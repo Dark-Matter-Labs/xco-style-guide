@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config, { isServer }) {
-    if (isServer) {
-      config.externals = [...(config.externals ?? []), "sharp"];
-    }
-    return config;
-  },
+  // Prevent webpack from bundling native .node binaries
+  serverExternalPackages: ["sharp", "@resvg/resvg-js"],
 };
 
 export default nextConfig;
