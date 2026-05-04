@@ -9,8 +9,7 @@ const DIMS = {
   mark:   { vw: 400,  vh: 200  },
 } as const;
 
-// Full-bleed linear sweep: dark navy (top) → xco-cool → warm amber → ember (bottom)
-// Matches the Novacene reference: fully saturated, no opacity washing, horizon feel
+// Full-bleed horizon sweep: dark navy → ocean blue → sky blue → warm peach → orange
 export const AbstractThreeRegimesDiagram = forwardRef<
   SVGSVGElement,
   ThreeRegimesDiagramProps
@@ -22,12 +21,11 @@ export const AbstractThreeRegimesDiagram = forwardRef<
       <defs>
         <linearGradient id="abs-sweep" gradientUnits="userSpaceOnUse"
           x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
-          <stop offset="0%"   stopColor="#0F1C24" />
-          <stop offset="22%"  stopColor="#1A3241" />
-          <stop offset="48%"  stopColor="#085A8C" />
-          <stop offset="68%"  stopColor="#7A4132" />
-          <stop offset="85%"  stopColor="#CC5038" />
-          <stop offset="100%" stopColor="#F27F3D" />
+          <stop offset="0%"   stopColor="#192640" />
+          <stop offset="35%"  stopColor="#085A8C" />
+          <stop offset="55%"  stopColor="#4B9EBF" />
+          <stop offset="75%"  stopColor="#F2B077" />
+          <stop offset="100%" stopColor="#F28444" />
         </linearGradient>
       </defs>
       <rect width={vw} height={vh} fill="url(#abs-sweep)" />
