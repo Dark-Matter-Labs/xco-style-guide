@@ -3,8 +3,9 @@ import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 const generators = [
   { href: "/three-regimes", label: "Three Regimes" },
+  { href: "/social-card",   label: "Social Card" },
+  { href: "/paper-cover",   label: "Paper Cover" },
   { href: "/portfolio-diagram", label: "Portfolio Diagram", wip: true },
-  { href: "/social-card", label: "Social Card", wip: true },
 ];
 
 export default function GeneratorsLayout({
