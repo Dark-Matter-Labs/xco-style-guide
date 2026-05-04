@@ -3,42 +3,49 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── xCO design tokens ──────────────────────────────────────────────
-   Single source of truth for all brand values.
-   Tailwind v4 @theme maps these to utility classes automatically.
-   Full token definitions also exported from lib/design-tokens.ts.
-   ───────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   xCO Design Token System
+   Single source of truth: lib/design-tokens.ts (TypeScript)
+   Tailwind utilities derived here via @theme.
+
+   Palette: 6 tokens. If you think you need more, you probably
+   need a new opacity stop, not a new hue.
+   ══════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* Colours */
-  --color-xco-paper:     #F2EFE8;
-  --color-xco-ink:       #1C1B17;
-  --color-xco-ink-muted: #5F5C53;
-  --color-xco-ember:     #E8593C;
-  --color-xco-cool:      #3B5A6B;
-  --color-xco-flag:      #D4B547;
+  /* ── Colour ─────────────────────────────────────────────────────── */
 
-  /* Typography */
-  --font-display: var(--font-crimson);
-  --font-body:    var(--font-crimson);
-  --font-ui:      var(--font-inter);
-  --font-mono:    var(--font-dm-mono);
+  --color-xco-paper:     #F2EFE8;   /* default page bg — warm cream, not white */
+  --color-xco-ink:       #1C1B17;   /* body text — warm near-black, not #000   */
+  --color-xco-ink-muted: #5F5C53;   /* secondary text, captions                */
+  --color-xco-ember:     #E8593C;   /* the one earned accent — use ≤5% surface */
+  --color-xco-cool:      #3B5A6B;   /* field-register diagrams — one per comp  */
+  --color-xco-flag:      #D4B547;   /* [wip] / [draft] / [v0.1] markers        */
 
-  /* shadcn semantic aliases — mapped to xCO palette */
+  /* ── Typography ─────────────────────────────────────────────────── */
+  /* font-* variables are set by next/font on <html>; we alias them here */
+
+  --font-display: var(--font-crimson);  /* Crimson Pro — publication register  */
+  --font-body:    var(--font-crimson);  /* Crimson Pro — running text          */
+  --font-ui:      var(--font-inter);    /* Inter — navigation, labels          */
+  --font-mono:    var(--font-dm-mono);  /* DM Mono — annotations, code, data   */
+
+  /* shadcn semantic aliases */
   --font-sans:    var(--font-inter);
   --font-heading: var(--font-crimson);
 
-  /* Spacing */
+  /* ── Spacing ────────────────────────────────────────────────────── */
+
   --xco-gutter: 1.5rem;
 
-  /* Radius — minimal, this is not a round-corner brand */
+  /* ── Radius — minimal, this is not a round-corner brand ─────────── */
+
   --radius: 0.125rem;
 }
 
-/* ── xCO base layer ───────────────────────────────────────────────── */
+/* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
 
 :root {
-  /* shadcn semantic tokens remapped to xCO palette */
   --background:           #F2EFE8;
   --foreground:           #1C1B17;
   --card:                 #F2EFE8;
@@ -59,7 +66,7 @@
   --ring:                 #1C1B17;
 }
 
-/* Dark mode — secondary register, never primary */
+/* Dark mode — secondary register only. Paper + ink is the primary. */
 .dark {
   --background:           #1C1B17;
   --foreground:           #F2EFE8;
@@ -105,6 +112,8 @@
   --radius-lg:  calc(var(--radius) * 1.5);
 }
 
+/* ── Base layer ───────────────────────────────────────────────────── */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -114,19 +123,21 @@
   }
 }
 
+/* ── Utilities ────────────────────────────────────────────────────── */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-  /* Grid line utility — visible in dev, toggled via class */
+
+  /* Grid lines — shown with .show-grid class (dev mode toggle) */
   .show-grid {
-    background-image:
-      repeating-linear-gradient(
-        to right,
-        rgba(28, 27, 23, 0.04) 0px,
-        rgba(28, 27, 23, 0.04) 1px,
-        transparent 1px,
-        transparent calc(100% / 12)
-      );
+    background-image: repeating-linear-gradient(
+      to right,
+      rgba(28, 27, 23, 0.04) 0px,
+      rgba(28, 27, 23, 0.04) 1px,
+      transparent 1px,
+      transparent calc(100% / 12)
+    );
   }
 }
