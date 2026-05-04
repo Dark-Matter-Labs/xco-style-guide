@@ -2,9 +2,10 @@ import Link from "next/link";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 const generators = [
-  { href: "/three-regimes", label: "Three Regimes" },
-  { href: "/social-card",   label: "Social Card" },
-  { href: "/paper-cover",   label: "Paper Cover" },
+  { href: "/three-regimes",   label: "Three Regimes" },
+  { href: "/social-card",     label: "Social Card" },
+  { href: "/paper-cover",     label: "Paper Cover" },
+  { href: "/image-treatment", label: "Image Treatment" },
   { href: "/portfolio-diagram", label: "Portfolio Diagram", wip: true },
 ];
 
