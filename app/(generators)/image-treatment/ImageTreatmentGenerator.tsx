@@ -15,6 +15,7 @@ const OCEAN = "#085A8C";
 
 type SourceMode   = "three-regimes" | "option-field" | "photo";
 type PhotoPalette = "mono" | "inverted" | "dusk" | "ocean" | "multi";
+type CellShape    = "square" | "hbars" | "vbars";
 
 // ── Debounce ──────────────────────────────────────────────────────────────
 function useDebounce<T>(value: T, ms: number): T {
@@ -63,12 +64,17 @@ function drawDiagramRaster(
   vw: number, vh: number,
   dotSpacing: number, fg: string,
   source: "three-regimes" | "option-field",
+  cellShape: CellShape,
 ) {
   const dots = source === "option-field"
     ? computeOptionFieldDots(vw, vh, dotSpacing)
     : computeDots(vw, vh, dotSpacing);
   ctx.fillStyle = fg;
-  for (const d of dots) ctx.fillRect(d.cx - d.r, d.cy - d.r, d.r * 2, d.r * 2);
+  for (const d of dots) {
+    const w = cellShape === "hbars" ? dotSpacing : d.r * 2;
+    const h = cellShape === "vbars" ? dotSpacing : d.r * 2;
+    ctx.fillRect(d.cx - w / 2, d.cy - h / 2, w, h);
+  }
 }
 
 // ── Three Regimes: Mark (original geometry) ───────────────────────────────
@@ -214,12 +220,14 @@ function drawPhotoRaster(
   vw: number, vh: number,
   dotSpacing: number,
   palette: PhotoPalette,
+  cellShape: CellShape,
 ) {
   const { data } = imgData;
-  const sz = (dark: number) => dotSpacing * 0.9 * dark;
+  const maxSz = dotSpacing * 0.9;
+  const rw = (dark: number) => cellShape === "hbars" ? dotSpacing : maxSz * dark;
+  const rh = (dark: number) => cellShape === "vbars" ? dotSpacing : maxSz * dark;
 
   if (palette === "multi") {
-    // Karel Martens: two offset grid layers, multiply composite
     ctx.globalCompositeOperation = "multiply";
     const half = dotSpacing * 0.5;
 
@@ -228,7 +236,10 @@ function drawPhotoRaster(
       for (let cy = oy + dotSpacing / 2; cy < vh; cy += dotSpacing) {
         for (let cx = ox + dotSpacing / 2; cx < vw; cx += dotSpacing) {
           const dark = 1 - sampleLum(data, cx, cy, vw, vh);
-          if (dark > 0.05) { const s = sz(dark); ctx.fillRect(cx - s / 2, cy - s / 2, s, s); }
+          if (dark > 0.05) {
+            const w = rw(dark), h = rh(dark);
+            ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+          }
         }
       }
     }
@@ -245,7 +256,10 @@ function drawPhotoRaster(
       for (let cx = dotSpacing / 2; cx < vw; cx += dotSpacing) {
         const lum  = sampleLum(data, cx, cy, vw, vh);
         const dark = palette === "inverted" ? lum : 1 - lum;
-        if (dark > 0.05) { const s = sz(dark); ctx.fillRect(cx - s / 2, cy - s / 2, s, s); }
+        if (dark > 0.05) {
+          const w = rw(dark), h = rh(dark);
+          ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+        }
       }
     }
   }
@@ -256,11 +270,11 @@ interface PreviewProps {
   source: SourceMode; mode: TreatmentMode; variant: DiagramVariant;
   resolution: number; colorMode: ColorMode; photoPalette: PhotoPalette;
   uploadedImg: HTMLImageElement | null; grain: boolean;
-  format: TreatmentFormat;
+  format: TreatmentFormat; cellShape: CellShape; showPhoto: boolean;
 }
 
 const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
-  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format }, ref) {
+  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto }, ref) {
     const { vw, vh } = DIMS[format];
     const bg = source === "photo"
       ? (photoPalette === "inverted" ? INK : PAPER)
@@ -279,14 +293,15 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
 
       if (source === "photo") {
         if (!uploadedImg) return;
+        if (showPhoto) ctx.drawImage(uploadedImg, 0, 0, vw, vh);
         const imgData = getImageData(uploadedImg, vw, vh);
-        drawPhotoRaster(ctx, imgData, vw, vh, dotSpacing, photoPalette);
+        drawPhotoRaster(ctx, imgData, vw, vh, dotSpacing, photoPalette, cellShape);
         if (grain) addGrain(ctx, vw, vh);
         return;
       }
 
       if (source === "option-field") {
-        if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "option-field");
+        if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "option-field", cellShape);
         else drawOptionFieldScanlines(ctx, vw, vh, fg, dotSpacing);
         return;
       }
@@ -296,20 +311,22 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
       if (variant === "signal")      { drawSignalVariant(ctx, vw, vh, fg, dotSpacing); return; }
 
       // mark
-      if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "three-regimes");
+      if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "three-regimes", cellShape);
       else                   drawMarkVariant(ctx, vw, vh, fg);
-    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, ref]);
+    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, ref, cellShape, showPhoto]);
 
     return <canvas ref={ref} width={vw} height={vh} className="w-full h-auto block" />;
   }
 );
 
-// ── SVG string builder (no DOM) ────────────────────────────────────────────
+// ── SVG string builder ────────────────────────────────────────────────────
 function buildSVGString(
   source: SourceMode, mode: TreatmentMode, variant: DiagramVariant,
   resolution: number, colorMode: ColorMode, photoPalette: PhotoPalette,
   uploadedImg: HTMLImageElement | null,
   vw: number, vh: number,
+  cellShape: CellShape,
+  showPhoto: boolean,
 ): string {
   const bg = source === "photo"
     ? (photoPalette === "inverted" ? INK : PAPER)
@@ -321,18 +338,34 @@ function buildSVGString(
   if (source === "photo" && uploadedImg) {
     const imgData = getImageData(uploadedImg, vw, vh);
     const { data } = imgData;
-    const sz = (dark: number) => dotSpacing * 0.9 * dark;
+    const maxSz = dotSpacing * 0.9;
+    const rw = (dark: number) => cellShape === "hbars" ? dotSpacing : maxSz * dark;
+    const rh = (dark: number) => cellShape === "vbars" ? dotSpacing : maxSz * dark;
+
+    let imagePart = "";
+    if (showPhoto) {
+      const pc = document.createElement("canvas");
+      pc.width = vw; pc.height = vh;
+      pc.getContext("2d")!.drawImage(uploadedImg, 0, 0, vw, vh);
+      imagePart = `<image href="${pc.toDataURL("image/jpeg", 0.85)}" x="0" y="0" width="${vw}" height="${vh}"/>`;
+    }
+
     const parts: string[] = [];
 
     if (photoPalette === "multi") {
       const half = dotSpacing * 0.5;
       for (const [color, ox, oy] of [[OCEAN, 0, 0], [DUSK, half, half]] as [string, number, number][]) {
+        const layerParts: string[] = [];
         for (let cy = oy + dotSpacing / 2; cy < vh; cy += dotSpacing) {
           for (let cx = ox + dotSpacing / 2; cx < vw; cx += dotSpacing) {
             const dark = 1 - sampleLum(data, cx, cy, vw, vh);
-            if (dark > 0.05) { const s = sz(dark); parts.push(`<rect x="${(cx-s/2).toFixed(1)}" y="${(cy-s/2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="${color}"/>`); }
+            if (dark > 0.05) {
+              const w = rw(dark), h = rh(dark);
+              layerParts.push(`<rect x="${(cx-w/2).toFixed(1)}" y="${(cy-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${color}"/>`);
+            }
           }
         }
+        parts.push(`<g style="mix-blend-mode:multiply">${layerParts.join("")}</g>`);
       }
     } else {
       const svgFg = photoPalette === "inverted" ? PAPER : photoPalette === "dusk" ? DUSK : photoPalette === "ocean" ? OCEAN : INK;
@@ -340,17 +373,22 @@ function buildSVGString(
         for (let cx = dotSpacing / 2; cx < vw; cx += dotSpacing) {
           const lum  = sampleLum(data, cx, cy, vw, vh);
           const dark = photoPalette === "inverted" ? lum : 1 - lum;
-          if (dark > 0.05) { const s = sz(dark); parts.push(`<rect x="${(cx-s/2).toFixed(1)}" y="${(cy-s/2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="${svgFg}"/>`); }
+          if (dark > 0.05) {
+            const w = rw(dark), h = rh(dark);
+            parts.push(`<rect x="${(cx-w/2).toFixed(1)}" y="${(cy-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${svgFg}"/>`);
+          }
         }
       }
     }
-    body = parts.join("");
+    body = imagePart + parts.join("");
 
   } else if (source === "option-field") {
     if (mode === "raster") {
-      body = computeOptionFieldDots(vw, vh, dotSpacing).map((d) =>
-        `<rect x="${(d.cx-d.r).toFixed(1)}" y="${(d.cy-d.r).toFixed(1)}" width="${(d.r*2).toFixed(2)}" height="${(d.r*2).toFixed(2)}" fill="${fg}"/>`,
-      ).join("");
+      body = computeOptionFieldDots(vw, vh, dotSpacing).map((d) => {
+        const w = cellShape === "hbars" ? dotSpacing : d.r * 2;
+        const h = cellShape === "vbars" ? dotSpacing : d.r * 2;
+        return `<rect x="${(d.cx-w/2).toFixed(1)}" y="${(d.cy-h/2).toFixed(1)}" width="${w.toFixed(2)}" height="${h.toFixed(2)}" fill="${fg}"/>`;
+      }).join("");
     } else {
       const spacing = Math.max(3, dotSpacing);
       const segW = Math.max(4, Math.round(spacing * 0.85));
@@ -424,9 +462,11 @@ function buildSVGString(
     } else {
       // mark variant
       if (mode === "raster") {
-        body = computeDots(vw, vh, dotSpacing).map((d) =>
-          `<rect x="${(d.cx-d.r).toFixed(1)}" y="${(d.cy-d.r).toFixed(1)}" width="${(d.r*2).toFixed(2)}" height="${(d.r*2).toFixed(2)}" fill="${fg}"/>`,
-        ).join("");
+        body = computeDots(vw, vh, dotSpacing).map((d) => {
+          const w = cellShape === "hbars" ? dotSpacing : d.r * 2;
+          const h = cellShape === "vbars" ? dotSpacing : d.r * 2;
+          return `<rect x="${(d.cx-w/2).toFixed(1)}" y="${(d.cy-h/2).toFixed(1)}" width="${w.toFixed(2)}" height="${h.toFixed(2)}" fill="${fg}"/>`;
+        }).join("");
       } else {
         const padX = vw * 0.10, padY = vh * 0.10;
         const S = Math.min((vw - 2 * padX) / 400, (vh - 2 * padY) / 200);
@@ -488,6 +528,8 @@ export function ImageTreatmentGenerator() {
   const [colorMode,    setColorMode]    = useState<ColorMode>("ink");
   const [photoPalette, setPhotoPalette] = useState<PhotoPalette>("mono");
   const [grain,        setGrain]        = useState(false);
+  const [cellShape,    setCellShape]    = useState<CellShape>("square");
+  const [showPhoto,    setShowPhoto]    = useState(true);
   const [format,       setFormat]       = useState<TreatmentFormat>("card");
   const [uploadedImg,  setUploadedImg]  = useState<HTMLImageElement | null>(null);
   const [exporting,    setExporting]    = useState<string | null>(null);
@@ -527,7 +569,7 @@ export function ImageTreatmentGenerator() {
         return;
       }
 
-      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, uploadedImg, w, h);
+      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, uploadedImg, w, h, cellShape, showPhoto);
 
       if (type === "svg") {
         downloadBlob(new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" }), `${slug}.svg`);
@@ -547,7 +589,7 @@ export function ImageTreatmentGenerator() {
 
   const previewProps: PreviewProps = {
     source, mode, variant, resolution: debouncedResolution,
-    colorMode, photoPalette, uploadedImg, grain, format,
+    colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto,
   };
 
   const btnClass = (active: boolean) =>
@@ -584,9 +626,13 @@ export function ImageTreatmentGenerator() {
                 {uploadedImg ? "Photo loaded — click to replace" : "Click to upload photo"}
               </span>
             </label>
-            <p className="font-mono text-xs text-xco-ink-muted italic">
-              The photo is sampled — only the raster interpretation is exported
-            </p>
+            {uploadedImg && (
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={showPhoto} onChange={(e) => setShowPhoto(e.target.checked)}
+                  className="accent-xco-dusk w-4 h-4" />
+                <span className="font-mono text-xs text-xco-ink">Show source photo</span>
+              </label>
+            )}
           </div>
         )}
 
@@ -647,6 +693,29 @@ export function ImageTreatmentGenerator() {
           </div>
         )}
 
+        {/* Cell shape — photo and diagram raster (not territories/signal which have fixed geometry) */}
+        {(source === "photo" || (mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
+          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Cell Shape</h2>
+            <div className="flex gap-0">
+              {([
+                { id: "square", label: "Square" },
+                { id: "hbars",  label: "H bars"  },
+                { id: "vbars",  label: "V bars"  },
+              ] as { id: CellShape; label: string }[]).map(({ id, label }) => (
+                <button key={id} onClick={() => setCellShape(id)} className={btnClass(cellShape === id)}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="font-mono text-xs text-xco-ink-muted italic">
+              {cellShape === "square" && "Equal width & height — classic halftone"}
+              {cellShape === "hbars"  && "Full column width — horizontal bars"}
+              {cellShape === "vbars"  && "Full row height — vertical bars"}
+            </p>
+          </div>
+        )}
+
         {/* Colour — diagram */}
         {source !== "photo" && (
           <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
@@ -704,12 +773,11 @@ export function ImageTreatmentGenerator() {
         {/* Export */}
         <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
           <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
-          {source !== "photo" && (
-            <button onClick={() => handle("svg")} disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
-              {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
-            </button>
-          )}
+          <button onClick={() => handle("svg")}
+            disabled={exporting !== null || (source === "photo" && !uploadedImg)}
+            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
+          </button>
           <button
             onClick={() => handle("png")}
             disabled={exporting !== null || (source === "photo" && !uploadedImg)}
