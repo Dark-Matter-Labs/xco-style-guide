@@ -1,27 +1,132 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── xCO design tokens ──────────────────────────────────────────────
+   Single source of truth for all brand values.
+   Tailwind v4 @theme maps these to utility classes automatically.
+   Full token definitions also exported from lib/design-tokens.ts.
+   ───────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Colours */
+  --color-xco-paper:     #F2EFE8;
+  --color-xco-ink:       #1C1B17;
+  --color-xco-ink-muted: #5F5C53;
+  --color-xco-ember:     #E8593C;
+  --color-xco-cool:      #3B5A6B;
+  --color-xco-flag:      #D4B547;
+
+  /* Typography */
+  --font-display: var(--font-crimson);
+  --font-body:    var(--font-crimson);
+  --font-ui:      var(--font-inter);
+  --font-mono:    var(--font-dm-mono);
+
+  /* shadcn semantic aliases — mapped to xCO palette */
+  --font-sans:    var(--font-inter);
+  --font-heading: var(--font-crimson);
+
+  /* Spacing */
+  --xco-gutter: 1.5rem;
+
+  /* Radius — minimal, this is not a round-corner brand */
+  --radius: 0.125rem;
+}
+
+/* ── xCO base layer ───────────────────────────────────────────────── */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* shadcn semantic tokens remapped to xCO palette */
+  --background:           #F2EFE8;
+  --foreground:           #1C1B17;
+  --card:                 #F2EFE8;
+  --card-foreground:      #1C1B17;
+  --popover:              #F2EFE8;
+  --popover-foreground:   #1C1B17;
+  --primary:              #1C1B17;
+  --primary-foreground:   #F2EFE8;
+  --secondary:            #E8E5DC;
+  --secondary-foreground: #1C1B17;
+  --muted:                #E8E5DC;
+  --muted-foreground:     #5F5C53;
+  --accent:               #E8593C;
+  --accent-foreground:    #F2EFE8;
+  --destructive:          #E8593C;
+  --border:               rgba(28, 27, 23, 0.12);
+  --input:                rgba(28, 27, 23, 0.12);
+  --ring:                 #1C1B17;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Dark mode — secondary register, never primary */
+.dark {
+  --background:           #1C1B17;
+  --foreground:           #F2EFE8;
+  --card:                 #2A2920;
+  --card-foreground:      #F2EFE8;
+  --popover:              #2A2920;
+  --popover-foreground:   #F2EFE8;
+  --primary:              #F2EFE8;
+  --primary-foreground:   #1C1B17;
+  --secondary:            #2A2920;
+  --secondary-foreground: #F2EFE8;
+  --muted:                #2A2920;
+  --muted-foreground:     #5F5C53;
+  --accent:               #E8593C;
+  --accent-foreground:    #F2EFE8;
+  --destructive:          #E8593C;
+  --border:               rgba(242, 239, 232, 0.10);
+  --input:                rgba(242, 239, 232, 0.10);
+  --ring:                 #F2EFE8;
+}
+
+@theme inline {
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+  --radius-sm:  calc(var(--radius) * 0.75);
+  --radius-md:  var(--radius);
+  --radius-lg:  calc(var(--radius) * 1.5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-xco-paper text-xco-ink font-ui text-base leading-relaxed;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  /* Grid line utility — visible in dev, toggled via class */
+  .show-grid {
+    background-image:
+      repeating-linear-gradient(
+        to right,
+        rgba(28, 27, 23, 0.04) 0px,
+        rgba(28, 27, 23, 0.04) 1px,
+        transparent 1px,
+        transparent calc(100% / 12)
+      );
   }
 }
