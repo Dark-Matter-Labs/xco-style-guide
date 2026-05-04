@@ -31,14 +31,6 @@ export const colors = {
     // Use: rgba(28,27,23,0.12) or Tailwind border-xco-ink/[0.12]
     usage: "Rules, dividers, grid lines. Never a separate hue.",
   },
-  flag: {
-    hex: "#D4B547",
-    cssVar: "--color-xco-flag",
-    twClass: "xco-flag",
-    usage:
-      "[wip] / [draft] / [v0.1] markers. Distinct enough to read as a tag; quiet enough not to compete.",
-  },
-
   // ── Extended diagram palette ─────────────────────────────────────
   // Five-color system for blueprint / warmth diagram modes.
   // Never use all five at once — pick a register (cool or warm).

@@ -171,7 +171,7 @@ export function ToneLinter() {
   }, [text]);
 
   const confidenceColour = {
-    low: "text-xco-flag",
+    low: "text-xco-dusk",
     medium: "text-xco-ink-muted",
     high: "text-xco-ink",
   };

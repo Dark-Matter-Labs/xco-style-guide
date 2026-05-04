@@ -91,7 +91,7 @@ export default function Home() {
           Every asset the team ships is built from these primitives.
           The system is the document.
         </p>
-        <span className="font-mono text-xs text-xco-flag bg-xco-flag/10 px-2 py-1 shrink-0">
+        <span className="font-mono text-xs text-xco-dusk bg-xco-dusk/10 px-2 py-1 shrink-0">
           [v0.1]
         </span>
       </footer>

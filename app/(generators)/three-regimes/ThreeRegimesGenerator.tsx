@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme } from "./ThreeRegimesDiagram";
+import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme, StructuralVariant } from "./ThreeRegimesDiagram";
 import { AbstractThreeRegimesDiagram } from "./AbstractThreeRegimesDiagram";
 import type { DiagramLabels } from "./ThreeRegimesDiagram";
 import { WIP } from "@/components/WIP";
@@ -123,6 +123,7 @@ export function ThreeRegimesGenerator() {
   const [previewFormat, setPreviewFormat] = useState<DiagramFormat>("hero");
   const [mode, setMode] = useState<DiagramMode>("structural");
   const [colorScheme, setColorScheme] = useState<DiagramColorScheme>("standard");
+  const [structuralVariant, setStructuralVariant] = useState<StructuralVariant>("classic");
   const [exporting, setExporting] = useState<string | null>(null);
 
   // Structural mode refs
@@ -146,6 +147,7 @@ export function ThreeRegimesGenerator() {
     showAnnotations,
     amplitude: 0,
     colorScheme,
+    structuralVariant,
   };
 
   const handleExport = async (type: string) => {
@@ -221,6 +223,35 @@ export function ThreeRegimesGenerator() {
                 </span>
               </label>
             ))}
+          </div>
+        )}
+
+        {mode === "structural" && (
+          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+              Layout
+            </h2>
+            <div className="grid grid-cols-2 gap-1">
+              {([
+                { id: "classic", label: "Classic",  hint: "hub + spoke" },
+                { id: "nested",  label: "Nested",   hint: "field wraps" },
+                { id: "columns", label: "Columns",  hint: "three strips" },
+                { id: "orbital", label: "Orbital",  hint: "circle nodes" },
+              ] as { id: StructuralVariant; label: string; hint: string }[]).map(({ id, label, hint }) => (
+                <button
+                  key={id}
+                  onClick={() => setStructuralVariant(id)}
+                  className={`text-left font-mono text-xs px-2 py-2 border transition-colors ${
+                    structuralVariant === id
+                      ? "bg-xco-ink text-xco-paper border-xco-ink"
+                      : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+                  }`}
+                >
+                  <span className="block">{label}</span>
+                  <span className="block opacity-60">{hint}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

@@ -28,9 +28,9 @@ export default function TypographyPage() {
       </header>
 
       {/* Caveat */}
-      <section className="bg-xco-flag/10 border-l-2 border-xco-flag px-6 py-4 max-w-2xl">
+      <section className="bg-xco-dusk/10 border-l-2 border-xco-dusk px-6 py-4 max-w-2xl">
         <p className="font-mono text-sm text-xco-ink leading-relaxed">
-          <span className="text-xco-flag">[inference]</span> Crimson Pro is a placeholder for
+          <span className="text-xco-dusk">[inference]</span> Crimson Pro is a placeholder for
           an editorial serif we will likely replace with something more distinctive. The system
           is built so the swap costs an hour, not a week — one variable in{" "}
           <code className="text-xco-ink-muted">globals.css</code>.

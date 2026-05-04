@@ -7,7 +7,6 @@ const orderedKeys: SwatchKey[] = [
   "paper",
   "ink",
   "inkMuted",
-  "flag",
   "navy",
   "ocean",
   "teal",
@@ -20,7 +19,6 @@ const swatchTextClass: Record<SwatchKey, string> = {
   paper:    "text-xco-ink",
   ink:      "text-xco-paper",
   inkMuted: "text-xco-paper",
-  flag:     "text-xco-ink",
   rule:     "text-xco-paper",
   navy:     "text-xco-paper",
   ocean:    "text-xco-paper",
@@ -47,7 +45,7 @@ export default function ColourPage() {
       {/* Palette principle */}
       <section className="max-w-2xl">
         <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
-          Nine tokens. Four core (paper, ink, ink-muted, flag) plus a five-colour extended
+          Eight tokens. Three core (paper, ink, ink-muted) plus a five-colour extended
           palette for diagrams — two cool registers (navy, ocean, teal) and two warm
           (sand, dusk). Never use all five at once. The brand lives in structure and type,
           not in colour variety.

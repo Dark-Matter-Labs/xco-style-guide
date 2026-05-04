@@ -15,8 +15,6 @@
 @theme {
   /* ── Colour — static tokens (never swap) ───────────────────────── */
 
-  --color-xco-flag:      #D4B547;   /* [wip] / [draft] / [v0.1] markers        */
-
   /* Extended diagram palette — blueprint (cool) + warmth (warm) */
   --color-xco-navy:      #192640;
   --color-xco-ocean:     #085A8C;
