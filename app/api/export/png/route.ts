@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
-import fs from "fs";
-import path from "path";
 
 const GOOGLE_FONTS_URL =
   "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:ital,wght@0,400;1,400&display=swap";
@@ -9,16 +7,11 @@ const GOOGLE_FONTS_URL =
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;
 
-function ensureWasm(): Promise<void> {
+// Fetch WASM from /resvg.wasm (public/ dir) so the binary is a static asset,
+// not a filesystem read — avoids ENOENT in Vercel lambda bundles.
+function ensureWasm(origin: string): Promise<void> {
   if (wasmReady) return wasmReady;
-  wasmReady = (async () => {
-    const wasmPath = path.join(
-      process.cwd(),
-      "node_modules/@resvg/resvg-wasm/index_bg.wasm",
-    );
-    const wasmBuffer = fs.readFileSync(wasmPath);
-    await initWasm(wasmBuffer);
-  })();
+  wasmReady = initWasm(fetch(`${origin}/resvg.wasm`));
   return wasmReady;
 }
 
@@ -63,7 +56,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "svg, width, height required" }, { status: 400 });
     }
 
-    await ensureWasm();
+    const origin = new URL(req.url).origin;
+    await ensureWasm(origin);
     const fonts = await loadFonts();
 
     // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers
