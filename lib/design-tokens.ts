@@ -31,21 +31,6 @@ export const colors = {
     // Use: rgba(28,27,23,0.12) or Tailwind border-xco-ink/[0.12]
     usage: "Rules, dividers, grid lines. Never a separate hue.",
   },
-  ember: {
-    hex: "#E8593C",
-    cssVar: "--color-xco-ember",
-    twClass: "xco-ember",
-    usage:
-      "The one earned accent. Active diagram axis, wip marker. Max ~5% of any surface.",
-    maxSurfacePct: 5,
-  },
-  cool: {
-    hex: "#3B5A6B",
-    cssVar: "--color-xco-cool",
-    twClass: "xco-cool",
-    usage:
-      "Field-register diagrams. Regenerative, slower, deeper. One instance per composition.",
-  },
   flag: {
     hex: "#D4B547",
     cssVar: "--color-xco-flag",
@@ -214,7 +199,7 @@ export const diagram = {
   nodeTypes: {
     risk: {
       label: "Risk Node",
-      fill: colors.ember.hex,
+      fill: colors.dusk.hex,
       stroke: colors.ink.hex,
       strokeWidth: 1.5,
       textColor: colors.paper.hex,
@@ -233,7 +218,7 @@ export const diagram = {
     field: {
       label: "Field Node",
       fill: colors.paper.hex,
-      stroke: colors.cool.hex,
+      stroke: colors.ocean.hex,
       strokeWidth: 1.5,
       textColor: colors.ink.hex,
       border: "dashed",

@@ -7,8 +7,8 @@ const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crims
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const MUTED = "#5F5C53";
-const EMBER = "#E8593C";
-const COOL  = "#3B5A6B";
+const OCEAN = "#085A8C";
+const DUSK  = "#F27F3D";
 
 // A4 at 96dpi — 794×1123
 export const COVER_W = 794;
@@ -52,18 +52,18 @@ function CoverMark({ cx, cy, scale }: { cx: number; cy: number; scale: number })
   return (
     <g transform={`translate(${tx},${ty}) scale(${S})`}>
       <line x1={fr.cx} y1={fr.cy + fr.h/2} x2={merge.x} y2={merge.y}
-        stroke={EMBER} strokeWidth={1.2/S} strokeLinecap="round" />
+        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
       <line x1={fo.cx} y1={fo.cy + fo.h/2} x2={merge.x} y2={merge.y}
-        stroke={EMBER} strokeWidth={1.2/S} strokeLinecap="round" />
+        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
       <line x1={merge.x} y1={merge.y} x2={fi.cx} y2={fi.cy - fi.h/2}
-        stroke={EMBER} strokeWidth={1.2/S} strokeLinecap="round" />
-      <circle cx={merge.x} cy={merge.y} r={2.5/S} fill={EMBER} />
+        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
+      <circle cx={merge.x} cy={merge.y} r={2.5/S} fill={DUSK} />
       <rect x={fr.cx - fr.w/2} y={fr.cy - fr.h/2} width={fr.w} height={fr.h}
         fill={PAPER} stroke={INK} strokeWidth={1/S} />
       <rect x={fo.cx - fo.w/2} y={fo.cy - fo.h/2} width={fo.w} height={fo.h}
         fill={PAPER} stroke={INK} strokeWidth={1/S} />
       <rect x={fi.cx - fi.w/2} y={fi.cy - fi.h/2} width={fi.w} height={fi.h}
-        fill={PAPER} stroke={COOL} strokeWidth={1/S} strokeDasharray={`${5/S} ${3.5/S}`} />
+        fill={PAPER} stroke={OCEAN} strokeWidth={1/S} strokeDasharray={`${5/S} ${3.5/S}`} />
     </g>
   );
 }
@@ -75,10 +75,10 @@ function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number })
       x1={COVER_W / 2} y1={top} x2={COVER_W / 2} y2={bottom}>
       <stop offset="0%"   stopColor="#0F1C24" />
       <stop offset="22%"  stopColor="#1A3241" />
-      <stop offset="48%"  stopColor="#3B5A6B" />
+      <stop offset="48%"  stopColor="#085A8C" />
       <stop offset="68%"  stopColor="#7A4132" />
       <stop offset="85%"  stopColor="#CC5038" />
-      <stop offset="100%" stopColor="#E8593C" />
+      <stop offset="100%" stopColor="#F27F3D" />
     </linearGradient>
   );
 }

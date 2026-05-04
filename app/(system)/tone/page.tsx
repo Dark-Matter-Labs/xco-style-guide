@@ -49,7 +49,7 @@ export default function TonePage() {
               </div>
 
               {/* Rule */}
-              <div className="border-l-2 border-xco-ember pl-4">
+              <div className="border-l-2 border-xco-dusk pl-4">
                 <p className="font-body text-base text-xco-ink italic leading-snug">
                   {reg.rule}
                 </p>
@@ -93,7 +93,7 @@ export default function TonePage() {
           {[...bannedWords].map((w) => (
             <span
               key={w}
-              className="font-mono text-xs text-xco-ember border border-xco-ember/40 px-2 py-1"
+              className="font-mono text-xs text-xco-dusk border border-xco-dusk/40 px-2 py-1"
             >
               {w.trim()}
             </span>

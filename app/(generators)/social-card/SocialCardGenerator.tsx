@@ -102,7 +102,7 @@ export function SocialCardGenerator() {
             {LAYOUTS.map(({ id, label, hint }) => (
               <label key={id} className="flex items-start gap-2 cursor-pointer">
                 <input type="radio" name="layout" value={id} checked={layout === id}
-                  onChange={() => setLayout(id)} className="accent-xco-ember mt-0.5 shrink-0" />
+                  onChange={() => setLayout(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                 <span>
                   <span className="font-mono text-xs text-xco-ink block">{label}</span>
                   <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
@@ -119,7 +119,7 @@ export function SocialCardGenerator() {
               {DIAGRAM_TYPES.map(({ id, label, hint }) => (
                 <label key={id} className="flex items-start gap-2 cursor-pointer">
                   <input type="radio" name="diagramType" value={id} checked={diagramType === id}
-                    onChange={() => setDiagramType(id)} className="accent-xco-ember mt-0.5 shrink-0" />
+                    onChange={() => setDiagramType(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                   <span>
                     <span className="font-mono text-xs text-xco-ink block">{label}</span>
                     <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
@@ -149,7 +149,7 @@ export function SocialCardGenerator() {
           {FORMATS.map(({ id, label, size }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-ember" />
+                onChange={() => setFormat(id)} className="accent-xco-dusk" />
               <span className="font-mono text-xs text-xco-ink">{label}</span>
               <span className="font-mono text-xs text-xco-ink-muted">{size}</span>
             </label>

@@ -23,8 +23,6 @@ const DIMS: Record<FieldFormat, { vw: number; vh: number }> = {
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
-const EMBER = "#E8593C";
-const COOL  = "#3B5A6B";
 const NAVY  = "#192640";
 const OCEAN = "#085A8C";
 const TEAL  = "#3786A6";
@@ -76,8 +74,8 @@ export function spatialWeight(
 function segmentColor(yRel: number, colorMode: FieldColorMode): string {
   if (colorMode === "inverted") return PAPER;
   if (colorMode === "spectrum") {
-    if (yRel > 0.62) return COOL;
-    if (yRel < 0.38) return EMBER;
+    if (yRel > 0.62) return OCEAN;
+    if (yRel < 0.38) return DUSK;
     return INK;
   }
   if (colorMode === "blueprint") {

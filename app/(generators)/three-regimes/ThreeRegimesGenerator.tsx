@@ -214,7 +214,7 @@ export function ThreeRegimesGenerator() {
             ] as { id: DiagramColorScheme; label: string; hint: string }[]).map(({ id, label, hint }) => (
               <label key={id} className="flex items-start gap-2 cursor-pointer">
                 <input type="radio" name="colorScheme" value={id} checked={colorScheme === id}
-                  onChange={() => setColorScheme(id)} className="accent-xco-ember mt-0.5" />
+                  onChange={() => setColorScheme(id)} className="accent-xco-dusk mt-0.5" />
                 <span className="space-y-0.5">
                   <span className="font-mono text-xs text-xco-ink block">{label}</span>
                   <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
@@ -278,7 +278,7 @@ export function ThreeRegimesGenerator() {
                 type="checkbox"
                 checked={showAnnotations}
                 onChange={(e) => setShowAnnotations(e.target.checked)}
-                className="accent-xco-ember w-4 h-4"
+                className="accent-xco-dusk w-4 h-4"
               />
               <span className="font-mono text-xs text-xco-ink-muted">
                 Show annotation marginalia
@@ -301,7 +301,7 @@ export function ThreeRegimesGenerator() {
                   value={f.id}
                   checked={previewFormat === f.id}
                   onChange={() => setPreviewFormat(f.id)}
-                  className="accent-xco-ember"
+                  className="accent-xco-dusk"
                 />
                 <span className="font-mono text-xs text-xco-ink">
                   {f.label}

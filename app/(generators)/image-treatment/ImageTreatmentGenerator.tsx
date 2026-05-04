@@ -117,11 +117,11 @@ export function ImageTreatmentGenerator() {
               <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
                 Resolution
               </h2>
-              <span className="font-mono text-xs text-xco-ember">{dotSpacing}px grid</span>
+              <span className="font-mono text-xs text-xco-dusk">{dotSpacing}px grid</span>
             </div>
             <input type="range" min={0} max={100} step={1}
               value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
-              className="w-full accent-xco-ember" />
+              className="w-full accent-xco-dusk" />
             <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
               <span>coarse</span>
               <span>fine</span>
@@ -160,7 +160,7 @@ export function ImageTreatmentGenerator() {
           {COLOR_MODES.map(({ id, label }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="color" value={id} checked={colorMode === id}
-                onChange={() => setColorMode(id)} className="accent-xco-ember" />
+                onChange={() => setColorMode(id)} className="accent-xco-dusk" />
               <span className="font-mono text-xs text-xco-ink">{label}</span>
             </label>
           ))}
@@ -172,7 +172,7 @@ export function ImageTreatmentGenerator() {
           {FORMATS.map(({ id, label }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-ember" />
+                onChange={() => setFormat(id)} className="accent-xco-dusk" />
               <span className="font-mono text-xs text-xco-ink">{label}</span>
             </label>
           ))}

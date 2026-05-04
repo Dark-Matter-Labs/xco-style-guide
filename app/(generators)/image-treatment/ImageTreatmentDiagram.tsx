@@ -5,8 +5,8 @@ import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagra
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
-const EMBER = "#E8593C";
-const COOL  = "#3B5A6B";
+const OCEAN = "#085A8C";
+const DUSK  = "#F27F3D";
 
 export type DotShape      = "circle" | "square";
 export type ColorMode     = "ink" | "ember" | "inverted";
@@ -133,10 +133,10 @@ function SharpMark({ vw, vh, fg }: { vw: number; vh: number; fg: string }) {
         const [px1, py1] = t(x1, y1);
         const [px2, py2] = t(x2, y2);
         return <line key={i} x1={px1} y1={py1} x2={px2} y2={py2}
-          stroke={EMBER} strokeWidth={1.5} strokeLinecap="round" />;
+          stroke={DUSK} strokeWidth={1.5} strokeLinecap="round" />;
       })}
       {/* Merge dot */}
-      <circle cx={mx} cy={my} r={3 * S} fill={EMBER} />
+      <circle cx={mx} cy={my} r={3 * S} fill={DUSK} />
       {/* Frontier */}
       <rect x={frX} y={frY} width={120 * S} height={45 * S}
         fill={PAPER} stroke={fg} strokeWidth={1.2} />
@@ -145,7 +145,7 @@ function SharpMark({ vw, vh, fg }: { vw: number; vh: number; fg: string }) {
         fill={PAPER} stroke={fg} strokeWidth={1.2} />
       {/* Field — dashed cool */}
       <rect x={fiX} y={fiY} width={300 * S} height={46 * S}
-        fill={PAPER} stroke={COOL} strokeWidth={1.2}
+        fill={PAPER} stroke={OCEAN} strokeWidth={1.2}
         strokeDasharray={`${6} ${4}`} />
     </g>
   );
@@ -210,7 +210,7 @@ export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentPro
 
     const bg = colorMode === "inverted" ? INK : PAPER;
     const fg = colorMode === "inverted" ? PAPER
-             : colorMode === "ember"    ? EMBER
+             : colorMode === "ember"    ? DUSK
              : INK;
 
     const dotSpacing = spacingFromResolution(resolution);

@@ -92,7 +92,7 @@ export function PaperCoverGenerator() {
             {VISUALS.map(({ id, label, hint }) => (
               <label key={id} className="flex items-start gap-2 cursor-pointer">
                 <input type="radio" name="visual" value={id} checked={visual === id}
-                  onChange={() => setVisual(id)} className="accent-xco-ember mt-0.5 shrink-0" />
+                  onChange={() => setVisual(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                 <span>
                   <span className="font-mono text-xs text-xco-ink block">{label}</span>
                   <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>

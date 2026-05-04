@@ -8,8 +8,8 @@ const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crims
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const MUTED = "#5F5C53";
-const EMBER = "#E8593C";
-const COOL  = "#3B5A6B";
+const OCEAN = "#085A8C";
+const DUSK  = "#F27F3D";
 
 export type CardFormat  = "card" | "square";
 export type CardLayout  = "typographic" | "diagram" | "abstract";
@@ -47,18 +47,18 @@ function ThreeRegimesMark({ tx, ty, scale }: { tx: number; ty: number; scale: nu
   return (
     <g transform={`translate(${tx},${ty}) scale(${S})`}>
       <line x1={fr.cx} y1={fr.cy + fr.h / 2} x2={merge.x} y2={merge.y}
-        stroke={EMBER} strokeWidth={1.4 / S} strokeLinecap="round" />
+        stroke={DUSK} strokeWidth={1.4 / S} strokeLinecap="round" />
       <line x1={fo.cx} y1={fo.cy + fo.h / 2} x2={merge.x} y2={merge.y}
-        stroke={EMBER} strokeWidth={1.4 / S} strokeLinecap="round" />
+        stroke={DUSK} strokeWidth={1.4 / S} strokeLinecap="round" />
       <line x1={merge.x} y1={merge.y} x2={fi.cx} y2={fi.cy - fi.h / 2}
-        stroke={EMBER} strokeWidth={1.4 / S} strokeLinecap="round" />
-      <circle cx={merge.x} cy={merge.y} r={3 / S} fill={EMBER} />
+        stroke={DUSK} strokeWidth={1.4 / S} strokeLinecap="round" />
+      <circle cx={merge.x} cy={merge.y} r={3 / S} fill={DUSK} />
       <rect x={fr.cx - fr.w / 2} y={fr.cy - fr.h / 2} width={fr.w} height={fr.h}
         fill={PAPER} stroke={INK} strokeWidth={1.2 / S} />
       <rect x={fo.cx - fo.w / 2} y={fo.cy - fo.h / 2} width={fo.w} height={fo.h}
         fill={PAPER} stroke={INK} strokeWidth={1.2 / S} />
       <rect x={fi.cx - fi.w / 2} y={fi.cy - fi.h / 2} width={fi.w} height={fi.h}
-        fill={PAPER} stroke={COOL} strokeWidth={1.2 / S}
+        fill={PAPER} stroke={OCEAN} strokeWidth={1.2 / S}
         strokeDasharray={`${6 / S} ${4 / S}`} />
     </g>
   );
@@ -103,10 +103,10 @@ function AbstractGradient({ vw, vh }: { vw: number; vh: number }) {
       x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
       <stop offset="0%"   stopColor="#0F1C24" />
       <stop offset="22%"  stopColor="#1A3241" />
-      <stop offset="48%"  stopColor="#3B5A6B" />
+      <stop offset="48%"  stopColor="#085A8C" />
       <stop offset="68%"  stopColor="#7A4132" />
       <stop offset="85%"  stopColor="#CC5038" />
-      <stop offset="100%" stopColor="#E8593C" />
+      <stop offset="100%" stopColor="#F27F3D" />
     </linearGradient>
   );
 }
@@ -136,7 +136,7 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
       <>
         <rect width={vw} height={vh} fill={PAPER} />
         <line x1={600} y1={PAD} x2={600} y2={vh - PAD} stroke={INK} strokeOpacity={0.10} strokeWidth={1} />
-        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={EMBER} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
         {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 60} fontFamily="'Crimson Pro', Georgia, serif" fontSize={48} fill={INK}>{l}</text>)}
         <line x1={PAD} y1={558} x2={colW} y2={558} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
         {byline && <text x={PAD} y={590} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
@@ -154,7 +154,7 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
   return (
     <>
       <rect width={vw} height={vh} fill={PAPER} />
-      {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={EMBER} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+      {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
       {lines.map((l, i) => <text key={i} x={PAD} y={200 + i * 70} fontFamily="'Crimson Pro', Georgia, serif" fontSize={58} fill={INK}>{l}</text>)}
       <line x1={PAD} y1={558} x2={vw - PAD} y2={558} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
       {byline && <text x={PAD} y={592} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
@@ -188,7 +188,7 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
     return (
       <>
         <rect width={vw} height={vh} fill={PAPER} />
-        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={EMBER} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
         {diagramType === "option-field"
           ? <OptionFieldEmbed x0={PAD} y0={140} w={vw - PAD * 2} h={310} />
           : <ThreeRegimesMark tx={markTx} ty={160} scale={markScale} />
@@ -206,7 +206,7 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
   return (
     <>
       <rect width={vw} height={vh} fill={PAPER} />
-      {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={EMBER} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+      {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
       {lines.map((l, i) => <text key={i} x={PAD} y={400 + i * 82} fontFamily="'Crimson Pro', Georgia, serif" fontSize={68} fill={INK}>{l}</text>)}
       <line x1={PAD} y1={vh - 130} x2={vw - PAD} y2={vh - 130} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
       {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}

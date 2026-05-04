@@ -12,17 +12,18 @@ async function getEmbeddedFontCSS(): Promise<string> {
 
   const cssRes = await fetch(GOOGLE_FONTS_URL, {
     headers: {
-      // woff2 format requires a modern UA
+      // Old IE9 UA → Google Fonts returns TTF format, which librsvg/Sharp can render.
+      // Modern Chrome UA returns woff2 which librsvg cannot decode as a data URI.
       "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)",
     },
   });
 
   if (!cssRes.ok) throw new Error(`Google Fonts fetch failed: ${cssRes.status}`);
   const css = await cssRes.text();
 
-  // Find all woff2 URLs and replace with data URIs
-  const urlPattern = /url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/g;
+  // Match any gstatic font URL (TTF format has no .woff2 suffix)
+  const urlPattern = /url\((https?:\/\/fonts\.gstatic\.com\/[^)]+)\)/g;
   const matches = Array.from(css.matchAll(urlPattern));
 
   let result = css;
@@ -32,7 +33,7 @@ async function getEmbeddedFontCSS(): Promise<string> {
       if (!fontRes.ok) return;
       const buf = await fontRes.arrayBuffer();
       const b64 = Buffer.from(buf).toString("base64");
-      result = result.replace(url, `data:font/woff2;base64,${b64}`);
+      result = result.replace(url, `data:font/truetype;base64,${b64}`);
     }),
   );
 

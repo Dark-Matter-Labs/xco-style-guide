@@ -7,8 +7,6 @@ const orderedKeys: SwatchKey[] = [
   "paper",
   "ink",
   "inkMuted",
-  "ember",
-  "cool",
   "flag",
   "navy",
   "ocean",
@@ -22,8 +20,6 @@ const swatchTextClass: Record<SwatchKey, string> = {
   paper:    "text-xco-ink",
   ink:      "text-xco-paper",
   inkMuted: "text-xco-paper",
-  ember:    "text-xco-paper",
-  cool:     "text-xco-paper",
   flag:     "text-xco-ink",
   rule:     "text-xco-paper",
   navy:     "text-xco-paper",
@@ -51,9 +47,10 @@ export default function ColourPage() {
       {/* Palette principle */}
       <section className="max-w-2xl">
         <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
-          Six tokens. If you think you need more, you probably need a new opacity stop,
-          not a new hue. The palette is deliberately spare — the brand lives in the
-          diagram structure and the type, not in colour variety.
+          Nine tokens. Four core (paper, ink, ink-muted, flag) plus a five-colour extended
+          palette for diagrams — two cool registers (navy, ocean, teal) and two warm
+          (sand, dusk). Never use all five at once. The brand lives in structure and type,
+          not in colour variety.
         </p>
       </section>
 
@@ -110,15 +107,15 @@ export default function ColourPage() {
         </div>
       </section>
 
-      {/* The 5% ember rule — worked example */}
+      {/* The 5% dusk rule — worked example */}
       <section className="max-w-3xl">
         <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-8">
-          The 5% Rule — Ember
+          The 5% Rule — Dusk
         </h2>
         <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed mb-8">
-          Ember is the one earned colour. It should never exceed ~5% of any surface.
+          Dusk is the one earned warm accent. It should never exceed ~5% of any surface.
           When it does, it stops signalling emphasis and starts signalling anxiety.
-          Below: ember at the right proportion, then at the wrong proportion.
+          Below: dusk at the right proportion, then at the wrong proportion.
         </p>
 
         {/* Right proportion */}
@@ -128,12 +125,12 @@ export default function ColourPage() {
           </p>
           <div className="relative h-16 bg-xco-paper border border-xco-ink/[0.12] overflow-hidden">
             <div
-              className="absolute left-0 top-0 h-full bg-xco-ember"
+              className="absolute left-0 top-0 h-full bg-xco-dusk"
               style={{ width: "5%" }}
             />
             <div className="absolute left-[7%] top-1/2 -translate-y-1/2">
               <p className="font-mono text-xs text-xco-ink-muted">
-                5% ember — the active axis on the Frontier dimension
+                5% dusk — the active axis on the Frontier dimension
               </p>
             </div>
           </div>
@@ -146,12 +143,12 @@ export default function ColourPage() {
           </p>
           <div className="relative h-16 bg-xco-paper border border-xco-ink/[0.12] overflow-hidden">
             <div
-              className="absolute left-0 top-0 h-full bg-xco-ember"
+              className="absolute left-0 top-0 h-full bg-xco-dusk"
               style={{ width: "40%" }}
             />
             <div className="absolute left-[43%] top-1/2 -translate-y-1/2">
               <p className="font-mono text-xs text-xco-ink-muted">
-                too much — ember becomes wallpaper
+                too much — dusk becomes wallpaper
               </p>
             </div>
           </div>

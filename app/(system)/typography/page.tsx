@@ -125,7 +125,7 @@ export default function TypographyPage() {
             >
               {/* Measurement annotation in DM Mono margin */}
               <div className="font-mono text-xs text-xco-ink-muted space-y-0.5 pt-1 shrink-0">
-                <p className="text-xco-ember">{step.label}</p>
+                <p className="text-xco-dusk">{step.label}</p>
                 <p>{step.size}</p>
                 <p>/{step.lineHeight} lh</p>
                 <p className="opacity-60">{step.measure} max</p>

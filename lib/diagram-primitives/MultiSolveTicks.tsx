@@ -23,7 +23,7 @@ export function MultiSolveTicks({
   y,
   count,
   width = 40,
-  stroke = colors.ember.hex,
+  stroke = colors.dusk.hex,
 }: MultiSolveTicksProps) {
   const tickHeight = 5;
   const tickGap = 4;

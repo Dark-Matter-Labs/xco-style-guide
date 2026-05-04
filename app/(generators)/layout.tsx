@@ -20,7 +20,7 @@ export default function GeneratorsLayout({
         <div className="max-w-7xl mx-auto flex items-center gap-8">
           <Link
             href="/"
-            className="font-mono text-xs text-xco-ink-muted hover:text-xco-ember transition-colors shrink-0"
+            className="font-mono text-xs text-xco-ink-muted hover:text-xco-dusk transition-colors shrink-0"
           >
             ← xCO
           </Link>

@@ -53,13 +53,13 @@ function Slider({
         <span className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
           {label}
         </span>
-        <span className="font-mono text-xs text-xco-ember">
+        <span className="font-mono text-xs text-xco-dusk">
           {display ?? value.toFixed(2)}
         </span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-xco-ember" />
+        className="w-full accent-xco-dusk" />
       {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
     </div>
   );
@@ -134,7 +134,7 @@ export function OptionFieldGenerator() {
           {COLOR_MODES.map(({ id, label, hint }) => (
             <label key={id} className="flex items-start gap-2 cursor-pointer">
               <input type="radio" name="color" value={id} checked={colorMode === id}
-                onChange={() => setColorMode(id)} className="accent-xco-ember mt-0.5" />
+                onChange={() => setColorMode(id)} className="accent-xco-dusk mt-0.5" />
               <span className="space-y-0.5">
                 <span className="font-mono text-xs text-xco-ink block">{label}</span>
                 <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
@@ -149,7 +149,7 @@ export function OptionFieldGenerator() {
           {FORMATS.map(({ id, label }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-ember" />
+                onChange={() => setFormat(id)} className="accent-xco-dusk" />
               <span className="font-mono text-xs text-xco-ink">{label}</span>
             </label>
           ))}

@@ -80,7 +80,7 @@ export function RiskNode({
   const d = jitteredRectPath(cx, cy, width, height, amplitude, seed);
   return (
     <g>
-      <path d={d} fill={colors.ember.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} strokeLinecap="round" />
+      <path d={d} fill={colors.dusk.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} strokeLinecap="round" />
       <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.paper.hex} />
     </g>
   );
@@ -116,7 +116,7 @@ export function FieldNode({
   const d = jitteredRectPath(cx, cy, width, height, amplitude, seed);
   return (
     <g>
-      <path d={d} fill={colors.paper.hex} stroke={colors.cool.hex} strokeWidth={diagram.lineWeights.structural} strokeDasharray="6 4" strokeLinecap="round" />
+      <path d={d} fill={colors.paper.hex} stroke={colors.ocean.hex} strokeWidth={diagram.lineWeights.structural} strokeDasharray="6 4" strokeLinecap="round" />
       <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.ink.hex} />
     </g>
   );

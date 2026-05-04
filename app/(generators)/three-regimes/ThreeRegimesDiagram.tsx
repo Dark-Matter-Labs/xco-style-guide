@@ -60,11 +60,8 @@ const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crims
 
 const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;
-const EMBER = colors.ember.hex;
-const COOL  = colors.cool.hex;
 const MUTED = colors.inkMuted.hex;
 
-// Extended palette — blueprint scheme
 const NAVY  = "#192640";
 const OCEAN = "#085A8C";
 const TEAL  = "#3786A6";
@@ -174,8 +171,8 @@ export const ThreeRegimesDiagram = forwardRef<
   const C = {
     frontier:  bp ? TEAL  : INK,
     fortress:  bp ? NAVY  : INK,
-    field:     bp ? OCEAN : COOL,
-    connector: bp ? DUSK  : EMBER,
+    field:     OCEAN,
+    connector: DUSK,
   };
 
   const frontierBot = { x: L.frontier.cx, y: L.frontier.cy + L.frontier.h / 2 };

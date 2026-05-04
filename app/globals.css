@@ -15,8 +15,6 @@
 @theme {
   /* ── Colour — static tokens (never swap) ───────────────────────── */
 
-  --color-xco-ember:     #E8593C;   /* the one earned accent — use ≤5% surface */
-  --color-xco-cool:      #3B5A6B;   /* field-register diagrams — one per comp  */
   --color-xco-flag:      #D4B547;   /* [wip] / [draft] / [v0.1] markers        */
 
   /* Extended diagram palette — blueprint (cool) + warmth (warm) */
@@ -76,9 +74,9 @@
   --secondary-foreground: #1C1B17;
   --muted:                #E8E5DC;
   --muted-foreground:     #5F5C53;
-  --accent:               #E8593C;
+  --accent:               #F27F3D;
   --accent-foreground:    #FFFFFF;
-  --destructive:          #E8593C;
+  --destructive:          #F27F3D;
   --border:               rgba(28, 27, 23, 0.12);
   --input:                rgba(28, 27, 23, 0.12);
   --ring:                 #1C1B17;
@@ -103,9 +101,9 @@
   --secondary-foreground: #FFFFFF;
   --muted:                #2A2920;
   --muted-foreground:     #5F5C53;
-  --accent:               #E8593C;
+  --accent:               #F27F3D;
   --accent-foreground:    #FFFFFF;
-  --destructive:          #E8593C;
+  --destructive:          #F27F3D;
   --border:               rgba(255, 255, 255, 0.10);
   --input:                rgba(255, 255, 255, 0.10);
   --ring:                 #FFFFFF;

@@ -145,7 +145,7 @@ function HighlightedText({ text, matches }: { text: string; matches: BannedMatch
     parts.push(
       <mark
         key={`m-${m.index}`}
-        className="bg-xco-ember/20 text-xco-ember border-b border-xco-ember"
+        className="bg-xco-dusk/20 text-xco-dusk border-b border-xco-dusk"
       >
         {text.slice(m.index, m.index + m.length)}
       </mark>,
@@ -199,7 +199,7 @@ export function ToneLinter() {
           {text && (
             <button
               onClick={() => { setText(""); setResult(null); }}
-              className="font-mono text-xs text-xco-ink-muted hover:text-xco-ember transition-colors ml-auto"
+              className="font-mono text-xs text-xco-ink-muted hover:text-xco-dusk transition-colors ml-auto"
             >
               clear
             </button>
@@ -235,8 +235,8 @@ export function ToneLinter() {
                 <ul className="space-y-1">
                   {result.bannedMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs text-xco-ember">✗</span>
-                      <span className="font-mono text-sm text-xco-ember">{m.word}</span>
+                      <span className="font-mono text-xs text-xco-dusk">✗</span>
+                      <span className="font-mono text-sm text-xco-dusk">{m.word}</span>
                     </li>
                   ))}
                 </ul>
