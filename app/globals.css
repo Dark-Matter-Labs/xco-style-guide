@@ -27,14 +27,14 @@
   /* ── Typography ─────────────────────────────────────────────────── */
   /* font-* variables are set by next/font on <html>; we alias them here */
 
-  --font-display: var(--font-crimson);  /* Crimson Pro — publication register  */
+  --font-display: var(--font-inter);    /* Inter — display, headlines          */
   --font-body:    var(--font-crimson);  /* Crimson Pro — running text          */
   --font-ui:      var(--font-inter);    /* Inter — navigation, labels          */
   --font-mono:    var(--font-dm-mono);  /* DM Mono — annotations, code, data   */
 
   /* shadcn semantic aliases */
   --font-sans:    var(--font-inter);
-  --font-heading: var(--font-crimson);
+  --font-heading: var(--font-inter);
 
   /* ── Spacing ────────────────────────────────────────────────────── */
 
