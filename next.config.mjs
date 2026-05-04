@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["sharp"],
+  webpack(config, { isServer }) {
+    if (isServer) {
+      config.externals = [...(config.externals ?? []), "sharp"];
+    }
+    return config;
   },
 };
 
