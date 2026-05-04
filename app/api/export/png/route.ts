@@ -1,49 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import sharp from "sharp";
+import { Resvg } from "@resvg/resvg-js";
+import fs from "fs";
+import path from "path";
 
 const GOOGLE_FONTS_URL =
   "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:ital,wght@0,400;1,400&display=swap";
 
-// Module-level cache — persists for the lifetime of the serverless container.
-let cachedFontCSS: string | null = null;
+const FONTS_DIR = "/tmp/xco-fonts";
 
-async function getEmbeddedFontCSS(): Promise<string> {
-  if (cachedFontCSS) return cachedFontCSS;
+// Resolved once per container instance
+let fontsReady: Promise<string> | null = null;
 
-  const cssRes = await fetch(GOOGLE_FONTS_URL, {
-    headers: {
-      // Old IE9 UA → Google Fonts returns TTF format, which librsvg/Sharp can render.
-      // Modern Chrome UA returns woff2 which librsvg cannot decode as a data URI.
-      "User-Agent":
-        "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)",
-    },
-  });
+function prepareFonts(): Promise<string> {
+  if (fontsReady) return fontsReady;
+  fontsReady = (async () => {
+    fs.mkdirSync(FONTS_DIR, { recursive: true });
 
-  if (!cssRes.ok) throw new Error(`Google Fonts fetch failed: ${cssRes.status}`);
-  const css = await cssRes.text();
+    // Old Android 2.2 UA → Google Fonts returns TTF (magic 00010000).
+    // Modern UAs get woff2/woff which resvg's font loader cannot parse.
+    const cssRes = await fetch(GOOGLE_FONTS_URL, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+      },
+    });
+    if (!cssRes.ok) throw new Error(`Google Fonts fetch failed: ${cssRes.status}`);
+    const css = await cssRes.text();
 
-  // Match any gstatic font URL (TTF format has no .woff2 suffix)
-  const urlPattern = /url\((https?:\/\/fonts\.gstatic\.com\/[^)]+)\)/g;
-  const matches = Array.from(css.matchAll(urlPattern));
+    const urls = Array.from(
+      css.matchAll(/url\((https?:\/\/fonts\.gstatic\.com\/[^)]+)\)/g),
+    ).map((m) => m[1]);
 
-  let result = css;
-  await Promise.all(
-    matches.map(async ([, url]) => {
-      const fontRes = await fetch(url);
-      if (!fontRes.ok) return;
-      const buf = await fontRes.arrayBuffer();
-      const b64 = Buffer.from(buf).toString("base64");
-      result = result.replace(url, `data:font/truetype;base64,${b64}`);
-    }),
-  );
+    await Promise.all(
+      urls.map(async (url, i) => {
+        const dest = path.join(FONTS_DIR, `font-${i}.ttf`);
+        if (fs.existsSync(dest)) return;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+      }),
+    );
 
-  cachedFontCSS = result;
-  return result;
-}
-
-function injectFonts(svg: string, fontCSS: string): string {
-  // Replace the @import line inside <style> with the full @font-face CSS
-  return svg.replace(/@import url\([^)]+\);/, fontCSS);
+    return FONTS_DIR;
+  })();
+  return fontsReady;
 }
 
 export async function POST(req: NextRequest) {
@@ -58,16 +58,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "svg, width, height required" }, { status: 400 });
     }
 
-    const fontCSS = await getEmbeddedFontCSS();
-    const svgWithFonts = injectFonts(svg, fontCSS);
+    const fontDir = await prepareFonts();
 
-    // Add explicit dimensions so librsvg rasterises at the right size
-    const svgWithSize = svgWithFonts.replace(
-      "<svg",
-      `<svg width="${width}" height="${height}"`,
-    );
+    // Strip @import — resvg can't fetch external CSS; fonts come from fontDirs
+    const svgClean = svg.replace(/@import url\([^)]+\);?/g, "");
 
-    const buffer = await sharp(Buffer.from(svgWithSize)).png().toBuffer();
+    // Add explicit pixel dimensions for correct rasterisation size
+    const svgWithSize = svgClean.replace("<svg", `<svg width="${width}" height="${height}"`);
+
+    const resvg = new Resvg(svgWithSize, {
+      font: {
+        fontDirs: [fontDir],
+        loadSystemFonts: false,
+        defaultFontFamily: "DM Mono",
+      },
+      fitTo: { mode: "width", value: width },
+    });
+
+    const rendered = resvg.render();
+    const buffer = rendered.asPng();
 
     return new NextResponse(new Uint8Array(buffer), {
       headers: {
