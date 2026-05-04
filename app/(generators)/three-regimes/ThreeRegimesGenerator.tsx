@@ -196,69 +196,74 @@ export function ThreeRegimesGenerator() {
           </div>
           {mode === "abstract" && (
             <p className="font-mono text-xs text-xco-ink-muted italic">
-              Organic blobs, flowing lines — emotional register
+              Gradient mood — Field, Frontier, Fortress as colour atmosphere.
+              No text, no structure.
             </p>
           )}
         </div>
 
-        <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
-            Node Labels
-          </h2>
-        </div>
+        {mode === "structural" && (
+          <>
+            <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4">
+              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+                Node Labels
+              </h2>
+            </div>
 
-        <Field
-          label="Frontier"
-          value={labels.frontier}
-          onChange={(v) => setLabels({ ...labels, frontier: v })}
-        />
-        <Field
-          label="Fortress"
-          value={labels.fortress}
-          onChange={(v) => setLabels({ ...labels, fortress: v })}
-        />
-        <Field
-          label="Field"
-          value={labels.field}
-          onChange={(v) => setLabels({ ...labels, field: v })}
-        />
-        <Field
-          label="Field sublabel"
-          value={labels.fieldSublabel}
-          onChange={(v) => setLabels({ ...labels, fieldSublabel: v })}
-          hint="shown below field label in mono"
-        />
+            <Field
+              label="Frontier"
+              value={labels.frontier}
+              onChange={(v) => setLabels({ ...labels, frontier: v })}
+            />
+            <Field
+              label="Fortress"
+              value={labels.fortress}
+              onChange={(v) => setLabels({ ...labels, fortress: v })}
+            />
+            <Field
+              label="Field"
+              value={labels.field}
+              onChange={(v) => setLabels({ ...labels, field: v })}
+            />
+            <Field
+              label="Field sublabel"
+              value={labels.fieldSublabel}
+              onChange={(v) => setLabels({ ...labels, fieldSublabel: v })}
+              hint="shown below field label in mono"
+            />
 
-        <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4 pt-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
-            Text
-          </h2>
-        </div>
+            <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4 pt-2">
+              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+                Text
+              </h2>
+            </div>
 
-        <TextArea
-          label="Relationship statement"
-          value={statement}
-          onChange={setStatement}
-          hint="DM Mono italic, below the diagram"
-        />
-        <TextArea
-          label="Caption"
-          value={caption}
-          onChange={setCaption}
-          hint="optional — smaller, below statement"
-        />
+            <TextArea
+              label="Relationship statement"
+              value={statement}
+              onChange={setStatement}
+              hint="DM Mono italic, below the diagram"
+            />
+            <TextArea
+              label="Caption"
+              value={caption}
+              onChange={setCaption}
+              hint="optional — smaller, below statement"
+            />
 
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showAnnotations}
-            onChange={(e) => setShowAnnotations(e.target.checked)}
-            className="accent-xco-ember w-4 h-4"
-          />
-          <span className="font-mono text-xs text-xco-ink-muted">
-            Show annotation marginalia
-          </span>
-        </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showAnnotations}
+                onChange={(e) => setShowAnnotations(e.target.checked)}
+                className="accent-xco-ember w-4 h-4"
+              />
+              <span className="font-mono text-xs text-xco-ink-muted">
+                Show annotation marginalia
+              </span>
+            </label>
+          </>
+        )}
 
         {mode === "structural" && (
           <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
