@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 const sections = [
   { href: "/typography", label: "Typography" },
@@ -24,7 +25,7 @@ export default function SystemLayout({
           >
             ← xCO
           </Link>
-          <div className="flex items-center gap-6 overflow-x-auto">
+          <div className="flex items-center gap-6 overflow-x-auto flex-1">
             {sections.map(({ href, label }) => (
               <Link
                 key={href}
@@ -35,6 +36,7 @@ export default function SystemLayout({
               </Link>
             ))}
           </div>
+          <DarkModeToggle />
         </div>
       </nav>
       <div className="max-w-6xl mx-auto px-8 py-12">{children}</div>

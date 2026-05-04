@@ -13,11 +13,8 @@
    ══════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Colour ─────────────────────────────────────────────────────── */
+  /* ── Colour — static tokens (never swap) ───────────────────────── */
 
-  --color-xco-paper:     #F2EFE8;   /* default page bg — warm cream, not white */
-  --color-xco-ink:       #1C1B17;   /* body text — warm near-black, not #000   */
-  --color-xco-ink-muted: #5F5C53;   /* secondary text, captions                */
   --color-xco-ember:     #E8593C;   /* the one earned accent — use ≤5% surface */
   --color-xco-cool:      #3B5A6B;   /* field-register diagrams — one per comp  */
   --color-xco-flag:      #D4B547;   /* [wip] / [draft] / [v0.1] markers        */
@@ -43,9 +40,23 @@
   --radius: 0.125rem;
 }
 
+/* ── xCO dynamic tokens — paper ↔ ink swap on .dark ─────────────── */
+/* @theme inline creates Tailwind utilities that resolve at runtime.  */
+
+@theme inline {
+  --color-xco-paper:     var(--xco-paper);
+  --color-xco-ink:       var(--xco-ink);
+  --color-xco-ink-muted: var(--xco-ink-muted);
+}
+
 /* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
 
 :root {
+  /* xCO dynamic palette — swap targets for .dark */
+  --xco-paper:     #F2EFE8;   /* warm cream, not white  */
+  --xco-ink:       #1C1B17;   /* warm near-black        */
+  --xco-ink-muted: #5F5C53;   /* secondary text         */
+
   --background:           #F2EFE8;
   --foreground:           #1C1B17;
   --card:                 #F2EFE8;
@@ -66,8 +77,13 @@
   --ring:                 #1C1B17;
 }
 
-/* Dark mode — secondary register only. Paper + ink is the primary. */
+/* Dark mode — first-class register. Paper ↔ ink swap + shadcn tokens. */
 .dark {
+  /* xCO palette swap */
+  --xco-paper:     #1C1B17;
+  --xco-ink:       #F2EFE8;
+  --xco-ink-muted: #9A9690;
+
   --background:           #1C1B17;
   --foreground:           #F2EFE8;
   --card:                 #2A2920;

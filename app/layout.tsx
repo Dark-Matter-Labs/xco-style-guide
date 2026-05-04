@@ -46,6 +46,14 @@ export default function RootLayout({
         dmMono.variable,
       )}
     >
+      {/* FOUC prevention — reads localStorage before first paint */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('xco-theme');if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );

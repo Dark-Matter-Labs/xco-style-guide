@@ -19,3 +19,4 @@ export type { AnnotationProps } from "./Annotation";
 export { AnnotationSource } from "./Annotation";
 
 export { jitteredLinePath, jitteredRectPath, seededLCG } from "./jitter";
+export { organicBlobPath, flowPaths } from "./organic";
