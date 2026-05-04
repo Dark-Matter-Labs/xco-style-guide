@@ -1,3 +1,26 @@
+import { WIP } from "@/components/WIP";
+import { ThreeRegimesGenerator } from "./ThreeRegimesGenerator";
+
 export default function ThreeRegimesPage() {
-  return <div className="p-8"><p className="font-mono text-sm text-xco-ink-muted">[wip] Three Regimes generator — coming in Step 4</p></div>;
+  return (
+    <div className="space-y-10">
+      <header className="flex items-baseline justify-between border-b border-xco-ink/[0.12] pb-6">
+        <div>
+          <p className="font-mono text-xs text-xco-ink-muted mb-1">Generator</p>
+          <h1 className="font-display text-4xl">Three Regimes of Optionality</h1>
+        </div>
+        <WIP variant="v0.1" />
+      </header>
+
+      <section className="max-w-2xl">
+        <p className="font-body text-lg text-xco-ink leading-relaxed">
+          Frontier / Fortress / Field — where Field is not a peer but the
+          precondition. Adjust labels, relationship statement, and caption.
+          Export SVG for exact typography; PNG for quick sharing.
+        </p>
+      </section>
+
+      <ThreeRegimesGenerator />
+    </div>
+  );
 }
