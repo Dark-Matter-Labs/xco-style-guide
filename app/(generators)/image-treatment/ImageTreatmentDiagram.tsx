@@ -8,19 +8,19 @@ const INK   = "#1C1B17";
 const OCEAN = "#085A8C";
 const DUSK  = "#F27F3D";
 
-export type DotShape        = "circle" | "square";
 export type ColorMode       = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";
-export type TreatmentMode   = "dots" | "sharp";
+export type TreatmentMode   = "raster" | "sharp";
 export type SourceDiagram   = "three-regimes" | "option-field";
+export type DiagramVariant  = "mark" | "territories" | "signal";
 
 export interface ImageTreatmentProps {
-  mode:          TreatmentMode;
-  resolution:    number;
-  dotShape:      DotShape;
-  colorMode:     ColorMode;
-  format:        TreatmentFormat;
-  sourceDiagram: SourceDiagram;
+  mode:            TreatmentMode;
+  resolution:      number;
+  colorMode:       ColorMode;
+  format:          TreatmentFormat;
+  sourceDiagram:   SourceDiagram;
+  diagramVariant?: DiagramVariant;
 }
 
 export const DIMS = {
@@ -157,7 +157,7 @@ function OptionFieldSharp({ vw, vh, fg, dotSpacing }: { vw: number; vh: number; 
 
 // ── Main SVG component — only used for export refs ───────────────────
 export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentProps>(
-  function ImageTreatmentDiagram({ mode, resolution, dotShape, colorMode, format, sourceDiagram }, ref) {
+  function ImageTreatmentDiagram({ mode, resolution, colorMode, format, sourceDiagram }, ref) {
     const { vw, vh } = DIMS[format];
     const bg = colorMode === "inverted" ? INK : PAPER;
     const fg = colorMode === "inverted" ? PAPER : colorMode === "ember" ? DUSK : INK;
@@ -170,15 +170,11 @@ export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentPro
     return (
       <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <rect width={vw} height={vh} fill={bg} />
-        {mode === "dots" && !isField && dots.map((d, i) =>
-          dotShape === "circle"
-            ? <circle key={i} cx={d.cx} cy={d.cy} r={d.r} fill={fg} />
-            : <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
+        {mode === "raster" && !isField && dots.map((d, i) =>
+          <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
         )}
-        {mode === "dots" && isField && fieldDots.map((d, i) =>
-          dotShape === "circle"
-            ? <circle key={i} cx={d.cx} cy={d.cy} r={d.r} fill={fg} />
-            : <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
+        {mode === "raster" && isField && fieldDots.map((d, i) =>
+          <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
         )}
         {mode === "sharp" && !isField && <SharpMark vw={vw} vh={vh} fg={fg} />}
         {mode === "sharp" &&  isField && <OptionFieldSharp vw={vw} vh={vh} fg={fg} dotSpacing={dotSpacing} />}
