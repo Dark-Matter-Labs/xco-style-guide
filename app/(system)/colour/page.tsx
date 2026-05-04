@@ -10,17 +10,27 @@ const orderedKeys: SwatchKey[] = [
   "ember",
   "cool",
   "flag",
+  "navy",
+  "ocean",
+  "teal",
+  "sand",
+  "dusk",
 ];
 
 // Text to overlay on swatches — light or dark depending on colour value
 const swatchTextClass: Record<SwatchKey, string> = {
-  paper: "text-xco-ink",
-  ink: "text-xco-paper",
+  paper:    "text-xco-ink",
+  ink:      "text-xco-paper",
   inkMuted: "text-xco-paper",
-  ember: "text-xco-paper",
-  cool: "text-xco-paper",
-  flag: "text-xco-ink",
-  rule: "text-xco-paper",
+  ember:    "text-xco-paper",
+  cool:     "text-xco-paper",
+  flag:     "text-xco-ink",
+  rule:     "text-xco-paper",
+  navy:     "text-xco-paper",
+  ocean:    "text-xco-paper",
+  teal:     "text-xco-paper",
+  sand:     "text-xco-ink",
+  dusk:     "text-xco-ink",
 };
 
 function hexToRgb(hex: string) {

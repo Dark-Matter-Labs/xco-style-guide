@@ -11,6 +11,7 @@ export interface DiagramLabels {
 }
 
 export type DiagramFormat = "hero" | "square" | "mark";
+export type DiagramColorScheme = "standard" | "blueprint";
 
 export interface ThreeRegimesDiagramProps {
   labels: DiagramLabels;
@@ -19,6 +20,7 @@ export interface ThreeRegimesDiagramProps {
   showAnnotations: boolean;
   format: DiagramFormat;
   amplitude: number; // retained for interface compat — unused
+  colorScheme?: DiagramColorScheme;
 }
 
 const LAYOUTS = {
@@ -62,21 +64,29 @@ const EMBER = colors.ember.hex;
 const COOL  = colors.cool.hex;
 const MUTED = colors.inkMuted.hex;
 
+// Extended palette — blueprint scheme
+const NAVY  = "#192640";
+const OCEAN = "#085A8C";
+const TEAL  = "#3786A6";
+const DUSK  = "#F27F3D";
+
 // Horizontal hatching — density encodes regime character:
 // Frontier (sparse): open, expansive, high optionality
 // Fortress (dense):  closed, entrenched, low optionality
-// Field (medium, cool): systemic, broad, slower-moving
-function HatchPatterns() {
+// Field (medium): systemic, broad, slower-moving
+function HatchPatterns({ frColor, foColor, fiColor }: {
+  frColor: string; foColor: string; fiColor: string;
+}) {
   return (
     <>
       <pattern id="hatch-fr" patternUnits="userSpaceOnUse" width="8" height="10">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" strokeOpacity="0.5" />
+        <line x1="0" y1="0" x2="8" y2="0" stroke={frColor} strokeWidth="0.75" strokeOpacity="0.5" />
       </pattern>
       <pattern id="hatch-fo" patternUnits="userSpaceOnUse" width="8" height="4.5">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" strokeOpacity="0.7" />
+        <line x1="0" y1="0" x2="8" y2="0" stroke={foColor} strokeWidth="0.75" strokeOpacity="0.7" />
       </pattern>
       <pattern id="hatch-fi" patternUnits="userSpaceOnUse" width="8" height="7">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={COOL} strokeWidth="0.75" strokeOpacity="0.55" />
+        <line x1="0" y1="0" x2="8" y2="0" stroke={fiColor} strokeWidth="0.75" strokeOpacity="0.55" />
       </pattern>
     </>
   );
@@ -153,12 +163,20 @@ export const ThreeRegimesDiagram = forwardRef<
   SVGSVGElement,
   ThreeRegimesDiagramProps
 >(function ThreeRegimesDiagram(
-  { labels, relationshipStatement, caption, showAnnotations, format },
+  { labels, relationshipStatement, caption, showAnnotations, format, colorScheme = "standard" },
   ref,
 ) {
   const L = LAYOUTS[format];
   const showText = format !== "mark";
   const hasSub = Boolean(labels.fieldSublabel);
+
+  const bp = colorScheme === "blueprint";
+  const C = {
+    frontier:  bp ? TEAL  : INK,
+    fortress:  bp ? NAVY  : INK,
+    field:     bp ? OCEAN : COOL,
+    connector: bp ? DUSK  : EMBER,
+  };
 
   const frontierBot = { x: L.frontier.cx, y: L.frontier.cy + L.frontier.h / 2 };
   const fortressBot = { x: L.fortress.cx, y: L.fortress.cy + L.fortress.h / 2 };
@@ -181,45 +199,44 @@ export const ThreeRegimesDiagram = forwardRef<
     <svg ref={ref} viewBox={`0 0 ${L.vw} ${L.vh}`} xmlns="http://www.w3.org/2000/svg">
       <defs>
         <style>{FONT_IMPORT}</style>
-        <HatchPatterns />
+        <HatchPatterns frColor={C.frontier} foColor={C.fortress} fiColor={C.field} />
       </defs>
 
       {/* Background */}
       <rect width={L.vw} height={L.vh} fill={PAPER} />
 
-      {/* Connectors — ember, crisp */}
+      {/* Connectors */}
       <line
         x1={frontierBot.x} y1={frontierBot.y} x2={L.merge.x} y2={L.merge.y}
-        stroke={EMBER} strokeWidth={L.lineW} strokeLinecap="square"
+        stroke={C.connector} strokeWidth={L.lineW} strokeLinecap="square"
       />
       <line
         x1={fortressBot.x} y1={fortressBot.y} x2={L.merge.x} y2={L.merge.y}
-        stroke={EMBER} strokeWidth={L.lineW} strokeLinecap="square"
+        stroke={C.connector} strokeWidth={L.lineW} strokeLinecap="square"
       />
       <line
         x1={L.merge.x} y1={L.merge.y} x2={fieldTop.x} y2={fieldTop.y}
-        stroke={EMBER} strokeWidth={L.lineW} strokeLinecap="square"
+        stroke={C.connector} strokeWidth={L.lineW} strokeLinecap="square"
       />
 
       {/* Merge dot */}
-      <circle cx={L.merge.x} cy={L.merge.y} r={L.dotR} fill={EMBER} />
+      <circle cx={L.merge.x} cy={L.merge.y} r={L.dotR} fill={C.connector} />
 
       {/* Nodes */}
       <HatchBox
         cx={L.frontier.cx} cy={L.frontier.cy}
         w={L.frontier.w} h={L.frontier.h}
-        hatchId="hatch-fr"
+        hatchId="hatch-fr" borderColor={C.frontier}
       />
       <HatchBox
         cx={L.fortress.cx} cy={L.fortress.cy}
         w={L.fortress.w} h={L.fortress.h}
-        hatchId="hatch-fo"
+        hatchId="hatch-fo" borderColor={C.fortress}
       />
       <HatchBox
         cx={L.field.cx} cy={L.field.cy}
         w={L.field.w} h={L.field.h}
-        hatchId="hatch-fi"
-        borderColor={COOL}
+        hatchId="hatch-fi" borderColor={C.field}
       />
 
       {/* Labels — rendered with white clearance so hatch doesn't cut through */}
@@ -229,14 +246,14 @@ export const ThreeRegimesDiagram = forwardRef<
             cx={L.frontier.cx} cy={L.frontier.cy}
             primary={labels.frontier}
             primarySize={L.labelSize} subSize={L.subSize}
-            primaryColor={INK} subColor={INK}
+            primaryColor={C.frontier} subColor={C.frontier}
             clearW={nodeClearW} clearH={nodeClearH}
           />
           <ClearLabel
             cx={L.fortress.cx} cy={L.fortress.cy}
             primary={labels.fortress}
             primarySize={L.labelSize} subSize={L.subSize}
-            primaryColor={INK} subColor={INK}
+            primaryColor={C.fortress} subColor={C.fortress}
             clearW={nodeClearW} clearH={nodeClearH}
           />
           <ClearLabel
@@ -244,7 +261,7 @@ export const ThreeRegimesDiagram = forwardRef<
             primary={labels.field}
             sub={labels.fieldSublabel || undefined}
             primarySize={L.labelSize} subSize={L.subSize}
-            primaryColor={COOL} subColor={COOL}
+            primaryColor={C.field} subColor={C.field}
             clearW={fieldClearW} clearH={fieldClearH}
           />
         </>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ThreeRegimesDiagram, DiagramFormat } from "./ThreeRegimesDiagram";
+import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme } from "./ThreeRegimesDiagram";
 import { AbstractThreeRegimesDiagram } from "./AbstractThreeRegimesDiagram";
 import type { DiagramLabels } from "./ThreeRegimesDiagram";
 import { WIP } from "@/components/WIP";
@@ -122,6 +122,7 @@ export function ThreeRegimesGenerator() {
   const [showAnnotations, setShowAnnotations] = useState(false);
   const [previewFormat, setPreviewFormat] = useState<DiagramFormat>("hero");
   const [mode, setMode] = useState<DiagramMode>("structural");
+  const [colorScheme, setColorScheme] = useState<DiagramColorScheme>("standard");
   const [exporting, setExporting] = useState<string | null>(null);
 
   // Structural mode refs
@@ -144,6 +145,7 @@ export function ThreeRegimesGenerator() {
     caption,
     showAnnotations,
     amplitude: 0,
+    colorScheme,
   };
 
   const handleExport = async (type: string) => {
@@ -200,6 +202,27 @@ export function ThreeRegimesGenerator() {
             </p>
           )}
         </div>
+
+        {mode === "structural" && (
+          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+              Colour Scheme
+            </h2>
+            {([
+              { id: "standard", label: "Standard", hint: "ink / cool / ember" },
+              { id: "blueprint", label: "Blueprint", hint: "teal · navy · ocean · dusk" },
+            ] as { id: DiagramColorScheme; label: string; hint: string }[]).map(({ id, label, hint }) => (
+              <label key={id} className="flex items-start gap-2 cursor-pointer">
+                <input type="radio" name="colorScheme" value={id} checked={colorScheme === id}
+                  onChange={() => setColorScheme(id)} className="accent-xco-ember mt-0.5" />
+                <span className="space-y-0.5">
+                  <span className="font-mono text-xs text-xco-ink block">{label}</span>
+                  <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
 
         {mode === "structural" && (
           <>

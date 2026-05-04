@@ -1,45 +1,60 @@
 import Link from "next/link";
 
 const systemLinks = [
-  { href: "/typography", label: "Typography" },
-  { href: "/colour", label: "Colour" },
-  { href: "/grid", label: "Grid" },
-  { href: "/diagrams", label: "Diagrammatic Grammar" },
-  { href: "/tone", label: "Tone of Voice" },
-  { href: "/components", label: "Components" },
+  { href: "/typography",  label: "Typography",          n: "01" },
+  { href: "/colour",      label: "Colour",              n: "02" },
+  { href: "/grid",        label: "Grid",                n: "03" },
+  { href: "/diagrams",    label: "Diagrammatic Grammar", n: "04" },
+  { href: "/tone",        label: "Tone of Voice",       n: "05" },
+  { href: "/components",  label: "Components",          n: "06" },
 ];
 
 const generatorLinks = [
-  { href: "/three-regimes", label: "Three Regimes", note: "priority — Robyn's substack" },
-  { href: "/portfolio-diagram", label: "Portfolio Diagram", note: "phase 2" },
-  { href: "/social-card", label: "Social Card", note: "phase 2" },
+  { href: "/three-regimes",  label: "Three Regimes" },
+  { href: "/option-field",   label: "Option Field" },
+  { href: "/social-card",    label: "Social Card" },
+  { href: "/paper-cover",    label: "Paper Cover" },
+  { href: "/image-treatment", label: "Image Treatment" },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen px-8 py-16 max-w-5xl mx-auto">
-      <header className="mb-16 border-b border-xco-ink/[0.12] pb-8">
-        <p className="font-mono text-xs text-xco-ink-muted mb-3 tracking-widest uppercase">
-          Dark Matter Labs
+    <main className="min-h-screen bg-xco-paper">
+
+      {/* Header — full bleed, ocean accent at bottom */}
+      <header className="border-b-4 border-xco-ocean px-8 pt-14 pb-10">
+        <p className="font-mono text-xs text-xco-ink-muted tracking-widest uppercase mb-8">
+          Dark Matter Labs — Expanding Civilisational Optionality
         </p>
-        <h1 className="font-display text-5xl leading-tight mb-2">
-          Expanding Civilisational Optionality
-        </h1>
-        <p className="font-mono text-sm text-xco-ink-muted">xCO — Living Style Guide</p>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 max-w-7xl">
+          <h1 className="font-display text-[clamp(3rem,7vw,5.5rem)] leading-[1.0] text-xco-ink">
+            xCO
+          </h1>
+          <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed max-w-xl">
+            The visual language for civilisational optionality —
+            documented and generated here.
+          </p>
+        </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-        <section>
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-6">
+      <div className="max-w-7xl px-8 py-14 grid grid-cols-1 lg:grid-cols-[2fr_1px_1fr] gap-0">
+
+        {/* Design System */}
+        <section className="pr-0 lg:pr-16 pb-14 lg:pb-0">
+          <h2 className="font-mono text-xs text-xco-ocean tracking-widest uppercase mb-8">
             Design System
           </h2>
-          <nav className="space-y-2">
-            {systemLinks.map(({ href, label }) => (
-              <Link key={href} href={href} className="flex items-baseline gap-3 group">
-                <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ember transition-colors">
-                  →
+          <nav className="space-y-0">
+            {systemLinks.map(({ href, label, n }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex items-baseline gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-ocean transition-colors"
+              >
+                <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ocean transition-colors w-6 shrink-0">
+                  {n}
                 </span>
-                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ember transition-colors">
+                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ocean transition-colors">
                   {label}
                 </span>
               </Link>
@@ -47,38 +62,39 @@ export default function Home() {
           </nav>
         </section>
 
-        <section>
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-6">
-            Asset Generators
+        {/* Divider */}
+        <div className="hidden lg:block bg-xco-ink/[0.08]" />
+
+        {/* Instruments */}
+        <section className="pt-14 lg:pt-0 lg:pl-16 border-t border-xco-ink/[0.08] lg:border-t-0">
+          <h2 className="font-mono text-xs text-xco-dusk tracking-widest uppercase mb-8">
+            Instruments
           </h2>
-          <nav className="space-y-2">
-            {generatorLinks.map(({ href, label, note }) => (
-              <Link key={href} href={href} className="flex items-baseline gap-3 group">
-                <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ember transition-colors">
-                  →
-                </span>
-                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ember transition-colors">
+          <nav className="space-y-0">
+            {generatorLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex items-baseline gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-dusk transition-colors"
+              >
+                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-dusk transition-colors">
                   {label}
                 </span>
-                {note && (
-                  <span className="font-mono text-xs text-xco-ink-muted">[{note}]</span>
-                )}
               </Link>
             ))}
           </nav>
         </section>
       </div>
 
-      <section className="mt-16 pt-8 border-t border-xco-ink/[0.12]">
-        <p className="font-body text-xco-ink-muted max-w-2xl leading-relaxed">
-          This site is the system. The design language for xCO is documented and generated
-          here — typography, colour, diagrammatic grammar, tone of voice. Every asset the
-          team ships is made from these primitives.
+      <footer className="max-w-7xl px-8 pb-14 flex items-center justify-between">
+        <p className="font-mono text-xs text-xco-ink-muted max-w-lg leading-relaxed">
+          Every asset the team ships is built from these primitives.
+          The system is the document.
         </p>
-        <p className="font-mono text-xs text-xco-flag mt-4 inline-block bg-xco-flag/10 px-2 py-1">
-          [v0.1] — system under construction
-        </p>
-      </section>
+        <span className="font-mono text-xs text-xco-flag bg-xco-flag/10 px-2 py-1 shrink-0">
+          [v0.1]
+        </span>
+      </footer>
     </main>
   );
 }

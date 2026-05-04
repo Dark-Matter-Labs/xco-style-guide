@@ -3,7 +3,7 @@
 import { forwardRef, useMemo } from "react";
 
 export type FieldFormat    = "hero" | "square" | "mark";
-export type FieldColorMode = "ink" | "spectrum" | "inverted";
+export type FieldColorMode = "ink" | "spectrum" | "inverted" | "blueprint" | "warmth";
 
 export interface OptionFieldProps {
   format:      FieldFormat;
@@ -25,6 +25,11 @@ const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const EMBER = "#E8593C";
 const COOL  = "#3B5A6B";
+const NAVY  = "#192640";
+const OCEAN = "#085A8C";
+const TEAL  = "#3786A6";
+const SAND  = "#F2B077";
+const DUSK  = "#F27F3D";
 
 // resolution 0–100 → spacing 10→3px
 function resolveSpacing(r: number): number {
@@ -71,10 +76,21 @@ function spatialWeight(
 function segmentColor(yRel: number, colorMode: FieldColorMode): string {
   if (colorMode === "inverted") return PAPER;
   if (colorMode === "spectrum") {
-    // Field (bottom) → COOL, convergence/open (top) → EMBER, mid → INK
     if (yRel > 0.62) return COOL;
     if (yRel < 0.38) return EMBER;
     return INK;
+  }
+  if (colorMode === "blueprint") {
+    // Navy ground — teal (open/frontier) → ocean (field/systemic) by register
+    if (yRel < 0.38) return TEAL;
+    if (yRel > 0.62) return OCEAN;
+    return "#1A6E9B"; // mid interpolated
+  }
+  if (colorMode === "warmth") {
+    // White ground — dusk (upper) → sand (lower) warmth gradient
+    if (yRel < 0.38) return DUSK;
+    if (yRel > 0.62) return SAND;
+    return "#F29958"; // mid interpolated
   }
   return INK;
 }
@@ -111,7 +127,7 @@ export const OptionFieldDiagram = forwardRef<SVGSVGElement, OptionFieldProps>(
   function OptionFieldDiagram(props, ref) {
     const { format, colorMode } = props;
     const { vw, vh } = DIMS[format];
-    const bg = colorMode === "inverted" ? INK : PAPER;
+    const bg = colorMode === "inverted" ? INK : colorMode === "blueprint" ? NAVY : PAPER;
 
     const segs = useMemo(
       () => compute(props),

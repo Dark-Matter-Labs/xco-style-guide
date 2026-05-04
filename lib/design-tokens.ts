@@ -53,6 +53,15 @@ export const colors = {
     usage:
       "[wip] / [draft] / [v0.1] markers. Distinct enough to read as a tag; quiet enough not to compete.",
   },
+
+  // ── Extended diagram palette ─────────────────────────────────────
+  // Five-color system for blueprint / warmth diagram modes.
+  // Never use all five at once — pick a register (cool or warm).
+  navy:  { hex: "#192640", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Blueprint dark ground. Deep structural register." },
+  ocean: { hex: "#085A8C", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Structural blue — nav accent, systemic diagram elements." },
+  teal:  { hex: "#3786A6", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Open register — frontier, coastal, lighter blue." },
+  sand:  { hex: "#F2B077", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Warm field register — terrestrial, amber light." },
+  dusk:  { hex: "#F27F3D", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Warm convergence — orange-ember, the meeting point." },
 } as const;
 
 export type ColorName = keyof typeof colors;

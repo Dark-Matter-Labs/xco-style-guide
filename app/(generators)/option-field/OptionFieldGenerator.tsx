@@ -33,9 +33,11 @@ const FORMATS: { id: FieldFormat; label: string; w: number; h: number }[] = [
 ];
 
 const COLOR_MODES: { id: FieldColorMode; label: string; hint: string }[] = [
-  { id: "ink",      label: "Ink",      hint: "ink on white" },
-  { id: "spectrum", label: "Spectrum", hint: "cool → ink → ember by register" },
-  { id: "inverted", label: "Inverted", hint: "white on ink" },
+  { id: "ink",       label: "Ink",       hint: "ink on white" },
+  { id: "spectrum",  label: "Spectrum",  hint: "cool → ink → ember by register" },
+  { id: "inverted",  label: "Inverted",  hint: "white on ink" },
+  { id: "blueprint", label: "Blueprint", hint: "navy ground — teal to ocean scanlines" },
+  { id: "warmth",    label: "Warmth",    hint: "dusk to sand on white" },
 ];
 
 function Slider({
@@ -171,7 +173,7 @@ export function OptionFieldGenerator() {
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
         <div className="border border-xco-ink/[0.12] overflow-hidden"
-          style={{ background: colorMode === "inverted" ? "#1C1B17" : "#FFFFFF" }}>
+          style={{ background: colorMode === "inverted" ? "#1C1B17" : colorMode === "blueprint" ? "#192640" : "#FFFFFF" }}>
           <OptionFieldDiagram {...props} format={format} />
         </div>
         <p className="font-mono text-xs text-xco-ink-muted">

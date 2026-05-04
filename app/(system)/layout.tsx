@@ -17,7 +17,7 @@ export default function SystemLayout({
 }) {
   return (
     <div className="min-h-screen bg-xco-paper">
-      <nav className="border-b border-xco-ink/[0.12] px-8 py-3 sticky top-0 bg-xco-paper z-10">
+      <nav className="border-b-2 border-xco-ocean px-8 py-3 sticky top-0 bg-xco-paper z-10">
         <div className="max-w-6xl mx-auto flex items-center gap-8">
           <Link
             href="/"
