@@ -53,24 +53,24 @@
 
 :root {
   /* xCO dynamic palette — swap targets for .dark */
-  --xco-paper:     #F2EFE8;   /* warm cream, not white  */
+  --xco-paper:     #FFFFFF;
   --xco-ink:       #1C1B17;   /* warm near-black        */
   --xco-ink-muted: #5F5C53;   /* secondary text         */
 
-  --background:           #F2EFE8;
+  --background:           #FFFFFF;
   --foreground:           #1C1B17;
-  --card:                 #F2EFE8;
+  --card:                 #FFFFFF;
   --card-foreground:      #1C1B17;
-  --popover:              #F2EFE8;
+  --popover:              #FFFFFF;
   --popover-foreground:   #1C1B17;
   --primary:              #1C1B17;
-  --primary-foreground:   #F2EFE8;
+  --primary-foreground:   #FFFFFF;
   --secondary:            #E8E5DC;
   --secondary-foreground: #1C1B17;
   --muted:                #E8E5DC;
   --muted-foreground:     #5F5C53;
   --accent:               #E8593C;
-  --accent-foreground:    #F2EFE8;
+  --accent-foreground:    #FFFFFF;
   --destructive:          #E8593C;
   --border:               rgba(28, 27, 23, 0.12);
   --input:                rgba(28, 27, 23, 0.12);
@@ -81,27 +81,27 @@
 .dark {
   /* xCO palette swap */
   --xco-paper:     #1C1B17;
-  --xco-ink:       #F2EFE8;
+  --xco-ink:       #FFFFFF;
   --xco-ink-muted: #9A9690;
 
   --background:           #1C1B17;
-  --foreground:           #F2EFE8;
+  --foreground:           #FFFFFF;
   --card:                 #2A2920;
-  --card-foreground:      #F2EFE8;
+  --card-foreground:      #FFFFFF;
   --popover:              #2A2920;
-  --popover-foreground:   #F2EFE8;
-  --primary:              #F2EFE8;
+  --popover-foreground:   #FFFFFF;
+  --primary:              #FFFFFF;
   --primary-foreground:   #1C1B17;
   --secondary:            #2A2920;
-  --secondary-foreground: #F2EFE8;
+  --secondary-foreground: #FFFFFF;
   --muted:                #2A2920;
   --muted-foreground:     #5F5C53;
   --accent:               #E8593C;
-  --accent-foreground:    #F2EFE8;
+  --accent-foreground:    #FFFFFF;
   --destructive:          #E8593C;
-  --border:               rgba(242, 239, 232, 0.10);
-  --input:                rgba(242, 239, 232, 0.10);
-  --ring:                 #F2EFE8;
+  --border:               rgba(255, 255, 255, 0.10);
+  --input:                rgba(255, 255, 255, 0.10);
+  --ring:                 #FFFFFF;
 }
 
 @theme inline {

@@ -10,7 +10,7 @@ export default function DiagramsPage() {
       </header>
 
       <section className="max-w-2xl space-y-4">
-        <p className="font-body text-lg text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
           The brand is the diagrams. The grammar defines seven primitives. Every
           xCO diagram is assembled from these — no others.
         </p>

@@ -19,13 +19,13 @@ export function JitteredLine({
   y1,
   x2,
   y2,
-  amplitude = diagram.jitterAmplitude,
+  amplitude = 1.8,
   strokeWidth,
   stroke = colors.ink.hex,
   annotation = false,
   seed = 42,
 }: JitteredLineProps) {
-  const sw = strokeWidth ?? (annotation ? diagram.lineWeights.annotation : diagram.lineWeights.primary);
+  const sw = strokeWidth ?? (annotation ? diagram.lineWeights.texture : diagram.lineWeights.structural);
   const d = jitteredLinePath(x1, y1, x2, y2, amplitude, seed);
 
   return (

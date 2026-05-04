@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
-const PAPER = "#F2EFE8";
+const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const MUTED = "#5F5C53";
 const EMBER = "#E8593C";
@@ -67,29 +67,18 @@ function CoverMark({ cx, cy, scale }: { cx: number; cy: number; scale: number })
   );
 }
 
-// Abstract gradient for cover visual zone (muted, formal)
-function CoverAbstractGradients() {
+// Linear gradient for cover visual zone — same sweep as other abstract assets
+function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number }) {
   return (
-    <>
-      <radialGradient id="cv-field" gradientUnits="userSpaceOnUse"
-        cx={COVER_W/2} cy={480} r={520}>
-        <stop offset="0%"   stopColor={COOL}  stopOpacity="0.30" />
-        <stop offset="60%"  stopColor={COOL}  stopOpacity="0.08" />
-        <stop offset="100%" stopColor={COOL}  stopOpacity="0" />
-      </radialGradient>
-      <radialGradient id="cv-frontier" gradientUnits="userSpaceOnUse"
-        cx={120} cy={130} r={400}>
-        <stop offset="0%"   stopColor={EMBER} stopOpacity="0.28" />
-        <stop offset="50%"  stopColor={EMBER} stopOpacity="0.07" />
-        <stop offset="100%" stopColor={EMBER} stopOpacity="0" />
-      </radialGradient>
-      <radialGradient id="cv-fortress" gradientUnits="userSpaceOnUse"
-        cx={COVER_W - 80} cy={160} r={360}>
-        <stop offset="0%"   stopColor={INK}   stopOpacity="0.20" />
-        <stop offset="50%"  stopColor={INK}   stopOpacity="0.05" />
-        <stop offset="100%" stopColor={INK}   stopOpacity="0" />
-      </radialGradient>
-    </>
+    <linearGradient id="cv-abstract" gradientUnits="userSpaceOnUse"
+      x1={COVER_W / 2} y1={top} x2={COVER_W / 2} y2={bottom}>
+      <stop offset="0%"   stopColor="#0F1C24" />
+      <stop offset="22%"  stopColor="#1A3241" />
+      <stop offset="48%"  stopColor="#3B5A6B" />
+      <stop offset="68%"  stopColor="#7A4132" />
+      <stop offset="85%"  stopColor="#CC5038" />
+      <stop offset="100%" stopColor="#E8593C" />
+    </linearGradient>
   );
 }
 
@@ -121,7 +110,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
       >
         <defs>
           <style>{FONT_IMPORT}</style>
-          {visual === "abstract" && <CoverAbstractGradients />}
+          {visual === "abstract" && <CoverAbstractGradient top={visualTop} bottom={visualBottom} />}
         </defs>
 
         {/* Background */}
@@ -129,21 +118,8 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Abstract gradient visual */}
         {visual === "abstract" && (
-          <>
-            <rect x={0} y={visualTop} width={COVER_W} height={visualBottom - visualTop}
-              fill={PAPER} />
-            <rect x={0} y={visualTop} width={COVER_W} height={visualBottom - visualTop}
-              fill="url(#cv-field)" />
-            <rect x={0} y={visualTop} width={COVER_W} height={visualBottom - visualTop}
-              fill="url(#cv-frontier)" />
-            <rect x={0} y={visualTop} width={COVER_W} height={visualBottom - visualTop}
-              fill="url(#cv-fortress)" />
-            {/* Fade edges */}
-            <rect x={0} y={visualTop} width={COVER_W} height={32}
-              fill={`url(#cv-fade-top)`} />
-            <rect x={0} y={visualBottom - 32} width={COVER_W} height={32}
-              fill={`url(#cv-fade-bot)`} />
-          </>
+          <rect x={0} y={visualTop} width={COVER_W} height={visualBottom - visualTop}
+            fill="url(#cv-abstract)" />
         )}
 
         {/* Three Regimes mark visual */}

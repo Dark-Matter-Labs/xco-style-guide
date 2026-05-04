@@ -39,7 +39,7 @@ export default function Home() {
                 <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ember transition-colors">
                   →
                 </span>
-                <span className="font-body text-lg text-xco-ink group-hover:text-xco-ember transition-colors">
+                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ember transition-colors">
                   {label}
                 </span>
               </Link>
@@ -57,7 +57,7 @@ export default function Home() {
                 <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ember transition-colors">
                   →
                 </span>
-                <span className="font-body text-lg text-xco-ink group-hover:text-xco-ember transition-colors">
+                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ember transition-colors">
                   {label}
                 </span>
                 {note && (

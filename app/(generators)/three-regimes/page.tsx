@@ -13,7 +13,7 @@ export default function ThreeRegimesPage() {
       </header>
 
       <section className="max-w-2xl">
-        <p className="font-body text-lg text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
           Frontier / Fortress / Field — where Field is not a peer but the
           precondition. Adjust labels, relationship statement, and caption.
           Export SVG for exact typography; PNG for quick sharing.

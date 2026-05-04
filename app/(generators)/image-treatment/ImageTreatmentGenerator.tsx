@@ -178,7 +178,7 @@ export function ImageTreatmentGenerator() {
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
         <div className="border border-xco-ink/[0.12] overflow-hidden"
-          style={{ background: colorMode === "inverted" ? "#1C1B17" : "#F2EFE8" }}>
+          style={{ background: colorMode === "inverted" ? "#1C1B17" : "#FFFFFF" }}>
           <ImageTreatmentDiagram {...props} format={format} />
         </div>
         <p className="font-mono text-xs text-xco-ink-muted">

@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react";
 
-const PAPER = "#F2EFE8";
+const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const EMBER = "#E8593C";
 const COOL  = "#3B5A6B";

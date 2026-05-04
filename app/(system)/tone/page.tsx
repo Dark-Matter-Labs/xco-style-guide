@@ -15,7 +15,7 @@ export default function TonePage() {
 
       {/* Principle */}
       <section className="max-w-2xl space-y-4">
-        <p className="font-body text-lg text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
           Three registers. Pick deliberately. The writing fails if the register
           is chosen by accident — an annotation that reads like a hunch, a
           method text that reads like an annotation, a hunch mistaken for a

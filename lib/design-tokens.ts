@@ -7,7 +7,7 @@
 
 export const colors = {
   paper: {
-    hex: "#F2EFE8",
+    hex: "#FFFFFF",
     cssVar: "--color-xco-paper",
     twClass: "xco-paper",
     usage: "Default page background. Never pure white.",
@@ -129,20 +129,20 @@ export const typography = {
     {
       name: "h3",
       label: "Heading 3",
-      size: "1.375rem",
+      size: "1.625rem",
       lineHeight: "1.3",
       measure: "62ch",
       face: "body" as const,
-      tailwind: "text-[1.375rem] leading-[1.3]",
+      tailwind: "text-[1.625rem] leading-[1.3]",
     },
     {
       name: "body",
       label: "Body",
-      size: "1.125rem",
+      size: "1.375rem",
       lineHeight: "1.7",
       measure: "68ch",
       face: "body" as const,
-      tailwind: "text-lg leading-relaxed",
+      tailwind: "text-[1.375rem] leading-relaxed",
     },
     {
       name: "small",
@@ -188,16 +188,18 @@ export const spacing = {
 } as const;
 
 // ── Diagram primitives ───────────────────────────────────────────────
+//
+// Two-weight system (Martin Perrow / In Studio):
+//   structural — borders, connectors, axis rules, primary data lines
+//   texture    — hatching, grid, leaders, secondary annotation
+//
+// All diagram types must use only these two weights.
+// Scale by format: hero/square use 1×, mark uses 0.5×.
 
 export const diagram = {
-  // Line jitter: applied to every drawn path. Value is a noise amplitude
-  // in SVG user units. Too little = rendering bug. Too much = decorative.
-  // Default 1.8 — adjustable on /diagrams with a slider.
-  jitterAmplitude: 1.8,
-
   lineWeights: {
-    primary: 1.5,     // Structural lines (post-jitter)
-    annotation: 0.5,  // Leaders, context lines (dashed)
+    structural: 1.5,  // Box borders, connectors, primary lines
+    texture:    0.75, // Hatching, grid rules, leader lines
   },
 
   nodeTypes: {

@@ -40,7 +40,7 @@ export default function ColourPage() {
 
       {/* Palette principle */}
       <section className="max-w-2xl">
-        <p className="font-body text-lg text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
           Six tokens. If you think you need more, you probably need a new opacity stop,
           not a new hue. The palette is deliberately spare — the brand lives in the
           diagram structure and the type, not in colour variety.
@@ -105,7 +105,7 @@ export default function ColourPage() {
         <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-8">
           The 5% Rule — Ember
         </h2>
-        <p className="font-body text-lg text-xco-ink leading-relaxed mb-8">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed mb-8">
           Ember is the one earned colour. It should never exceed ~5% of any surface.
           When it does, it stops signalling emphasis and starts signalling anxiety.
           Below: ember at the right proportion, then at the wrong proportion.
@@ -153,7 +153,7 @@ export default function ColourPage() {
         <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-4">
           Dark Mode
         </h2>
-        <p className="font-body text-lg text-xco-ink-muted leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink-muted leading-relaxed">
           A dark-mode variant exists (paper ↔ ink swap) but is not the primary register.
           Paper + ink is the default. Dark mode applies to: terminal output, code blocks,
           embedded media. It is never the hero surface.

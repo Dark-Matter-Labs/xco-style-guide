@@ -148,7 +148,7 @@ export default function TypographyPage() {
         <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-4">
           Weight Rule
         </h2>
-        <p className="font-body text-lg text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
           Two weights only per face: regular and one emphasis — italic for Crimson Pro,
           medium for Inter, italic for DM Mono. No bold. No light. Restraint is the
           rule, not a constraint.

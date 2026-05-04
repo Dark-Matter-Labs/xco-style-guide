@@ -120,7 +120,6 @@ export function ThreeRegimesGenerator() {
   );
   const [caption, setCaption] = useState("");
   const [showAnnotations, setShowAnnotations] = useState(false);
-  const [amplitude, setAmplitude] = useState(1.8);
   const [previewFormat, setPreviewFormat] = useState<DiagramFormat>("hero");
   const [mode, setMode] = useState<DiagramMode>("structural");
   const [exporting, setExporting] = useState<string | null>(null);
@@ -144,7 +143,7 @@ export function ThreeRegimesGenerator() {
     relationshipStatement: statement,
     caption,
     showAnnotations,
-    amplitude,
+    amplitude: 0,
   };
 
   const handleExport = async (type: string) => {
@@ -265,25 +264,6 @@ export function ThreeRegimesGenerator() {
           </>
         )}
 
-        {mode === "structural" && (
-          <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
-              Jitter
-            </h2>
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min={0} max={8} step={0.1}
-                value={amplitude}
-                onChange={(e) => setAmplitude(Number(e.target.value))}
-                className="flex-1 accent-xco-ember"
-              />
-              <span className="font-mono text-xs text-xco-ember w-8 text-right">
-                {amplitude.toFixed(1)}
-              </span>
-            </div>
-          </div>
-        )}
 
         <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
           <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">

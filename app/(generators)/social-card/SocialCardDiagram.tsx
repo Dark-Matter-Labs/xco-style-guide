@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
-const PAPER = "#F2EFE8";
+const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const MUTED = "#5F5C53";
 const EMBER = "#E8593C";
@@ -96,29 +96,19 @@ function ThreeRegimesMark({
   );
 }
 
-// ── Gradient defs for abstract layout ──────────────────────────────
-function AbstractGradients({ vw, vh }: { vw: number; vh: number }) {
+// ── Linear gradient for abstract layout ────────────────────────────
+// Full-bleed sweep: dark navy (top) → xco-cool → warm amber → ember (bottom)
+function AbstractGradient({ vw, vh }: { vw: number; vh: number }) {
   return (
-    <>
-      <radialGradient id="sc-field" gradientUnits="userSpaceOnUse"
-        cx={vw * 0.5} cy={vh} r={vh * 1.1}>
-        <stop offset="0%"   stopColor={COOL}  stopOpacity="0.45" />
-        <stop offset="50%"  stopColor={COOL}  stopOpacity="0.14" />
-        <stop offset="100%" stopColor={COOL}  stopOpacity="0"    />
-      </radialGradient>
-      <radialGradient id="sc-frontier" gradientUnits="userSpaceOnUse"
-        cx={vw * 0.18} cy={vh * 0.15} r={vw * 0.5}>
-        <stop offset="0%"   stopColor={EMBER} stopOpacity="0.50" />
-        <stop offset="40%"  stopColor={EMBER} stopOpacity="0.15" />
-        <stop offset="100%" stopColor={EMBER} stopOpacity="0"    />
-      </radialGradient>
-      <radialGradient id="sc-fortress" gradientUnits="userSpaceOnUse"
-        cx={vw * 0.82} cy={vh * 0.18} r={vw * 0.45}>
-        <stop offset="0%"   stopColor={INK}   stopOpacity="0.32" />
-        <stop offset="40%"  stopColor={INK}   stopOpacity="0.08" />
-        <stop offset="100%" stopColor={INK}   stopOpacity="0"    />
-      </radialGradient>
-    </>
+    <linearGradient id="sc-abstract" gradientUnits="userSpaceOnUse"
+      x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
+      <stop offset="0%"   stopColor="#0F1C24" />
+      <stop offset="22%"  stopColor="#1A3241" />
+      <stop offset="48%"  stopColor="#3B5A6B" />
+      <stop offset="68%"  stopColor="#7A4132" />
+      <stop offset="85%"  stopColor="#CC5038" />
+      <stop offset="100%" stopColor="#E8593C" />
+    </linearGradient>
   );
 }
 
@@ -135,12 +125,9 @@ function CardSVG({ headline, tag, byline, layout }: Omit<SocialCardProps, "forma
       <svg viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <style>{FONT_IMPORT}</style>
-          <AbstractGradients vw={vw} vh={vh} />
+          <AbstractGradient vw={vw} vh={vh} />
         </defs>
-        <rect width={vw} height={vh} fill={PAPER} />
-        <rect width={vw} height={vh} fill="url(#sc-field)" />
-        <rect width={vw} height={vh} fill="url(#sc-frontier)" />
-        <rect width={vw} height={vh} fill="url(#sc-fortress)" />
+        <rect width={vw} height={vh} fill="url(#sc-abstract)" />
 
         {tag && (
           <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace"
@@ -265,12 +252,9 @@ function SquareSVG({ headline, tag, byline, layout }: Omit<SocialCardProps, "for
       <svg viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <style>{FONT_IMPORT}</style>
-          <AbstractGradients vw={vw} vh={vh} />
+          <AbstractGradient vw={vw} vh={vh} />
         </defs>
-        <rect width={vw} height={vh} fill={PAPER} />
-        <rect width={vw} height={vh} fill="url(#sc-field)" />
-        <rect width={vw} height={vh} fill="url(#sc-frontier)" />
-        <rect width={vw} height={vh} fill="url(#sc-fortress)" />
+        <rect width={vw} height={vh} fill="url(#sc-abstract)" />
 
         {tag && (
           <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace"
@@ -413,12 +397,9 @@ function CardInner({ headline, tag, byline, layout }: SocialCardProps) {
     return (
       <>
         <defs>
-          <AbstractGradients vw={vw} vh={vh} />
+          <AbstractGradient vw={vw} vh={vh} />
         </defs>
-        <rect width={vw} height={vh} fill={PAPER} />
-        <rect width={vw} height={vh} fill="url(#sc-field)" />
-        <rect width={vw} height={vh} fill="url(#sc-frontier)" />
-        <rect width={vw} height={vh} fill="url(#sc-fortress)" />
+        <rect width={vw} height={vh} fill="url(#sc-abstract)" />
         {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
         {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 72} fontFamily="'Crimson Pro', Georgia, serif" fontStyle="italic" fontSize={62} fill={PAPER}>{l}</text>)}
         {byline && <text x={PAD} y={vh - PAD + 8} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
@@ -461,11 +442,8 @@ function SquareInner({ headline, tag, byline, layout }: SocialCardProps) {
     const lines = wrap(headline, 20);
     return (
       <>
-        <defs><AbstractGradients vw={vw} vh={vh} /></defs>
-        <rect width={vw} height={vh} fill={PAPER} />
-        <rect width={vw} height={vh} fill="url(#sc-field)" />
-        <rect width={vw} height={vh} fill="url(#sc-frontier)" />
-        <rect width={vw} height={vh} fill="url(#sc-fortress)" />
+        <defs><AbstractGradient vw={vw} vh={vh} /></defs>
+        <rect width={vw} height={vh} fill="url(#sc-abstract)" />
         {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
         {lines.map((l, i) => <text key={i} x={PAD} y={440 + i * 82} fontFamily="'Crimson Pro', Georgia, serif" fontStyle="italic" fontSize={72} fill={PAPER}>{l}</text>)}
         {byline && <text x={PAD} y={vh - PAD} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
