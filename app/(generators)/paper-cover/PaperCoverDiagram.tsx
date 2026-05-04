@@ -23,6 +23,7 @@ export interface PaperCoverProps {
   authors:     string;
   date:        string;
   visual:      CoverVisual;
+  className?:  string;
 }
 
 function wrap(text: string, maxChars: number): string[] {
@@ -84,7 +85,7 @@ function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number })
 
 export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
   function PaperCoverDiagram(
-    { paperNumber, title, subtitle, authors, date, visual },
+    { paperNumber, title, subtitle, authors, date, visual, className },
     ref,
   ) {
     const PAD = 56;
@@ -107,6 +108,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         ref={ref}
         viewBox={`0 0 ${COVER_W} ${COVER_H}`}
         xmlns="http://www.w3.org/2000/svg"
+        className={className}
       >
         <defs>
           <style>{FONT_IMPORT}</style>

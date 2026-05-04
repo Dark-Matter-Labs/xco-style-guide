@@ -38,7 +38,7 @@ function resolveSpacing(r: number): number {
 
 // Spatial weight function — encodes optionality field geometry
 // xRel, yRel ∈ [0,1]; y=0 is top, y=1 is bottom
-function spatialWeight(
+export function spatialWeight(
   xRel: number,
   yRel: number,
   fieldStr: number,

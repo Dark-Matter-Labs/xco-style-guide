@@ -1,23 +1,26 @@
 "use client";
 
 import { forwardRef, useMemo } from "react";
+import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const EMBER = "#E8593C";
 const COOL  = "#3B5A6B";
 
-export type DotShape  = "circle" | "square";
-export type ColorMode = "ink" | "ember" | "inverted";
+export type DotShape      = "circle" | "square";
+export type ColorMode     = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";
 export type TreatmentMode   = "dots" | "sharp";
+export type SourceDiagram = "three-regimes" | "option-field";
 
 export interface ImageTreatmentProps {
-  mode:       TreatmentMode;
-  resolution: number;        // 0 (coarse) → 100 (fine)
-  dotShape:   DotShape;
-  colorMode:  ColorMode;
-  format:     TreatmentFormat;
+  mode:           TreatmentMode;
+  resolution:     number;        // 0 (coarse) → 100 (fine)
+  dotShape:       DotShape;
+  colorMode:      ColorMode;
+  format:         TreatmentFormat;
+  sourceDiagram:  SourceDiagram;
 }
 
 // ── Mark geometry in original 400×200 space ──────────────────────────
@@ -148,9 +151,61 @@ function SharpMark({ vw, vh, fg }: { vw: number; vh: number; fg: string }) {
   );
 }
 
+// ── Option Field dot computation ──────────────────────────────────────
+// Treats the spatial weight field as source: heavier zones → larger dots.
+function computeOptionFieldDots(
+  vw: number, vh: number,
+  dotSpacing: number,
+): Dot[] {
+  const maxW = dotSpacing * 1.0;
+  const maxR = dotSpacing * 0.46;
+  const dots: Dot[] = [];
+  for (let cy = dotSpacing / 2; cy < vh; cy += dotSpacing) {
+    for (let cx = dotSpacing / 2; cx < vw; cx += dotSpacing) {
+      const xRel = cx / vw;
+      const yRel = cy / vh;
+      const w = spatialWeight(xRel, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
+      const cov = Math.min(1, w / maxW);
+      if (cov > 0.05) dots.push({ cx, cy, r: maxR * cov });
+    }
+  }
+  return dots;
+}
+
+// ── Option Field sharp (scanline) render ───────────────────────────────
+function OptionFieldSharp({
+  vw, vh, fg, dotSpacing,
+}: { vw: number; vh: number; fg: string; dotSpacing: number }) {
+  const spacing = Math.max(3, dotSpacing);
+  const segW = Math.max(4, Math.round(spacing * 0.85));
+  const pad = Math.round(vw * 0.04);
+  const maxW = spacing * 1.5;
+  const usableW = vw - pad * 2;
+  const segs: { x: number; y: number; sh: number }[] = [];
+
+  for (let y = spacing / 2; y < vh; y += spacing) {
+    const yRel = y / vh;
+    for (let x = pad; x < vw - pad; x += segW) {
+      const xRel = (x - pad) / usableW;
+      const sh = spatialWeight(xRel, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
+      segs.push({ x, y, sh });
+    }
+  }
+
+  return (
+    <>
+      {segs.map((s, i) => (
+        <rect key={i} x={s.x} y={s.y - s.sh / 2} width={segW} height={s.sh} fill={fg} />
+      ))}
+    </>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────
 export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentProps>(
-  function ImageTreatmentDiagram({ mode, resolution, dotShape, colorMode, format }, ref) {
+  function ImageTreatmentDiagram(
+    { mode, resolution, dotShape, colorMode, format, sourceDiagram }, ref,
+  ) {
     const { vw, vh } = DIMS[format];
 
     const bg = colorMode === "inverted" ? INK : PAPER;
@@ -165,22 +220,37 @@ export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentPro
       [vw, vh, dotSpacing, bg, fg],
     );
 
+    const fieldDots = useMemo(
+      () => computeOptionFieldDots(vw, vh, dotSpacing),
+      [vw, vh, dotSpacing],
+    );
+
+    const isField = sourceDiagram === "option-field";
+
     return (
       <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <rect width={vw} height={vh} fill={bg} />
 
-        {mode === "dots" && dots.map((d, i) =>
+        {mode === "dots" && !isField && dots.map((d, i) =>
           dotShape === "circle" ? (
             <circle key={i} cx={d.cx} cy={d.cy} r={d.r} fill={fg} />
           ) : (
-            <rect key={i}
-              x={d.cx - d.r} y={d.cy - d.r}
-              width={d.r * 2} height={d.r * 2}
-              fill={fg} />
+            <rect key={i} x={d.cx - d.r} y={d.cy - d.r}
+              width={d.r * 2} height={d.r * 2} fill={fg} />
           )
         )}
 
-        {mode === "sharp" && <SharpMark vw={vw} vh={vh} fg={fg} />}
+        {mode === "dots" && isField && fieldDots.map((d, i) =>
+          dotShape === "circle" ? (
+            <circle key={i} cx={d.cx} cy={d.cy} r={d.r} fill={fg} />
+          ) : (
+            <rect key={i} x={d.cx - d.r} y={d.cy - d.r}
+              width={d.r * 2} height={d.r * 2} fill={fg} />
+          )
+        )}
+
+        {mode === "sharp" && !isField && <SharpMark vw={vw} vh={vh} fg={fg} />}
+        {mode === "sharp" &&  isField && <OptionFieldSharp vw={vw} vh={vh} fg={fg} dotSpacing={dotSpacing} />}
       </svg>
     );
   }

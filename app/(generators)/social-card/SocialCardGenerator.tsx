@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { SocialCardDiagram } from "./SocialCardDiagram";
-import type { CardFormat, CardLayout } from "./SocialCardDiagram";
+import type { CardFormat, CardLayout, DiagramType } from "./SocialCardDiagram";
 
 function svgToString(el: SVGSVGElement): string {
   return '<?xml version="1.0" standalone="no"?>\n' +
@@ -48,8 +48,13 @@ function FieldInput({ label, value, onChange, hint, mono }: {
 
 const LAYOUTS: { id: CardLayout; label: string; hint: string }[] = [
   { id: "typographic", label: "Typographic", hint: "Clean text, full-width" },
-  { id: "diagram",     label: "Diagram",     hint: "Text left, Three Regimes mark right" },
+  { id: "diagram",     label: "Diagram",     hint: "Text left, diagram right" },
   { id: "abstract",    label: "Abstract",    hint: "Gradient background, paper text" },
+];
+
+const DIAGRAM_TYPES: { id: DiagramType; label: string; hint: string }[] = [
+  { id: "three-regimes", label: "Three Regimes", hint: "Frontier / Fortress / Field mark" },
+  { id: "option-field",  label: "Option Field",  hint: "Variable-weight scanline field" },
 ];
 
 const FORMATS: { id: CardFormat; label: string; size: string; w: number; h: number }[] = [
@@ -61,9 +66,10 @@ export function SocialCardGenerator() {
   const [headline, setHeadline] = useState("Field is the precondition for everything else");
   const [tag, setTag]           = useState("Three Regimes");
   const [byline, setByline]     = useState("Expanding Civilisational Optionality");
-  const [layout, setLayout]     = useState<CardLayout>("typographic");
-  const [format, setFormat]     = useState<CardFormat>("card");
-  const [exporting, setExporting] = useState<string | null>(null);
+  const [layout, setLayout]         = useState<CardLayout>("typographic");
+  const [diagramType, setDiagramType] = useState<DiagramType>("three-regimes");
+  const [format, setFormat]         = useState<CardFormat>("card");
+  const [exporting, setExporting]   = useState<string | null>(null);
 
   const cardRef   = useRef<SVGSVGElement>(null);
   const squareRef = useRef<SVGSVGElement>(null);
@@ -71,7 +77,7 @@ export function SocialCardGenerator() {
   const activeRef = format === "card" ? cardRef : squareRef;
   const activeFormat = FORMATS.find((f) => f.id === format)!;
 
-  const props = { headline, tag, byline, layout };
+  const props = { headline, tag, byline, layout, diagramType };
 
   const handle = async (type: string) => {
     setExporting(type);
@@ -105,6 +111,24 @@ export function SocialCardGenerator() {
             ))}
           </div>
         </div>
+
+        {layout === "diagram" && (
+          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Diagram</h2>
+            <div className="space-y-1">
+              {DIAGRAM_TYPES.map(({ id, label, hint }) => (
+                <label key={id} className="flex items-start gap-2 cursor-pointer">
+                  <input type="radio" name="diagramType" value={id} checked={diagramType === id}
+                    onChange={() => setDiagramType(id)} className="accent-xco-ember mt-0.5 shrink-0" />
+                  <span>
+                    <span className="font-mono text-xs text-xco-ink block">{label}</span>
+                    <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-4 border-t border-xco-ink/[0.12] pt-4">
           <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Content</h2>

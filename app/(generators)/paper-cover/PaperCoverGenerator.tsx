@@ -133,18 +133,17 @@ export function PaperCoverGenerator() {
         </div>
       </aside>
 
-      {/* Preview — constrained height so the tall A4 doesn't dominate */}
-      <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] overflow-hidden bg-xco-paper"
-          style={{ maxHeight: "80vh" }}>
-          <PaperCoverDiagram ref={coverRef} {...props} />
+      {/* Preview — full A4 shown at constrained width so it doesn't clip */}
+      <div className="flex-1 min-w-0 space-y-4" style={{ maxWidth: `${COVER_W}px` }}>
+        <div className="border border-xco-ink/[0.12] bg-xco-paper">
+          <PaperCoverDiagram {...props} className="w-full h-auto" />
         </div>
         <p className="font-mono text-xs text-xco-ink-muted">
           A4 portrait — {COVER_W}×{COVER_H}px at 96dpi · exports at 2× for print
         </p>
       </div>
 
-      {/* Hidden ref */}
+      {/* Hidden ref for export — natural size, no className */}
       <div className="sr-only" aria-hidden="true">
         <PaperCoverDiagram ref={coverRef} {...props} />
       </div>

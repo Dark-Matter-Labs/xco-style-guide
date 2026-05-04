@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ImageTreatmentDiagram, spacingFromResolution } from "./ImageTreatmentDiagram";
-import type { DotShape, ColorMode, TreatmentFormat, TreatmentMode } from "./ImageTreatmentDiagram";
+import type { DotShape, ColorMode, TreatmentFormat, TreatmentMode, SourceDiagram } from "./ImageTreatmentDiagram";
 
 function svgToString(el: SVGSVGElement): string {
   return '<?xml version="1.0" standalone="no"?>\n' +
@@ -38,19 +38,20 @@ const COLOR_MODES: { id: ColorMode; label: string }[] = [
 ];
 
 export function ImageTreatmentGenerator() {
-  const [mode,       setMode]       = useState<TreatmentMode>("dots");
-  const [resolution, setResolution] = useState(30);
-  const [dotShape,   setDotShape]   = useState<DotShape>("circle");
-  const [colorMode,  setColorMode]  = useState<ColorMode>("ink");
-  const [format,     setFormat]     = useState<TreatmentFormat>("card");
-  const [exporting,  setExporting]  = useState<string | null>(null);
+  const [sourceDiagram, setSourceDiagram] = useState<SourceDiagram>("three-regimes");
+  const [mode,          setMode]          = useState<TreatmentMode>("dots");
+  const [resolution,    setResolution]    = useState(30);
+  const [dotShape,      setDotShape]      = useState<DotShape>("circle");
+  const [colorMode,     setColorMode]     = useState<ColorMode>("ink");
+  const [format,        setFormat]        = useState<TreatmentFormat>("card");
+  const [exporting,     setExporting]     = useState<string | null>(null);
 
   const cardRef   = useRef<SVGSVGElement>(null);
   const squareRef = useRef<SVGSVGElement>(null);
   const activeRef = format === "card" ? cardRef : squareRef;
   const activeFormat = FORMATS.find((f) => f.id === format)!;
 
-  const props = { mode, resolution, dotShape, colorMode };
+  const props = { mode, resolution, dotShape, colorMode, sourceDiagram };
   const dotSpacing = spacingFromResolution(resolution);
 
   const handle = async (type: string) => {
@@ -70,8 +71,25 @@ export function ImageTreatmentGenerator() {
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
 
-        {/* Mode */}
+        {/* Source diagram */}
         <div className="space-y-2">
+          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Source</h2>
+          <div className="flex gap-0">
+            {(["three-regimes", "option-field"] as const).map((s) => (
+              <button key={s} onClick={() => setSourceDiagram(s)}
+                className={`flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+                  sourceDiagram === s
+                    ? "bg-xco-ink text-xco-paper border-xco-ink"
+                    : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+                }`}>
+                {s === "three-regimes" ? "Three Regimes" : "Option Field"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mode */}
+        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
           <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Mode</h2>
           <div className="flex gap-0">
             {(["dots", "sharp"] as const).map((m) => (
