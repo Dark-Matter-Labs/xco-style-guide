@@ -60,48 +60,21 @@ function PrimitiveCard({
 }
 
 export function DiagramsDemo() {
-  const [amplitude, setAmplitude] = useState(1.8);
+  const amplitude = 0;
 
   return (
     <div className="space-y-12">
-      {/* Jitter slider — the open question */}
-      <section className="bg-xco-ink/[0.03] border border-xco-ink/[0.12] p-6 space-y-4">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
-            Jitter Amplitude
-          </h2>
-          <span className="font-mono text-sm text-xco-ember">{amplitude.toFixed(1)}</span>
-        </div>
-        <input
-          type="range"
-          min={0}
-          max={8}
-          step={0.1}
-          value={amplitude}
-          onChange={(e) => setAmplitude(Number(e.target.value))}
-          className="w-full accent-xco-ember"
-        />
-        <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
-          <span>0.0 — looks like a rendering bug</span>
-          <span>8.0 — looks decorative</span>
-        </div>
-        <p className="font-mono text-xs text-xco-flag">
-          [open question] How much jitter is right? This slider is here so the team can argue about it.
-          Default: 1.8.
-        </p>
-      </section>
-
-      {/* JitteredLine */}
+      {/* Line weights */}
       <PrimitiveCard
-        title="JitteredLine"
-        description="The load-bearing primitive. Every line in an xCO diagram goes through this — non-smooth because the world is volatile, not because the designer wanted texture."
+        title="Line"
+        description="Two weights, no others. Structural (1.5px) carries the diagram. Texture (0.75px) carries density — hatching, grid, leaders. Both are crisp and precise."
         source={JitteredLineSource}
         preview={
           <>
-            <JitteredLine x1={20} y1={50} x2={380} y2={50} amplitude={amplitude} seed={42} />
-            <JitteredLine x1={20} y1={90} x2={380} y2={90} amplitude={amplitude} annotation seed={7} />
-            <text x={20} y={38} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>primary (1.5px)</text>
-            <text x={20} y={110} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>annotation (0.5px, dashed)</text>
+            <line x1={20} y1={50} x2={380} y2={50} stroke={colors.ink.hex} strokeWidth={1.5} />
+            <line x1={20} y1={90} x2={380} y2={90} stroke={colors.ink.hex} strokeWidth={0.75} strokeDasharray="4 4" />
+            <text x={20} y={38} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>structural (1.5px)</text>
+            <text x={20} y={110} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>texture (0.75px, dashed)</text>
           </>
         }
         viewBox="0 0 400 130"
@@ -110,7 +83,7 @@ export function DiagramsDemo() {
       {/* RiskNode */}
       <PrimitiveCard
         title="RiskNode"
-        description="The triggering condition. Filled with ember — the only node type that uses the accent colour. Used sparingly."
+        description="The triggering condition. Ember fill — the only node type that uses the accent colour. Used sparingly: one risk node per diagram."
         source={RiskNodeSource}
         preview={
           <>
@@ -124,7 +97,7 @@ export function DiagramsDemo() {
       {/* OptionNode */}
       <PrimitiveCard
         title="OptionNode"
-        description="The response. The default node type — paper fill, ink border. Frontier and Fortress are both OptionNodes."
+        description="The response. Default node — white fill, ink border. Frontier and Fortress are both OptionNodes. Hatching optional to encode weight."
         source={OptionNodeSource}
         preview={
           <>

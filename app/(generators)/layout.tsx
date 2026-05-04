@@ -6,7 +6,7 @@ const generators = [
   { href: "/social-card",     label: "Social Card" },
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/image-treatment", label: "Image Treatment" },
-  { href: "/portfolio-diagram", label: "Portfolio Diagram", wip: true },
+  { href: "/option-field",      label: "Option Field" },
 ];
 
 export default function GeneratorsLayout({
@@ -25,18 +25,13 @@ export default function GeneratorsLayout({
             ← xCO
           </Link>
           <div className="flex items-center gap-6 overflow-x-auto flex-1">
-            {generators.map(({ href, label, wip }) => (
+            {generators.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                className="font-ui text-xs text-xco-ink-muted hover:text-xco-ink transition-colors whitespace-nowrap flex items-center gap-1.5"
+                className="font-ui text-xs text-xco-ink-muted hover:text-xco-ink transition-colors whitespace-nowrap"
               >
                 {label}
-                {wip && (
-                  <span className="font-mono text-xs bg-xco-flag/15 text-xco-flag px-1">
-                    [phase 2]
-                  </span>
-                )}
               </Link>
             ))}
           </div>

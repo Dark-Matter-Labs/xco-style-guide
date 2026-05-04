@@ -11,16 +11,19 @@ export default function DiagramsPage() {
 
       <section className="max-w-2xl space-y-4">
         <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
-          The brand is the diagrams. The grammar defines seven primitives. Every
-          xCO diagram is assembled from these — no others.
+          The brand is the diagrams. The grammar defines the primitives.
+          Every xCO diagram is assembled from these — no others.
         </p>
         <p className="font-body text-xco-ink-muted leading-relaxed">
-          The line must not be smooth. The jitter reads as{" "}
-          <em>measurement noise</em>, not hand-drawing. Clean enough to read
-          as data, rough enough to read as honest.
+          The visual language is raw and computational. Rectangles are the
+          atomic unit. Hatching encodes weight. Lines are crisp and precise —
+          no pretence of hand-drawing. The diagram should feel like it was
+          built by people who take measurement seriously.
         </p>
         <ul className="font-mono text-sm text-xco-ink-muted space-y-1 mt-4">
-          <li>— Two line weights: 1.5px structural, 0.5px annotation (dashed)</li>
+          <li>— Two line weights: 1.5px structural · 0.75px texture</li>
+          <li>— Rectangle is the atomic unit — solid, hatched, or dashed border</li>
+          <li>— Hatching density encodes character: sparse (open) → dense (constrained)</li>
           <li>— Three node types: Risk, Option, Field</li>
           <li>— One annotation style: DM Mono italic, marked uncertainty</li>
           <li>— One multi-solve signature: stacked ticks</li>

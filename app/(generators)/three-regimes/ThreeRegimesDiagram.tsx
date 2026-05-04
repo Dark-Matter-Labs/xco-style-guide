@@ -24,23 +24,23 @@ export interface ThreeRegimesDiagramProps {
 const LAYOUTS = {
   hero: {
     vw: 1200, vh: 630,
-    frontier: { cx: 300,  cy: 190, w: 240, h: 80  },
-    fortress:  { cx: 900,  cy: 190, w: 240, h: 80  },
-    field:     { cx: 600,  cy: 450, w: 820, h: 90  },
+    frontier: { cx: 300,  cy: 190, w: 260, h: 90  },
+    fortress:  { cx: 900,  cy: 190, w: 260, h: 90  },
+    field:     { cx: 600,  cy: 455, w: 860, h: 96  },
     merge:     { x: 600, y: 318 },
-    relY: 547, capY: 595,
-    relFontSize: 14, annoChars: 55,
-    labelSize: 11, subSize: 9, lineW: 1.5, dotR: 4,
+    relY: 550, capY: 598,
+    relFontSize: 18, annoChars: 55,
+    labelSize: 20, subSize: 13, lineW: 1.5, dotR: 5,
   },
   square: {
     vw: 1200, vh: 1200,
-    frontier: { cx: 300,  cy: 300, w: 240, h: 80  },
-    fortress:  { cx: 900,  cy: 300, w: 240, h: 80  },
-    field:     { cx: 600,  cy: 730, w: 820, h: 100 },
-    merge:     { x: 600, y: 520 },
-    relY: 865, capY: 925,
-    relFontSize: 16, annoChars: 70,
-    labelSize: 11, subSize: 9, lineW: 1.5, dotR: 4,
+    frontier: { cx: 300,  cy: 300, w: 260, h: 90  },
+    fortress:  { cx: 900,  cy: 300, w: 260, h: 90  },
+    field:     { cx: 600,  cy: 740, w: 860, h: 100 },
+    merge:     { x: 600, y: 524 },
+    relY: 872, capY: 928,
+    relFontSize: 20, annoChars: 70,
+    labelSize: 20, subSize: 13, lineW: 1.5, dotR: 5,
   },
   mark: {
     vw: 400, vh: 200,
@@ -50,7 +50,7 @@ const LAYOUTS = {
     merge:     { x: 200, y: 116 },
     relY: null, capY: null,
     relFontSize: 0, annoChars: 0,
-    labelSize: 7, subSize: 5.5, lineW: 0.8, dotR: 2.5,
+    labelSize: 8, subSize: 6, lineW: 0.9, dotR: 3,
   },
 } as const;
 
@@ -62,27 +62,27 @@ const EMBER = colors.ember.hex;
 const COOL  = colors.cool.hex;
 const MUTED = colors.inkMuted.hex;
 
-// Horizontal hatching patterns — density encodes regime character:
+// Horizontal hatching — density encodes regime character:
 // Frontier (sparse): open, expansive, high optionality
 // Fortress (dense):  closed, entrenched, low optionality
 // Field (medium, cool): systemic, broad, slower-moving
 function HatchPatterns() {
   return (
     <>
-      <pattern id="hatch-fr" patternUnits="userSpaceOnUse" width="8" height="9">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" />
+      <pattern id="hatch-fr" patternUnits="userSpaceOnUse" width="8" height="10">
+        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" strokeOpacity="0.5" />
       </pattern>
-      <pattern id="hatch-fo" patternUnits="userSpaceOnUse" width="8" height="4">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" />
+      <pattern id="hatch-fo" patternUnits="userSpaceOnUse" width="8" height="4.5">
+        <line x1="0" y1="0" x2="8" y2="0" stroke={INK} strokeWidth="0.75" strokeOpacity="0.7" />
       </pattern>
-      <pattern id="hatch-fi" patternUnits="userSpaceOnUse" width="8" height="6">
-        <line x1="0" y1="0" x2="8" y2="0" stroke={COOL} strokeWidth="0.75" />
+      <pattern id="hatch-fi" patternUnits="userSpaceOnUse" width="8" height="7">
+        <line x1="0" y1="0" x2="8" y2="0" stroke={COOL} strokeWidth="0.75" strokeOpacity="0.55" />
       </pattern>
     </>
   );
 }
 
-// Hatched rectangle: white ground + hatch fill + crisp border
+// Hatched rectangle: white ground + hatch + crisp border
 function HatchBox({
   cx, cy, w, h, hatchId, borderColor = INK, borderWidth = 1.5,
 }: {
@@ -96,6 +96,42 @@ function HatchBox({
       <rect x={x} y={y} width={w} height={h} fill={`url(#${hatchId})`} />
       <rect x={x} y={y} width={w} height={h} fill="none"
         stroke={borderColor} strokeWidth={borderWidth} />
+    </g>
+  );
+}
+
+// Text with a white clearance rect so hatching doesn't cut through labels
+function ClearLabel({
+  cx, cy, primary, sub, primarySize, subSize, primaryColor, subColor,
+  clearW, clearH,
+}: {
+  cx: number; cy: number;
+  primary: string; sub?: string;
+  primarySize: number; subSize: number;
+  primaryColor: string; subColor: string;
+  clearW: number; clearH: number;
+}) {
+  const gap = primarySize * 0.85;
+  const primaryY = sub ? cy - gap / 2 : cy;
+  const subY     = cy + gap;
+  return (
+    <g>
+      <rect x={cx - clearW / 2} y={cy - clearH / 2}
+        width={clearW} height={clearH} fill={PAPER} />
+      <text x={cx} y={primaryY}
+        textAnchor="middle" dominantBaseline="central"
+        fontFamily="'DM Mono', monospace" fontSize={primarySize}
+        fill={primaryColor}>
+        {primary}
+      </text>
+      {sub && (
+        <text x={cx} y={subY}
+          textAnchor="middle" dominantBaseline="central"
+          fontFamily="'DM Mono', monospace" fontSize={subSize}
+          fontStyle="italic" fill={subColor} fillOpacity={0.7}>
+          {sub}
+        </text>
+      )}
     </g>
   );
 }
@@ -122,6 +158,7 @@ export const ThreeRegimesDiagram = forwardRef<
 ) {
   const L = LAYOUTS[format];
   const showText = format !== "mark";
+  const hasSub = Boolean(labels.fieldSublabel);
 
   const frontierBot = { x: L.frontier.cx, y: L.frontier.cy + L.frontier.h / 2 };
   const fortressBot = { x: L.fortress.cx, y: L.fortress.cy + L.fortress.h / 2 };
@@ -133,6 +170,12 @@ export const ThreeRegimesDiagram = forwardRef<
         L.annoChars,
       )
     : [];
+
+  // Clearance rect sizing — comfortable padding around the text block
+  const nodeClearW = L.frontier.w - 20;
+  const nodeClearH = L.labelSize * 1.8;
+  const fieldClearW = Math.min(L.field.w - 40, 400);
+  const fieldClearH = hasSub ? L.labelSize * 1.6 + L.subSize * 1.6 : L.labelSize * 1.8;
 
   return (
     <svg ref={ref} viewBox={`0 0 ${L.vw} ${L.vh}`} xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +204,7 @@ export const ThreeRegimesDiagram = forwardRef<
       {/* Merge dot */}
       <circle cx={L.merge.x} cy={L.merge.y} r={L.dotR} fill={EMBER} />
 
-      {/* Nodes — drawn on top of connectors */}
+      {/* Nodes */}
       <HatchBox
         cx={L.frontier.cx} cy={L.frontier.cy}
         w={L.frontier.w} h={L.frontier.h}
@@ -179,49 +222,31 @@ export const ThreeRegimesDiagram = forwardRef<
         borderColor={COOL}
       />
 
-      {/* Node labels */}
+      {/* Labels — rendered with white clearance so hatch doesn't cut through */}
       {showText && (
         <>
-          {/* Frontier */}
-          <text
-            x={L.frontier.cx} y={labels.fieldSublabel ? L.frontier.cy - L.labelSize * 0.4 : L.frontier.cy}
-            textAnchor="middle" dominantBaseline="central"
-            fontFamily="'DM Mono', monospace" fontSize={L.labelSize}
-            fill={INK} letterSpacing="1"
-          >
-            {labels.frontier}
-          </text>
-
-          {/* Fortress */}
-          <text
-            x={L.fortress.cx} y={L.fortress.cy}
-            textAnchor="middle" dominantBaseline="central"
-            fontFamily="'DM Mono', monospace" fontSize={L.labelSize}
-            fill={INK} letterSpacing="1"
-          >
-            {labels.fortress}
-          </text>
-
-          {/* Field — label + sublabel */}
-          <text
-            x={L.field.cx}
-            y={labels.fieldSublabel ? L.field.cy - L.subSize * 0.8 : L.field.cy}
-            textAnchor="middle" dominantBaseline="central"
-            fontFamily="'DM Mono', monospace" fontSize={L.labelSize}
-            fill={COOL} letterSpacing="1"
-          >
-            {labels.field}
-          </text>
-          {labels.fieldSublabel && (
-            <text
-              x={L.field.cx} y={L.field.cy + L.labelSize * 0.9}
-              textAnchor="middle" dominantBaseline="central"
-              fontFamily="'DM Mono', monospace" fontSize={L.subSize}
-              fontStyle="italic" fill={COOL} fillOpacity={0.65}
-            >
-              {labels.fieldSublabel}
-            </text>
-          )}
+          <ClearLabel
+            cx={L.frontier.cx} cy={L.frontier.cy}
+            primary={labels.frontier}
+            primarySize={L.labelSize} subSize={L.subSize}
+            primaryColor={INK} subColor={INK}
+            clearW={nodeClearW} clearH={nodeClearH}
+          />
+          <ClearLabel
+            cx={L.fortress.cx} cy={L.fortress.cy}
+            primary={labels.fortress}
+            primarySize={L.labelSize} subSize={L.subSize}
+            primaryColor={INK} subColor={INK}
+            clearW={nodeClearW} clearH={nodeClearH}
+          />
+          <ClearLabel
+            cx={L.field.cx} cy={L.field.cy}
+            primary={labels.field}
+            sub={labels.fieldSublabel || undefined}
+            primarySize={L.labelSize} subSize={L.subSize}
+            primaryColor={COOL} subColor={COOL}
+            clearW={fieldClearW} clearH={fieldClearH}
+          />
         </>
       )}
 
@@ -242,7 +267,7 @@ export const ThreeRegimesDiagram = forwardRef<
         <text
           x={L.vw / 2} y={L.capY}
           textAnchor="middle"
-          fontFamily="'DM Mono', monospace" fontSize={11}
+          fontFamily="'DM Mono', monospace" fontSize={14}
           fill={MUTED}
         >
           {caption}
@@ -251,12 +276,12 @@ export const ThreeRegimesDiagram = forwardRef<
 
       {/* Annotation marginalia */}
       {showText && annoLines.length > 0 && (
-        <g fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.65}>
+        <g fontFamily="'DM Mono', monospace" fontSize={11} fill={MUTED} fillOpacity={0.65}>
           {annoLines.map((line, i) => (
             <text
               key={i}
               x={format === "square" ? 100 : 80}
-              y={L.field.cy + L.field.h / 2 + 18 + i * 13}
+              y={L.field.cy + L.field.h / 2 + 22 + i * 16}
             >
               {line}
             </text>
