@@ -18,6 +18,7 @@ const generatorLinks = [
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/align",           label: "Align" },
   { href: "/text-highlight",  label: "Text Highlight" },
+  { href: "/design-export",   label: "Token Export" },
 ];
 
 export default function Home() {

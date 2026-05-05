@@ -1,0 +1,205 @@
+// Generates the three exportable design token artifacts from lib/design-tokens.ts.
+// Pure functions — no React, safe to call server or client side.
+
+import { colors, typography, spacing, diagram, bannedWords } from "@/lib/design-tokens";
+
+// ── CLAUDE.md system prompt ─────────────────────────────────────────────────
+
+export function buildClaudePrompt(): string {
+  const colorRows = Object.entries(colors)
+    .filter(([, v]) => "hex" in v)
+    .map(([, v]) => {
+      const c = v as { hex: string; cssVar?: string; usage: string };
+      const cssVar = c.cssVar ?? "—";
+      const tw = ("twClass" in v ? v.twClass : "—") as string;
+      return `| \`${cssVar}\` | \`${c.hex}\` | \`${tw}\` | ${c.usage} |`;
+    })
+    .join("\n");
+
+  const faceRows = Object.entries(typography.faces)
+    .map(([, f]) => `| ${f.family} | \`${f.twClass}\` | ${f.usage} |`)
+    .join("\n");
+
+  const scaleRows = typography.scale
+    .map((s) => `| ${s.label} | \`${s.size}\` | ${s.lineHeight} | ${s.face} |`)
+    .join("\n");
+
+  const banned = bannedWords.map((w) => `\`${w.trim()}\``).join(", ");
+
+  return `# xCO Design System — Claude Code Reference
+
+You are implementing the xCO visual language by Dark Matter Labs (Expanding Civilisational Optionality). Apply these exact tokens and rules to every UI decision. Do not introduce any colours, fonts, or radius values outside this system.
+
+## Colour palette
+
+Eight tokens only. Never use arbitrary hex codes or add new colours.
+
+| CSS Variable | Hex | Tailwind class | Usage |
+|---|---|---|---|
+${colorRows}
+
+Rules and dividers: \`rgba(28, 27, 23, 0.12)\` — ink at 12% opacity. In Tailwind: \`border-xco-ink/[0.12]\`.
+
+## Typography
+
+Four typefaces only. Do not introduce any other font families.
+
+| Family | Tailwind class | Usage |
+|---|---|---|
+${faceRows}
+
+## Type scale
+
+| Step | Size | Line height | Face |
+|---|---|---|---|
+${scaleRows}
+
+Body measure (max-width): 68ch for body text. Reduce for captions and mono.
+
+## Visual principles
+
+- **Corner radius**: near-zero (\`${spacing.gutter}\` gutter, \`0.125rem\` radius max). This is not a rounded-corner brand.
+- **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
+- **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) as a background — use \`ink\` and \`paper\` tokens.
+- **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
+- **No bold** on UI / Inter face. Use weight 400 or 500 only.
+- Dark mode is a paper ↔ ink swap — all other colours remain fixed.
+
+## Three visual registers (diagram modes)
+
+- **Blueprint** (cool): navy → ocean → teal gradient. Use for systemic / structural diagrams.
+- **Warmth** (warm): sand → dusk. Use for field-level / terrestrial context.
+- **Spectrum**: full warm-to-cold arc — sand, dusk, teal, ocean, navy. Use for comparative / ranked diagrams.
+
+Never mix registers within a single diagram.
+
+## Node types (diagram)
+
+| Type | Fill | Border | Usage |
+|---|---|---|---|
+| Option | paper | ink solid | Default node — a response or choice. |
+| Risk | dusk | ink solid | The trigger — what the portfolio responds to. |
+| Field | paper | ocean dashed | Systemic precondition — foundational layer. |
+
+## Banned words
+
+Never write these in copy, UI labels, or documentation: ${banned}
+
+Write with precision and restraint instead.
+
+## CSS setup
+
+Add this block to your \`globals.css\` or \`app/globals.css\`:
+
+\`\`\`css
+:root {
+  --color-xco-paper:     #FFFFFF;
+  --color-xco-ink:       #1C1B17;
+  --color-xco-ink-muted: #5F5C53;
+  --color-xco-navy:      #192640;
+  --color-xco-ocean:     #085A8C;
+  --color-xco-teal:      #3786A6;
+  --color-xco-sand:      #F2B077;
+  --color-xco-dusk:      #F27F3D;
+}
+\`\`\`
+
+Then load fonts (Next.js example):
+- Crimson Pro — display + body
+- Inter — UI
+- DM Mono — mono
+`;
+}
+
+// ── CSS custom properties block ─────────────────────────────────────────────
+
+export function buildCSSVariables(): string {
+  const entries = Object.entries(colors)
+    .filter(([, v]) => "hex" in v && "cssVar" in v)
+    .map(([, v]) => {
+      const c = v as { hex: string; cssVar: string };
+      const pad = " ".repeat(Math.max(1, 30 - c.cssVar.length));
+      return `  ${c.cssVar}:${pad}${c.hex};`;
+    })
+    .join("\n");
+
+  return `:root {
+  /* xCO colour tokens */
+${entries}
+
+  /* xCO spacing */
+  --xco-gutter: ${spacing.gutter};
+
+  /* xCO radius — near-zero, not a round-corner brand */
+  --radius: 0.125rem;
+}`;
+}
+
+// ── Tailwind v4 @theme block ────────────────────────────────────────────────
+
+export function buildTailwindV4(): string {
+  const colorEntries = Object.entries(colors)
+    .filter(([, v]) => "hex" in v && "cssVar" in v && "twClass" in v)
+    .map(([, v]) => {
+      const c = v as { hex: string; cssVar: string; twClass: string };
+      const key = `--color-${c.twClass}`;
+      const pad = " ".repeat(Math.max(1, 30 - key.length));
+      return `  ${key}:${pad}${c.hex};`;
+    })
+    .join("\n");
+
+  return `/* Add inside @theme {} in globals.css */
+@theme {
+  /* xCO colour palette */
+${colorEntries}
+
+  /* Typography aliases — assumes next/font CSS variables on <html> */
+  --font-display: var(--font-crimson);   /* Crimson Pro */
+  --font-body:    var(--font-crimson);   /* Crimson Pro */
+  --font-ui:      var(--font-inter);     /* Inter */
+  --font-mono:    var(--font-dm-mono);   /* DM Mono */
+
+  /* Spacing */
+  --xco-gutter: ${spacing.gutter};
+
+  /* Radius */
+  --radius: 0.125rem;
+}`;
+}
+
+// ── Tailwind v3 theme extension ─────────────────────────────────────────────
+
+export function buildTailwindV3(): string {
+  const colorEntries = Object.entries(colors)
+    .filter(([, v]) => "hex" in v && "twClass" in v)
+    .map(([, v]) => {
+      const c = v as { hex: string; twClass: string };
+      const key = `"${c.twClass}"`;
+      const pad = " ".repeat(Math.max(1, 22 - key.length));
+      return `      ${key}:${pad}"${c.hex}",`;
+    })
+    .join("\n");
+
+  return `// tailwind.config.js — add inside theme.extend
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+${colorEntries}
+      },
+      fontFamily: {
+        display: ["Crimson Pro", "Georgia", "serif"],
+        body:    ["Crimson Pro", "Georgia", "serif"],
+        ui:      ["Inter", "sans-serif"],
+        mono:    ["DM Mono", "monospace"],
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        sm:      "0.0625rem",
+        lg:      "0.1875rem",
+      },
+    },
+  },
+};`;
+}

@@ -6,10 +6,11 @@ const generators = [
   { href: "/social-card",     label: "Social Card" },
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/image-treatment", label: "Image Treatment" },
-  { href: "/option-field",      label: "Option Field" },
-  { href: "/align",             label: "Align" },
-  { href: "/text-highlight",    label: "Text Highlight" },
-  { href: "/territory",         label: "Territory" },
+  { href: "/option-field",    label: "Option Field" },
+  { href: "/align",           label: "Align" },
+  { href: "/text-highlight",  label: "Text Highlight" },
+  { href: "/territory",       label: "Territory" },
+  { href: "/design-export",   label: "Token Export" },
 ];
 
 export default function GeneratorsLayout({
