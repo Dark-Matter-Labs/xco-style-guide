@@ -1,6 +1,8 @@
 "use client";
 
 import { forwardRef } from "react";
+import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { squarify } from "@/lib/squarify";
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
@@ -14,7 +16,7 @@ const DUSK  = "#F27F3D";
 export const COVER_W = 794;
 export const COVER_H = 1123;
 
-export type CoverVisual = "none" | "abstract" | "mark";
+export type CoverVisual = "none" | "abstract" | "mark" | "option-field" | "territory";
 
 export interface PaperCoverProps {
   paperNumber: string;
@@ -82,6 +84,90 @@ function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number })
   );
 }
 
+// ── Option Field embed ─────────────────────────────────────────────────────
+function OptionFieldCoverEmbed({
+  x0, y0, w, h,
+}: {
+  x0: number; y0: number; w: number; h: number;
+}) {
+  const spacing = 7;
+  const segW    = 5;
+  const maxW    = spacing * 1.5;
+  const segs: { x: number; y: number; sh: number }[] = [];
+
+  for (let y = spacing / 2; y < h; y += spacing) {
+    const yRel = y / h;
+    for (let x = 0; x < w; x += segW) {
+      const xRel = x / w;
+      const sh = spatialWeight(xRel, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
+      segs.push({ x: x0 + x, y: y0 + y, sh });
+    }
+  }
+
+  return (
+    <>
+      {segs.map((s, i) => (
+        <rect key={i} x={s.x} y={s.y - s.sh / 2} width={segW} height={s.sh} fill={INK} />
+      ))}
+    </>
+  );
+}
+
+// ── Territory embed ─────────────────────────────────────────────────────────
+const COVER_TERRITORY_ITEMS = [
+  { label: "Field",       weight: 100 },
+  { label: "Frontier",    weight: 65  },
+  { label: "Fortress",    weight: 50  },
+  { label: "Optionality", weight: 38  },
+  { label: "Transition",  weight: 25  },
+  { label: "Emergence",   weight: 15  },
+];
+
+const COVER_TERRITORY_PALETTE: [string, string][] = [
+  ["#F2B077", "#1C1B17"],
+  ["#F27F3D", "#1C1B17"],
+  ["#3786A6", "#FFFFFF"],
+  ["#085A8C", "#FFFFFF"],
+  ["#192640", "#FFFFFF"],
+];
+
+function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
+  const rects = squarify(COVER_TERRITORY_ITEMS, w, h);
+  const gutter = 3;
+  const half = gutter / 2;
+  return (
+    <>
+      <rect x={x0} y={y0} width={w} height={h} fill={INK} />
+      {rects.map((r, i) => {
+        const cx = r.x + half;
+        const cy = r.y + half;
+        const cw = r.w - gutter;
+        const ch = r.h - gutter;
+        if (cw < 4 || ch < 4) return null;
+        const t = rects.length <= 1 ? 0 : i / (rects.length - 1);
+        const idx = Math.min(COVER_TERRITORY_PALETTE.length - 1, Math.floor(t * COVER_TERRITORY_PALETTE.length));
+        const [bg, fg] = COVER_TERRITORY_PALETTE[idx];
+        const showLabel = cw >= 40 && ch >= 22;
+        const fs = Math.min(Math.min(cw, ch) * 0.14, 22);
+        return (
+          <g key={i}>
+            <rect x={x0 + cx} y={y0 + cy} width={cw} height={ch} fill={bg} />
+            {showLabel && (
+              <text
+                x={x0 + cx + cw / 2} y={y0 + cy + ch / 2}
+                textAnchor="middle" dominantBaseline="middle"
+                fontFamily="'DM Mono', monospace" fontSize={fs} fill={fg}
+              >
+                {r.label}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </>
+  );
+}
+
 export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
   function PaperCoverDiagram(
     { paperNumber, title, subtitle, authors, date, visual, className },
@@ -92,8 +178,9 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
     const subtitleLines = subtitle ? wrap(subtitle, 34) : [];
 
     // Vertical layout — content starts below visual zone
+    const hasVisual    = visual !== "none";
     const visualTop    = 140;
-    const visualBottom = visual !== "none" ? 480 : 180;
+    const visualBottom = hasVisual ? 480 : 180;
     const ruleY        = visualBottom + 20;
     const numberY      = ruleY + 52;
     const titleStartY  = numberY + 58;
@@ -111,7 +198,9 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
       >
         <defs>
           <style>{FONT_IMPORT}</style>
-          {visual === "abstract" && <CoverAbstractGradient top={visualTop} bottom={visualBottom} />}
+          {visual === "abstract" && (
+            <CoverAbstractGradient top={visualTop} bottom={visualBottom} />
+          )}
         </defs>
 
         {/* Background */}
@@ -126,6 +215,22 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Three Regimes mark visual */}
         {visual === "mark" && (
           <CoverMark cx={COVER_W / 2} cy={(visualTop + visualBottom) / 2} scale={0.85} />
+        )}
+
+        {/* Option Field visual */}
+        {visual === "option-field" && (
+          <OptionFieldCoverEmbed
+            x0={0} y0={visualTop}
+            w={COVER_W} h={visualBottom - visualTop}
+          />
+        )}
+
+        {/* Territory treemap visual */}
+        {visual === "territory" && (
+          <TerritoryEmbed
+            x0={0} y0={visualTop}
+            w={COVER_W} h={visualBottom - visualTop}
+          />
         )}
 
         {/* Header — xCO wordmark */}

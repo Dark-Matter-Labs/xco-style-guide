@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { squarify } from "@/lib/squarify";
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
@@ -13,7 +14,7 @@ const DUSK  = "#F27F3D";
 
 export type CardFormat  = "card" | "square";
 export type CardLayout  = "typographic" | "diagram" | "abstract";
-export type DiagramType = "three-regimes" | "option-field";
+export type DiagramType = "three-regimes" | "option-field" | "territory";
 
 export interface SocialCardProps {
   headline:    string;
@@ -96,6 +97,61 @@ function OptionFieldEmbed({
   );
 }
 
+// ── Territory embed — renders a mini treemap into an arbitrary SVG rect ──
+const TERRITORY_ITEMS = [
+  { label: "Field",       weight: 100 },
+  { label: "Frontier",    weight: 65  },
+  { label: "Fortress",    weight: 50  },
+  { label: "Optionality", weight: 38  },
+  { label: "Transition",  weight: 25  },
+  { label: "Emergence",   weight: 15  },
+];
+
+const TERRITORY_PALETTE: [string, string][] = [
+  ["#F2B077", "#1C1B17"],
+  ["#F27F3D", "#1C1B17"],
+  ["#3786A6", "#FFFFFF"],
+  ["#085A8C", "#FFFFFF"],
+  ["#192640", "#FFFFFF"],
+];
+
+function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
+  const rects = squarify(TERRITORY_ITEMS, w, h);
+  const gutter = 4;
+  const half = gutter / 2;
+  return (
+    <>
+      <rect x={x0} y={y0} width={w} height={h} fill={INK} />
+      {rects.map((r, i) => {
+        const cx = r.x + half;
+        const cy = r.y + half;
+        const cw = r.w - gutter;
+        const ch = r.h - gutter;
+        if (cw < 4 || ch < 4) return null;
+        const t = rects.length <= 1 ? 0 : i / (rects.length - 1);
+        const idx = Math.min(TERRITORY_PALETTE.length - 1, Math.floor(t * TERRITORY_PALETTE.length));
+        const [bg, fg] = TERRITORY_PALETTE[idx];
+        const showLabel = cw >= 50 && ch >= 28;
+        const fs = Math.min(Math.min(cw, ch) * 0.14, 28);
+        return (
+          <g key={i}>
+            <rect x={x0 + cx} y={y0 + cy} width={cw} height={ch} fill={bg} />
+            {showLabel && (
+              <text
+                x={x0 + cx + cw / 2} y={y0 + cy + ch / 2}
+                textAnchor="middle" dominantBaseline="middle"
+                fontFamily="'DM Mono', monospace" fontSize={fs} fill={fg}
+              >
+                {r.label}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </>
+  );
+}
+
 // ── Abstract gradient ──────────────────────────────────────────────────
 function AbstractGradient({ vw, vh }: { vw: number; vh: number }) {
   return (
@@ -140,10 +196,9 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
         <line x1={PAD} y1={558} x2={colW} y2={558} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
         {byline && <text x={PAD} y={590} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
         <text x={vw - PAD} y={590} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
-        {diagramType === "option-field"
-          ? <OptionFieldEmbed x0={625} y0={60} w={495} h={510} />
-          : <ThreeRegimesMark tx={635} ty={175} scale={1.15} />
-        }
+        {diagramType === "option-field" && <OptionFieldEmbed x0={625} y0={60} w={495} h={510} />}
+        {diagramType === "territory"    && <TerritoryEmbed   x0={625} y0={60} w={495} h={510} />}
+        {diagramType === "three-regimes" && <ThreeRegimesMark tx={635} ty={175} scale={1.15} />}
       </>
     );
   }
@@ -188,10 +243,9 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
       <>
         <rect width={vw} height={vh} fill={PAPER} />
         {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-        {diagramType === "option-field"
-          ? <OptionFieldEmbed x0={PAD} y0={140} w={vw - PAD * 2} h={310} />
-          : <ThreeRegimesMark tx={markTx} ty={160} scale={markScale} />
-        }
+        {diagramType === "option-field"  && <OptionFieldEmbed x0={PAD} y0={140} w={vw - PAD * 2} h={310} />}
+        {diagramType === "territory"     && <TerritoryEmbed   x0={PAD} y0={140} w={vw - PAD * 2} h={310} />}
+        {diagramType === "three-regimes" && <ThreeRegimesMark tx={markTx} ty={160} scale={markScale} />}
         {lines.map((l, i) => <text key={i} x={vw / 2} y={headlineY + i * 65} textAnchor="middle" fontFamily="'Crimson Pro', Georgia, serif" fontSize={52} fill={INK}>{l}</text>)}
         <line x1={PAD} y1={vh - 130} x2={vw - PAD} y2={vh - 130} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
         {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}

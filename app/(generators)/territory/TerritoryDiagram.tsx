@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useMemo } from "react";
+import { squarify } from "@/lib/squarify";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -17,8 +18,8 @@ export interface TerritoryProps {
   items:        TerritoryItem[];
   format:       TerritoryFormat;
   colorMode:    TerritoryColorMode;
-  cornerRadius: number;   // px
-  gutter:       number;   // px gap between cells
+  cornerRadius: number;
+  gutter:       number;
 }
 
 // ── Constants ───────────────────────────────────────────────────────────────
@@ -36,98 +37,6 @@ const TEAL  = "#3786A6";
 const SAND  = "#F2B077";
 const DUSK  = "#F27F3D";
 
-// ── Squarify algorithm ──────────────────────────────────────────────────────
-// Bruls, Huizing, van Wijk (1999) — fills a rect with sub-rects whose areas
-// are proportional to weights, minimising aspect ratios.
-
-interface ComputedRect extends TerritoryItem {
-  x: number; y: number; w: number; h: number;
-  rank: number;  // 0 = largest
-}
-
-function worstRatio(areas: number[], shortEdge: number): number {
-  if (areas.length === 0) return Infinity;
-  const s = areas.reduce((a, b) => a + b, 0);
-  const hi = Math.max(...areas);
-  const lo = Math.min(...areas);
-  return Math.max(
-    (shortEdge * shortEdge * hi) / (s * s),
-    (s * s) / (shortEdge * shortEdge * lo),
-  );
-}
-
-function computeSquarify(items: TerritoryItem[], vw: number, vh: number): ComputedRect[] {
-  const valid = items
-    .filter(i => i.weight > 0)
-    .sort((a, b) => b.weight - a.weight);
-  if (valid.length === 0) return [];
-
-  const totalW = valid.reduce((s, i) => s + i.weight, 0);
-  const totalA = vw * vh;
-  const nodes  = valid.map((item, rank) => ({
-    ...item,
-    rank,
-    area: (item.weight / totalW) * totalA,
-  }));
-
-  const rects: ComputedRect[] = [];
-
-  function fixRow(
-    row: typeof nodes,
-    rx: number, ry: number, rw: number, rh: number,
-  ): [number, number, number, number] {
-    const rowSum = row.reduce((s, n) => s + n.area, 0);
-    if (rw >= rh) {
-      const stripW = rowSum / rh;
-      let cy = ry;
-      for (const n of row) {
-        const cellH = n.area / stripW;
-        rects.push({ ...n, x: rx, y: cy, w: stripW, h: cellH });
-        cy += cellH;
-      }
-      return [rx + stripW, ry, rw - stripW, rh];
-    } else {
-      const stripH = rowSum / rw;
-      let cx = rx;
-      for (const n of row) {
-        const cellW = n.area / stripH;
-        rects.push({ ...n, x: cx, y: ry, w: cellW, h: stripH });
-        cx += cellW;
-      }
-      return [rx, ry + stripH, rw, rh - stripH];
-    }
-  }
-
-  function layout(
-    remaining: typeof nodes,
-    row:       typeof nodes,
-    rx: number, ry: number, rw: number, rh: number,
-  ) {
-    if (rw < 1 || rh < 1) return;
-    if (remaining.length === 0) {
-      if (row.length > 0) fixRow(row, rx, ry, rw, rh);
-      return;
-    }
-    const c       = remaining[0];
-    const edge    = Math.min(rw, rh);
-    const nextRow = [...row, c];
-
-    if (
-      row.length === 0 ||
-      worstRatio(nextRow.map(n => n.area), edge) <=
-      worstRatio(row.map(n => n.area), edge)
-    ) {
-      layout(remaining.slice(1), nextRow, rx, ry, rw, rh);
-    } else {
-      const [nx, ny, nw, nh] = fixRow(row, rx, ry, rw, rh);
-      layout(remaining, [], nx, ny, nw, nh);
-    }
-  }
-
-  layout(nodes, [], 0, 0, vw, vh);
-  return rects;
-}
-
 // ── Colour map ───────────────────────────────────────────────────────────────
 
 function cellColors(
@@ -139,7 +48,6 @@ function cellColors(
   const t = total <= 1 ? 0 : rank / (total - 1);
 
   if (mode === "blueprint") {
-    // Largest = teal (open frontier), smallest = navy (foundational)
     if (t < 0.33) return { bg: TEAL,  fg: PAPER };
     if (t < 0.66) return { bg: OCEAN, fg: PAPER };
     return               { bg: NAVY,  fg: PAPER };
@@ -167,7 +75,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
 
     // Stringify items so useMemo doesn't re-run on every object reference change
     const rects = useMemo(
-      () => computeSquarify(items, vw, vh),
+      () => squarify(items, vw, vh),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [JSON.stringify(items), vw, vh],
     );
@@ -194,11 +102,9 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
           const showLabel = cw >= 64 && ch >= 42;
           const showSub   = showLabel && !!r.sublabel && cw >= 100 && ch >= 72;
 
-          // Scale font to cell — 14% of shorter edge, capped at 42px
           const fs  = Math.min(Math.min(cw, ch) * 0.14, 42);
           const sub = fs * 0.52;
 
-          // Vertical grouping when both label + sublabel present
           const gap    = fs * 0.18;
           const labelY = showSub
             ? cy + ch / 2 - gap / 2 - sub / 2

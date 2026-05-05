@@ -51,9 +51,11 @@ function Field({ label, value, onChange, hint, mono, rows }: {
 }
 
 const VISUALS: { id: CoverVisual; label: string; hint: string }[] = [
-  { id: "none",     label: "None",     hint: "White space and typography only" },
-  { id: "abstract", label: "Abstract", hint: "Muted gradient field — atmospheric" },
-  { id: "mark",     label: "Mark",     hint: "Three Regimes geometric mark" },
+  { id: "none",         label: "None",         hint: "White space and typography only" },
+  { id: "abstract",     label: "Abstract",     hint: "Muted gradient field — atmospheric" },
+  { id: "mark",         label: "Mark",         hint: "Three Regimes geometric mark" },
+  { id: "option-field", label: "Option Field", hint: "Variable-weight scanline field" },
+  { id: "territory",    label: "Territory",    hint: "Weighted treemap — concept areas by size" },
 ];
 
 export function PaperCoverGenerator() {

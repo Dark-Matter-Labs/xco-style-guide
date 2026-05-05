@@ -55,6 +55,7 @@ const LAYOUTS: { id: CardLayout; label: string; hint: string }[] = [
 const DIAGRAM_TYPES: { id: DiagramType; label: string; hint: string }[] = [
   { id: "three-regimes", label: "Three Regimes", hint: "Frontier / Fortress / Field mark" },
   { id: "option-field",  label: "Option Field",  hint: "Variable-weight scanline field" },
+  { id: "territory",     label: "Territory",     hint: "Weighted treemap — concept areas by size" },
 ];
 
 const FORMATS: { id: CardFormat; label: string; size: string; w: number; h: number }[] = [
