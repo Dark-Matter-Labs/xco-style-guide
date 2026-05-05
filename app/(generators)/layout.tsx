@@ -9,6 +9,7 @@ const generators = [
   { href: "/option-field",      label: "Option Field" },
   { href: "/align",             label: "Align" },
   { href: "/text-highlight",    label: "Text Highlight" },
+  { href: "/territory",         label: "Territory" },
 ];
 
 export default function GeneratorsLayout({
