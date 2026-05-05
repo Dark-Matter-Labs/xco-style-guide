@@ -30,6 +30,13 @@ function useDebounce<T>(value: T, ms: number): T {
 // ── Helpers ───────────────────────────────────────────────────────────────
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
 
+function getPhotoDims(img: HTMLImageElement): { vw: number; vh: number } {
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+  if (iw <= 1200) return { vw: iw, vh: ih };
+  return { vw: 1200, vh: Math.round(ih * (1200 / iw)) };
+}
+
 function sampleLum(data: Uint8ClampedArray, cx: number, cy: number, vw: number, vh: number): number {
   const px = clamp(Math.floor(cx), 0, vw - 1);
   const py = clamp(Math.floor(cy), 0, vh - 1);
@@ -275,7 +282,9 @@ interface PreviewProps {
 
 const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
   function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto }, ref) {
-    const { vw, vh } = DIMS[format];
+    const { vw, vh } = source === "photo" && uploadedImg
+      ? getPhotoDims(uploadedImg)
+      : DIMS[format];
     const bg = source === "photo"
       ? (photoPalette === "inverted" ? INK : PAPER)
       : (colorMode === "inverted" ? INK : PAPER);
@@ -293,7 +302,7 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
 
       if (source === "photo") {
         if (!uploadedImg) return;
-        if (showPhoto) ctx.drawImage(uploadedImg, 0, 0, vw, vh);
+        if (showPhoto) ctx.drawImage(uploadedImg, 0, 0, vw, vh); // vw/vh match natural dims — no stretch
         const imgData = getImageData(uploadedImg, vw, vh);
         drawPhotoRaster(ctx, imgData, vw, vh, dotSpacing, photoPalette, cellShape);
         if (grain) addGrain(ctx, vw, vh);
@@ -560,7 +569,10 @@ export function ImageTreatmentGenerator() {
   const handle = async (type: string) => {
     setExporting(type);
     try {
-      const { w, h } = activeFormat;
+      const photoDims = source === "photo" && uploadedImg ? getPhotoDims(uploadedImg) : null;
+      const { w, h } = photoDims
+        ? { w: photoDims.vw, h: photoDims.vh }
+        : { w: activeFormat.w, h: activeFormat.h };
 
       // Photo PNG: use canvas directly (no server route needed)
       if (source === "photo" && type === "png") {
@@ -758,17 +770,19 @@ export function ImageTreatmentGenerator() {
           </div>
         )}
 
-        {/* Format */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
-          {FORMATS.map(({ id, label }) => (
-            <label key={id} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">{label}</span>
-            </label>
-          ))}
-        </div>
+        {/* Format — not applicable in photo mode (dims come from the image) */}
+        {source !== "photo" && (
+          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+            {FORMATS.map(({ id, label }) => (
+              <label key={id} className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="format" value={id} checked={format === id}
+                  onChange={() => setFormat(id)} className="accent-xco-dusk" />
+                <span className="font-mono text-xs text-xco-ink">{label}</span>
+              </label>
+            ))}
+          </div>
+        )}
 
         {/* Export */}
         <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
@@ -805,7 +819,9 @@ export function ImageTreatmentGenerator() {
         )}
         <p className="font-mono text-xs text-xco-ink-muted">
           {source === "photo"
-            ? `${dotSpacing}px raster grid · ${format === "card" ? "1200×630" : "1200×1200"}`
+            ? uploadedImg
+              ? (() => { const d = getPhotoDims(uploadedImg); return `${dotSpacing}px raster grid · ${d.vw}×${d.vh} (natural size)`; })()
+              : `${dotSpacing}px raster grid`
             : source === "option-field"
               ? `Option field · ${format === "card" ? "1200×630" : "1200×1200"}`
               : `Three Regimes — ${variant} · ${format === "card" ? "1200×630" : "1200×1200"}`}
