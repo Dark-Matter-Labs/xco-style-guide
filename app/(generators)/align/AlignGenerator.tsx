@@ -27,6 +27,58 @@ const PRESETS: Record<AlignPreset, ColorStop & { label: string; hint: string }> 
   ink:       { label: "Ink",       hint: "ink → muted → paper", shadow: INK,   mid: MUTED, highlight: PAPER },
 };
 
+// ── Style prompt builder ───────────────────────────────────────────────────
+const PRESET_MOOD: Record<AlignPreset, string> = {
+  blueprint: "cold, institutional, technical — the feeling of infrastructure blueprints, deep-ocean charts, systems under pressure",
+  ember:     "warm tension — industrial heat, concentrated force, ember before flame",
+  horizon:   "liminal, expansive — the feeling of dusk over open terrain, transition between states",
+  dusk:      "atmospheric, in-between — neither day nor night, neither resolved nor open",
+  ink:       "stark, archival, definitive — print heritage, typographic authority, no colour sentimentality",
+};
+
+function buildStylePrompt(preset: AlignPreset, midpoint: number): string {
+  const { shadow, mid: midColor, highlight, label } = PRESETS[preset];
+  const mood = PRESET_MOOD[preset];
+  const toneDesc =
+    midpoint < 0.3 ? "heavy shadow masses, sparse highlights — image reads very dark"
+    : midpoint < 0.5 ? "balanced tonal range — dark and light in dialogue"
+    : "luminous, highlight-dominant — structural elements emerge from brightness";
+
+  return `xCO Visual Identity — image generation prompt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PALETTE — ${label} preset (tritone, three colors only)
+  Shadow    ${shadow}
+  Midtone   ${midColor}
+  Highlight ${highlight}
+
+Use ONLY these three hex values. Strip all photographic color.
+Map luminance to palette: shadows → ${shadow}, midtones → ${midColor}, bright areas → ${highlight}.
+Tonal balance: ${toneDesc}.
+
+MOOD
+${mood}
+
+AESTHETIC
+Austere, structural, serious. Civilizational in scale — the feeling of deep systems,
+long time horizons, infrastructure, ecological forces. Hard geometric forms preferred.
+No organic decoration, no lifestyle warmth, no visual clutter. Strong figure-ground
+contrast. Deliberate negative space. Elements placed with intention, not filled in.
+If the subject is photorealistic, treat it as if passed through a tritone duotone
+process — all photographic hue removed, replaced with the three palette stops above.
+
+TYPOGRAPHY (if text appears in the image)
+  Display / headlines    Inter — geometric sans-serif, weight 400–500
+  Data / labels          DM Mono — monospaced, regular
+  Body / longer text     Crimson Pro — serif, regular or italic
+  No decorative typefaces. Text is sparse, precise, left-aligned.
+
+COMPOSITION
+Clean. Architectural. Asymmetric without being chaotic. If there is a subject,
+let it breathe — wide margins, unforced placement. Diagrams and abstract structures
+are as valid as photographic subjects.`;
+}
+
 // Derive canvas dimensions from image's natural aspect ratio, max 1200px wide.
 function getImageDims(img: HTMLImageElement): { vw: number; vh: number } {
   const iw = img.naturalWidth, ih = img.naturalHeight;
@@ -225,6 +277,7 @@ export function AlignGenerator() {
   const [cellShape,    setCellShape]    = useState<CellShape>("square");
   const [grain,        setGrain]        = useState(false);
   const [exporting,    setExporting]    = useState<string | null>(null);
+  const [copied,       setCopied]       = useState(false);
 
   const canvasRef           = useRef<HTMLCanvasElement>(null);
   const debouncedResolution = useDebounce(resolution, 120);
@@ -250,6 +303,13 @@ export function AlignGenerator() {
   }, [uploadedImg, preset, debouncedMidpoint, raster, spacing, cellShape, grain, vw, vh]);
 
   const slug = `xco-align-${vw}x${vh}-${preset}`;
+
+  const handleCopyPrompt = async () => {
+    const prompt = buildStylePrompt(preset, debouncedMidpoint);
+    await navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleExport = (type: "png" | "svg") => {
     if (!uploadedImg) return;
@@ -378,6 +438,26 @@ export function AlignGenerator() {
           <p className="font-mono text-xs text-xco-ink-muted italic mt-1">
             Organic noise layer — softens digital harshness
           </p>
+        </div>
+
+        {/* Prompt */}
+        <div className="border-t border-xco-ink/[0.12] pt-4 space-y-2">
+          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+            Style prompt
+          </h2>
+          <p className="font-mono text-xs text-xco-ink-muted italic leading-snug">
+            Copy into ChatGPT, Midjourney, Firefly, or any image generator to produce outputs that match the xCO palette and aesthetic.
+          </p>
+          <button
+            onClick={handleCopyPrompt}
+            className={`w-full text-left font-mono text-xs border px-3 py-2 transition-colors ${
+              copied
+                ? "bg-xco-teal text-white border-xco-teal"
+                : "text-xco-ink border-xco-ink/[0.2] hover:border-xco-ink hover:bg-xco-ink/[0.04]"
+            }`}
+          >
+            {copied ? "✓ Copied to clipboard" : `⌘ Copy ${PRESETS[preset].label} prompt`}
+          </button>
         </div>
 
         {/* Export */}
