@@ -7,6 +7,7 @@ const generators = [
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/option-field",      label: "Option Field" },
+  { href: "/align",             label: "Align" },
 ];
 
 export default function GeneratorsLayout({
