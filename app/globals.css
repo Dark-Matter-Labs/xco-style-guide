@@ -34,6 +34,10 @@
   --font-sans:    var(--font-inter);
   --font-heading: var(--font-inter);
 
+  /* ── Leading ────────────────────────────────────────────────────── */
+
+  --leading-heading: 1.2;
+
   /* ── Spacing ────────────────────────────────────────────────────── */
 
   --xco-gutter: 1.5rem;
@@ -139,6 +143,9 @@
   }
   body {
     @apply bg-xco-paper text-xco-ink font-ui text-base leading-relaxed;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--leading-heading);
   }
 }
 

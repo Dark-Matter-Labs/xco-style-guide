@@ -8,6 +8,7 @@ const generators = [
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/option-field",      label: "Option Field" },
   { href: "/align",             label: "Align" },
+  { href: "/text-highlight",    label: "Text Highlight" },
 ];
 
 export default function GeneratorsLayout({

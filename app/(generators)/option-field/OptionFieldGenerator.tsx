@@ -70,7 +70,7 @@ export function OptionFieldGenerator() {
   const [frontierStr, setFrontierStr] = useState(0.60);
   const [fortressStr, setFortressStr] = useState(0.52);
   const [volatility,  setVolatility]  = useState(0.34);
-  const [resolution,  setResolution]  = useState(55);
+  const [resolution,  setResolution]  = useState(35);
   const [colorMode,   setColorMode]   = useState<FieldColorMode>("ink");
   const [format,      setFormat]      = useState<FieldFormat>("hero");
   const [exporting,   setExporting]   = useState<string | null>(null);

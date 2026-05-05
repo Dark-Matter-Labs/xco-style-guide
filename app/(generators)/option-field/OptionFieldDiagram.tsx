@@ -29,9 +29,9 @@ const TEAL  = "#3786A6";
 const SAND  = "#F2B077";
 const DUSK  = "#F27F3D";
 
-// resolution 0–100 → spacing 10→3px
+// resolution 0–100 → spacing 20→8px (coarser range → cleaner, less linework)
 function resolveSpacing(r: number): number {
-  return Math.round(10 - (r / 100) * 7);
+  return Math.round(20 - (r / 100) * 12);
 }
 
 // Spatial weight function — encodes optionality field geometry
@@ -98,10 +98,11 @@ interface Seg { x: number; y: number; h: number; color: string; w: number }
 function compute(props: OptionFieldProps): Seg[] {
   const { vw, vh } = DIMS[props.format];
   const isMark = props.format === "mark";
-  const PAD    = isMark ? 14 : 54;
-  const segW   = isMark ? 5  : 12;
+  const PAD    = isMark ? 16 : 80;
+  const segW   = isMark ? 8  : 22;
   const spacing = resolveSpacing(props.resolution);
-  const maxW    = spacing * 1.5;
+  // Cap bar height to 80% of row pitch so rows always have visible gaps
+  const maxW    = spacing * 0.8;
   const segs: Seg[] = [];
 
   const usableW = vw - PAD * 2;
