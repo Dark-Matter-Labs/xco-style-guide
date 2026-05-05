@@ -10,11 +10,14 @@ const systemLinks = [
 ];
 
 const generatorLinks = [
-  { href: "/three-regimes",  label: "Three Regimes" },
-  { href: "/option-field",   label: "Option Field" },
-  { href: "/social-card",    label: "Social Card" },
-  { href: "/paper-cover",    label: "Paper Cover" },
+  { href: "/three-regimes",   label: "Three Regimes" },
+  { href: "/option-field",    label: "Option Field" },
+  { href: "/territory",       label: "Territory" },
+  { href: "/social-card",     label: "Social Card" },
+  { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/image-treatment", label: "Image Treatment" },
+  { href: "/align",           label: "Align" },
+  { href: "/text-highlight",  label: "Text Highlight" },
 ];
 
 export default function Home() {

@@ -117,23 +117,45 @@ export function TextHighlightGenerator() {
   const [mode, setMode] = useState<HighlightMode>("block");
   const [positions, setPositions] = useState<Record<number, number>>({});
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const containerRef  = useRef<HTMLDivElement>(null);
+  const textRef       = useRef<HTMLDivElement>(null);
+  const sidenoteRefs  = useRef<Record<number, HTMLDivElement>>({});
 
   const tokens = tokenize(text, annotations);
 
-  // Measure highlighted-term positions and align sidenotes
+  // Measure term positions then push sidenotes apart (waterfall) to prevent overlap.
   useLayoutEffect(() => {
     if (!containerRef.current || !textRef.current) return;
     const cTop = containerRef.current.getBoundingClientRect().top;
-    const next: Record<number, number> = {};
-    annotations.forEach((ann) => {
-      const el = textRef.current!.querySelector(
-        `[data-ann="${ann.id}"]`,
-      ) as HTMLElement | null;
-      if (el) next[ann.id] = el.getBoundingClientRect().top - cTop;
-    });
-    setPositions(next);
+
+    const measured = annotations
+      .map((ann) => {
+        const termEl = textRef.current!.querySelector(
+          `[data-ann="${ann.id}"]`,
+        ) as HTMLElement | null;
+        if (!termEl) return null;
+        const noteEl = sidenoteRefs.current[ann.id];
+        return {
+          id:     ann.id,
+          rawTop: termEl.getBoundingClientRect().top - cTop,
+          height: noteEl ? noteEl.getBoundingClientRect().height : 42,
+        };
+      })
+      .filter(Boolean) as { id: number; rawTop: number; height: number }[];
+
+    // Sort by natural position, then push each note down if it would overlap the previous.
+    measured.sort((a, b) => a.rawTop - b.rawTop);
+    const adjusted: Record<number, number> = {};
+    let cursor = 0;
+    for (const item of measured) {
+      const top = Math.max(item.rawTop, cursor);
+      adjusted[item.id] = top;
+      cursor = top + item.height + 10;
+    }
+
+    setPositions((prev) =>
+      JSON.stringify(prev) === JSON.stringify(adjusted) ? prev : adjusted,
+    );
   }, [text, annotations, mode]);
 
   const updateAnn = (id: number, patch: Partial<Annotation>) =>
@@ -288,16 +310,18 @@ export function TextHighlightGenerator() {
                       }}
                     >
                       {tok.text}
-                      <sup
+                      <span
                         style={{
-                          fontSize: "0.58em",
-                          marginLeft: "1px",
-                          verticalAlign: "super",
+                          position: "relative",
+                          top: "-0.42em",
+                          fontSize: "0.62em",
+                          marginLeft: "2px",
                           lineHeight: 0,
+                          fontWeight: 600,
                         }}
                       >
                         {ann.id}
-                      </sup>
+                      </span>
                     </span>
                   );
                 }
@@ -316,16 +340,18 @@ export function TextHighlightGenerator() {
                     }}
                   >
                     {tok.text}
-                    <sup
+                    <span
                       style={{
-                        fontSize: "0.45em",
-                        marginLeft: "1px",
+                        position: "relative",
+                        top: "-0.42em",
+                        fontSize: "0.5em",
+                        marginLeft: "2px",
                         lineHeight: 0,
-                        verticalAlign: "super",
+                        fontWeight: 600,
                       }}
                     >
                       {ann.id}
-                    </sup>
+                    </span>
                   </span>
                 );
               })}
@@ -346,6 +372,10 @@ export function TextHighlightGenerator() {
                 return (
                   <div
                     key={ann.id}
+                    ref={(el) => {
+                      if (el) sidenoteRefs.current[ann.id] = el;
+                      else delete sidenoteRefs.current[ann.id];
+                    }}
                     style={{
                       position: "absolute",
                       top,
