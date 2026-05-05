@@ -15,7 +15,6 @@ const MUTED = "#5F5C53";
 // ── Types ──────────────────────────────────────────────────────────────────
 type AlignPreset = "blueprint" | "ember" | "horizon" | "dusk" | "ink";
 type CellShape   = "square" | "hbars" | "vbars";
-type AlignFormat = "card" | "square";
 
 interface ColorStop { shadow: string; mid: string; highlight: string }
 
@@ -28,10 +27,12 @@ const PRESETS: Record<AlignPreset, ColorStop & { label: string; hint: string }> 
   ink:       { label: "Ink",       hint: "ink → muted → paper", shadow: INK,   mid: MUTED, highlight: PAPER },
 };
 
-const DIMS = {
-  card:   { vw: 1200, vh: 630  },
-  square: { vw: 1200, vh: 1200 },
-} as const;
+// Derive canvas dimensions from image's natural aspect ratio, max 1200px wide.
+function getImageDims(img: HTMLImageElement): { vw: number; vh: number } {
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  if (iw <= 1200) return { vw: iw, vh: ih };
+  return { vw: 1200, vh: Math.round(ih * (1200 / iw)) };
+}
 
 // ── Debounce ───────────────────────────────────────────────────────────────
 function useDebounce<T>(value: T, ms: number): T {
@@ -87,19 +88,13 @@ function applyTritone(
 }
 
 // ── Canvas helpers ─────────────────────────────────────────────────────────
-// Cover-fit: scale image to fill canvas, crop to centre. No stretching.
-function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, vw: number, vh: number) {
-  const iw = img.naturalWidth, ih = img.naturalHeight;
-  const scale = Math.max(vw / iw, vh / ih);
-  const sw = iw * scale, sh = ih * scale;
-  ctx.drawImage(img, (vw - sw) / 2, (vh - sh) / 2, sw, sh);
-}
-
+// Canvas dimensions are derived from the image's own aspect ratio (getImageDims),
+// so we can draw directly without any cropping.
 function getImgData(img: HTMLImageElement, vw: number, vh: number): ImageData {
   const c = document.createElement("canvas");
   c.width = vw; c.height = vh;
   const ctx = c.getContext("2d")!;
-  drawImageCover(ctx, img, vw, vh);
+  ctx.drawImage(img, 0, 0, vw, vh);
   return ctx.getImageData(0, 0, vw, vh);
 }
 
@@ -229,14 +224,14 @@ export function AlignGenerator() {
   const [resolution,   setResolution]   = useState(40);
   const [cellShape,    setCellShape]    = useState<CellShape>("square");
   const [grain,        setGrain]        = useState(false);
-  const [format,       setFormat]       = useState<AlignFormat>("card");
   const [exporting,    setExporting]    = useState<string | null>(null);
 
   const canvasRef           = useRef<HTMLCanvasElement>(null);
   const debouncedResolution = useDebounce(resolution, 120);
   const debouncedMidpoint   = useDebounce(midpoint, 80);
 
-  const { vw, vh } = DIMS[format];
+  // Dimensions follow the uploaded image's natural aspect ratio (max 1200px wide).
+  const { vw, vh } = uploadedImg ? getImageDims(uploadedImg) : { vw: 1200, vh: 630 };
   const spacing    = spacingFromRes(debouncedResolution);
 
   const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -254,7 +249,7 @@ export function AlignGenerator() {
     renderToCanvas(canvas, uploadedImg, preset, debouncedMidpoint, raster, spacing, cellShape, grain, vw, vh);
   }, [uploadedImg, preset, debouncedMidpoint, raster, spacing, cellShape, grain, vw, vh]);
 
-  const slug = `xco-align-${format}-${preset}`;
+  const slug = `xco-align-${vw}x${vh}-${preset}`;
 
   const handleExport = (type: "png" | "svg") => {
     if (!uploadedImg) return;
@@ -385,30 +380,16 @@ export function AlignGenerator() {
           </p>
         </div>
 
-        {/* Format */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
-          {(["card", "square"] as AlignFormat[]).map((f) => (
-            <label key={f} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="format" value={f} checked={format === f}
-                onChange={() => setFormat(f)} className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">
-                {f === "card" ? "1200 × 630 — hero / OG" : "1200 × 1200 — square"}
-              </span>
-            </label>
-          ))}
-        </div>
-
         {/* Export */}
         <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
           <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
           <button onClick={() => handleExport("svg")} disabled={exporting !== null || !uploadedImg}
             className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
-            {exporting === "svg" ? "exporting…" : `↓ SVG — ${format === "card" ? "1200×630" : "1200×1200"}`}
+            {exporting === "svg" ? "exporting…" : `↓ SVG — ${uploadedImg ? `${vw}×${vh}` : "—"}`}
           </button>
           <button onClick={() => handleExport("png")} disabled={exporting !== null || !uploadedImg}
             className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
-            {exporting === "png" ? "exporting…" : `↓ PNG — ${format === "card" ? "1200×630" : "1200×1200"}`}
+            {exporting === "png" ? "exporting…" : `↓ PNG — ${uploadedImg ? `${vw}×${vh}` : "—"}`}
           </button>
           {!uploadedImg && (
             <p className="font-mono text-xs text-xco-ink-muted italic">Upload an image to enable export</p>
@@ -421,12 +402,12 @@ export function AlignGenerator() {
       <div className="flex-1 min-w-0 space-y-4">
         {!uploadedImg ? (
           <div className="border border-xco-ink/[0.12] flex items-center justify-center bg-xco-paper"
-            style={{ aspectRatio: format === "card" ? "1200/630" : "1" }}>
+            style={{ aspectRatio: "1200/630" }}>
             <div className="text-center space-y-2 p-8">
               <p className="font-mono text-xs text-xco-ink-muted">Upload an image to preview</p>
               <p className="font-mono text-xs text-xco-ink-muted opacity-60">
                 Tritone maps shadow / mid / highlight luminance bands<br />
-                to xCO palette stops — stripping photographic colour
+                to xCO palette stops — output matches your image aspect ratio
               </p>
             </div>
           </div>
@@ -437,7 +418,7 @@ export function AlignGenerator() {
         )}
         <p className="font-mono text-xs text-xco-ink-muted">
           {uploadedImg
-            ? `${PRESETS[preset].label} · midpoint ${Math.round(midpoint * 100)}% · ${format === "card" ? "1200×630" : "1200×1200"}`
+            ? `${PRESETS[preset].label} · midpoint ${Math.round(midpoint * 100)}% · ${vw}×${vh}`
             : "Tritone palette mapping · optional highlight raster · grain"}
         </p>
       </div>
