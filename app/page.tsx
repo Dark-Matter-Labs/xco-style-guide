@@ -1,5 +1,18 @@
 import Link from "next/link";
 
+const templateLinks = [
+  {
+    href: "https://docs.google.com/document/d/1YUHnNz7f1oXnnJY18WoZuP2BHaqnUSgUNfdsvivZVMQ/edit?tab=t.0",
+    label: "Document Template",
+    meta: "Google Docs",
+  },
+  {
+    href: "https://docs.google.com/presentation/d/1ttOljLpcgRGJ4n2r2D6yRfRdqaCZoWtOWQKOe2wLQ0Y/edit?slide=id.g3ddab6f8e13_0_16#slide=id.g3ddab6f8e13_0_16",
+    label: "Slide Template",
+    meta: "Google Slides",
+  },
+];
+
 const systemLinks = [
   { href: "/typography",  label: "Typography",          n: "01" },
   { href: "/colour",      label: "Colour",              n: "02" },
@@ -89,6 +102,31 @@ export default function Home() {
           </nav>
         </section>
       </div>
+
+      {/* Templates */}
+      <section className="max-w-7xl px-8 pb-14 border-t border-xco-ink/[0.08] pt-14">
+        <h2 className="font-mono text-xs text-xco-ink-muted tracking-widest uppercase mb-8">
+          Templates
+        </h2>
+        <nav className="space-y-0 max-w-sm">
+          {templateLinks.map(({ href, label, meta }) => (
+            <a
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-baseline justify-between gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-ink/[0.25] transition-colors"
+            >
+              <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ink transition-colors">
+                {label}
+              </span>
+              <span className="font-mono text-xs text-xco-ink-muted shrink-0 group-hover:text-xco-ink transition-colors">
+                {meta} ↗
+              </span>
+            </a>
+          ))}
+        </nav>
+      </section>
 
       <footer className="max-w-7xl px-8 pb-14 flex items-center justify-between">
         <p className="font-mono text-xs text-xco-ink-muted max-w-lg leading-relaxed">
