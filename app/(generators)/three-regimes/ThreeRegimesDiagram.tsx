@@ -60,16 +60,16 @@ const LAYOUTS = {
 
 type LayoutData = (typeof LAYOUTS)[DiagramFormat];
 
-const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
 const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;
 const MUTED = colors.inkMuted.hex;
 
-const NAVY  = "#192640";
-const OCEAN = "#085A8C";
-const TEAL  = "#3786A6";
-const DUSK  = "#F27F3D";
+const NAVY  = "#000064";
+const OCEAN = "#005096";
+const TEAL  = "#0082aa";
+const DUSK  = "#ff5a00";
 
 // ── Shared primitives ───────────────────────────────────────────────────────
 
@@ -124,12 +124,12 @@ function ClearLabel({
     <g>
       <rect x={cx - clearW / 2} y={cy - clearH / 2} width={clearW} height={clearH} fill={PAPER} />
       <text x={cx} y={primaryY} textAnchor="middle" dominantBaseline="central"
-        fontFamily="'DM Mono', monospace" fontSize={primarySize} fill={primaryColor}>
+        fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={primarySize} fill={primaryColor}>
         {primary}
       </text>
       {sub && (
         <text x={cx} y={subY} textAnchor="middle" dominantBaseline="central"
-          fontFamily="'DM Mono', monospace" fontSize={subSize}
+          fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={subSize}
           fontStyle="italic" fill={subColor} fillOpacity={0.7}>
           {sub}
         </text>
@@ -408,7 +408,7 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
         {relationshipStatement && (
           <text x={L.vw / 2} y={L.relY}
             textAnchor="middle"
-            fontFamily="'DM Mono', monospace" fontSize={L.relFontSize}
+            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={L.relFontSize}
             fontStyle="italic" fill={MUTED}>
             {relationshipStatement}
           </text>
@@ -416,7 +416,7 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
         {caption && (
           <text x={L.vw / 2} y={L.capY!}
             textAnchor="middle"
-            fontFamily="'DM Mono', monospace" fontSize={14} fill={MUTED}>
+            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={14} fill={MUTED}>
             {caption}
           </text>
         )}
@@ -475,19 +475,19 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
               )}
               {showText && L.relY !== null && relationshipStatement && (
                 <text x={L.vw / 2} y={L.relY} textAnchor="middle"
-                  fontFamily="'DM Mono', monospace" fontSize={L.relFontSize}
+                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={L.relFontSize}
                   fontStyle="italic" fill={MUTED}>
                   {relationshipStatement}
                 </text>
               )}
               {showText && L.capY !== null && caption && (
                 <text x={L.vw / 2} y={L.capY} textAnchor="middle"
-                  fontFamily="'DM Mono', monospace" fontSize={14} fill={MUTED}>
+                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={14} fill={MUTED}>
                   {caption}
                 </text>
               )}
               {showText && annoLines.length > 0 && (
-                <g fontFamily="'DM Mono', monospace" fontSize={11} fill={MUTED} fillOpacity={0.65}>
+                <g fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={11} fill={MUTED} fillOpacity={0.65}>
                   {annoLines.map((line, i) => (
                     <text key={i}
                       x={format === "square" ? 100 : 80}

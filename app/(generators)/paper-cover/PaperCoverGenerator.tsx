@@ -111,7 +111,7 @@ export function PaperCoverGenerator() {
           <Field label="Title" value={title} onChange={setTitle} rows={3}
             hint="Keep under 50 chars for clean line breaks" />
           <Field label="Subtitle" value={subtitle} onChange={setSubtitle} rows={2}
-            hint="Optional — Crimson Pro italic below title" />
+            hint="Optional — Suisse Works italic below title" />
           <Field label="Authors" value={authors} onChange={setAuthors}
             hint="Comma-separated" />
           <Field label="Date" value={date} onChange={setDate}

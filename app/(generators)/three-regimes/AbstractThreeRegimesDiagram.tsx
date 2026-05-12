@@ -21,11 +21,11 @@ export const AbstractThreeRegimesDiagram = forwardRef<
       <defs>
         <linearGradient id="abs-sweep" gradientUnits="userSpaceOnUse"
           x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
-          <stop offset="0%"   stopColor="#192640" />
-          <stop offset="35%"  stopColor="#085A8C" />
-          <stop offset="55%"  stopColor="#4B9EBF" />
-          <stop offset="75%"  stopColor="#F2B077" />
-          <stop offset="100%" stopColor="#F28444" />
+          <stop offset="0%"   stopColor="#000064" />
+          <stop offset="35%"  stopColor="#005096" />
+          <stop offset="55%"  stopColor="#0082aa" />
+          <stop offset="75%"  stopColor="#ffa064" />
+          <stop offset="100%" stopColor="#ff5a00" />
         </linearGradient>
       </defs>
       <rect width={vw} height={vh} fill="url(#abs-sweep)" />

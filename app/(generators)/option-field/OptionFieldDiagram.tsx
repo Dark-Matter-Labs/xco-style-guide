@@ -23,11 +23,11 @@ const DIMS: Record<FieldFormat, { vw: number; vh: number }> = {
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
-const NAVY  = "#192640";
-const OCEAN = "#085A8C";
-const TEAL  = "#3786A6";
-const SAND  = "#F2B077";
-const DUSK  = "#F27F3D";
+const NAVY  = "#000064";
+const OCEAN = "#005096";
+const TEAL  = "#0082aa";
+const SAND  = "#ffa064";
+const DUSK  = "#ff5a00";
 
 // resolution 0–100 → spacing 20→8px (coarser range → cleaner, less linework)
 function resolveSpacing(r: number): number {

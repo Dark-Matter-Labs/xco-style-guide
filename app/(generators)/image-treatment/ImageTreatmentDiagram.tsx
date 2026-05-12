@@ -5,8 +5,8 @@ import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagra
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
-const OCEAN = "#085A8C";
-const DUSK  = "#F27F3D";
+const OCEAN = "#005096";
+const DUSK  = "#ff5a00";
 
 export type ColorMode       = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";

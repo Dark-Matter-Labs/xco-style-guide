@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
 
 const GOOGLE_FONTS_URL =
-  "https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:ital,wght@0,400;1,400&display=swap";
+  "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap";
 
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;

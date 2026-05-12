@@ -30,10 +30,9 @@ export default function TypographyPage() {
       {/* Caveat */}
       <section className="bg-xco-dusk/10 border-l-2 border-xco-dusk px-6 py-4 max-w-2xl">
         <p className="font-mono text-sm text-xco-ink leading-relaxed">
-          <span className="text-xco-dusk">[inference]</span> Crimson Pro is a placeholder for
-          an editorial serif we will likely replace with something more distinctive. The system
-          is built so the swap costs an hour, not a week — one variable in{" "}
-          <code className="text-xco-ink-muted">globals.css</code>.
+          <span className="text-xco-dusk">[note]</span> Suisse Works and Suisse Int&apos;l are
+          licensed typefaces from Swiss Typefaces. If unavailable, the system falls back to
+          Times New Roman (serif) and Helvetica Neue (sans-serif). DM Mono is loaded via Google Fonts.
         </p>
       </section>
 
@@ -68,13 +67,6 @@ export default function TypographyPage() {
                   weights: {(face.weights as readonly string[]).join(" / ")}
                 </p>
                 <p className="font-body text-sm text-xco-ink-muted italic">{face.usage}</p>
-                {"note" in face && face.note && (
-                  <WIP
-                    variant="v0.1"
-                    label={face.note}
-                    className="mt-2 text-xs leading-relaxed max-w-sm block"
-                  />
-                )}
               </div>
             </div>
           ))}
@@ -89,7 +81,7 @@ export default function TypographyPage() {
         <div className="space-y-6">
           <div className="grid grid-cols-[140px_1fr] gap-8 items-baseline border-b border-xco-ink/[0.12] pb-6">
             <p className="font-mono text-xs text-xco-ink-muted">
-              Crimson Pro
+              Suisse Works
               <br />
               400i
             </p>
@@ -149,8 +141,8 @@ export default function TypographyPage() {
           Weight Rule
         </h2>
         <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
-          Two weights only per face: regular and one emphasis — italic for Crimson Pro,
-          medium for Inter, italic for DM Mono. No bold. No light. Restraint is the
+          Two weights only per face: regular and one emphasis — italic for Suisse Works,
+          medium for Suisse Int&apos;l, italic for Suisse Mono. No bold. No light. Restraint is the
           rule, not a constraint.
         </p>
       </section>

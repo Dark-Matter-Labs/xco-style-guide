@@ -10,8 +10,8 @@ import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagra
 
 const INK   = "#1C1B17";
 const PAPER = "#FFFFFF";
-const DUSK  = "#F27F3D";
-const OCEAN = "#085A8C";
+const DUSK  = "#ff5a00";
+const OCEAN = "#005096";
 
 type SourceMode   = "three-regimes" | "option-field" | "photo";
 type PhotoPalette = "mono" | "inverted" | "dusk" | "ocean" | "multi";

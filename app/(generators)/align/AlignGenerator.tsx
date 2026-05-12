@@ -5,11 +5,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 // ── Palette ────────────────────────────────────────────────────────────────
 const INK   = "#1C1B17";
 const PAPER = "#FFFFFF";
-const NAVY  = "#192640";
-const OCEAN = "#085A8C";
-const TEAL  = "#3786A6";
-const SAND  = "#F2B077";
-const DUSK  = "#F27F3D";
+const NAVY  = "#000064";
+const OCEAN = "#005096";
+const TEAL  = "#0082aa";
+const SAND  = "#ffa064";
+const DUSK  = "#ff5a00";
 const MUTED = "#5F5C53";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -68,9 +68,9 @@ If the subject is photorealistic, treat it as if passed through a tritone duoton
 process — all photographic hue removed, replaced with the three palette stops above.
 
 TYPOGRAPHY (if text appears in the image)
-  Display / headlines    Inter — geometric sans-serif, weight 400–500
-  Data / labels          DM Mono — monospaced, regular
-  Body / longer text     Crimson Pro — serif, regular or italic
+  Display / headlines    Suisse Int'l — geometric sans-serif, weight 400–500
+  Data / labels          Suisse Mono — monospaced, regular
+  Body / longer text     Suisse Works — serif, regular or italic
   No decorative typefaces. Text is sparse, precise, left-aligned.
 
 COMPOSITION

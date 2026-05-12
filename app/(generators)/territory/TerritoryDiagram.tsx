@@ -31,11 +31,11 @@ const DIMS: Record<TerritoryFormat, { vw: number; vh: number }> = {
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
-const NAVY  = "#192640";
-const OCEAN = "#085A8C";
-const TEAL  = "#3786A6";
-const SAND  = "#F2B077";
-const DUSK  = "#F27F3D";
+const NAVY  = "#000064";
+const OCEAN = "#005096";
+const TEAL  = "#0082aa";
+const SAND  = "#ffa064";
+const DUSK  = "#ff5a00";
 
 // ── Colour map ───────────────────────────────────────────────────────────────
 
@@ -86,7 +86,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
       <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <style>
-            {`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=DM+Mono&display=swap');`}
+            {`@import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');`}
           </style>
         </defs>
         <rect width={vw} height={vh} fill={bg} />
@@ -122,7 +122,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={labelY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily="Inter, sans-serif" fontWeight="500"
+                  fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`} fontWeight="500"
                   fontSize={fs} fill={fg}
                 >
                   {r.label}
@@ -132,7 +132,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={subY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily="'DM Mono', monospace" fontWeight="400"
+                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontWeight="400"
                   fontSize={sub} fill={fg} opacity={0.5}
                 >
                   {r.sublabel}

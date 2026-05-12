@@ -62,7 +62,7 @@ Body measure (max-width): 68ch for body text. Reduce for captions and mono.
 - **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
 - **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) as a background — use \`ink\` and \`paper\` tokens.
 - **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
-- **No bold** on UI / Inter face. Use weight 400 or 500 only.
+- **No bold** on UI / Suisse Int'l face. Use weight 400 or 500 only.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
 
 ## Three visual registers (diagram modes)
@@ -96,18 +96,18 @@ Add this block to your \`globals.css\` or \`app/globals.css\`:
   --color-xco-paper:     #FFFFFF;
   --color-xco-ink:       #1C1B17;
   --color-xco-ink-muted: #5F5C53;
-  --color-xco-navy:      #192640;
-  --color-xco-ocean:     #085A8C;
-  --color-xco-teal:      #3786A6;
-  --color-xco-sand:      #F2B077;
-  --color-xco-dusk:      #F27F3D;
+  --color-xco-navy:      #000064;
+  --color-xco-ocean:     #005096;
+  --color-xco-teal:      #0082aa;
+  --color-xco-sand:      #ffa064;
+  --color-xco-dusk:      #ff5a00;
 }
 \`\`\`
 
-Then load fonts (Next.js example):
-- Crimson Pro — display + body
-- Inter — UI
-- DM Mono — mono
+Then load fonts:
+- Suisse Works (licensed) — display + body; fallback: Times New Roman
+- Suisse Int'l (licensed) — UI; fallback: Helvetica Neue
+- Suisse Mono (licensed) — mono; fallback: DM Mono (Google Fonts)
 `;
 }
 
@@ -153,11 +153,11 @@ export function buildTailwindV4(): string {
   /* xCO colour palette */
 ${colorEntries}
 
-  /* Typography aliases — assumes next/font CSS variables on <html> */
-  --font-display: var(--font-crimson);   /* Crimson Pro */
-  --font-body:    var(--font-crimson);   /* Crimson Pro */
-  --font-ui:      var(--font-inter);     /* Inter */
-  --font-mono:    var(--font-dm-mono);   /* DM Mono */
+  /* Typography — Suisse typefaces (licensed); system fallbacks shown */
+  --font-display: "Suisse Works", "Times New Roman", Georgia, serif;
+  --font-body:    "Suisse Works", "Times New Roman", Georgia, serif;
+  --font-ui:      "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "Suisse Mono", var(--font-dm-mono), monospace;
 
   /* Spacing */
   --xco-gutter: ${spacing.gutter};
@@ -189,10 +189,10 @@ module.exports = {
 ${colorEntries}
       },
       fontFamily: {
-        display: ["Crimson Pro", "Georgia", "serif"],
-        body:    ["Crimson Pro", "Georgia", "serif"],
-        ui:      ["Inter", "sans-serif"],
-        mono:    ["DM Mono", "monospace"],
+        display: ["Suisse Works", "Times New Roman", "Georgia", "serif"],
+        body:    ["Suisse Works", "Times New Roman", "Georgia", "serif"],
+        ui:      ["Suisse Int'l", "Helvetica Neue", "Arial", "sans-serif"],
+        mono:    ["Suisse Mono", "DM Mono", "monospace"],
       },
       borderRadius: {
         DEFAULT: "0.125rem",

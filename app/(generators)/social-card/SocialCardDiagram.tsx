@@ -4,13 +4,13 @@ import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
 
-const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital@0;1&family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
 const PAPER = "#FFFFFF";
 const INK   = "#1C1B17";
 const MUTED = "#5F5C53";
-const OCEAN = "#085A8C";
-const DUSK  = "#F27F3D";
+const OCEAN = "#005096";
+const DUSK  = "#ff5a00";
 
 export type CardFormat  = "card" | "square";
 export type CardLayout  = "typographic" | "diagram" | "abstract";
@@ -108,11 +108,11 @@ const TERRITORY_ITEMS = [
 ];
 
 const TERRITORY_PALETTE: [string, string][] = [
-  ["#F2B077", "#1C1B17"],
-  ["#F27F3D", "#1C1B17"],
-  ["#3786A6", "#FFFFFF"],
-  ["#085A8C", "#FFFFFF"],
-  ["#192640", "#FFFFFF"],
+  ["#ffa064", "#1C1B17"],
+  ["#ff5a00", "#1C1B17"],
+  ["#0082aa", "#FFFFFF"],
+  ["#005096", "#FFFFFF"],
+  ["#000064", "#FFFFFF"],
 ];
 
 function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
@@ -140,7 +140,7 @@ function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h
               <text
                 x={x0 + cx + cw / 2} y={y0 + cy + ch / 2}
                 textAnchor="middle" dominantBaseline="middle"
-                fontFamily="'DM Mono', monospace" fontSize={fs} fill={fg}
+                fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={fs} fill={fg}
               >
                 {r.label}
               </text>
@@ -157,11 +157,11 @@ function AbstractGradient({ vw, vh }: { vw: number; vh: number }) {
   return (
     <linearGradient id="sc-abstract" gradientUnits="userSpaceOnUse"
       x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
-      <stop offset="0%"   stopColor="#192640" />
-      <stop offset="35%"  stopColor="#085A8C" />
-      <stop offset="55%"  stopColor="#4B9EBF" />
-      <stop offset="75%"  stopColor="#F2B077" />
-      <stop offset="100%" stopColor="#F28444" />
+      <stop offset="0%"   stopColor="#000064" />
+      <stop offset="35%"  stopColor="#005096" />
+      <stop offset="55%"  stopColor="#0082aa" />
+      <stop offset="75%"  stopColor="#ffa064" />
+      <stop offset="100%" stopColor="#ff5a00" />
     </linearGradient>
   );
 }
@@ -176,10 +176,10 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
       <>
         <defs><AbstractGradient vw={vw} vh={vh} /></defs>
         <rect width={vw} height={vh} fill="url(#sc-abstract)" />
-        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-        {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 72} fontFamily="'Crimson Pro', Georgia, serif" fontStyle="italic" fontSize={62} fill={PAPER}>{l}</text>)}
-        {byline && <text x={PAD} y={vh - PAD + 8} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
-        <text x={vw - PAD} y={vh - PAD + 8} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.45}>xCO</text>
+        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 72} fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontStyle="italic" fontSize={62} fill={PAPER}>{l}</text>)}
+        {byline && <text x={PAD} y={vh - PAD + 8} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
+        <text x={vw - PAD} y={vh - PAD + 8} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.45}>xCO</text>
       </>
     );
   }
@@ -191,11 +191,11 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
       <>
         <rect width={vw} height={vh} fill={PAPER} />
         <line x1={600} y1={PAD} x2={600} y2={vh - PAD} stroke={INK} strokeOpacity={0.10} strokeWidth={1} />
-        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-        {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 60} fontFamily="'Crimson Pro', Georgia, serif" fontSize={48} fill={INK}>{l}</text>)}
+        {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {lines.map((l, i) => <text key={i} x={PAD} y={220 + i * 60} fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontSize={48} fill={INK}>{l}</text>)}
         <line x1={PAD} y1={558} x2={colW} y2={558} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
-        {byline && <text x={PAD} y={590} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
-        <text x={vw - PAD} y={590} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
+        {byline && <text x={PAD} y={590} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
+        <text x={vw - PAD} y={590} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
         {diagramType === "option-field" && <OptionFieldEmbed x0={625} y0={60} w={495} h={510} />}
         {diagramType === "territory"    && <TerritoryEmbed   x0={625} y0={60} w={495} h={510} />}
         {diagramType === "three-regimes" && <ThreeRegimesMark tx={635} ty={175} scale={1.15} />}
@@ -208,11 +208,11 @@ function CardInner({ headline, tag, byline, layout, diagramType }: SocialCardPro
   return (
     <>
       <rect width={vw} height={vh} fill={PAPER} />
-      {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-      {lines.map((l, i) => <text key={i} x={PAD} y={200 + i * 70} fontFamily="'Crimson Pro', Georgia, serif" fontSize={58} fill={INK}>{l}</text>)}
+      {tag && <text x={PAD} y={PAD + 20} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+      {lines.map((l, i) => <text key={i} x={PAD} y={200 + i * 70} fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontSize={58} fill={INK}>{l}</text>)}
       <line x1={PAD} y1={558} x2={vw - PAD} y2={558} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
-      {byline && <text x={PAD} y={592} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
-      <text x={vw - PAD} y={592} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
+      {byline && <text x={PAD} y={592} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
+      <text x={vw - PAD} y={592} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
     </>
   );
 }
@@ -226,10 +226,10 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
       <>
         <defs><AbstractGradient vw={vw} vh={vh} /></defs>
         <rect width={vw} height={vh} fill="url(#sc-abstract)" />
-        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-        {lines.map((l, i) => <text key={i} x={PAD} y={440 + i * 82} fontFamily="'Crimson Pro', Georgia, serif" fontStyle="italic" fontSize={72} fill={PAPER}>{l}</text>)}
-        {byline && <text x={PAD} y={vh - PAD} fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
-        <text x={vw - PAD} y={vh - PAD} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.45}>xCO</text>
+        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.75} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {lines.map((l, i) => <text key={i} x={PAD} y={440 + i * 82} fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontStyle="italic" fontSize={72} fill={PAPER}>{l}</text>)}
+        {byline && <text x={PAD} y={vh - PAD} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.6} letterSpacing="1">{byline}</text>}
+        <text x={vw - PAD} y={vh - PAD} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={PAPER} fillOpacity={0.45}>xCO</text>
       </>
     );
   }
@@ -242,14 +242,14 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
     return (
       <>
         <rect width={vw} height={vh} fill={PAPER} />
-        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+        {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
         {diagramType === "option-field"  && <OptionFieldEmbed x0={PAD} y0={140} w={vw - PAD * 2} h={310} />}
         {diagramType === "territory"     && <TerritoryEmbed   x0={PAD} y0={140} w={vw - PAD * 2} h={310} />}
         {diagramType === "three-regimes" && <ThreeRegimesMark tx={markTx} ty={160} scale={markScale} />}
-        {lines.map((l, i) => <text key={i} x={vw / 2} y={headlineY + i * 65} textAnchor="middle" fontFamily="'Crimson Pro', Georgia, serif" fontSize={52} fill={INK}>{l}</text>)}
+        {lines.map((l, i) => <text key={i} x={vw / 2} y={headlineY + i * 65} textAnchor="middle" fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontSize={52} fill={INK}>{l}</text>)}
         <line x1={PAD} y1={vh - 130} x2={vw - PAD} y2={vh - 130} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
-        {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
-        <text x={vw - PAD} y={vh - 96} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
+        {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
+        <text x={vw - PAD} y={vh - 96} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
       </>
     );
   }
@@ -259,11 +259,11 @@ function SquareInner({ headline, tag, byline, layout, diagramType }: SocialCardP
   return (
     <>
       <rect width={vw} height={vh} fill={PAPER} />
-      {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
-      {lines.map((l, i) => <text key={i} x={PAD} y={400 + i * 82} fontFamily="'Crimson Pro', Georgia, serif" fontSize={68} fill={INK}>{l}</text>)}
+      {tag && <text x={PAD} y={PAD + 22} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={DUSK} letterSpacing="3">[{tag.toUpperCase()}]</text>}
+      {lines.map((l, i) => <text key={i} x={PAD} y={400 + i * 82} fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontSize={68} fill={INK}>{l}</text>)}
       <line x1={PAD} y1={vh - 130} x2={vw - PAD} y2={vh - 130} stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
-      {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
-      <text x={vw - PAD} y={vh - 96} textAnchor="end" fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
+      {byline && <text x={PAD} y={vh - 96} fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">{byline}</text>}
+      <text x={vw - PAD} y={vh - 96} textAnchor="end" fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.6}>xCO</text>
     </>
   );
 }

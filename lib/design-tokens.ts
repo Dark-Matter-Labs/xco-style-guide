@@ -34,11 +34,11 @@ export const colors = {
   // ── Extended diagram palette ─────────────────────────────────────
   // Five-color system for blueprint / warmth diagram modes.
   // Never use all five at once — pick a register (cool or warm).
-  navy:  { hex: "#192640", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Blueprint dark ground. Deep structural register." },
-  ocean: { hex: "#085A8C", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Structural blue — nav accent, systemic diagram elements." },
-  teal:  { hex: "#3786A6", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Open register — frontier, coastal, lighter blue." },
-  sand:  { hex: "#F2B077", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Warm field register — terrestrial, amber light." },
-  dusk:  { hex: "#F27F3D", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Warm convergence — orange-ember, the meeting point." },
+  navy:  { hex: "#000064", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Blueprint dark ground. Deep structural register." },
+  ocean: { hex: "#005096", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Structural blue — nav accent, systemic diagram elements." },
+  teal:  { hex: "#0082aa", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Open register — frontier, coastal, lighter blue." },
+  sand:  { hex: "#ffa064", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Warm field register — terrestrial, amber light." },
+  dusk:  { hex: "#ff5a00", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Warm convergence — orange-ember, the meeting point." },
 } as const;
 
 export type ColorName = keyof typeof colors;
@@ -48,17 +48,14 @@ export type ColorName = keyof typeof colors;
 export const typography = {
   faces: {
     display: {
-      family: "Crimson Pro",
+      family: "Suisse Works",
       cssVar: "--font-display",
       twClass: "font-display",
       weights: ["400 (regular)", "400i (italic)"],
       usage: "Paper titles, large pull quotes, publication register.",
-      // [inference] Martin flagged he wants to revisit display type later —
-      // possibly a custom or commissioned serif. One-variable swap.
-      note: "[v0.1] Placeholder for a more distinctive editorial serif. The system is built so the swap costs an hour, not a week.",
     },
     body: {
-      family: "Crimson Pro",
+      family: "Suisse Works",
       cssVar: "--font-body",
       twClass: "font-body",
       weights: ["400 (regular)", "400i (italic)", "600 (semibold)"],
@@ -66,14 +63,14 @@ export const typography = {
         "All running text. Same family as display — the seam is closed; the document reads as a single voice.",
     },
     ui: {
-      family: "Inter",
+      family: "Suisse Int'l",
       cssVar: "--font-ui",
       twClass: "font-ui",
       weights: ["400 (regular)", "500 (medium)"],
       usage: "Navigation, labels, structural scaffolding. No bold.",
     },
     mono: {
-      family: "DM Mono",
+      family: "Suisse Mono",
       cssVar: "--font-mono",
       twClass: "font-mono",
       weights: ["400 (regular)", "400i (italic)"],
