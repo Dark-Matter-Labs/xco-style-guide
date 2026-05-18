@@ -2,7 +2,7 @@ import { typography } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
 
 const specimens: Record<string, string> = {
-  display: "Expanding Civilisational Optionality",
+  display: "Expanding Civilizational Optionality",
   h1: "Three Regimes of Optionality",
   h2: "Field is the precondition for Frontier and Fortress",
   h3: "The portfolio combines food forest, mistifier networks, community energy storage",
@@ -60,7 +60,7 @@ export default function TypographyPage() {
                   ? "Madrid: +7.5°C. Portfolio: [food forest, mistifier networks, energy storage]"
                   : key === "ui"
                   ? "Navigation · Labels · Structural Scaffolding"
-                  : "Expanding Civilisational Optionality — a method for moving from civilisational risk to a believable, plural portfolio of responses."}
+                  : "Expanding Civilizational Optionality — a method for moving from civilizational risk to a believable, plural portfolio of responses."}
               </p>
               <div className="pt-2 space-y-1">
                 <p className="font-mono text-xs text-xco-ink-muted">

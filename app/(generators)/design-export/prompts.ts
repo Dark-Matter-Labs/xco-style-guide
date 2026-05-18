@@ -28,7 +28,7 @@ export function buildClaudePrompt(): string {
 
   return `# xCO Design System — Claude Code Reference
 
-You are implementing the xCO visual language by Dark Matter Labs (Expanding Civilisational Optionality). Apply these exact tokens and rules to every UI decision. Do not introduce any colours, fonts, or radius values outside this system.
+You are implementing the xCO visual language by Dark Matter Labs (Expanding Civilizational Optionality). Apply these exact tokens and rules to every UI decision. Do not introduce any colours, fonts, or radius values outside this system.
 
 ## Colour palette
 

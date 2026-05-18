@@ -41,14 +41,14 @@ export default function Home() {
       {/* Header — full bleed, ocean accent at bottom */}
       <header className="border-b-4 border-xco-ocean px-8 pt-14 pb-10">
         <p className="font-mono text-xs text-xco-ink-muted tracking-widest uppercase mb-8">
-          Dark Matter Labs — Expanding Civilisational Optionality
+          Dark Matter Labs — Expanding Civilizational Optionality
         </p>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 max-w-7xl">
           <h1 className="font-display text-[clamp(3rem,7vw,5.5rem)] leading-[1.0] text-xco-ink">
             xCO
           </h1>
           <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed max-w-xl">
-            The visual language for civilisational optionality —
+            The visual language for civilizational optionality —
             documented and generated here.
           </p>
         </div>

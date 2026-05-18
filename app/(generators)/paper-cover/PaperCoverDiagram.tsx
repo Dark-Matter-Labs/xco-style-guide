@@ -241,7 +241,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         </text>
         <text x={PAD + 38} y={88}
           fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.7}>
-          Expanding Civilisational Optionality
+          Expanding Civilizational Optionality
         </text>
 
         {/* Header rule */}

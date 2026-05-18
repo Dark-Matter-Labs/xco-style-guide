@@ -66,7 +66,7 @@ const FORMATS: { id: CardFormat; label: string; size: string; w: number; h: numb
 export function SocialCardGenerator() {
   const [headline, setHeadline] = useState("Field is the precondition for everything else");
   const [tag, setTag]           = useState("Three Regimes");
-  const [byline, setByline]     = useState("Expanding Civilisational Optionality");
+  const [byline, setByline]     = useState("Expanding Civilizational Optionality");
   const [layout, setLayout]         = useState<CardLayout>("typographic");
   const [diagramType, setDiagramType] = useState<DiagramType>("three-regimes");
   const [format, setFormat]         = useState<CardFormat>("card");
