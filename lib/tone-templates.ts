@@ -17,7 +17,7 @@ export const toneRegisters = [
       },
       {
         good: "Arctic destabilisation is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact.",
-        bad: "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilisational risk.",
+        bad: "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilizational risk.",
       },
     ],
   },
@@ -31,11 +31,11 @@ export const toneRegisters = [
     examples: [
       {
         good: "If field optionality is the precondition for the other two regimes, the allocation problem isn't about choosing between them — it's about why capital under-prices preconditions. We're trying to figure out how to price what makes everything else possible.",
-        bad: "We believe field optionality represents a paradigm shift in how we think about civilisational resilience.",
+        bad: "We believe field optionality represents a paradigm shift in how we think about civilizational resilience.",
       },
       {
         good: "There's something structurally odd about how the three regimes get funded. Frontier and Fortress attract capital because their returns are legible. Field doesn't. That might be the whole problem.",
-        bad: "We envision a transformative new approach that leverages field optionality to unlock unprecedented civilisational potential across all three regimes.",
+        bad: "We envision a transformative new approach that leverages field optionality to unlock unprecedented civilizational potential across all three regimes.",
       },
     ],
   },
@@ -64,7 +64,7 @@ export type RegisterId = (typeof toneRegisters)[number]["id"];
 // ── Prompt templates ─────────────────────────────────────────────────
 
 export const promptTemplates: Record<RegisterId, string> = {
-  method: `You are writing in the METHOD register of Expanding Civilisational Optionality (xCO).
+  method: `You are writing in the METHOD register of Expanding Civilizational Optionality (xCO).
 
 RULE: Specific verbs, real numbers, named places. No abstractions or process-hedging.
 
@@ -73,7 +73,7 @@ EXAMPLES OF THE REGISTER:
 ✗ "We are exploring transformative pathways for urban climate resilience through integrated, multi-stakeholder approaches."
 
 ✓ "Arctic destabilisation is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact."
-✗ "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilisational risk."
+✗ "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilizational risk."
 
 INSTRUCTIONS:
 - Use named places (Madrid, Santiago, the Mackenzie Basin), real numbers (+7.5°C, 40,000 ha, 4×), specific verbs (combines, requires, produces, removes, fails to)
@@ -84,16 +84,16 @@ INSTRUCTIONS:
 TEXT TO WRITE:
 [INSERT BRIEF OR BULLET POINTS HERE]`,
 
-  hunch: `You are writing in the HUNCH register of Expanding Civilisational Optionality (xCO).
+  hunch: `You are writing in the HUNCH register of Expanding Civilizational Optionality (xCO).
 
 RULE: Declarative about the question, tentative about the answer. You know what the problem is. You don't know the solution yet.
 
 EXAMPLES OF THE REGISTER:
 ✓ "If field optionality is the precondition for the other two regimes, the allocation problem isn't about choosing between them — it's about why capital under-prices preconditions. We're trying to figure out how to price what makes everything else possible."
-✗ "We believe field optionality represents a paradigm shift in how we think about civilisational resilience."
+✗ "We believe field optionality represents a paradigm shift in how we think about civilizational resilience."
 
 ✓ "There's something structurally odd about how the three regimes get funded. Frontier and Fortress attract capital because their returns are legible. Field doesn't. That might be the whole problem."
-✗ "We envision a transformative new approach that leverages field optionality to unlock unprecedented civilisational potential."
+✗ "We envision a transformative new approach that leverages field optionality to unlock unprecedented civilizational potential."
 
 INSTRUCTIONS:
 - State the problem clearly and confidently — do not hedge about the question
@@ -105,7 +105,7 @@ INSTRUCTIONS:
 TEXT TO WRITE:
 [INSERT TOPIC OR QUESTION HERE]`,
 
-  annotation: `You are writing in the ANNOTATION register of Expanding Civilisational Optionality (xCO).
+  annotation: `You are writing in the ANNOTATION register of Expanding Civilizational Optionality (xCO).
 
 RULE: Show the working. Mark every assumption, dependency, and uncertainty inline. Never assert more than you know.
 

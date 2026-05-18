@@ -61,7 +61,7 @@ const VISUALS: { id: CoverVisual; label: string; hint: string }[] = [
 export function PaperCoverGenerator() {
   const [paperNumber, setPaperNumber] = useState("01");
   const [title,       setTitle]       = useState("The Three Regimes of Optionality");
-  const [subtitle,    setSubtitle]    = useState("A framework for civilisational-scale investment");
+  const [subtitle,    setSubtitle]    = useState("A framework for civilizational-scale investment");
   const [authors,     setAuthors]     = useState("Indy Johar, Robyn Bennett");
   const [date,        setDate]        = useState("May 2026");
   const [visual,      setVisual]      = useState<CoverVisual>("abstract");

@@ -12,9 +12,9 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "xCO — Expanding Civilisational Optionality",
+  title: "xCO — Expanding Civilizational Optionality",
   description:
-    "Living style guide and asset-generation system for Expanding Civilisational Optionality, a Dark Matter Labs project.",
+    "Living style guide and asset-generation system for Expanding Civilizational Optionality, a Dark Matter Labs project.",
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
 # xCO Living Style Guide
 
-**Expanding Civilisational Optionality — Dark Matter Labs**
+**Expanding Civilizational Optionality — Dark Matter Labs**
 
 A living design system and asset-generation app. Two jobs: document the visual grammar, and let the team produce work from it. The site is the system.
 
