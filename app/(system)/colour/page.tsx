@@ -14,7 +14,6 @@ const orderedKeys: SwatchKey[] = [
   "dusk",
 ];
 
-// Text to overlay on swatches — light or dark depending on colour value
 const swatchTextClass: Record<SwatchKey, string> = {
   paper:    "text-xco-ink",
   ink:      "text-xco-paper",
@@ -37,65 +36,59 @@ function hexToRgb(hex: string) {
 export default function ColourPage() {
   return (
     <div className="space-y-20">
-      <header className="flex items-baseline justify-between border-b border-xco-ink/[0.12] pb-6">
-        <h1 className="font-display text-4xl">Colour</h1>
+      <header className="flex items-baseline justify-between pb-6">
+        <h1 className="font-display text-[3rem] leading-[1.1]">Colour</h1>
         <WIP variant="v0.1" />
       </header>
 
       {/* Palette principle */}
       <section className="max-w-2xl">
-        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
-          Eight tokens. Three core (paper, ink, ink-muted) plus a five-colour extended
-          palette for diagrams — two cool registers (navy, ocean, teal) and two warm
-          (sand, dusk). Never use all five at once. The brand lives in structure and type,
-          not in colour variety.
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+          Two surface colours: paper (#FFFFFF) and ink (#1C1B17). No greys.
+          Plus a five-colour extended palette for diagrams — two cool registers
+          (navy, ocean, teal) and two warm (sand, dusk). Never use all five at
+          once. The brand lives in structure and type, not colour variety.
         </p>
       </section>
 
       {/* Swatches */}
       <section>
-        <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-8">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Palette
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-xco-ink/[0.12]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {orderedKeys.map((key) => {
             const color = colors[key];
             const textClass = swatchTextClass[key];
             return (
-              <div key={key} className="bg-xco-paper">
-                {/* Swatch block */}
+              <div key={key}>
                 <div
                   className="h-40 flex flex-col justify-end p-4"
                   style={{ backgroundColor: color.hex }}
                 >
                   {"opacity" in color && color.opacity != null ? (
-                    <p
-                      className={`font-mono text-xs ${textClass} opacity-80`}
-                    >
+                    <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass}`}>
                       {color.hex} / {Math.round(color.opacity * 100)}% opacity
                     </p>
                   ) : (
-                    <p className={`font-mono text-xs ${textClass} opacity-80`}>
+                    <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass}`}>
                       {color.hex}
                     </p>
                   )}
-                  <p className={`font-mono text-xs ${textClass} opacity-50`}>
+                  <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass} opacity-60`}>
                     {hexToRgb(color.hex)}
                   </p>
                 </div>
-                {/* Token info */}
-                <div className="p-4 space-y-2">
-                  <div className="flex items-baseline justify-between">
-                    <p className="font-ui text-sm font-medium text-xco-ink capitalize">
-                      {key === "inkMuted" ? "ink-muted" : key}
+                <div className="pt-4 space-y-1">
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink capitalize">
+                    {key === "inkMuted" ? "ink-muted" : key}
+                  </p>
+                  {"cssVar" in color && (
+                    <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                      {color.cssVar}
                     </p>
-                    {"cssVar" in color && (
-                      <code className="font-mono text-xs text-xco-ink-muted">
-                        {color.cssVar}
-                      </code>
-                    )}
-                  </div>
-                  <p className="font-body text-sm text-xco-ink-muted italic leading-relaxed">
+                  )}
+                  <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
                     {color.usage}
                   </p>
                 </div>
@@ -105,47 +98,38 @@ export default function ColourPage() {
         </div>
       </section>
 
-      {/* The 5% dusk rule — worked example */}
+      {/* The 5% dusk rule */}
       <section className="max-w-3xl">
-        <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-8">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           The 5% Rule — Dusk
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed mb-8">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mb-8">
           Dusk is the one earned warm accent. It should never exceed ~5% of any surface.
           When it does, it stops signalling emphasis and starts signalling anxiety.
-          Below: dusk at the right proportion, then at the wrong proportion.
         </p>
 
-        {/* Right proportion */}
-        <div className="mb-6">
-          <p className="font-mono text-xs text-xco-ink-muted mb-3">
+        <div className="mb-8">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-3">
             ✓ ~5% — emphasis, not decoration
           </p>
-          <div className="relative h-16 bg-xco-paper border border-xco-ink/[0.12] overflow-hidden">
-            <div
-              className="absolute left-0 top-0 h-full bg-xco-dusk"
-              style={{ width: "5%" }}
-            />
+          <div className="relative h-16 bg-xco-paper overflow-hidden">
+            <div className="absolute left-0 top-0 h-full bg-xco-dusk" style={{ width: "5%" }} />
             <div className="absolute left-[7%] top-1/2 -translate-y-1/2">
-              <p className="font-mono text-xs text-xco-ink-muted">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 5% dusk — the active axis on the Frontier dimension
               </p>
             </div>
           </div>
         </div>
 
-        {/* Wrong proportion */}
         <div>
-          <p className="font-mono text-xs text-xco-ink-muted mb-3">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-3">
             ✗ 40% — no longer emphasis, now just noise
           </p>
-          <div className="relative h-16 bg-xco-paper border border-xco-ink/[0.12] overflow-hidden">
-            <div
-              className="absolute left-0 top-0 h-full bg-xco-dusk"
-              style={{ width: "40%" }}
-            />
+          <div className="relative h-16 bg-xco-paper overflow-hidden">
+            <div className="absolute left-0 top-0 h-full bg-xco-dusk" style={{ width: "40%" }} />
             <div className="absolute left-[43%] top-1/2 -translate-y-1/2">
-              <p className="font-mono text-xs text-xco-ink-muted">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 too much — dusk becomes wallpaper
               </p>
             </div>
@@ -155,10 +139,10 @@ export default function ColourPage() {
 
       {/* Dark mode note */}
       <section className="max-w-2xl pb-8">
-        <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-4">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Dark Mode
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink-muted leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
           A dark-mode variant exists (paper ↔ ink swap) but is not the primary register.
           Paper + ink is the default. Dark mode applies to: terminal output, code blocks,
           embedded media. It is never the hero surface.

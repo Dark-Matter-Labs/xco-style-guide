@@ -36,15 +36,15 @@ function PrimitiveCard({
   viewBox = "0 0 400 160",
 }: PrimitiveCardProps) {
   return (
-    <section className="space-y-4 border-b border-xco-ink/[0.12] pb-12">
+    <section className="space-y-4 pb-12">
       <div>
-        <h2 className="font-mono text-sm text-xco-ink">{title}</h2>
-        <p className="font-body text-xco-ink-muted italic text-sm mt-1">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{title}</h2>
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mt-1">
           {description}
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <div className="border border-xco-ink/[0.12] bg-xco-paper">
+        <div className="bg-xco-paper">
           <svg
             viewBox={viewBox}
             className="w-full"
@@ -64,7 +64,6 @@ export function DiagramsDemo() {
 
   return (
     <div className="space-y-12">
-      {/* Line weights */}
       <PrimitiveCard
         title="Line"
         description="Two weights, no others. Structural (1.5px) carries the diagram. Texture (0.75px) carries density — hatching, grid, leaders. Both are crisp and precise."
@@ -73,14 +72,13 @@ export function DiagramsDemo() {
           <>
             <line x1={20} y1={50} x2={380} y2={50} stroke={colors.ink.hex} strokeWidth={1.5} />
             <line x1={20} y1={90} x2={380} y2={90} stroke={colors.ink.hex} strokeWidth={0.75} strokeDasharray="4 4" />
-            <text x={20} y={38} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>structural (1.5px)</text>
-            <text x={20} y={110} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>texture (0.75px, dashed)</text>
+            <text x={20} y={38} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>structural (1.5px)</text>
+            <text x={20} y={110} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>texture (0.75px, dashed)</text>
           </>
         }
         viewBox="0 0 400 130"
       />
 
-      {/* RiskNode */}
       <PrimitiveCard
         title="RiskNode"
         description="The triggering condition. Ember fill — the only node type that uses the accent colour. Used sparingly: one risk node per diagram."
@@ -88,13 +86,12 @@ export function DiagramsDemo() {
         preview={
           <>
             <RiskNode cx={200} cy={80} label="Arctic destabilisation" amplitude={amplitude} seed={10} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>ember fill / paper text / ink stroke</text>
+            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>ember fill / paper text / ink stroke</text>
           </>
         }
         viewBox="0 0 400 160"
       />
 
-      {/* OptionNode */}
       <PrimitiveCard
         title="OptionNode"
         description="The response. Default node — white fill, ink border. Frontier and Fortress are both OptionNodes. Hatching optional to encode weight."
@@ -103,13 +100,12 @@ export function DiagramsDemo() {
           <>
             <OptionNode cx={120} cy={80} label="Frontier" amplitude={amplitude} seed={20} />
             <OptionNode cx={280} cy={80} label="Fortress" amplitude={amplitude} seed={30} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>paper fill / ink stroke</text>
+            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>paper fill / ink stroke</text>
           </>
         }
         viewBox="0 0 400 160"
       />
 
-      {/* FieldNode */}
       <PrimitiveCard
         title="FieldNode"
         description="The systemic precondition. Cool-coloured dashed border — visually quieter, foundationally more important. Field is never a peer of Frontier and Fortress; it's what makes them possible."
@@ -126,13 +122,12 @@ export function DiagramsDemo() {
               amplitude={amplitude}
               seed={40}
             />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>cool stroke / dashed / paper fill</text>
+            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>cool stroke / dashed / paper fill</text>
           </>
         }
         viewBox="0 0 400 160"
       />
 
-      {/* MultiSolveTicks */}
       <PrimitiveCard
         title="MultiSolveTicks"
         description="The multi-solving signature. Stacked horizontal ticks beneath a node show how many distinct contributions it makes — the visual rhyme that runs through the entire portfolio system."
@@ -143,13 +138,12 @@ export function DiagramsDemo() {
             <MultiSolveTicks cx={120} y={102} count={3} />
             <OptionNode cx={280} cy={70} label={"Mistifier\nnetwork"} amplitude={amplitude} seed={60} />
             <MultiSolveTicks cx={280} y={102} count={1} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.inkMuted.hex}>3 contributions (cools / recharges / feeds) vs 1</text>
+            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>3 contributions (cools / recharges / feeds) vs 1</text>
           </>
         }
         viewBox="0 0 400 160"
       />
 
-      {/* ScaleRule */}
       <PrimitiveCard
         title="ScaleRule"
         description="Scale boundary marker. When a diagram crosses scales — macro, bioregional, urban, neighbourhood — draw this rule. The scale label lives in the left margin in DM Mono italic."
@@ -164,7 +158,6 @@ export function DiagramsDemo() {
         viewBox="0 0 400 160"
       />
 
-      {/* Annotation */}
       <PrimitiveCard
         title="Annotation"
         description="Marginalia in DM Mono italic. Every diagram should permit and visibly invite these. This is what differentiates xCO diagrams from McKinsey diagrams — the working is visible."

@@ -605,10 +605,10 @@ export function ImageTreatmentGenerator() {
   };
 
   const btnClass = (active: boolean) =>
-    `flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+    `flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
       active
         ? "bg-xco-ink text-xco-paper border-xco-ink"
-        : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+        : "text-xco-ink border-xco-ink"
     }`;
 
   return (
@@ -618,7 +618,7 @@ export function ImageTreatmentGenerator() {
 
         {/* Source */}
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Source</h2>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Source</h2>
           <div className="flex gap-0 flex-wrap">
             {(["three-regimes", "option-field", "photo"] as SourceMode[]).map((s) => (
               <button key={s} onClick={() => setSource(s)} className={btnClass(source === s)}>
@@ -630,11 +630,11 @@ export function ImageTreatmentGenerator() {
 
         {/* Photo upload */}
         {source === "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Image</h2>
-            <label className={`block border-2 border-dashed p-4 text-center cursor-pointer transition-colors ${uploadedImg ? "border-xco-ink/[0.4]" : "border-xco-ink/[0.2] hover:border-xco-ink/[0.5]"}`}>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Image</h2>
+            <label className={`block border-2 border-dashed p-4 text-center cursor-pointer transition-colors ${uploadedImg ? "border-xco-ink" : "border-xco-ink hover:border-xco-ink"}`}>
               <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <span className="font-mono text-xs text-xco-ink-muted">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 {uploadedImg ? "Photo loaded — click to replace" : "Click to upload photo"}
               </span>
             </label>
@@ -642,7 +642,7 @@ export function ImageTreatmentGenerator() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={showPhoto} onChange={(e) => setShowPhoto(e.target.checked)}
                   className="accent-xco-dusk w-4 h-4" />
-                <span className="font-mono text-xs text-xco-ink">Show source photo</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Show source photo</span>
               </label>
             )}
           </div>
@@ -650,8 +650,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Diagram variant (three-regimes only) */}
         {source === "three-regimes" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Variant</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Variant</h2>
             <div className="flex gap-0">
               {(["mark", "territories", "signal"] as DiagramVariant[]).map((v) => (
                 <button key={v} onClick={() => setVariant(v)} className={btnClass(variant === v)}>
@@ -659,7 +659,7 @@ export function ImageTreatmentGenerator() {
                 </button>
               ))}
             </div>
-            <p className="font-mono text-xs text-xco-ink-muted italic">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               {variant === "mark"        && "Original geometric mark — sources converging to field"}
               {variant === "territories" && "Three regime zones — block diagram layout"}
               {variant === "signal"      && "Scanline topology — two streams merging into one"}
@@ -669,8 +669,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Mode (raster / sharp) — only where applicable */}
         {showMode && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Mode</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Mode</h2>
             <div className="flex gap-0">
               {(["raster", "sharp"] as TreatmentMode[]).map((m) => (
                 <button key={m} onClick={() => setMode(m)} className={btnClass(mode === m)}>
@@ -683,19 +683,19 @@ export function ImageTreatmentGenerator() {
 
         {/* Resolution */}
         {showResolution && (
-          <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
+          <div className="space-y-3 pt-4">
             <div className="flex items-baseline justify-between">
-              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Resolution</h2>
-              <span className="font-mono text-xs text-xco-dusk">{dotSpacing}px grid</span>
+              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Resolution</h2>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{dotSpacing}px grid</span>
             </div>
             <input type="range" min={0} max={100} step={1}
               value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
               className="w-full accent-xco-dusk" />
-            <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
+            <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               <span>coarse</span><span>fine</span>
             </div>
             {source !== "photo" && (
-              <p className="font-mono text-xs text-xco-ink-muted italic">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 {resolution <= 20 && "Abstract texture — mark unreadable"}
                 {resolution > 20 && resolution <= 45 && "Suggested: placeholder / teaser"}
                 {resolution > 45 && resolution <= 70 && "Suggested: evolving state"}
@@ -707,8 +707,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Cell shape — photo and diagram raster (not territories/signal which have fixed geometry) */}
         {(source === "photo" || (mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Cell Shape</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Cell Shape</h2>
             <div className="flex gap-0">
               {([
                 { id: "square", label: "Square" },
@@ -720,7 +720,7 @@ export function ImageTreatmentGenerator() {
                 </button>
               ))}
             </div>
-            <p className="font-mono text-xs text-xco-ink-muted italic">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               {cellShape === "square" && "Equal width & height — classic halftone"}
               {cellShape === "hbars"  && "Full column width — horizontal bars"}
               {cellShape === "vbars"  && "Full row height — vertical bars"}
@@ -730,13 +730,13 @@ export function ImageTreatmentGenerator() {
 
         {/* Colour — diagram */}
         {source !== "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Colour</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
             {COLOR_MODES.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="color" value={id} checked={colorMode === id}
                   onChange={() => setColorMode(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
@@ -744,13 +744,13 @@ export function ImageTreatmentGenerator() {
 
         {/* Palette — photo */}
         {source === "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Palette</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Palette</h2>
             {PHOTO_PALETTES.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="photo-palette" value={id} checked={photoPalette === id}
                   onChange={() => setPhotoPalette(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
@@ -758,13 +758,13 @@ export function ImageTreatmentGenerator() {
 
         {/* Grain — photo only */}
         {source === "photo" && (
-          <div className="border-t border-xco-ink/[0.12] pt-4">
+          <div className="pt-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={grain} onChange={(e) => setGrain(e.target.checked)}
                 className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">Film grain</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Film grain</span>
             </label>
-            <p className="font-mono text-xs text-xco-ink-muted italic mt-1">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
               Adds photographic noise — organic, less cold
             </p>
           </div>
@@ -772,34 +772,34 @@ export function ImageTreatmentGenerator() {
 
         {/* Format — not applicable in photo mode (dims come from the image) */}
         {source !== "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
             {FORMATS.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="format" value={id} checked={format === id}
                   onChange={() => setFormat(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
         )}
 
         {/* Export */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           <button onClick={() => handle("svg")}
             disabled={exporting !== null || (source === "photo" && !uploadedImg)}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
             {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
           </button>
           <button
             onClick={() => handle("png")}
             disabled={exporting !== null || (source === "photo" && !uploadedImg)}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
             {exporting === "png" ? "exporting…" : `↓ PNG — ${activeFormat.label}`}
           </button>
           {source === "photo" && !uploadedImg && (
-            <p className="font-mono text-xs text-xco-ink-muted italic">Upload a photo to enable export</p>
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to enable export</p>
           )}
         </div>
       </aside>
@@ -807,17 +807,17 @@ export function ImageTreatmentGenerator() {
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
         {source === "photo" && !uploadedImg ? (
-          <div className="border border-xco-ink/[0.12] flex items-center justify-center"
+          <div className="border border-xco-ink flex items-center justify-center"
             style={{ aspectRatio: format === "card" ? "1200/630" : "1" }}>
-            <span className="font-mono text-xs text-xco-ink-muted">Upload a photo to preview</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to preview</span>
           </div>
         ) : (
-          <div className="border border-xco-ink/[0.12] overflow-hidden"
+          <div className="border border-xco-ink overflow-hidden"
             style={{ background: source === "photo" ? (photoPalette === "inverted" ? INK : PAPER) : (colorMode === "inverted" ? INK : PAPER) }}>
             <PreviewCanvas ref={canvasRef} {...previewProps} />
           </div>
         )}
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {source === "photo"
             ? uploadedImg
               ? (() => { const d = getPhotoDims(uploadedImg); return `${dotSpacing}px raster grid · ${d.vw}×${d.vh} (natural size)`; })()

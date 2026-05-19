@@ -87,7 +87,7 @@ export function DesignExportGenerator() {
 
         {/* Export type selector */}
         <div className="space-y-1">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">
             Export format
           </h2>
           {EXPORTS.map(({ id, label, tag }) => (
@@ -97,15 +97,15 @@ export function DesignExportGenerator() {
               className={`w-full text-left flex items-center justify-between gap-3 py-2.5 px-3 border transition-colors ${
                 active === id
                   ? "border-xco-ocean bg-xco-ocean/[0.05] text-xco-ink"
-                  : "border-xco-ink/[0.15] text-xco-ink-muted hover:border-xco-ink/[0.35] hover:text-xco-ink"
+                  : "border-xco-ink text-xco-ink"
               }`}
             >
-              <span className="font-mono text-xs">{label}</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6]">{label}</span>
               <span
                 className={`font-mono text-[10px] px-1.5 py-0.5 shrink-0 ${
                   active === id
                     ? "bg-xco-ocean text-xco-paper"
-                    : "bg-xco-ink/[0.06] text-xco-ink-muted"
+                    : "bg-transparent text-xco-ink"
                 }`}
               >
                 {tag}
@@ -115,32 +115,32 @@ export function DesignExportGenerator() {
         </div>
 
         {/* Description */}
-        <div className="border-t border-xco-ink/[0.12] pt-4 space-y-3">
-          <p className="font-body text-sm text-xco-ink leading-relaxed">
+        <div className="pt-4 space-y-3">
+          <p className="font-body text-[1.375rem] leading-[1.7] text-xco-ink">
             {activeExport.description}
           </p>
           {active === "claude" && (
-            <p className="font-mono text-xs text-xco-ink-muted italic leading-snug">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug">
               Works with any framework. Claude Code reads CLAUDE.md automatically at session start.
             </p>
           )}
         </div>
 
         {/* Actions */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+        <div className="space-y-2 pt-4">
           <button
             onClick={handleCopy}
-            className={`w-full font-mono text-xs px-3 py-2.5 border transition-colors ${
+            className={`w-full font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2.5 border transition-colors ${
               copied === active
                 ? "bg-xco-ocean text-xco-paper border-xco-ocean"
-                : "text-xco-ink border-xco-ink/[0.2] hover:border-xco-ink hover:bg-xco-ink/[0.04]"
+                : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
             }`}
           >
             {copied === active ? "Copied to clipboard" : "Copy to clipboard"}
           </button>
           <button
             onClick={handleDownload}
-            className="w-full font-mono text-xs text-xco-ink-muted border border-xco-ink/[0.15] px-3 py-2.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
+            className="w-full font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
           >
             ↓ Download — {activeExport.filename}
           </button>
@@ -148,11 +148,11 @@ export function DesignExportGenerator() {
 
         {/* Usage hint for Claude */}
         {active === "claude" && (
-          <div className="border border-xco-ink/[0.12] p-3 space-y-1.5">
-            <p className="font-mono text-xs text-xco-ink-muted uppercase tracking-widest">
+          <div className="border border-xco-ink p-3 space-y-1.5">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
               How to use
             </p>
-            <ol className="space-y-1.5 font-mono text-xs text-xco-ink-muted leading-snug list-none">
+            <ol className="space-y-1.5 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug list-none">
               <li>1. Copy or download the CLAUDE.md</li>
               <li>2. Place it at your project root</li>
               <li>3. Add the CSS tokens (copy the CSS export)</li>
@@ -165,21 +165,21 @@ export function DesignExportGenerator() {
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-xs text-xco-ink-muted">
+          <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             {activeExport.filename} — {content.split("\n").length} lines
           </span>
-          <span className="font-mono text-xs text-xco-ink-muted">
+          <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             {(new Blob([content]).size / 1024).toFixed(1)} KB
           </span>
         </div>
 
-        <div className="border border-xco-ink/[0.12] overflow-hidden">
-          <pre className="font-mono text-xs text-xco-ink leading-relaxed p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
+        <div className="border border-xco-ink overflow-hidden">
+          <pre className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
             {content}
           </pre>
         </div>
 
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           Generated from{" "}
           <span className="text-xco-ink">lib/design-tokens.ts</span> — always reflects the current token set.
         </p>

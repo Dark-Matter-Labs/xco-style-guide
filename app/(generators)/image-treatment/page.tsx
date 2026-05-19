@@ -4,10 +4,10 @@ import { ImageTreatmentGenerator } from "./ImageTreatmentGenerator";
 export default function ImageTreatmentPage() {
   return (
     <div className="space-y-10">
-      <header className="flex items-baseline justify-between border-b border-xco-ink/[0.12] pb-6">
+      <header className="flex items-baseline justify-between pb-6">
         <div>
-          <h1 className="font-display text-4xl">Image Treatment</h1>
-          <p className="font-mono text-xs text-xco-ink-muted mt-2">
+          <h1 className="font-display text-[3rem] leading-[1.1]">Image Treatment</h1>
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
             Dot-matrix → sharp · evolutionary resolution · Substack placeholders
           </p>
         </div>

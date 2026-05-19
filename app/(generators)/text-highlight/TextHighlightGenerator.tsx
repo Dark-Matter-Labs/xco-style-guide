@@ -168,7 +168,7 @@ export function TextHighlightGenerator() {
 
         {/* Mode toggle */}
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Highlight mode
           </h2>
           <div className="flex gap-0">
@@ -176,17 +176,17 @@ export function TextHighlightGenerator() {
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+                className={`flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
                   mode === m
                     ? "bg-xco-ink text-xco-paper border-xco-ink"
-                    : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+                    : "text-xco-ink border-xco-ink"
                 }`}
               >
                 {m === "block" ? "Colour block" : "Font size"}
               </button>
             ))}
           </div>
-          <p className="font-mono text-xs text-xco-ink-muted italic leading-snug">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug">
             {mode === "block"
               ? "Warm background = critical. Cold background = peripheral."
               : "Large scale = critical. Small scale = peripheral — creates holes in the text mass."}
@@ -194,17 +194,17 @@ export function TextHighlightGenerator() {
         </div>
 
         {/* Legend */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Warm → Cold
           </h2>
           {([1, 2, 3, 4, 5] as Level[]).map((lvl) => (
             <div key={lvl} className="flex items-center gap-2">
               <div
-                className="w-4 h-4 shrink-0 border border-xco-ink/[0.1]"
+                className="w-4 h-4 shrink-0 border border-xco-ink"
                 style={{ backgroundColor: LEVEL_COLORS[lvl].bg }}
               />
-              <span className="font-mono text-xs text-xco-ink-muted">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 {lvl} — {LEVEL_COLORS[lvl].name}
               </span>
             </div>
@@ -212,8 +212,8 @@ export function TextHighlightGenerator() {
         </div>
 
         {/* Annotation editor */}
-        <div className="space-y-5 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <div className="space-y-5 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Annotations
           </h2>
           {annotations.map((ann) => (
@@ -221,7 +221,7 @@ export function TextHighlightGenerator() {
               <div className="flex items-center gap-2">
                 {/* Colour chip + number */}
                 <span
-                  className="font-mono text-xs w-5 h-5 flex items-center justify-center shrink-0"
+                  className="font-mono font-medium text-[0.9375rem] leading-[1.6] w-5 h-5 flex items-center justify-center shrink-0"
                   style={{
                     backgroundColor: LEVEL_COLORS[ann.level].bg,
                     color: LEVEL_COLORS[ann.level].fg,
@@ -234,7 +234,7 @@ export function TextHighlightGenerator() {
                   type="text"
                   value={ann.term}
                   onChange={(e) => updateAnn(ann.id, { term: e.target.value })}
-                  className="flex-1 bg-transparent border-b border-xco-ink/[0.2] font-mono text-xs text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink"
+                  className="flex-1 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink"
                 />
                 {/* Level */}
                 <select
@@ -242,7 +242,7 @@ export function TextHighlightGenerator() {
                   onChange={(e) =>
                     updateAnn(ann.id, { level: Number(e.target.value) as Level })
                   }
-                  className="bg-transparent border border-xco-ink/[0.2] font-mono text-xs text-xco-ink px-1 py-0.5 focus:outline-none"
+                  className="bg-transparent border border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink px-1 py-0.5 focus:outline-none"
                 >
                   {([1, 2, 3, 4, 5] as Level[]).map((l) => (
                     <option key={l} value={l}>
@@ -255,24 +255,24 @@ export function TextHighlightGenerator() {
                 value={ann.note}
                 onChange={(e) => updateAnn(ann.id, { note: e.target.value })}
                 rows={2}
-                className="w-full bg-transparent border border-xco-ink/[0.2] font-body text-xs text-xco-ink py-1 px-2 focus:outline-none focus:border-xco-ink resize-none"
+                className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-1 px-2 focus:outline-none focus:border-xco-ink resize-none"
               />
             </div>
           ))}
         </div>
 
         {/* Body text */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Body text
           </h2>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={7}
-            className="w-full bg-transparent border border-xco-ink/[0.2] font-body text-sm text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink resize-none leading-snug"
+            className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink resize-none leading-snug"
           />
-          <p className="font-mono text-xs text-xco-ink-muted italic">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             Terms are matched case-insensitively on first occurrence.
           </p>
         </div>
@@ -280,14 +280,14 @@ export function TextHighlightGenerator() {
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] bg-xco-paper p-12 overflow-hidden">
+        <div className="border border-xco-ink bg-xco-paper p-12 overflow-hidden">
           {/* Inner wrapper — reference point for absolute sidenote positions */}
           <div ref={containerRef} style={{ position: "relative" }}>
 
             {/* Main text — 58% width, leaving room for sidenotes */}
             <div
               ref={textRef}
-              className="font-body text-xl leading-relaxed"
+              className="font-body text-[1.375rem] leading-[1.7]"
               style={{ width: "58%" }}
             >
               {tokens.map((tok, i) => {
@@ -382,7 +382,7 @@ export function TextHighlightGenerator() {
                       width: "100%",
                       transition: "top 0.15s ease",
                     }}
-                    className="font-mono text-xs leading-snug text-xco-ink-muted"
+                    className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-snug text-xco-ink"
                   >
                     <span
                       style={{ color: c.bg, fontWeight: 700, marginRight: "5px" }}
@@ -397,7 +397,7 @@ export function TextHighlightGenerator() {
           </div>
         </div>
 
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {mode === "block"
             ? "Colour temperature encodes importance — sand (critical) → navy (peripheral). Sidenotes align to term height."
             : "Scale encodes importance — 2× for critical, 0.7× for peripheral. Irregular sizes create open holes in the text rhythm."}
