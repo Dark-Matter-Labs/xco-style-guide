@@ -172,7 +172,7 @@ export function ToneLinter() {
 
   const confidenceColour = {
     low: "text-xco-dusk",
-    medium: "text-xco-ink-muted",
+    medium: "text-xco-ink",
     high: "text-xco-ink",
   };
 
@@ -185,21 +185,21 @@ export function ToneLinter() {
           onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) analyse(); }}
           placeholder="Paste a paragraph of draft text here — the linter will flag banned words and suggest which register it belongs to."
           rows={6}
-          className="w-full bg-transparent border border-xco-ink/[0.2] font-body text-base text-xco-ink p-4 focus:outline-none focus:border-xco-ink transition-colors resize-none placeholder:text-xco-ink-muted/50"
+          className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink p-4 focus:outline-none transition-colors resize-none placeholder:text-xco-ink/40"
         />
         <div className="flex items-center gap-4">
           <button
             onClick={analyse}
             disabled={!text.trim()}
-            className="font-mono text-xs border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="font-mono font-medium text-[0.9375rem] leading-[1.6] border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Analyse ↵
           </button>
-          <p className="font-mono text-xs text-xco-ink-muted">or ⌘↵ / Ctrl↵</p>
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">or ⌘↵ / Ctrl↵</p>
           {text && (
             <button
               onClick={() => { setText(""); setResult(null); }}
-              className="font-mono text-xs text-xco-ink-muted hover:text-xco-dusk transition-colors ml-auto"
+              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors ml-auto"
             >
               clear
             </button>
@@ -208,56 +208,53 @@ export function ToneLinter() {
       </div>
 
       {result && (
-        <div className="space-y-6 border-t border-xco-ink/[0.12] pt-6">
-          {/* Highlighted text */}
+        <div className="space-y-6 pt-6">
           {result.bannedMatches.length > 0 && (
             <div className="space-y-3">
-              <p className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Text with flags
               </p>
-              <div className="font-body text-base text-xco-ink leading-relaxed p-4 bg-xco-ink/[0.02] border border-xco-ink/[0.08] whitespace-pre-wrap">
+              <div className="font-body text-[1.375rem] text-xco-ink leading-[1.7] p-4 whitespace-pre-wrap">
                 <HighlightedText text={text} matches={result.bannedMatches} />
               </div>
             </div>
           )}
 
-          {/* Banned words */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <p className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Banned words
               </p>
               {result.bannedMatches.length === 0 ? (
-                <p className="font-mono text-sm text-xco-ink-muted italic">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ No banned words found
                 </p>
               ) : (
                 <ul className="space-y-1">
                   {result.bannedMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs text-xco-dusk">✗</span>
-                      <span className="font-mono text-sm text-xco-dusk">{m.word}</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">✗</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{m.word}</span>
                     </li>
                   ))}
                 </ul>
               )}
             </div>
 
-            {/* Register suggestion */}
             <div className="space-y-3">
-              <p className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Register detected
               </p>
               {result.register ? (
                 <div className="space-y-2">
-                  <p className={`font-mono text-sm ${confidenceColour[result.confidence]}`}>
+                  <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${confidenceColour[result.confidence]}`}>
                     {result.register}{" "}
                     <span className="opacity-60">({result.confidence} confidence)</span>
                   </p>
                   {result.signals.length > 0 && (
                     <ul className="space-y-0.5">
                       {result.signals.map((s, i) => (
-                        <li key={i} className="font-mono text-xs text-xco-ink-muted">
+                        <li key={i} className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                           — {s}
                         </li>
                       ))}
@@ -265,7 +262,7 @@ export function ToneLinter() {
                   )}
                 </div>
               ) : (
-                <p className="font-mono text-sm text-xco-ink-muted italic">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   — register unclear. Pick A, B, or C deliberately.
                 </p>
               )}

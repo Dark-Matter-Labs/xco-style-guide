@@ -35,17 +35,17 @@ function Field({ label, value, onChange, hint, mono, rows }: {
   label: string; value: string; onChange: (v: string) => void;
   hint?: string; mono?: boolean; rows?: number;
 }) {
-  const cls = `w-full bg-transparent border-b border-xco-ink/[0.2] text-base text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono text-sm" : "font-body"}`;
+  const cls = `w-full bg-transparent border-b border-xco-ink text-[1.375rem] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`;
   return (
     <label className="block space-y-1">
-      <span className="font-mono text-xs text-xco-ink-muted uppercase tracking-wider">{label}</span>
+      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>
       {rows ? (
         <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={rows}
           className={`${cls} border resize-none px-2 py-2`} />
       ) : (
         <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className={cls} />
       )}
-      {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
+      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
   );
 }
@@ -89,23 +89,23 @@ export function PaperCoverGenerator() {
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
 
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Visual</h2>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Visual</h2>
           <div className="space-y-1">
             {VISUALS.map(({ id, label, hint }) => (
               <label key={id} className="flex items-start gap-2 cursor-pointer">
                 <input type="radio" name="visual" value={id} checked={visual === id}
                   onChange={() => setVisual(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                 <span>
-                  <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                  <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
                 </span>
               </label>
             ))}
           </div>
         </div>
 
-        <div className="space-y-4 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Content</h2>
+        <div className="space-y-4 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Content</h2>
           <Field label="Paper number" value={paperNumber} onChange={setPaperNumber}
             hint='Shown as "No. 01"' mono />
           <Field label="Title" value={title} onChange={setTitle} rows={3}
@@ -118,9 +118,9 @@ export function PaperCoverGenerator() {
             hint="e.g. May 2026" mono />
         </div>
 
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
-          <p className="font-mono text-xs text-xco-ink-muted mb-2">
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-2">
             A4 portrait — {COVER_W}×{COVER_H} (SVG) · {COVER_W*2}×{COVER_H*2} (PNG 2×)
           </p>
           {[
@@ -128,7 +128,7 @@ export function PaperCoverGenerator() {
             { id: "png", label: `PNG — 2× print ${COVER_W*2}×${COVER_H*2}` },
           ].map(({ id, label }) => (
             <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
@@ -137,10 +137,10 @@ export function PaperCoverGenerator() {
 
       {/* Preview — full A4 shown at constrained width so it doesn't clip */}
       <div className="flex-1 min-w-0 space-y-4" style={{ maxWidth: `${COVER_W}px` }}>
-        <div className="border border-xco-ink/[0.12] bg-xco-paper">
+        <div className="border border-xco-ink bg-xco-paper">
           <PaperCoverDiagram {...props} className="w-full h-auto" />
         </div>
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           A4 portrait — {COVER_W}×{COVER_H}px at 96dpi · exports at 2× for print
         </p>
       </div>

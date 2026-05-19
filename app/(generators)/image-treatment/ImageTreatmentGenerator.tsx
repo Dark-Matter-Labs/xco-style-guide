@@ -540,22 +540,42 @@ export function ImageTreatmentGenerator() {
   const [cellShape,    setCellShape]    = useState<CellShape>("square");
   const [showPhoto,    setShowPhoto]    = useState(true);
   const [format,       setFormat]       = useState<TreatmentFormat>("card");
-  const [uploadedImg,  setUploadedImg]  = useState<HTMLImageElement | null>(null);
+  const [uploadedImgs, setUploadedImgs] = useState<HTMLImageElement[]>([]);
   const [exporting,    setExporting]    = useState<string | null>(null);
+  const [activeIdx,    setActiveIdx]    = useState(0);
+  const [animating,    setAnimating]    = useState(false);
+  const [animSpeed,    setAnimSpeed]    = useState(2000);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const debouncedResolution = useDebounce(resolution, 120);
   const activeFormat = FORMATS.find((f) => f.id === format)!;
   const dotSpacing = spacingFromResolution(debouncedResolution);
 
+  const activeImg = source === "photo" ? (uploadedImgs[activeIdx] ?? null) : null;
+
   const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => { setUploadedImg(img); URL.revokeObjectURL(url); };
-    img.src = url;
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    files.forEach((file) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        setUploadedImgs((prev) => {
+          if (prev.length >= 4) return prev;
+          return [...prev, img];
+        });
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    });
+    e.target.value = "";
   }, []);
+
+  useEffect(() => {
+    if (!animating || uploadedImgs.length <= 1) return;
+    const t = setInterval(() => setActiveIdx((i) => (i + 1) % uploadedImgs.length), animSpeed);
+    return () => clearInterval(t);
+  }, [animating, uploadedImgs.length, animSpeed]);
 
   // True when resolution slider / grain should be shown
   const showResolution = source === "photo" ||
@@ -569,19 +589,19 @@ export function ImageTreatmentGenerator() {
   const handle = async (type: string) => {
     setExporting(type);
     try {
-      const photoDims = source === "photo" && uploadedImg ? getPhotoDims(uploadedImg) : null;
+      const photoDims = source === "photo" && activeImg ? getPhotoDims(activeImg) : null;
       const { w, h } = photoDims
         ? { w: photoDims.vw, h: photoDims.vh }
         : { w: activeFormat.w, h: activeFormat.h };
 
-      // Photo PNG: use canvas directly (no server route needed)
+      // Photo PNG: use canvas directly
       if (source === "photo" && type === "png") {
-        const canvas = canvasRef.current;
+        const canvas = canvasRefs.current[activeIdx];
         if (canvas) downloadDataURL(canvas.toDataURL("image/png"), `${slug}.png`);
         return;
       }
 
-      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, uploadedImg, w, h, cellShape, showPhoto);
+      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, activeImg, w, h, cellShape, showPhoto);
 
       if (type === "svg") {
         downloadBlob(new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" }), `${slug}.svg`);
@@ -601,14 +621,14 @@ export function ImageTreatmentGenerator() {
 
   const previewProps: PreviewProps = {
     source, mode, variant, resolution: debouncedResolution,
-    colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto,
+    colorMode, photoPalette, uploadedImg: activeImg, grain, format, cellShape, showPhoto,
   };
 
   const btnClass = (active: boolean) =>
-    `flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+    `flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
       active
         ? "bg-xco-ink text-xco-paper border-xco-ink"
-        : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+        : "text-xco-ink border-xco-ink"
     }`;
 
   return (
@@ -618,7 +638,7 @@ export function ImageTreatmentGenerator() {
 
         {/* Source */}
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Source</h2>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Source</h2>
           <div className="flex gap-0 flex-wrap">
             {(["three-regimes", "option-field", "photo"] as SourceMode[]).map((s) => (
               <button key={s} onClick={() => setSource(s)} className={btnClass(source === s)}>
@@ -628,21 +648,42 @@ export function ImageTreatmentGenerator() {
           </div>
         </div>
 
-        {/* Photo upload */}
+        {/* Photo upload — multi-image (max 4) */}
         {source === "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Image</h2>
-            <label className={`block border-2 border-dashed p-4 text-center cursor-pointer transition-colors ${uploadedImg ? "border-xco-ink/[0.4]" : "border-xco-ink/[0.2] hover:border-xco-ink/[0.5]"}`}>
-              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <span className="font-mono text-xs text-xco-ink-muted">
-                {uploadedImg ? "Photo loaded — click to replace" : "Click to upload photo"}
-              </span>
-            </label>
-            {uploadedImg && (
+          <div className="space-y-2 pt-4">
+            <div className="flex items-baseline justify-between">
+              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Images</h2>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{uploadedImgs.length}/4</span>
+            </div>
+            {uploadedImgs.map((img, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink flex-1">
+                  {i + 1} — {img.naturalWidth}×{img.naturalHeight}
+                </span>
+                <button
+                  onClick={() => {
+                    setUploadedImgs((prev) => prev.filter((_, j) => j !== i));
+                    setActiveIdx((a) => Math.min(a, Math.max(0, uploadedImgs.length - 2)));
+                  }}
+                  className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            {uploadedImgs.length < 4 && (
+              <label className="block border border-dashed border-xco-ink p-3 text-center cursor-pointer hover:bg-xco-ink/[0.03] transition-colors">
+                <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {uploadedImgs.length === 0 ? "Click to upload photos" : "+ Add image"}
+                </span>
+              </label>
+            )}
+            {uploadedImgs.length > 0 && (
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={showPhoto} onChange={(e) => setShowPhoto(e.target.checked)}
                   className="accent-xco-dusk w-4 h-4" />
-                <span className="font-mono text-xs text-xco-ink">Show source photo</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Show source photo</span>
               </label>
             )}
           </div>
@@ -650,8 +691,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Diagram variant (three-regimes only) */}
         {source === "three-regimes" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Variant</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Variant</h2>
             <div className="flex gap-0">
               {(["mark", "territories", "signal"] as DiagramVariant[]).map((v) => (
                 <button key={v} onClick={() => setVariant(v)} className={btnClass(variant === v)}>
@@ -659,7 +700,7 @@ export function ImageTreatmentGenerator() {
                 </button>
               ))}
             </div>
-            <p className="font-mono text-xs text-xco-ink-muted italic">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               {variant === "mark"        && "Original geometric mark — sources converging to field"}
               {variant === "territories" && "Three regime zones — block diagram layout"}
               {variant === "signal"      && "Scanline topology — two streams merging into one"}
@@ -669,8 +710,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Mode (raster / sharp) — only where applicable */}
         {showMode && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Mode</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Mode</h2>
             <div className="flex gap-0">
               {(["raster", "sharp"] as TreatmentMode[]).map((m) => (
                 <button key={m} onClick={() => setMode(m)} className={btnClass(mode === m)}>
@@ -683,19 +724,19 @@ export function ImageTreatmentGenerator() {
 
         {/* Resolution */}
         {showResolution && (
-          <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
+          <div className="space-y-3 pt-4">
             <div className="flex items-baseline justify-between">
-              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Resolution</h2>
-              <span className="font-mono text-xs text-xco-dusk">{dotSpacing}px grid</span>
+              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Resolution</h2>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{dotSpacing}px grid</span>
             </div>
             <input type="range" min={0} max={100} step={1}
               value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
               className="w-full accent-xco-dusk" />
-            <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
+            <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               <span>coarse</span><span>fine</span>
             </div>
             {source !== "photo" && (
-              <p className="font-mono text-xs text-xco-ink-muted italic">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 {resolution <= 20 && "Abstract texture — mark unreadable"}
                 {resolution > 20 && resolution <= 45 && "Suggested: placeholder / teaser"}
                 {resolution > 45 && resolution <= 70 && "Suggested: evolving state"}
@@ -707,8 +748,8 @@ export function ImageTreatmentGenerator() {
 
         {/* Cell shape — photo and diagram raster (not territories/signal which have fixed geometry) */}
         {(source === "photo" || (mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Cell Shape</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Cell Shape</h2>
             <div className="flex gap-0">
               {([
                 { id: "square", label: "Square" },
@@ -720,7 +761,7 @@ export function ImageTreatmentGenerator() {
                 </button>
               ))}
             </div>
-            <p className="font-mono text-xs text-xco-ink-muted italic">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               {cellShape === "square" && "Equal width & height — classic halftone"}
               {cellShape === "hbars"  && "Full column width — horizontal bars"}
               {cellShape === "vbars"  && "Full row height — vertical bars"}
@@ -730,13 +771,13 @@ export function ImageTreatmentGenerator() {
 
         {/* Colour — diagram */}
         {source !== "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Colour</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
             {COLOR_MODES.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="color" value={id} checked={colorMode === id}
                   onChange={() => setColorMode(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
@@ -744,13 +785,13 @@ export function ImageTreatmentGenerator() {
 
         {/* Palette — photo */}
         {source === "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Palette</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Palette</h2>
             {PHOTO_PALETTES.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="photo-palette" value={id} checked={photoPalette === id}
                   onChange={() => setPhotoPalette(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
@@ -758,69 +799,140 @@ export function ImageTreatmentGenerator() {
 
         {/* Grain — photo only */}
         {source === "photo" && (
-          <div className="border-t border-xco-ink/[0.12] pt-4">
+          <div className="pt-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={grain} onChange={(e) => setGrain(e.target.checked)}
                 className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">Film grain</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Film grain</span>
             </label>
-            <p className="font-mono text-xs text-xco-ink-muted italic mt-1">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
               Adds photographic noise — organic, less cold
             </p>
           </div>
         )}
 
+        {/* Animation — crossfade when multiple photos loaded */}
+        {source === "photo" && uploadedImgs.length > 1 && (
+          <div className="space-y-3 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Animation</h2>
+            <div className="flex gap-0">
+              <button onClick={() => setAnimating((a) => !a)} className={btnClass(animating)}>
+                {animating ? "pause" : "play"}
+              </button>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Hold per frame</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{(animSpeed / 1000).toFixed(1)}s</span>
+            </div>
+            <input type="range" min={500} max={6000} step={100}
+              value={animSpeed} onChange={(e) => setAnimSpeed(Number(e.target.value))}
+              className="w-full accent-xco-dusk" />
+            <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+              <span>fast</span><span>slow</span>
+            </div>
+          </div>
+        )}
+
         {/* Format — not applicable in photo mode (dims come from the image) */}
         {source !== "photo" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
             {FORMATS.map(({ id, label }) => (
               <label key={id} className="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="format" value={id} checked={format === id}
                   onChange={() => setFormat(id)} className="accent-xco-dusk" />
-                <span className="font-mono text-xs text-xco-ink">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
               </label>
             ))}
           </div>
         )}
 
         {/* Export */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           <button onClick={() => handle("svg")}
-            disabled={exporting !== null || (source === "photo" && !uploadedImg)}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
             {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
           </button>
           <button
             onClick={() => handle("png")}
-            disabled={exporting !== null || (source === "photo" && !uploadedImg)}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
-            {exporting === "png" ? "exporting…" : `↓ PNG — ${activeFormat.label}`}
+            disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            {exporting === "png" ? "exporting…" : `↓ PNG — ${source === "photo" && uploadedImgs.length > 1 ? `frame ${activeIdx + 1}/${uploadedImgs.length}` : activeFormat.label}`}
           </button>
-          {source === "photo" && !uploadedImg && (
-            <p className="font-mono text-xs text-xco-ink-muted italic">Upload a photo to enable export</p>
+          {source === "photo" && uploadedImgs.length === 0 && (
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to enable export</p>
           )}
         </div>
       </aside>
 
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
-        {source === "photo" && !uploadedImg ? (
-          <div className="border border-xco-ink/[0.12] flex items-center justify-center"
+        {source === "photo" && uploadedImgs.length === 0 ? (
+          <div className="border border-xco-ink flex items-center justify-center"
             style={{ aspectRatio: format === "card" ? "1200/630" : "1" }}>
-            <span className="font-mono text-xs text-xco-ink-muted">Upload a photo to preview</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to preview</span>
+          </div>
+        ) : source === "photo" ? (
+          <div className="relative border border-xco-ink overflow-hidden"
+            style={{ background: photoPalette === "inverted" ? INK : PAPER }}>
+            {uploadedImgs.map((img, i) => (
+              <div
+                key={i}
+                className="transition-opacity duration-700 ease-in-out"
+                style={{
+                  position: i === 0 ? "relative" : "absolute",
+                  top: 0, left: 0, right: 0,
+                  opacity: i === activeIdx ? 1 : 0,
+                }}
+              >
+                <PreviewCanvas
+                  ref={(el) => { canvasRefs.current[i] = el; }}
+                  {...previewProps}
+                  uploadedImg={img}
+                />
+              </div>
+            ))}
           </div>
         ) : (
-          <div className="border border-xco-ink/[0.12] overflow-hidden"
-            style={{ background: source === "photo" ? (photoPalette === "inverted" ? INK : PAPER) : (colorMode === "inverted" ? INK : PAPER) }}>
-            <PreviewCanvas ref={canvasRef} {...previewProps} />
+          <div className="border border-xco-ink overflow-hidden"
+            style={{ background: colorMode === "inverted" ? INK : PAPER }}>
+            <PreviewCanvas
+              ref={(el) => { canvasRefs.current[0] = el; }}
+              {...previewProps}
+            />
           </div>
         )}
-        <p className="font-mono text-xs text-xco-ink-muted">
+
+        {/* Frame picker — shown when multiple images loaded */}
+        {source === "photo" && uploadedImgs.length > 1 && (
+          <div className="flex gap-2">
+            {uploadedImgs.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => { setActiveIdx(i); setAnimating(false); }}
+                className={`font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-1 border transition-colors ${
+                  i === activeIdx
+                    ? "bg-xco-ink text-xco-paper border-xco-ink"
+                    : "text-xco-ink border-xco-ink"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {source === "photo"
-            ? uploadedImg
-              ? (() => { const d = getPhotoDims(uploadedImg); return `${dotSpacing}px raster grid · ${d.vw}×${d.vh} (natural size)`; })()
+            ? uploadedImgs.length > 0
+              ? (() => {
+                  const img = uploadedImgs[activeIdx];
+                  if (!img) return `${dotSpacing}px raster grid`;
+                  const d = getPhotoDims(img);
+                  return `${dotSpacing}px raster grid · ${d.vw}×${d.vh}${uploadedImgs.length > 1 ? ` · frame ${activeIdx + 1}/${uploadedImgs.length}` : ""}`;
+                })()
               : `${dotSpacing}px raster grid`
             : source === "option-field"
               ? `Option field · ${format === "card" ? "1200×630" : "1200×1200"}`

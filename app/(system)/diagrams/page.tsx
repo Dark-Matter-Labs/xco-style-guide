@@ -4,23 +4,23 @@ import { DiagramsDemo } from "./DiagramsDemo";
 export default function DiagramsPage() {
   return (
     <div className="space-y-16">
-      <header className="flex items-baseline justify-between border-b border-xco-ink/[0.12] pb-6">
-        <h1 className="font-display text-4xl">Diagrammatic Grammar</h1>
+      <header className="flex items-baseline justify-between pb-6">
+        <h1 className="font-display text-[3rem] leading-[1.1]">Diagrammatic Grammar</h1>
         <WIP variant="v0.1" />
       </header>
 
       <section className="max-w-2xl space-y-4">
-        <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
           The brand is the diagrams. The grammar defines the primitives.
           Every xCO diagram is assembled from these — no others.
         </p>
-        <p className="font-body text-xco-ink-muted leading-relaxed">
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
           The visual language is raw and computational. Rectangles are the
           atomic unit. Hatching encodes weight. Lines are crisp and precise —
           no pretence of hand-drawing. The diagram should feel like it was
           built by people who take measurement seriously.
         </p>
-        <ul className="font-mono text-sm text-xco-ink-muted space-y-1 mt-4">
+        <ul className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink space-y-1 mt-4">
           <li>— Two line weights: 1.5px structural · 0.75px texture</li>
           <li>— Rectangle is the atomic unit — solid, hatched, or dashed border</li>
           <li>— Hatching density encodes character: sparse (open) → dense (constrained)</li>

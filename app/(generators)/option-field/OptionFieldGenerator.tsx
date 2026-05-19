@@ -50,17 +50,17 @@ function Slider({
   return (
     <div className="space-y-2">
       <div className="flex items-baseline justify-between">
-        <span className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
           {label}
         </span>
-        <span className="font-mono text-xs text-xco-dusk">
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">
           {display ?? value.toFixed(2)}
         </span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-xco-dusk" />
-      {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
+      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </div>
   );
 }
@@ -102,7 +102,7 @@ export function OptionFieldGenerator() {
 
         {/* Field composition */}
         <div className="space-y-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Regime composition
           </h2>
           <Slider label="Field" hint="systemic foundation — lower register"
@@ -114,13 +114,13 @@ export function OptionFieldGenerator() {
         </div>
 
         {/* Volatility */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+        <div className="space-y-2 pt-4">
           <Slider label="Volatility" hint="spatial variation — noise in the field"
             value={volatility} onChange={setVolatility} />
         </div>
 
         {/* Resolution */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
+        <div className="space-y-2 pt-4">
           <Slider label="Resolution" min={0} max={100} step={1}
             value={resolution} onChange={setResolution}
             display={`${Math.round(10 - (resolution / 100) * 7)}px`}
@@ -129,41 +129,41 @@ export function OptionFieldGenerator() {
         </div>
 
         {/* Color */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Colour</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
           {COLOR_MODES.map(({ id, label, hint }) => (
             <label key={id} className="flex items-start gap-2 cursor-pointer">
               <input type="radio" name="color" value={id} checked={colorMode === id}
                 onChange={() => setColorMode(id)} className="accent-xco-dusk mt-0.5" />
               <span className="space-y-0.5">
-                <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
               </span>
             </label>
           ))}
         </div>
 
         {/* Format */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
           {FORMATS.map(({ id, label }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id} checked={format === id}
                 onChange={() => setFormat(id)} className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">{label}</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
             </label>
           ))}
         </div>
 
         {/* Export */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           {[
             { id: "svg", label: `SVG — ${activeDim.label}` },
             { id: "png", label: `PNG — ${activeDim.label}` },
           ].map(({ id, label }) => (
             <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
@@ -172,11 +172,11 @@ export function OptionFieldGenerator() {
 
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] overflow-hidden"
+        <div className="border border-xco-ink overflow-hidden"
           style={{ background: colorMode === "inverted" ? "#1C1B17" : colorMode === "blueprint" ? "#000064" : "#FFFFFF" }}>
           <OptionFieldDiagram {...props} format={format} />
         </div>
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {activeDim.label} · {Math.round(10 - (resolution / 100) * 7)}px scanlines
           · f{fieldStr.toFixed(2)} fr{frontierStr.toFixed(2)} fo{fortressStr.toFixed(2)}
         </p>

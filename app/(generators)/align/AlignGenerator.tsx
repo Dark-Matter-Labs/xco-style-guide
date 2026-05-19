@@ -328,10 +328,10 @@ export function AlignGenerator() {
   };
 
   const btnClass = (active: boolean) =>
-    `flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+    `flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
       active
         ? "bg-xco-ink text-xco-paper border-xco-ink"
-        : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+        : "text-xco-ink border-xco-ink"
     }`;
 
   const midLabel = debouncedMidpoint < 0.3 ? "dark images" : debouncedMidpoint < 0.5 ? "balanced" : "bright images";
@@ -344,59 +344,59 @@ export function AlignGenerator() {
 
         {/* Upload */}
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Image</h2>
-          <label className={`block border-2 border-dashed p-5 text-center cursor-pointer transition-colors ${uploadedImg ? "border-xco-ink/[0.4]" : "border-xco-ink/[0.2] hover:border-xco-ink/[0.5]"}`}>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Image</h2>
+          <label className={`block border-2 border-dashed p-5 text-center cursor-pointer transition-colors ${uploadedImg ? "border-xco-ink" : "border-xco-ink hover:border-xco-ink"}`}>
             <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-            <span className="font-mono text-xs text-xco-ink-muted">
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               {uploadedImg ? "Image loaded — click to replace" : "Upload image to align"}
             </span>
           </label>
-          <p className="font-mono text-xs text-xco-ink-muted italic">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             ChatGPT / DALL-E outputs, external diagrams, moodboards
           </p>
         </div>
 
         {/* Palette preset */}
-        <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Palette</h2>
+        <div className="space-y-3 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Palette</h2>
           {(Object.entries(PRESETS) as [AlignPreset, typeof PRESETS[AlignPreset]][]).map(([id, p]) => (
             <label key={id} className="flex items-start gap-2 cursor-pointer">
               <input type="radio" name="preset" value={id} checked={preset === id}
                 onChange={() => setPreset(id)} className="accent-xco-dusk mt-0.5" />
               <span className="space-y-0.5">
-                <span className="font-mono text-xs text-xco-ink block">{p.label}</span>
-                <span className="font-mono text-xs text-xco-ink-muted block">{p.hint}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{p.label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{p.hint}</span>
               </span>
             </label>
           ))}
         </div>
 
         {/* Midpoint / contrast */}
-        <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
+        <div className="space-y-3 pt-4">
           <div className="flex items-baseline justify-between">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Contrast</h2>
-            <span className="font-mono text-xs text-xco-dusk">{midLabel}</span>
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Contrast</h2>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{midLabel}</span>
           </div>
           <input type="range" min={10} max={70} step={1}
             value={Math.round(midpoint * 100)}
             onChange={(e) => setMidpoint(Number(e.target.value) / 100)}
             className="w-full accent-xco-dusk" />
-          <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
+          <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             <span>dark</span><span>bright</span>
           </div>
-          <p className="font-mono text-xs text-xco-ink-muted italic">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             Sets where shadow → mid transition occurs. Lower = more shadow preserved.
           </p>
         </div>
 
         {/* Highlight raster overlay */}
-        <div className="border-t border-xco-ink/[0.12] pt-4 space-y-3">
+        <div className="pt-4 space-y-3">
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={raster} onChange={(e) => setRaster(e.target.checked)}
               className="accent-xco-dusk w-4 h-4" />
-            <span className="font-mono text-xs text-xco-ink">Highlight raster overlay</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Highlight raster overlay</span>
           </label>
-          <p className="font-mono text-xs text-xco-ink-muted italic">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             Raster in highlight colour, sized by brightness — textures structural elements.
           </p>
 
@@ -404,18 +404,18 @@ export function AlignGenerator() {
             <div className="space-y-3 pt-1">
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-xs text-xco-ink-muted">Resolution</span>
-                  <span className="font-mono text-xs text-xco-dusk">{spacing}px</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Resolution</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{spacing}px</span>
                 </div>
                 <input type="range" min={0} max={100} step={1}
                   value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
                   className="w-full accent-xco-dusk" />
-                <div className="flex justify-between font-mono text-xs text-xco-ink-muted">
+                <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   <span>coarse</span><span>fine</span>
                 </div>
               </div>
               <div className="space-y-1">
-                <span className="font-mono text-xs text-xco-ink-muted block">Shape</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Shape</span>
                 <div className="flex gap-0">
                   {([["square", "Square"], ["hbars", "H bars"], ["vbars", "V bars"]] as [CellShape, string][]).map(([id, label]) => (
                     <button key={id} onClick={() => setCellShape(id as CellShape)} className={btnClass(cellShape === id)}>
@@ -429,31 +429,31 @@ export function AlignGenerator() {
         </div>
 
         {/* Grain */}
-        <div className="border-t border-xco-ink/[0.12] pt-4">
+        <div className="pt-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={grain} onChange={(e) => setGrain(e.target.checked)}
               className="accent-xco-dusk w-4 h-4" />
-            <span className="font-mono text-xs text-xco-ink">Film grain</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Film grain</span>
           </label>
-          <p className="font-mono text-xs text-xco-ink-muted italic mt-1">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
             Organic noise layer — softens digital harshness
           </p>
         </div>
 
         {/* Prompt */}
-        <div className="border-t border-xco-ink/[0.12] pt-4 space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <div className="pt-4 space-y-2">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Style prompt
           </h2>
-          <p className="font-mono text-xs text-xco-ink-muted italic leading-snug">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug">
             Copy into ChatGPT, Midjourney, Firefly, or any image generator to produce outputs that match the xCO palette and aesthetic.
           </p>
           <button
             onClick={handleCopyPrompt}
-            className={`w-full text-left font-mono text-xs border px-3 py-2 transition-colors ${
+            className={`w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] border px-3 py-2 transition-colors ${
               copied
                 ? "bg-xco-teal text-white border-xco-teal"
-                : "text-xco-ink border-xco-ink/[0.2] hover:border-xco-ink hover:bg-xco-ink/[0.04]"
+                : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
             }`}
           >
             {copied ? "✓ Copied to clipboard" : `⌘ Copy ${PRESETS[preset].label} prompt`}
@@ -461,18 +461,18 @@ export function AlignGenerator() {
         </div>
 
         {/* Export */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           <button onClick={() => handleExport("svg")} disabled={exporting !== null || !uploadedImg}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
             {exporting === "svg" ? "exporting…" : `↓ SVG — ${uploadedImg ? `${vw}×${vh}` : "—"}`}
           </button>
           <button onClick={() => handleExport("png")} disabled={exporting !== null || !uploadedImg}
-            className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
             {exporting === "png" ? "exporting…" : `↓ PNG — ${uploadedImg ? `${vw}×${vh}` : "—"}`}
           </button>
           {!uploadedImg && (
-            <p className="font-mono text-xs text-xco-ink-muted italic">Upload an image to enable export</p>
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload an image to enable export</p>
           )}
         </div>
 
@@ -481,22 +481,22 @@ export function AlignGenerator() {
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
         {!uploadedImg ? (
-          <div className="border border-xco-ink/[0.12] flex items-center justify-center bg-xco-paper"
+          <div className="border border-xco-ink flex items-center justify-center bg-xco-paper"
             style={{ aspectRatio: "1200/630" }}>
             <div className="text-center space-y-2 p-8">
-              <p className="font-mono text-xs text-xco-ink-muted">Upload an image to preview</p>
-              <p className="font-mono text-xs text-xco-ink-muted opacity-60">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload an image to preview</p>
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
                 Tritone maps shadow / mid / highlight luminance bands<br />
                 to xCO palette stops — output matches your image aspect ratio
               </p>
             </div>
           </div>
         ) : (
-          <div className="border border-xco-ink/[0.12] overflow-hidden">
+          <div className="border border-xco-ink overflow-hidden">
             <canvas ref={canvasRef} width={vw} height={vh} className="w-full h-auto block" />
           </div>
         )}
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {uploadedImg
             ? `${PRESETS[preset].label} · midpoint ${Math.round(midpoint * 100)}% · ${vw}×${vh}`
             : "Tritone palette mapping · optional highlight raster · grain"}

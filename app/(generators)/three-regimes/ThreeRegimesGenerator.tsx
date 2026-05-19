@@ -63,16 +63,16 @@ function Field({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="font-mono text-xs text-xco-ink-muted uppercase tracking-wider">
+      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">
         {label}
       </span>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-xco-ink/[0.2] font-body text-base text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors"
+        className="w-full bg-transparent border-b border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors"
       />
-      {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
+      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
   );
 }
@@ -90,16 +90,16 @@ function TextArea({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="font-mono text-xs text-xco-ink-muted uppercase tracking-wider">
+      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">
         {label}
       </span>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={2}
-        className="w-full bg-transparent border border-xco-ink/[0.2] font-body text-sm text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none"
+        className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none"
       />
-      {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
+      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
   );
 }
@@ -179,7 +179,7 @@ export function ThreeRegimesGenerator() {
 
         {/* Mode toggle */}
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Diagram Mode
           </h2>
           <div className="flex gap-0">
@@ -187,10 +187,10 @@ export function ThreeRegimesGenerator() {
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`flex-1 font-mono text-xs px-3 py-2 border transition-colors ${
+                className={`flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
                   mode === m
                     ? "bg-xco-ink text-xco-paper border-xco-ink"
-                    : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+                    : "text-xco-ink border-xco-ink"
                 }`}
               >
                 {m}
@@ -198,7 +198,7 @@ export function ThreeRegimesGenerator() {
             ))}
           </div>
           {mode === "abstract" && (
-            <p className="font-mono text-xs text-xco-ink-muted italic">
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               Gradient mood — Field, Frontier, Fortress as colour atmosphere.
               No text, no structure.
             </p>
@@ -206,8 +206,8 @@ export function ThreeRegimesGenerator() {
         </div>
 
         {mode === "structural" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
               Colour Scheme
             </h2>
             {([
@@ -218,8 +218,8 @@ export function ThreeRegimesGenerator() {
                 <input type="radio" name="colorScheme" value={id} checked={colorScheme === id}
                   onChange={() => setColorScheme(id)} className="accent-xco-dusk mt-0.5" />
                 <span className="space-y-0.5">
-                  <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                  <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
                 </span>
               </label>
             ))}
@@ -227,8 +227,8 @@ export function ThreeRegimesGenerator() {
         )}
 
         {mode === "structural" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
               Layout
             </h2>
             <div className="grid grid-cols-2 gap-1">
@@ -241,10 +241,10 @@ export function ThreeRegimesGenerator() {
                 <button
                   key={id}
                   onClick={() => setStructuralVariant(id)}
-                  className={`text-left font-mono text-xs px-2 py-2 border transition-colors ${
+                  className={`text-left font-mono font-medium text-[0.9375rem] leading-[1.6] px-2 py-2 border transition-colors ${
                     structuralVariant === id
                       ? "bg-xco-ink text-xco-paper border-xco-ink"
-                      : "text-xco-ink-muted border-xco-ink/[0.2] hover:border-xco-ink hover:text-xco-ink"
+                      : "text-xco-ink border-xco-ink"
                   }`}
                 >
                   <span className="block">{label}</span>
@@ -257,8 +257,8 @@ export function ThreeRegimesGenerator() {
 
         {mode === "structural" && (
           <>
-            <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4">
-              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+            <div className="space-y-1 pb-4">
+              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Node Labels
               </h2>
             </div>
@@ -285,8 +285,8 @@ export function ThreeRegimesGenerator() {
               hint="shown below field label in mono"
             />
 
-            <div className="space-y-1 border-b border-xco-ink/[0.12] pb-4 pt-2">
-              <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+            <div className="space-y-1 pb-4 pt-2">
+              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Text
               </h2>
             </div>
@@ -311,7 +311,7 @@ export function ThreeRegimesGenerator() {
                 onChange={(e) => setShowAnnotations(e.target.checked)}
                 className="accent-xco-dusk w-4 h-4"
               />
-              <span className="font-mono text-xs text-xco-ink-muted">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 Show annotation marginalia
               </span>
             </label>
@@ -319,8 +319,8 @@ export function ThreeRegimesGenerator() {
         )}
 
 
-        <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+        <div className="space-y-3 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Preview Format
           </h2>
           <div className="space-y-1">
@@ -334,10 +334,10 @@ export function ThreeRegimesGenerator() {
                   onChange={() => setPreviewFormat(f.id)}
                   className="accent-xco-dusk"
                 />
-                <span className="font-mono text-xs text-xco-ink">
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {f.label}
                 </span>
-                <span className="font-mono text-xs text-xco-ink-muted">
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {f.size}
                 </span>
               </label>
@@ -345,8 +345,8 @@ export function ThreeRegimesGenerator() {
           </div>
         </div>
 
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">
             Export
           </h2>
           {[
@@ -360,12 +360,12 @@ export function ThreeRegimesGenerator() {
               key={id}
               onClick={() => handleExport(id)}
               disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40"
+              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40"
             >
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
-          <p className="font-mono text-xs text-xco-ink-muted leading-relaxed pt-1">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-1">
             PNG exports use server-side font embedding for accurate typography.
           </p>
         </div>
@@ -373,13 +373,13 @@ export function ThreeRegimesGenerator() {
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] overflow-hidden bg-xco-paper">
+        <div className="border border-xco-ink overflow-hidden bg-xco-paper">
           <DiagramComponent
             {...diagramProps}
             format={previewFormat}
           />
         </div>
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {previewFormat === "hero" && "1200 × 630 — substack hero / open graph"}
           {previewFormat === "square" && "1200 × 1200 — social square"}
           {previewFormat === "mark" && "400 × 200 — mark (geometric only, no labels)"}

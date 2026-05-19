@@ -22,25 +22,30 @@
   --color-xco-sand:      #ffa064;
   --color-xco-dusk:      #ff5a00;
 
-  /* ── Typography ─────────────────────────────────────────────────── */
-  /* font-* variables are set by next/font on <html>; we alias them here */
+  /* ── Typography — three-scale system ───────────────────────────── */
+  /* Heading: Suisse Works (serif)  3rem / 1.1                        */
+  /* Body:    Suisse Int'l (sans)   1.375rem / 1.7                    */
+  /* Small:   DM Mono Medium        0.9375rem / 1.6                   */
 
   --font-display: "Suisse Works", "Times New Roman", Georgia, serif;
-  --font-body:    "Suisse Works", "Times New Roman", Georgia, serif;
+  --font-body:    "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
   --font-ui:      "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
-  --font-mono:    var(--font-dm-mono), "Suisse Mono", monospace;
+  --font-mono:    var(--font-dm-mono), "Courier New", monospace;
 
   /* shadcn semantic aliases */
   --font-sans:    "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
   --font-heading: "Suisse Works", "Times New Roman", Georgia, serif;
 
-  /* ── Leading ────────────────────────────────────────────────────── */
-
-  --leading-heading: 1.2;
-
   /* ── Spacing ────────────────────────────────────────────────────── */
 
   --xco-gutter: 1.5rem;
+
+  /* ── Golden ratio ───────────────────────────────────────────────── */
+  /* φ = 1.618  |  major 61.8%  |  minor 38.2%                       */
+  /* Use as grid column ratio: grid-cols-[61.8fr_38.2fr]              */
+  --phi:       1.618;
+  --phi-major: 61.8;   /* percent — use with calc(var(--phi-major) * 1%) */
+  --phi-minor: 38.2;
 
   /* ── Radius — minimal, this is not a round-corner brand ─────────── */
 
@@ -61,8 +66,8 @@
 :root {
   /* xCO dynamic palette — swap targets for .dark */
   --xco-paper:     #FFFFFF;
-  --xco-ink:       #1C1B17;   /* warm near-black        */
-  --xco-ink-muted: #5F5C53;   /* secondary text         */
+  --xco-ink:       #1C1B17;
+  --xco-ink-muted: #1C1B17;   /* no greys — maps to ink */
 
   --background:           #FFFFFF;
   --foreground:           #1C1B17;
@@ -72,15 +77,15 @@
   --popover-foreground:   #1C1B17;
   --primary:              #1C1B17;
   --primary-foreground:   #FFFFFF;
-  --secondary:            #E8E5DC;
+  --secondary:            #FFFFFF;
   --secondary-foreground: #1C1B17;
-  --muted:                #E8E5DC;
-  --muted-foreground:     #5F5C53;
+  --muted:                #FFFFFF;
+  --muted-foreground:     #1C1B17;
   --accent:               #ff5a00;
   --accent-foreground:    #FFFFFF;
   --destructive:          #ff5a00;
-  --border:               rgba(28, 27, 23, 0.12);
-  --input:                rgba(28, 27, 23, 0.12);
+  --border:               transparent;
+  --input:                #1C1B17;
   --ring:                 #1C1B17;
 }
 
@@ -89,25 +94,25 @@
   /* xCO palette swap */
   --xco-paper:     #1C1B17;
   --xco-ink:       #FFFFFF;
-  --xco-ink-muted: #9A9690;
+  --xco-ink-muted: #FFFFFF;   /* no greys — maps to ink */
 
   --background:           #1C1B17;
   --foreground:           #FFFFFF;
-  --card:                 #2A2920;
+  --card:                 #1C1B17;
   --card-foreground:      #FFFFFF;
-  --popover:              #2A2920;
+  --popover:              #1C1B17;
   --popover-foreground:   #FFFFFF;
   --primary:              #FFFFFF;
   --primary-foreground:   #1C1B17;
-  --secondary:            #2A2920;
+  --secondary:            #1C1B17;
   --secondary-foreground: #FFFFFF;
-  --muted:                #2A2920;
-  --muted-foreground:     #5F5C53;
+  --muted:                #1C1B17;
+  --muted-foreground:     #FFFFFF;
   --accent:               #ff5a00;
   --accent-foreground:    #FFFFFF;
   --destructive:          #ff5a00;
-  --border:               rgba(255, 255, 255, 0.10);
-  --input:                rgba(255, 255, 255, 0.10);
+  --border:               transparent;
+  --input:                #FFFFFF;
   --ring:                 #FFFFFF;
 }
 
@@ -139,13 +144,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-ring/50;
   }
   body {
-    @apply bg-xco-paper text-xco-ink font-ui text-base leading-relaxed;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    line-height: var(--leading-heading);
+    @apply bg-xco-paper text-xco-ink font-body text-[1.375rem] leading-[1.7];
   }
 }
 

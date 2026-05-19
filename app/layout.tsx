@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const dmMono = DM_Mono({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-dm-mono",
   display: "swap",

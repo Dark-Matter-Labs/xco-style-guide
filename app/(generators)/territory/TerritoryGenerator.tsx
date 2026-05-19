@@ -74,8 +74,8 @@ function Slider({
   return (
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between">
-        <span className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">{label}</span>
-        <span className="font-mono text-xs text-xco-dusk">{display ?? value}</span>
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">{label}</span>
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{display ?? value}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
@@ -161,10 +161,10 @@ export function TerritoryGenerator() {
         {/* Items editor */}
         <div className="space-y-3">
           <div className="flex items-baseline justify-between">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
               Concepts
             </h2>
-            <span className="font-mono text-xs text-xco-ink-muted">weight</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">weight</span>
           </div>
 
           <div className="space-y-2">
@@ -176,14 +176,14 @@ export function TerritoryGenerator() {
                     value={item.label}
                     onChange={e => updateItem(item.id, { label: e.target.value })}
                     placeholder="Concept"
-                    className="w-full bg-transparent border-b border-xco-ink/[0.2] font-mono text-xs text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink placeholder:text-xco-ink-muted/50"
+                    className="w-full bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink placeholder:text-xco-ink/50"
                   />
                   <input
                     type="text"
                     value={item.sublabel ?? ""}
                     onChange={e => updateItem(item.id, { sublabel: e.target.value })}
                     placeholder="sublabel"
-                    className="w-full bg-transparent font-mono text-[10px] text-xco-ink-muted py-0.5 focus:outline-none italic placeholder:opacity-40"
+                    className="w-full bg-transparent font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none placeholder:opacity-40"
                   />
                 </div>
                 <div className="flex items-center gap-1 shrink-0 pt-0.5">
@@ -192,12 +192,12 @@ export function TerritoryGenerator() {
                     value={item.weight}
                     min={1} max={999}
                     onChange={e => updateItem(item.id, { weight: Math.max(1, Number(e.target.value)) })}
-                    className="w-12 bg-transparent border-b border-xco-ink/[0.2] font-mono text-xs text-xco-dusk text-right py-0.5 focus:outline-none"
+                    className="w-12 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk text-right py-0.5 focus:outline-none"
                   />
                   <button
                     onClick={() => removeItem(item.id)}
                     disabled={items.length <= 2}
-                    className="font-mono text-base leading-none text-xco-ink-muted hover:text-xco-ink transition-colors disabled:opacity-20 px-0.5"
+                    className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-none text-xco-ink hover:text-xco-ink transition-colors disabled:opacity-20 px-0.5"
                   >
                     ×
                   </button>
@@ -208,37 +208,37 @@ export function TerritoryGenerator() {
 
           <button
             onClick={addItem}
-            className="w-full text-left font-mono text-xs text-xco-ink-muted border border-dashed border-xco-ink/[0.2] px-2 py-1.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
+            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-dashed border-xco-ink px-2 py-1.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
           >
             + Add concept
           </button>
 
           <button
             onClick={() => setItems(DEFAULT_ITEMS)}
-            className="font-mono text-xs text-xco-ink-muted hover:text-xco-ink transition-colors"
+            className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-ink transition-colors"
           >
             ↺ Reset to default
           </button>
         </div>
 
         {/* Colour mode */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Colour</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
           {COLOR_MODES.map(({ id, label, hint }) => (
             <label key={id} className="flex items-start gap-2 cursor-pointer">
               <input type="radio" name="color" value={id}
                 checked={colorMode === id} onChange={() => setColorMode(id)}
                 className="accent-xco-dusk mt-0.5" />
               <span className="space-y-0.5">
-                <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                <span className="font-mono text-xs text-xco-ink-muted block">{hint}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
               </span>
             </label>
           ))}
         </div>
 
         {/* Corner radius */}
-        <div className="space-y-3 border-t border-xco-ink/[0.12] pt-4">
+        <div className="space-y-3 pt-4">
           <Slider
             label="Corner radius"
             value={cornerRadius}
@@ -256,27 +256,27 @@ export function TerritoryGenerator() {
         </div>
 
         {/* Format */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
           {FORMATS.map(({ id, label }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id}
                 checked={format === id} onChange={() => setFormat(id)}
                 className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">{label}</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
             </label>
           ))}
         </div>
 
         {/* Export */}
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           {[
             { id: "svg", label: `SVG — ${activeDim.label}` },
             { id: "png", label: `PNG — ${activeDim.label}` },
           ].map(({ id, label }) => (
             <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
@@ -285,10 +285,10 @@ export function TerritoryGenerator() {
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] overflow-hidden">
+        <div className="border border-xco-ink overflow-hidden">
           <TerritoryDiagram {...diagramProps} format={format} />
         </div>
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {activeDim.label} · {diagramProps.items.length} cells · cell area ∝ weight
         </p>
       </div>

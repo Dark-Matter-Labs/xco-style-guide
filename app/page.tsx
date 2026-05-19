@@ -38,27 +38,27 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-xco-paper">
 
-      {/* Header — full bleed, ocean accent at bottom */}
-      <header className="border-b-4 border-xco-ocean px-8 pt-14 pb-10">
-        <p className="font-mono text-xs text-xco-ink-muted tracking-widest uppercase mb-8">
+      {/* Header */}
+      <header className="px-8 pt-14 pb-10">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Dark Matter Labs — Expanding Civilizational Optionality
         </p>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 max-w-7xl">
           <h1 className="font-display text-[clamp(3rem,7vw,5.5rem)] leading-[1.0] text-xco-ink">
             xCO
           </h1>
-          <p className="font-body text-[1.375rem] text-xco-ink leading-relaxed max-w-xl">
+          <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] max-w-xl">
             The visual language for civilizational optionality —
             documented and generated here.
           </p>
         </div>
       </header>
 
-      <div className="max-w-7xl px-8 py-14 grid grid-cols-1 lg:grid-cols-[2fr_1px_1fr] gap-0">
+      <div className="max-w-7xl px-8 py-14 grid grid-cols-1 lg:grid-cols-[61.8fr_38.2fr] gap-16">
 
         {/* Design System */}
-        <section className="pr-0 lg:pr-16 pb-14 lg:pb-0">
-          <h2 className="font-mono text-xs text-xco-ocean tracking-widest uppercase mb-8">
+        <section>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean tracking-widest uppercase mb-8">
             Design System
           </h2>
           <nav className="space-y-0">
@@ -66,12 +66,12 @@ export default function Home() {
               <Link
                 key={href}
                 href={href}
-                className="group flex items-baseline gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-ocean transition-colors"
+                className="group flex items-baseline gap-5 py-3 hover:text-xco-ocean transition-colors"
               >
-                <span className="font-mono text-xs text-xco-ink-muted group-hover:text-xco-ocean transition-colors w-6 shrink-0">
+                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink group-hover:text-xco-ocean transition-colors w-6 shrink-0">
                   {n}
                 </span>
-                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ocean transition-colors">
+                <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink group-hover:text-xco-ocean transition-colors">
                   {label}
                 </span>
               </Link>
@@ -79,12 +79,9 @@ export default function Home() {
           </nav>
         </section>
 
-        {/* Divider */}
-        <div className="hidden lg:block bg-xco-ink/[0.08]" />
-
         {/* Instruments */}
-        <section className="pt-14 lg:pt-0 lg:pl-16 border-t border-xco-ink/[0.08] lg:border-t-0">
-          <h2 className="font-mono text-xs text-xco-dusk tracking-widest uppercase mb-8">
+        <section>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk tracking-widest uppercase mb-8">
             Instruments
           </h2>
           <nav className="space-y-0">
@@ -92,9 +89,9 @@ export default function Home() {
               <Link
                 key={href}
                 href={href}
-                className="group flex items-baseline gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-dusk transition-colors"
+                className="group flex items-baseline gap-5 py-3 hover:text-xco-dusk transition-colors"
               >
-                <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-dusk transition-colors">
+                <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink group-hover:text-xco-dusk transition-colors">
                   {label}
                 </span>
               </Link>
@@ -104,8 +101,8 @@ export default function Home() {
       </div>
 
       {/* Templates */}
-      <section className="max-w-7xl px-8 pb-14 border-t border-xco-ink/[0.08] pt-14">
-        <h2 className="font-mono text-xs text-xco-ink-muted tracking-widest uppercase mb-8">
+      <section className="max-w-7xl px-8 pb-14">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Templates
         </h2>
         <nav className="space-y-0 max-w-sm">
@@ -115,12 +112,12 @@ export default function Home() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-baseline justify-between gap-5 py-3 border-b border-xco-ink/[0.08] hover:border-xco-ink/[0.25] transition-colors"
+              className="group flex items-baseline justify-between gap-5 py-3 hover:text-xco-ink transition-colors"
             >
-              <span className="font-body text-[1.375rem] text-xco-ink group-hover:text-xco-ink transition-colors">
+              <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink">
                 {label}
               </span>
-              <span className="font-mono text-xs text-xco-ink-muted shrink-0 group-hover:text-xco-ink transition-colors">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink shrink-0">
                 {meta} ↗
               </span>
             </a>
@@ -129,11 +126,11 @@ export default function Home() {
       </section>
 
       <footer className="max-w-7xl px-8 pb-14 flex items-center justify-between">
-        <p className="font-mono text-xs text-xco-ink-muted max-w-lg leading-relaxed">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink max-w-lg">
           Every asset the team ships is built from these primitives.
           The system is the document.
         </p>
-        <span className="font-mono text-xs text-xco-dusk bg-xco-dusk/10 px-2 py-1 shrink-0">
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk bg-xco-dusk/10 px-2 py-1 shrink-0">
           [v0.1]
         </span>
       </footer>

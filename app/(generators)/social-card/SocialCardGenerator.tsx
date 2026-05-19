@@ -38,10 +38,10 @@ function FieldInput({ label, value, onChange, hint, mono }: {
 }) {
   return (
     <label className="block space-y-1">
-      <span className="font-mono text-xs text-xco-ink-muted uppercase tracking-wider">{label}</span>
+      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>
       <input type="text" value={value} onChange={(e) => onChange(e.target.value)}
-        className={`w-full bg-transparent border-b border-xco-ink/[0.2] text-base text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono text-sm" : "font-body"}`} />
-      {hint && <p className="font-mono text-xs text-xco-ink-muted italic">{hint}</p>}
+        className={`w-full bg-transparent border-b border-xco-ink text-[1.375rem] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`} />
+      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
   );
 }
@@ -98,15 +98,15 @@ export function SocialCardGenerator() {
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
 
         <div className="space-y-2">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Layout</h2>
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Layout</h2>
           <div className="space-y-1">
             {LAYOUTS.map(({ id, label, hint }) => (
               <label key={id} className="flex items-start gap-2 cursor-pointer">
                 <input type="radio" name="layout" value={id} checked={layout === id}
                   onChange={() => setLayout(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                 <span>
-                  <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                  <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
                 </span>
               </label>
             ))}
@@ -114,16 +114,16 @@ export function SocialCardGenerator() {
         </div>
 
         {layout === "diagram" && (
-          <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-            <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Diagram</h2>
+          <div className="space-y-2 pt-4">
+            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Diagram</h2>
             <div className="space-y-1">
               {DIAGRAM_TYPES.map(({ id, label, hint }) => (
                 <label key={id} className="flex items-start gap-2 cursor-pointer">
                   <input type="radio" name="diagramType" value={id} checked={diagramType === id}
                     onChange={() => setDiagramType(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
                   <span>
-                    <span className="font-mono text-xs text-xco-ink block">{label}</span>
-                    <span className="font-mono text-xs text-xco-ink-muted">{hint}</span>
+                    <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
+                    <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
                   </span>
                 </label>
               ))}
@@ -131,13 +131,13 @@ export function SocialCardGenerator() {
           </div>
         )}
 
-        <div className="space-y-4 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Content</h2>
+        <div className="space-y-4 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Content</h2>
           <label className="block space-y-1">
-            <span className="font-mono text-xs text-xco-ink-muted uppercase tracking-wider">Headline</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">Headline</span>
             <textarea value={headline} onChange={(e) => setHeadline(e.target.value)} rows={3}
-              className="w-full bg-transparent border border-xco-ink/[0.2] font-body text-base text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none" />
-            <p className="font-mono text-xs text-xco-ink-muted italic">Keep under 60 chars for clean wrapping</p>
+              className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none" />
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Keep under 60 chars for clean wrapping</p>
           </label>
           <FieldInput label="Tag" value={tag} onChange={setTag}
             hint='Short label — shown as [TAG]' mono />
@@ -145,26 +145,26 @@ export function SocialCardGenerator() {
             hint="Author, org, or publication" />
         </div>
 
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted">Format</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
           {FORMATS.map(({ id, label, size }) => (
             <label key={id} className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="format" value={id} checked={format === id}
                 onChange={() => setFormat(id)} className="accent-xco-dusk" />
-              <span className="font-mono text-xs text-xco-ink">{label}</span>
-              <span className="font-mono text-xs text-xco-ink-muted">{size}</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{size}</span>
             </label>
           ))}
         </div>
 
-        <div className="space-y-2 border-t border-xco-ink/[0.12] pt-4">
-          <h2 className="font-ui text-xs tracking-widest uppercase text-xco-ink-muted mb-3">Export</h2>
+        <div className="space-y-2 pt-4">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
           {[
             { id: "svg", label: `SVG — ${activeFormat.size}` },
             { id: "png", label: `PNG — ${activeFormat.size}` },
           ].map(({ id, label }) => (
             <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono text-xs text-xco-ink border border-xco-ink/[0.2] px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
@@ -173,10 +173,10 @@ export function SocialCardGenerator() {
 
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
-        <div className="border border-xco-ink/[0.12] overflow-hidden bg-xco-paper">
+        <div className="border border-xco-ink overflow-hidden bg-xco-paper">
           <SocialCardDiagram {...props} format={format} />
         </div>
-        <p className="font-mono text-xs text-xco-ink-muted">
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           {format === "card" ? "1200 × 630 — LinkedIn / Substack OG" : "1080 × 1080 — Instagram / social square"}
         </p>
       </div>

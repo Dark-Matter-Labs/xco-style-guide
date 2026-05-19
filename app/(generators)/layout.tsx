@@ -20,11 +20,11 @@ export default function GeneratorsLayout({
 }) {
   return (
     <div className="min-h-screen bg-xco-paper">
-      <nav className="border-b-2 border-xco-ocean px-8 py-3 sticky top-0 bg-xco-paper z-10">
+      <nav className="px-8 py-4 sticky top-0 bg-xco-paper z-10">
         <div className="max-w-7xl mx-auto flex items-center gap-8">
           <Link
             href="/"
-            className="font-mono text-xs text-xco-ink-muted hover:text-xco-dusk transition-colors shrink-0"
+            className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors shrink-0"
           >
             ← xCO
           </Link>
@@ -33,7 +33,7 @@ export default function GeneratorsLayout({
               <Link
                 key={href}
                 href={href}
-                className="font-ui text-xs text-xco-ink-muted hover:text-xco-ink transition-colors whitespace-nowrap"
+                className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors whitespace-nowrap"
               >
                 {label}
               </Link>
