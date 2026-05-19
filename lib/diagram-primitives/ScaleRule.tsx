@@ -31,7 +31,7 @@ export function ScaleRule({
         y2={y}
         stroke={colors.ink.hex}
         strokeWidth={0.5}
-        strokeOpacity={0.25}
+        strokeDasharray="3 3"
       />
       <text
         x={lx}
@@ -40,8 +40,7 @@ export function ScaleRule({
         dominantBaseline="middle"
         fill={colors.inkMuted.hex}
         fontSize={10}
-        fontFamily="'DM Mono', monospace"
-        fontStyle="italic"
+        fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`}
       >
         {label}
       </text>

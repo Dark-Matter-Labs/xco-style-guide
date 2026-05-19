@@ -60,7 +60,7 @@ const LAYOUTS = {
 
 type LayoutData = (typeof LAYOUTS)[DiagramFormat];
 
-const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
+const FONT_SANS = `"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`;
 
 const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;
@@ -124,13 +124,13 @@ function ClearLabel({
     <g>
       <rect x={cx - clearW / 2} y={cy - clearH / 2} width={clearW} height={clearH} fill={PAPER} />
       <text x={cx} y={primaryY} textAnchor="middle" dominantBaseline="central"
-        fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={primarySize} fill={primaryColor}>
+        fontFamily={FONT_SANS} fontSize={primarySize} fill={primaryColor}>
         {primary}
       </text>
       {sub && (
         <text x={cx} y={subY} textAnchor="middle" dominantBaseline="central"
-          fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={subSize}
-          fontStyle="italic" fill={subColor} fillOpacity={0.7}>
+          fontFamily={FONT_SANS} fontSize={subSize}
+          fill={subColor}>
           {sub}
         </text>
       )}
@@ -188,7 +188,7 @@ function NestedContent({ L, labels, C, showText, hasSub }: VariantProps) {
 
       {/* Separator between label band and inner content */}
       <line x1={pad} y1={pad + labelBandH} x2={pad + outerW} y2={pad + labelBandH}
-        stroke={C.field} strokeWidth={0.75} strokeDasharray="4 4" opacity={0.4} />
+        stroke={C.field} strokeWidth={0.75} strokeDasharray="4 4" />
 
       {/* Field label in label band */}
       {showText && (
@@ -408,15 +408,15 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
         {relationshipStatement && (
           <text x={L.vw / 2} y={L.relY}
             textAnchor="middle"
-            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={L.relFontSize}
-            fontStyle="italic" fill={MUTED}>
+            fontFamily={FONT_SANS} fontSize={L.relFontSize}
+            fill={MUTED}>
             {relationshipStatement}
           </text>
         )}
         {caption && (
           <text x={L.vw / 2} y={L.capY!}
             textAnchor="middle"
-            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={14} fill={MUTED}>
+            fontFamily={FONT_SANS} fontSize={14} fill={MUTED}>
             {caption}
           </text>
         )}
@@ -426,7 +426,6 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
     return (
       <svg ref={ref} viewBox={`0 0 ${L.vw} ${L.vh}`} xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <style>{FONT_IMPORT}</style>
           <HatchPatterns frColor={C.frontier} foColor={C.fortress} fiColor={C.field} />
         </defs>
 
@@ -475,19 +474,19 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
               )}
               {showText && L.relY !== null && relationshipStatement && (
                 <text x={L.vw / 2} y={L.relY} textAnchor="middle"
-                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={L.relFontSize}
-                  fontStyle="italic" fill={MUTED}>
+                  fontFamily={FONT_SANS} fontSize={L.relFontSize}
+                  fill={MUTED}>
                   {relationshipStatement}
                 </text>
               )}
               {showText && L.capY !== null && caption && (
                 <text x={L.vw / 2} y={L.capY} textAnchor="middle"
-                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={14} fill={MUTED}>
+                  fontFamily={FONT_SANS} fontSize={14} fill={MUTED}>
                   {caption}
                 </text>
               )}
               {showText && annoLines.length > 0 && (
-                <g fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={11} fill={MUTED} fillOpacity={0.65}>
+                <g fontFamily={FONT_SANS} fontSize={11} fill={MUTED}>
                   {annoLines.map((line, i) => (
                     <text key={i}
                       x={format === "square" ? 100 : 80}

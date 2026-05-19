@@ -54,7 +54,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="max-w-7xl px-8 py-14 grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="max-w-7xl px-8 py-14 grid grid-cols-1 lg:grid-cols-[61.8fr_38.2fr] gap-16">
 
         {/* Design System */}
         <section>

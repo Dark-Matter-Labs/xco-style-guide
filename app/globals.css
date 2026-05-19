@@ -40,6 +40,13 @@
 
   --xco-gutter: 1.5rem;
 
+  /* ── Golden ratio ───────────────────────────────────────────────── */
+  /* φ = 1.618  |  major 61.8%  |  minor 38.2%                       */
+  /* Use as grid column ratio: grid-cols-[61.8fr_38.2fr]              */
+  --phi:       1.618;
+  --phi-major: 61.8;   /* percent — use with calc(var(--phi-major) * 1%) */
+  --phi-minor: 38.2;
+
   /* ── Radius — minimal, this is not a round-corner brand ─────────── */
 
   --radius: 0.125rem;

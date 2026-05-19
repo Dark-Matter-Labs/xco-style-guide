@@ -6,12 +6,11 @@ export interface AnnotationProps {
   text: string;
   /** Max chars per line before wrapping — approximate */
   charsPerLine?: number;
-  opacity?: number;
 }
 
 /**
- * Marginalia annotation in DM Mono italic. Every diagram permits and
- * visibly invites these — showing the working, marking uncertainty.
+ * Marginalia annotation. Every diagram permits and visibly invites these —
+ * showing the working, marking uncertainty.
  * Use [unverified], [inference], [speculation] inline in the text.
  */
 export function Annotation({
@@ -19,7 +18,6 @@ export function Annotation({
   y,
   text,
   charsPerLine = 40,
-  opacity = 0.75,
 }: AnnotationProps) {
   // Simple word-wrap approximation for SVG
   const words = text.split(" ");
@@ -39,7 +37,7 @@ export function Annotation({
   const lineHeight = 14;
 
   return (
-    <g opacity={opacity}>
+    <g>
       {lines.map((line, i) => (
         <text
           key={i}
@@ -47,8 +45,7 @@ export function Annotation({
           y={y + i * lineHeight}
           fill={colors.inkMuted.hex}
           fontSize={10}
-          fontFamily="'DM Mono', monospace"
-          fontStyle="italic"
+          fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`}
         >
           {line}
         </text>

@@ -84,11 +84,6 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
 
     return (
       <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <style>
-            {`@import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');`}
-          </style>
-        </defs>
         <rect width={vw} height={vh} fill={bg} />
 
         {rects.map((r, i) => {
@@ -132,8 +127,8 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={subY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily="'DM Mono', 'Suisse Mono', monospace" fontWeight="400"
-                  fontSize={sub} fill={fg} opacity={0.5}
+                  fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`} fontWeight="400"
+                  fontSize={sub} fill={fg}
                 >
                   {r.sublabel}
                 </text>
