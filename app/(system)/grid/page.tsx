@@ -1,4 +1,5 @@
 import { WIP } from "@/components/WIP";
+import { FibGrid } from "./FibGrid";
 
 const FIB = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
@@ -106,6 +107,18 @@ export default function GridPage() {
             Tailwind: <span className="text-xco-dusk">grid-cols-[61.8fr_38.2fr]</span>
           </p>
         </div>
+      </section>
+
+      {/* Interactive subdivision */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+          Recursive Subdivision
+        </h2>
+        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] max-w-2xl mb-8">
+          Each step cuts the remaining golden rectangle into a square and a new golden rectangle.
+          The spiral arc is the same curve at every scale — self-similar, inward forever.
+        </p>
+        <FibGrid />
       </section>
 
       {/* Fibonacci sequence */}
