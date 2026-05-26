@@ -281,7 +281,12 @@ interface PreviewProps {
 }
 
 const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
-  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto }, ref) {
+  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto }, forwardedRef) {
+    // Internal ref for drawing — always a RefObject regardless of what the parent passes.
+    // Callback refs (e.g. `ref={(el) => { arr[i] = el; }}`) are NOT RefObjects, so we
+    // cannot read `.current` from the forwarded ref. Use localRef for all canvas access.
+    const localRef = useRef<HTMLCanvasElement>(null);
+
     const { vw, vh } = source === "photo" && uploadedImg
       ? getPhotoDims(uploadedImg)
       : DIMS[format];
@@ -292,7 +297,7 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
     const dotSpacing = spacingFromResolution(resolution);
 
     useEffect(() => {
-      const canvas = (ref as React.RefObject<HTMLCanvasElement>)?.current;
+      const canvas = localRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -302,7 +307,7 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
 
       if (source === "photo") {
         if (!uploadedImg) return;
-        if (showPhoto) ctx.drawImage(uploadedImg, 0, 0, vw, vh); // vw/vh match natural dims — no stretch
+        if (showPhoto) ctx.drawImage(uploadedImg, 0, 0, vw, vh);
         const imgData = getImageData(uploadedImg, vw, vh);
         drawPhotoRaster(ctx, imgData, vw, vh, dotSpacing, photoPalette, cellShape);
         if (grain) addGrain(ctx, vw, vh);
@@ -322,9 +327,22 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
       // mark
       if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "three-regimes", cellShape);
       else                   drawMarkVariant(ctx, vw, vh, fg);
-    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, ref, cellShape, showPhoto]);
+    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, cellShape, showPhoto]);
 
-    return <canvas ref={ref} width={vw} height={vh} className="w-full h-auto block" />;
+    return (
+      <canvas
+        ref={(el) => {
+          (localRef as React.MutableRefObject<HTMLCanvasElement | null>).current = el;
+          if (typeof forwardedRef === "function") {
+            forwardedRef(el);
+          } else if (forwardedRef) {
+            (forwardedRef as React.MutableRefObject<HTMLCanvasElement | null>).current = el;
+          }
+        }}
+        width={vw} height={vh}
+        className="w-full h-auto block"
+      />
+    );
   }
 );
 
