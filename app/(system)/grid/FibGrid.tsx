@@ -11,7 +11,7 @@ const INK   = "#1C1B17";
 const PAPER = "#FFFFFF";
 const DUSK  = "#ff5a00";
 const MAX_DEPTH = 8;
-const FONT  = `"Untitled Sans", "Helvetica Neue", Arial, sans-serif`;
+const FONT  = `"Untitled Sans", "Inter", Arial, sans-serif`;
 
 interface Sq { x: number; y: number; s: number; i: number }
 

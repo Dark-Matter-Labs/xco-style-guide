@@ -105,8 +105,8 @@ Add this block to your \`globals.css\` or \`app/globals.css\`:
 \`\`\`
 
 Then load fonts:
-- Untitled Serif (licensed) — display + body; fallback: Times New Roman
-- Untitled Sans (licensed) — UI; fallback: Helvetica Neue
+- Untitled Serif (licensed) — display + body; fallback: Crimson Pro (Google Fonts)
+- Untitled Sans (licensed) — UI; fallback: Inter (Google Fonts)
 - DM Mono — mono (Google Fonts)
 `;
 }
@@ -154,9 +154,9 @@ export function buildTailwindV4(): string {
 ${colorEntries}
 
   /* Typography — Untitled fonts (licensed); system fallbacks shown */
-  --font-display: "Untitled Serif", "Times New Roman", Georgia, serif;
-  --font-body:    "Untitled Serif", "Times New Roman", Georgia, serif;
-  --font-ui:      "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Untitled Serif", "Crimson Pro", Georgia, serif;
+  --font-body:    "Untitled Serif", "Crimson Pro", Georgia, serif;
+  --font-ui:      "Untitled Sans", "Inter", Arial, sans-serif;
   --font-mono:    var(--font-dm-mono), monospace;
 
   /* Spacing */
@@ -189,9 +189,9 @@ module.exports = {
 ${colorEntries}
       },
       fontFamily: {
-        display: ["Untitled Serif", "Times New Roman", "Georgia", "serif"],
-        body:    ["Untitled Serif", "Times New Roman", "Georgia", "serif"],
-        ui:      ["Untitled Sans", "Helvetica Neue", "Arial", "sans-serif"],
+        display: ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
+        body:    ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
+        ui:      ["Untitled Sans", "Inter", "Arial", "sans-serif"],
         mono:    ["DM Mono", "monospace"],
       },
       borderRadius: {

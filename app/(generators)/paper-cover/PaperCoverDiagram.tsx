@@ -235,7 +235,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Header — xCO wordmark */}
         <text x={PAD} y={88}
-          fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif" fontStyle="italic"
+          fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif" fontStyle="italic"
           fontSize={16} fill={INK} fillOpacity={0.8}>
           xCO
         </text>
@@ -264,7 +264,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Title */}
         {titleLines.map((line, i) => (
           <text key={i} x={PAD} y={titleStartY + i * titleLineH}
-            fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif"
+            fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif"
             fontSize={44} fill={INK}>
             {line}
           </text>
@@ -273,7 +273,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Subtitle */}
         {subtitleLines.map((line, i) => (
           <text key={i} x={PAD} y={subtitleStartY + i * subtitleLineH}
-            fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif" fontStyle="italic"
+            fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif" fontStyle="italic"
             fontSize={22} fill={MUTED}>
             {line}
           </text>

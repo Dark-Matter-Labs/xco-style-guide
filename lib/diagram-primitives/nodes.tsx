@@ -29,7 +29,7 @@ function NodeText({ cx, cy, label, sublabel, fill = colors.ink.hex, fontSize = 1
           dominantBaseline="middle"
           fill={fill}
           fontSize={fontSize}
-          fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`}
+          fontFamily={`"Untitled Sans", "Inter", Arial, sans-serif`}
           fontWeight={400}
         >
           {line}
@@ -43,7 +43,7 @@ function NodeText({ cx, cy, label, sublabel, fill = colors.ink.hex, fontSize = 1
           dominantBaseline="middle"
           fill={fill}
           fontSize={10}
-          fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`}
+          fontFamily={`"Untitled Sans", "Inter", Arial, sans-serif`}
         >
           {sublabel}
         </text>
