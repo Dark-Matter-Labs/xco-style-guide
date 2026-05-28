@@ -44,10 +44,10 @@ export default function Home() {
           Dark Matter Labs — Expanding Civilizational Optionality
         </p>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 max-w-7xl">
-          <h1 className="font-display text-[clamp(3rem,7vw,5.5rem)] leading-[1.0] text-xco-ink">
+          <h1 className="font-display text-[100px] leading-[90px] text-xco-ink">
             xCO
           </h1>
-          <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] max-w-xl">
+          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-xl">
             The visual language for civilizational optionality —
             documented and generated here.
           </p>
@@ -71,7 +71,7 @@ export default function Home() {
                 <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink group-hover:text-xco-ocean transition-colors w-6 shrink-0">
                   {n}
                 </span>
-                <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink group-hover:text-xco-ocean transition-colors">
+                <span className="font-body text-[24px] leading-[26px] text-xco-ink group-hover:text-xco-ocean transition-colors">
                   {label}
                 </span>
               </Link>
@@ -91,7 +91,7 @@ export default function Home() {
                 href={href}
                 className="group flex items-baseline gap-5 py-3 hover:text-xco-dusk transition-colors"
               >
-                <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink group-hover:text-xco-dusk transition-colors">
+                <span className="font-body text-[24px] leading-[26px] text-xco-ink group-hover:text-xco-dusk transition-colors">
                   {label}
                 </span>
               </Link>
@@ -114,7 +114,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="group flex items-baseline justify-between gap-5 py-3 hover:text-xco-ink transition-colors"
             >
-              <span className="font-body text-[1.375rem] leading-[1.7] text-xco-ink">
+              <span className="font-body text-[24px] leading-[26px] text-xco-ink">
                 {label}
               </span>
               <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink shrink-0">

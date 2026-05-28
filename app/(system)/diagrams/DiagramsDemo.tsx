@@ -39,7 +39,7 @@ function PrimitiveCard({
     <section className="space-y-4 pb-12">
       <div>
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{title}</h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mt-1">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mt-1">
           {description}
         </p>
       </div>

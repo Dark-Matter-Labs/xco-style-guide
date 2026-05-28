@@ -255,7 +255,7 @@ export function TextHighlightGenerator() {
                 value={ann.note}
                 onChange={(e) => updateAnn(ann.id, { note: e.target.value })}
                 rows={2}
-                className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-1 px-2 focus:outline-none focus:border-xco-ink resize-none"
+                className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-1 px-2 focus:outline-none focus:border-xco-ink resize-none"
               />
             </div>
           ))}
@@ -270,7 +270,7 @@ export function TextHighlightGenerator() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={7}
-            className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink resize-none leading-snug"
+            className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink resize-none leading-snug"
           />
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             Terms are matched case-insensitively on first occurrence.
@@ -287,7 +287,7 @@ export function TextHighlightGenerator() {
             {/* Main text — 58% width, leaving room for sidenotes */}
             <div
               ref={textRef}
-              className="font-body text-[1.375rem] leading-[1.7]"
+              className="font-body text-[24px] leading-[26px]"
               style={{ width: "58%" }}
             >
               {tokens.map((tok, i) => {

@@ -3,6 +3,26 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Local fonts ──────────────────────────────────────────────────── */
+/* Drop the woff2 files into public/fonts/ to activate.               */
+/* Fallbacks to system serif / sans until files are present.          */
+
+@font-face {
+  font-family: "Untitled Serif";
+  src: url("/fonts/UntitledSerifRegular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/UntitledSansRegular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ══════════════════════════════════════════════════════════════════
    xCO Design Token System
    Single source of truth: lib/design-tokens.ts (TypeScript)
@@ -22,19 +42,21 @@
   --color-xco-sand:      #ffa064;
   --color-xco-dusk:      #ff5a00;
 
-  /* ── Typography — three-scale system ───────────────────────────── */
-  /* Heading: Suisse Works (serif)  3rem / 1.1                        */
-  /* Body:    Suisse Int'l (sans)   1.375rem / 1.7                    */
-  /* Small:   DM Mono Medium        0.9375rem / 1.6                   */
+  /* ── Typography — four-scale system ────────────────────────────── */
+  /* Logo:     Untitled Serif          100px / 90px                   */
+  /* Heading:  Untitled Serif (serif)   60px / 60px                   */
+  /* Heading2: Untitled Sans (sans)     36px / 40px                   */
+  /* Body:     Untitled Sans (sans)     24px / 26px                   */
+  /* Small:    DM Mono Medium           0.9375rem / 1.6               */
 
-  --font-display: "Suisse Works", "Times New Roman", Georgia, serif;
-  --font-body:    "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
-  --font-ui:      "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Untitled Serif", "Times New Roman", Georgia, serif;
+  --font-body:    "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-ui:      "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
   --font-mono:    var(--font-dm-mono), "Courier New", monospace;
 
   /* shadcn semantic aliases */
-  --font-sans:    "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
-  --font-heading: "Suisse Works", "Times New Roman", Georgia, serif;
+  --font-sans:    "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Untitled Serif", "Times New Roman", Georgia, serif;
 
   /* ── Spacing ────────────────────────────────────────────────────── */
 
@@ -147,7 +169,7 @@
     @apply outline-ring/50;
   }
   body {
-    @apply bg-xco-paper text-xco-ink font-body text-[1.375rem] leading-[1.7];
+    @apply bg-xco-paper text-xco-ink font-body text-[24px] leading-[26px];
   }
 }
 

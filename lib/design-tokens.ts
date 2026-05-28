@@ -48,21 +48,21 @@ export type ColorName = keyof typeof colors;
 export const typography = {
   faces: {
     display: {
-      family: "Suisse Works",
+      family: "Untitled Serif",
       cssVar: "--font-display",
       twClass: "font-display",
       weights: ["400 (regular)", "400i (italic)"],
       usage: "Headings. Serif — the weight of the idea.",
     },
     body: {
-      family: "Suisse Int'l",
+      family: "Untitled Sans",
       cssVar: "--font-body",
       twClass: "font-body",
       weights: ["400 (regular)"],
       usage: "All running text. Sans — clarity, no decoration.",
     },
     ui: {
-      family: "Suisse Int'l",
+      family: "Untitled Sans",
       cssVar: "--font-ui",
       twClass: "font-ui",
       weights: ["400 (regular)", "500 (medium)"],
@@ -78,26 +78,46 @@ export const typography = {
     },
   },
 
-  // Type scale — three levels only.
-  // Heading face is serif; Body face is sans (opposite pair by design).
+  // Type scale — four levels + small label.
+  // Serif face (Untitled Serif) for logo + heading.
+  // Sans face (Untitled Sans) for heading2 + body.
+  // Mono face (DM Mono) for labels, annotations, code.
   scale: [
+    {
+      name: "logo",
+      label: "Logo",
+      size: "100px",
+      lineHeight: "90px",
+      measure: "20ch",
+      face: "display" as const,
+      tailwind: "font-display text-[100px] leading-[90px]",
+    },
     {
       name: "heading",
       label: "Heading",
-      size: "3rem",
-      lineHeight: "1.1",
-      measure: "50ch",
+      size: "60px",
+      lineHeight: "60px",
+      measure: "40ch",
       face: "display" as const,
-      tailwind: "font-display text-[3rem] leading-[1.1]",
+      tailwind: "font-display text-[60px] leading-[60px]",
+    },
+    {
+      name: "heading2",
+      label: "Heading 2",
+      size: "36px",
+      lineHeight: "40px",
+      measure: "55ch",
+      face: "body" as const,
+      tailwind: "font-body text-[36px] leading-[40px]",
     },
     {
       name: "body",
       label: "Body",
-      size: "1.375rem",
-      lineHeight: "1.7",
+      size: "24px",
+      lineHeight: "26px",
       measure: "68ch",
       face: "body" as const,
-      tailwind: "font-body text-[1.375rem] leading-[1.7]",
+      tailwind: "font-body text-[24px] leading-[26px]",
     },
     {
       name: "small",

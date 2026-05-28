@@ -40,7 +40,7 @@ function FieldInput({ label, value, onChange, hint, mono }: {
     <label className="block space-y-1">
       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>
       <input type="text" value={value} onChange={(e) => onChange(e.target.value)}
-        className={`w-full bg-transparent border-b border-xco-ink text-[1.375rem] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`} />
+        className={`w-full bg-transparent border-b border-xco-ink text-[24px] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`} />
       {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
   );
@@ -136,7 +136,7 @@ export function SocialCardGenerator() {
           <label className="block space-y-1">
             <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">Headline</span>
             <textarea value={headline} onChange={(e) => setHeadline(e.target.value)} rows={3}
-              className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none" />
+              className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none" />
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Keep under 60 chars for clean wrapping</p>
           </label>
           <FieldInput label="Tag" value={tag} onChange={setTag}

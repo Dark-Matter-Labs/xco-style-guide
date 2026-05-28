@@ -116,7 +116,7 @@ export function DesignExportGenerator() {
 
         {/* Description */}
         <div className="pt-4 space-y-3">
-          <p className="font-body text-[1.375rem] leading-[1.7] text-xco-ink">
+          <p className="font-body text-[24px] leading-[26px] text-xco-ink">
             {activeExport.description}
           </p>
           {active === "claude" && (

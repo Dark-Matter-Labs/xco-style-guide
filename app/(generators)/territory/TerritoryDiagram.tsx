@@ -117,7 +117,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={labelY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`} fontWeight="500"
+                  fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`} fontWeight="500"
                   fontSize={fs} fill={fg}
                 >
                   {r.label}
@@ -127,7 +127,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={subY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`} fontWeight="400"
+                  fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`} fontWeight="400"
                   fontSize={sub} fill={fg}
                 >
                   {r.sublabel}

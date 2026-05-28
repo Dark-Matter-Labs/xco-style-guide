@@ -70,7 +70,7 @@ function Field({
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors"
+        className="w-full bg-transparent border-b border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors"
       />
       {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>
@@ -97,7 +97,7 @@ function TextArea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={2}
-        className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none"
+        className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink transition-colors resize-none"
       />
       {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
     </label>

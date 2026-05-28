@@ -49,19 +49,19 @@ export default function GridPage() {
   return (
     <div className="space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[3rem] leading-[1.1]">Grid</h1>
+        <h1 className="font-display text-[60px] leading-[60px]">Grid</h1>
         <WIP variant="v0.1" />
       </header>
 
       {/* Principle */}
       <section className="max-w-2xl space-y-4">
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           All proportions derive from a single ratio: φ = 1.618. The golden
           ratio is not a style choice — it is a structural constraint that makes
           every proportion decision self-similar. Apply it to page grids,
           canvas dimensions, column splits, and spacing.
         </p>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           The same ratio governs the Fibonacci sequence. Consecutive Fibonacci
           numbers converge to φ, making integer spacing values (8, 13, 21, 34…)
           naturally proportional without needing to calculate.
@@ -75,14 +75,14 @@ export default function GridPage() {
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-[61.8fr_38.2fr] gap-12 mb-12">
           <div className="space-y-4">
-            <p className="font-display text-[3rem] leading-[1.1]">φ = 1.618</p>
+            <p className="font-display text-[60px] leading-[60px]">φ = 1.618</p>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               Major — 61.8%
             </p>
             <div className="h-16 bg-xco-ink w-full" style={{ maxWidth: "61.8%" }} />
           </div>
           <div className="space-y-4">
-            <p className="font-display text-[3rem] leading-[1.1]">1 / φ = 0.618</p>
+            <p className="font-display text-[60px] leading-[60px]">1 / φ = 0.618</p>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               Minor — 38.2%
             </p>
@@ -114,7 +114,7 @@ export default function GridPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Recursive Subdivision
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] max-w-2xl mb-8">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl mb-8">
           Each step cuts the remaining golden rectangle into a square and a new golden rectangle.
           The spiral arc is the same curve at every scale — self-similar, inward forever.
         </p>
@@ -126,7 +126,7 @@ export default function GridPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Fibonacci Spacing Scale
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] max-w-2xl mb-8">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl mb-8">
           Use Fibonacci numbers as px/rem spacing steps. Each value is the sum
           of the previous two — consecutive ratios converge to φ. Skip 1 and 2
           for practical use; start at 3px for hairlines.
@@ -152,7 +152,7 @@ export default function GridPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
           Document Canvases
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Social card 1200 × 630: ratio is 1200/630 = 1.905 — close to φ².
           Slide 16:9 (1920 × 1080): ratio 1.778. A4 paper 297 × 210mm: ratio 1.414 (√2 — ISO standard).
           Apply the golden column split within each canvas: left margin at 38.2%, right at 61.8%.
@@ -186,7 +186,7 @@ export default function GridPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
           Diagram Types
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mb-10 max-w-2xl">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-10 max-w-2xl">
           xCO uses four diagram types. Pick the one that matches the
           relationship in the data — not the one that looks most complex.
         </p>
@@ -197,12 +197,12 @@ export default function GridPage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
                   {d.id}
                 </p>
-                <h3 className="font-display text-[3rem] leading-[1.1]">{d.label}</h3>
+                <h3 className="font-display text-[60px] leading-[60px]">{d.label}</h3>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {d.usage}
                 </p>
               </div>
-              <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+              <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                 {d.rules}
               </p>
               <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
@@ -224,7 +224,7 @@ export default function GridPage() {
               <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk shrink-0">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+              <span className="font-body text-[24px] text-xco-ink leading-[26px]">
                 {rule}
               </span>
             </li>

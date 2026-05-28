@@ -62,7 +62,7 @@ Body measure (max-width): 68ch for body text. Reduce for captions and mono.
 - **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
 - **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) as a background — use \`ink\` and \`paper\` tokens.
 - **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
-- **No bold** on UI / Suisse Int'l face. Use weight 400 or 500 only.
+- **No bold** on UI / Untitled Sans face. Use weight 400 or 500 only.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
 
 ## Three visual registers (diagram modes)
@@ -105,9 +105,9 @@ Add this block to your \`globals.css\` or \`app/globals.css\`:
 \`\`\`
 
 Then load fonts:
-- Suisse Works (licensed) — display + body; fallback: Times New Roman
-- Suisse Int'l (licensed) — UI; fallback: Helvetica Neue
-- Suisse Mono (licensed) — mono; fallback: DM Mono (Google Fonts)
+- Untitled Serif (licensed) — display + body; fallback: Times New Roman
+- Untitled Sans (licensed) — UI; fallback: Helvetica Neue
+- DM Mono — mono (Google Fonts)
 `;
 }
 
@@ -153,11 +153,11 @@ export function buildTailwindV4(): string {
   /* xCO colour palette */
 ${colorEntries}
 
-  /* Typography — Suisse typefaces (licensed); system fallbacks shown */
-  --font-display: "Suisse Works", "Times New Roman", Georgia, serif;
-  --font-body:    "Suisse Works", "Times New Roman", Georgia, serif;
-  --font-ui:      "Suisse Int'l", "Helvetica Neue", Arial, sans-serif;
-  --font-mono:    "Suisse Mono", var(--font-dm-mono), monospace;
+  /* Typography — Untitled fonts (licensed); system fallbacks shown */
+  --font-display: "Untitled Serif", "Times New Roman", Georgia, serif;
+  --font-body:    "Untitled Serif", "Times New Roman", Georgia, serif;
+  --font-ui:      "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    var(--font-dm-mono), monospace;
 
   /* Spacing */
   --xco-gutter: ${spacing.gutter};
@@ -189,10 +189,10 @@ module.exports = {
 ${colorEntries}
       },
       fontFamily: {
-        display: ["Suisse Works", "Times New Roman", "Georgia", "serif"],
-        body:    ["Suisse Works", "Times New Roman", "Georgia", "serif"],
-        ui:      ["Suisse Int'l", "Helvetica Neue", "Arial", "sans-serif"],
-        mono:    ["Suisse Mono", "DM Mono", "monospace"],
+        display: ["Untitled Serif", "Times New Roman", "Georgia", "serif"],
+        body:    ["Untitled Serif", "Times New Roman", "Georgia", "serif"],
+        ui:      ["Untitled Sans", "Helvetica Neue", "Arial", "sans-serif"],
+        mono:    ["DM Mono", "monospace"],
       },
       borderRadius: {
         DEFAULT: "0.125rem",
