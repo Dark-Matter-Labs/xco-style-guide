@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Mono } from "next/font/google";
+import { Crimson_Pro, DM_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +8,21 @@ const dmMono = DM_Mono({
   weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-dm-mono",
+  display: "swap",
+});
+
+const crimsonPro = Crimson_Pro({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-crimson-pro",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -27,6 +42,8 @@ export default function RootLayout({
       lang="en"
       className={cn(
         dmMono.variable,
+        crimsonPro.variable,
+        inter.variable,
       )}
     >
       {/* FOUC prevention — reads localStorage before first paint */}

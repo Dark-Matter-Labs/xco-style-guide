@@ -45,7 +45,7 @@ export function Annotation({
           y={y + i * lineHeight}
           fill={colors.inkMuted.hex}
           fontSize={10}
-          fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`}
+          fontFamily={`"Untitled Sans", "Inter", Arial, sans-serif`}
         >
           {line}
         </text>

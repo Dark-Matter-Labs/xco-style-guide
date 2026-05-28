@@ -32,7 +32,7 @@ export default function TypographyPage() {
           <span className="text-xco-dusk">UntitledSerifRegular.woff2</span> and{" "}
           <span className="text-xco-dusk">UntitledSansRegular.woff2</span> into{" "}
           <span className="text-xco-dusk">public/fonts/</span> to activate. Until then the system
-          falls back to Times New Roman (serif) and Helvetica Neue (sans). DM Mono is loaded via
+          falls back to Crimson Pro (serif) and Inter (sans), both loaded via Google Fonts. DM Mono is also loaded via
           Google Fonts.
         </p>
       </section>
