@@ -30,6 +30,20 @@ function useDebounce<T>(value: T, ms: number): T {
 // ── Helpers ───────────────────────────────────────────────────────────────
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
 
+// Pixel-perfect fillRect — snaps every edge to the nearest integer pixel so
+// Canvas 2D never anti-aliases the rectangle boundary.  All halftone drawing
+// must go through this rather than ctx.fillRect() directly.
+function fillRectPixel(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number,
+) {
+  const x0 = Math.round(x);
+  const y0 = Math.round(y);
+  const x1 = Math.round(x + w);
+  const y1 = Math.round(y + h);
+  if (x1 > x0 && y1 > y0) ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+}
+
 function getPhotoDims(img: HTMLImageElement): { vw: number; vh: number } {
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
@@ -80,7 +94,7 @@ function drawDiagramRaster(
   for (const d of dots) {
     const w = cellShape === "hbars" ? dotSpacing : d.r * 2;
     const h = cellShape === "vbars" ? dotSpacing : d.r * 2;
-    ctx.fillRect(d.cx - w / 2, d.cy - h / 2, w, h);
+    fillRectPixel(ctx, d.cx - w / 2, d.cy - h / 2, w, h);
   }
 }
 
@@ -174,14 +188,14 @@ function drawSignalVariant(
       for (let x = 0; x < cx; x += segW) {
         const xRel = x / cx;
         const h = spacing * (xRel * 0.55 + t * 0.25) * 0.9;
-        if (h > 0.5) ctx.fillRect(x, y - h / 2, segW * 0.85, h);
+        if (h > 0.5) fillRectPixel(ctx, x, y - h / 2, segW * 0.85, h);
       }
 
       // Right stream (fortress): denser, uniform
       for (let x = cx; x < vw; x += segW) {
         const xRel = 1 - (x - cx) / (vw - cx);
         const h = spacing * (0.3 + xRel * 0.45 + t * 0.2) * 0.9;
-        if (h > 0.5) ctx.fillRect(x, y - h / 2, segW * 0.85, h);
+        if (h > 0.5) fillRectPixel(ctx, x, y - h / 2, segW * 0.85, h);
       }
     } else {
       // Field: spreading bars below junction
@@ -189,7 +203,7 @@ function drawSignalVariant(
       const half = vw * (0.12 + t * 0.42);
       const h = spacing * (0.4 + t * 0.18);
       for (let x = clamp(cx - half, 0, vw); x < clamp(cx + half, 0, vw); x += segW) {
-        ctx.fillRect(x, y - h / 2, segW * 0.85, h);
+        fillRectPixel(ctx, x, y - h / 2, segW * 0.85, h);
       }
     }
   }
@@ -215,7 +229,7 @@ function drawOptionFieldScanlines(
     const yRel = y / vh;
     for (let x = pad; x < vw - pad; x += segW) {
       const sh = spatialWeight((x - pad) / usableW, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
-      ctx.fillRect(x, y - sh / 2, segW, sh);
+      fillRectPixel(ctx, x, y - sh / 2, segW, sh);
     }
   }
 }
@@ -245,7 +259,7 @@ function drawPhotoRaster(
           const dark = 1 - sampleLum(data, cx, cy, vw, vh);
           if (dark > 0.05) {
             const w = rw(dark), h = rh(dark);
-            ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+            fillRectPixel(ctx, cx - w / 2, cy - h / 2, w, h);
           }
         }
       }
@@ -265,7 +279,7 @@ function drawPhotoRaster(
         const dark = palette === "inverted" ? lum : 1 - lum;
         if (dark > 0.05) {
           const w = rw(dark), h = rh(dark);
-          ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+          fillRectPixel(ctx, cx - w / 2, cy - h / 2, w, h);
         }
       }
     }
