@@ -185,7 +185,7 @@ export function ToneLinter() {
           onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) analyse(); }}
           placeholder="Paste a paragraph of draft text here — the linter will flag banned words and suggest which register it belongs to."
           rows={6}
-          className="w-full bg-transparent border border-xco-ink font-body text-[1.375rem] leading-[1.7] text-xco-ink p-4 focus:outline-none transition-colors resize-none placeholder:text-xco-ink/40"
+          className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink p-4 focus:outline-none transition-colors resize-none placeholder:text-xco-ink/40"
         />
         <div className="flex items-center gap-4">
           <button
@@ -214,7 +214,7 @@ export function ToneLinter() {
               <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Text with flags
               </p>
-              <div className="font-body text-[1.375rem] text-xco-ink leading-[1.7] p-4 whitespace-pre-wrap">
+              <div className="font-body text-[24px] text-xco-ink leading-[26px] p-4 whitespace-pre-wrap">
                 <HighlightedText text={text} matches={result.bannedMatches} />
               </div>
             </div>

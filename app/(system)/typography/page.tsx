@@ -2,9 +2,11 @@ import { typography } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
 
 const specimens: Record<string, string> = {
-  heading: "Three Regimes of Optionality",
-  body: "Madrid faces +7.5°C. The question is not whether to respond at proportional scale, but what response at that scale looks like when capital systematically under-prices preconditions.",
-  small: "// [inference] assumes legionella testing compliance — unverified with Madrid water authority",
+  logo:     "xCO",
+  heading:  "Three Regimes of Optionality",
+  heading2: "Madrid — the heat question",
+  body:     "Madrid faces +7.5°C. The question is not whether to respond at proportional scale, but what response at that scale looks like when capital systematically under-prices preconditions.",
+  small:    "// [inference] assumes legionella testing compliance — unverified with Madrid water authority",
 };
 
 const faceClass: Record<string, string> = {
@@ -18,23 +20,27 @@ export default function TypographyPage() {
   return (
     <div className="space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[3rem] leading-[1.1]">Typography</h1>
+        <h1 className="font-display text-[60px] leading-[60px]">Typography</h1>
         <WIP variant="v0.1" />
       </header>
 
       {/* Caveat */}
       <section className="max-w-2xl">
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-          <span className="text-xco-dusk">[note]</span> Suisse Works and Suisse Int&apos;l are
-          licensed typefaces from Swiss Typefaces. If unavailable, the system falls back to
-          Times New Roman (serif) and Helvetica Neue (sans-serif). DM Mono is loaded via Google Fonts.
+          <span className="text-xco-dusk">[note]</span> Untitled Serif and Untitled Sans are
+          licensed typefaces from Klim Type Foundry. Drop{" "}
+          <span className="text-xco-dusk">UntitledSerifRegular.woff2</span> and{" "}
+          <span className="text-xco-dusk">UntitledSansRegular.woff2</span> into{" "}
+          <span className="text-xco-dusk">public/fonts/</span> to activate. Until then the system
+          falls back to Times New Roman (serif) and Helvetica Neue (sans). DM Mono is loaded via
+          Google Fonts.
         </p>
       </section>
 
-      {/* Three scales */}
+      {/* Four scales */}
       <section>
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
-          Three Scales
+          Scale
         </h2>
         <div className="space-y-0">
           {typography.scale.map((step) => (
@@ -72,7 +78,7 @@ export default function TypographyPage() {
                 <p className="text-xco-dusk">{(face.weights as readonly string[]).join(" / ")}</p>
               </div>
               <div>
-                <p className={`${faceClass[key]} text-[1.375rem] leading-[1.7] text-xco-ink`}>
+                <p className={`${faceClass[key]} text-[24px] leading-[26px] text-xco-ink`}>
                   {face.family}
                 </p>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
@@ -84,7 +90,7 @@ export default function TypographyPage() {
         </div>
       </section>
 
-      {/* Italic specimens — functional documentation */}
+      {/* Italic specimens */}
       <section>
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Italic — Diagram Annotations Only
@@ -92,10 +98,10 @@ export default function TypographyPage() {
         <div className="space-y-8">
           <div className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              Suisse Works<br />400i
+              Untitled Serif<br />400i
             </p>
-            <p className="font-display italic text-[3rem] leading-[1.1] text-xco-ink">
-              "If field optionality is the precondition, the allocation problem isn't about
+            <p className="font-display italic text-[60px] leading-[60px] text-xco-ink">
+              "If field optionality is the precondition, the allocation problem isn&apos;t about
               choosing between regimes."
             </p>
           </div>
@@ -116,10 +122,11 @@ export default function TypographyPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Weight Rule
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
-          Three scales only: Heading (Suisse Works serif, 3rem), Body (Suisse Int&apos;l sans, 1.375rem),
-          Small (DM Mono medium, 0.9375rem). Italic appears in diagram annotations and quoted pull-text.
-          No bold. No light. Restraint is the rule, not a constraint.
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+          Four scales: Logo (Untitled Serif 100px), Heading (Untitled Serif 60px), Heading 2
+          (Untitled Sans 36px), Body (Untitled Sans 24px). Labels and annotations use DM Mono
+          at 0.9375rem. Italic appears in diagram annotations and quoted pull-text only. No bold.
+          No light. Restraint is the rule, not a constraint.
         </p>
       </section>
     </div>

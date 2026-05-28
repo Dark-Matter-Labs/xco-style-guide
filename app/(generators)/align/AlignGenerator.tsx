@@ -68,9 +68,9 @@ If the subject is photorealistic, treat it as if passed through a tritone duoton
 process — all photographic hue removed, replaced with the three palette stops above.
 
 TYPOGRAPHY (if text appears in the image)
-  Display / headlines    Suisse Int'l — geometric sans-serif, weight 400–500
-  Data / labels          Suisse Mono — monospaced, regular
-  Body / longer text     Suisse Works — serif, regular or italic
+  Display / headlines    Untitled Sans — geometric sans-serif, weight 400–500
+  Data / labels          DM Mono — monospaced, regular
+  Body / longer text     Untitled Serif — serif, regular or italic
   No decorative typefaces. Text is sparse, precise, left-aligned.
 
 COMPOSITION

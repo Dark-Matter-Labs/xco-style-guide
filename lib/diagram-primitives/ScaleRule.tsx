@@ -40,7 +40,7 @@ export function ScaleRule({
         dominantBaseline="middle"
         fill={colors.inkMuted.hex}
         fontSize={10}
-        fontFamily={`"Suisse Int'l", "Helvetica Neue", Arial, sans-serif`}
+        fontFamily={`"Untitled Sans", "Helvetica Neue", Arial, sans-serif`}
       >
         {label}
       </text>

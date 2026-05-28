@@ -156,7 +156,7 @@ function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h
               <text
                 x={x0 + cx + cw / 2} y={y0 + cy + ch / 2}
                 textAnchor="middle" dominantBaseline="middle"
-                fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={fs} fill={fg}
+                fontFamily="'DM Mono', monospace" fontSize={fs} fill={fg}
               >
                 {r.label}
               </text>
@@ -235,12 +235,12 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Header — xCO wordmark */}
         <text x={PAD} y={88}
-          fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontStyle="italic"
+          fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif" fontStyle="italic"
           fontSize={16} fill={INK} fillOpacity={0.8}>
           xCO
         </text>
         <text x={PAD + 38} y={88}
-          fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.7}>
+          fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.7}>
           Expanding Civilizational Optionality
         </text>
 
@@ -255,7 +255,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Paper number */}
         {paperNumber && (
           <text x={PAD} y={numberY}
-            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={11}
+            fontFamily="'DM Mono', monospace" fontSize={11}
             fill={MUTED} letterSpacing="2">
             No. {paperNumber}
           </text>
@@ -264,7 +264,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Title */}
         {titleLines.map((line, i) => (
           <text key={i} x={PAD} y={titleStartY + i * titleLineH}
-            fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif"
+            fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif"
             fontSize={44} fill={INK}>
             {line}
           </text>
@@ -273,7 +273,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Subtitle */}
         {subtitleLines.map((line, i) => (
           <text key={i} x={PAD} y={subtitleStartY + i * subtitleLineH}
-            fontFamily="'Suisse Works', 'Times New Roman', Georgia, serif" fontStyle="italic"
+            fontFamily="'Untitled Serif', 'Times New Roman', Georgia, serif" fontStyle="italic"
             fontSize={22} fill={MUTED}>
             {line}
           </text>
@@ -286,7 +286,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Authors */}
         {authors && (
           <text x={PAD} y={COVER_H - 100}
-            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">
+            fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">
             {authors}
           </text>
         )}
@@ -294,14 +294,14 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Date */}
         {date && (
           <text x={PAD} y={COVER_H - 80}
-            fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.7}>
+            fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.7}>
             {date}
           </text>
         )}
 
         {/* Footer — org */}
         <text x={PAD} y={COVER_H - 44}
-          fontFamily="'DM Mono', 'Suisse Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.5}
+          fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.5}
           letterSpacing="1">
           Dark Matter Labs
         </text>

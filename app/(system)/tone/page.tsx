@@ -8,19 +8,19 @@ export default function TonePage() {
   return (
     <div className="space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[3rem] leading-[1.1]">Tone of Voice</h1>
+        <h1 className="font-display text-[60px] leading-[60px]">Tone of Voice</h1>
         <WIP variant="v0.1" />
       </header>
 
       {/* Principle */}
       <section className="max-w-2xl space-y-4">
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Three registers. Pick deliberately. The writing fails if the register
           is chosen by accident — an annotation that reads like a hunch, a
           method text that reads like an annotation, a hunch mistaken for a
           conclusion.
         </p>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Across all registers: declarative about the question, tentative about
           the answer. Specific verbs, real numbers, named places where possible.
           Mark uncertainty inline — never drop a claim because it's uncertain,
@@ -40,14 +40,14 @@ export default function TonePage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-1">
                   {reg.id}
                 </p>
-                <h3 className="font-display text-[3rem] leading-[1.1]">{reg.label}</h3>
+                <h3 className="font-display text-[60px] leading-[60px]">{reg.label}</h3>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {reg.usage}
                 </p>
               </div>
 
               <div className="pl-4">
-                <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+                <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                   {reg.rule}
                 </p>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
@@ -60,7 +60,7 @@ export default function TonePage() {
                   <div key={i} className="space-y-2">
                     <div className="space-y-1">
                       <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">✓ this</p>
-                      <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+                      <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                         {ex.good}
                       </p>
                     </div>
@@ -68,7 +68,7 @@ export default function TonePage() {
                       <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
                         ✗ not that
                       </p>
-                      <p className="font-body text-[1.375rem] text-xco-ink line-through leading-[1.7] opacity-60">
+                      <p className="font-body text-[24px] text-xco-ink line-through leading-[26px] opacity-60">
                         {ex.bad}
                       </p>
                     </div>
@@ -108,7 +108,7 @@ export default function TonePage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
           Prompt Templates
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mb-8 max-w-xl">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
           Copy into Claude or ChatGPT. Fill in the brief at the bottom.
           Each template enforces the register, bans the banned words, and
           requires uncertainty markers.
@@ -117,7 +117,7 @@ export default function TonePage() {
           {toneRegisters.map((reg) => (
             <div key={reg.id} className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">{reg.label}</h3>
+                <h3 className="font-body text-[24px] text-xco-ink leading-[26px]">{reg.label}</h3>
                 <CopyButton
                   text={promptTemplates[reg.id]}
                   label="Copy template"
@@ -136,7 +136,7 @@ export default function TonePage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
           Linter
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mb-8 max-w-xl">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
           Paste draft text. The linter flags banned words and suggests which
           register the writing is closest to.{" "}
           <WIP

@@ -37,13 +37,13 @@ export default function ColourPage() {
   return (
     <div className="space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[3rem] leading-[1.1]">Colour</h1>
+        <h1 className="font-display text-[60px] leading-[60px]">Colour</h1>
         <WIP variant="v0.1" />
       </header>
 
       {/* Palette principle */}
       <section className="max-w-2xl">
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Two surface colours: paper (#FFFFFF) and ink (#1C1B17). No greys.
           Plus a five-colour extended palette for diagrams — two cool registers
           (navy, ocean, teal) and two warm (sand, dusk). Never use all five at
@@ -88,7 +88,7 @@ export default function ColourPage() {
                       {color.cssVar}
                     </p>
                   )}
-                  <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+                  <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                     {color.usage}
                   </p>
                 </div>
@@ -103,7 +103,7 @@ export default function ColourPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           The 5% Rule — Dusk
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7] mb-8">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8">
           Dusk is the one earned warm accent. It should never exceed ~5% of any surface.
           When it does, it stops signalling emphasis and starts signalling anxiety.
         </p>
@@ -142,7 +142,7 @@ export default function ColourPage() {
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Dark Mode
         </h2>
-        <p className="font-body text-[1.375rem] text-xco-ink leading-[1.7]">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           A dark-mode variant exists (paper ↔ ink swap) but is not the primary register.
           Paper + ink is the default. Dark mode applies to: terminal output, code blocks,
           embedded media. It is never the hero surface.
