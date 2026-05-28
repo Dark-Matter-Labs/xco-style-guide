@@ -49,14 +49,14 @@
   /* Body:     Untitled Sans (sans)     24px / 26px                   */
   /* Small:    DM Mono Medium           0.9375rem / 1.6               */
 
-  --font-display: "Untitled Serif", "Times New Roman", Georgia, serif;
-  --font-body:    "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-ui:      "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
+  --font-body:    "Untitled Sans", var(--font-inter), Arial, sans-serif;
+  --font-ui:      "Untitled Sans", var(--font-inter), Arial, sans-serif;
   --font-mono:    var(--font-dm-mono), "Courier New", monospace;
 
   /* shadcn semantic aliases */
-  --font-sans:    "Untitled Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-heading: "Untitled Serif", "Times New Roman", Georgia, serif;
+  --font-sans:    "Untitled Sans", var(--font-inter), Arial, sans-serif;
+  --font-heading: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
 
   /* ── Spacing ────────────────────────────────────────────────────── */
 
