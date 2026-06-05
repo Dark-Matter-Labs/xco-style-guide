@@ -213,6 +213,42 @@ export const bannedWords = [
   " space ",  // "in this space" — the idiom, not the character
 ] as const;
 
+// ── Spelling corrections — US English (linter) ───────────────────────
+// xCO writes in US English. Flag British spellings and show corrections.
+
+export const spellingCorrections = [
+  { british: "civilisation",    american: "civilization" },
+  { british: "civilisational",  american: "civilizational" },
+  { british: "organise",        american: "organize" },
+  { british: "organised",       american: "organized" },
+  { british: "organising",      american: "organizing" },
+  { british: "organisation",    american: "organization" },
+  { british: "organisations",   american: "organizations" },
+  { british: "analyse",         american: "analyze" },
+  { british: "analysed",        american: "analyzed" },
+  { british: "analysing",       american: "analyzing" },
+  { british: "recognise",       american: "recognize" },
+  { british: "recognised",      american: "recognized" },
+  { british: "recognising",     american: "recognizing" },
+  { british: "realise",         american: "realize" },
+  { british: "realised",        american: "realized" },
+  { british: "realising",       american: "realizing" },
+  { british: "optimise",        american: "optimize" },
+  { british: "optimised",       american: "optimized" },
+  { british: "maximise",        american: "maximize" },
+  { british: "minimise",        american: "minimize" },
+  { british: "behaviour",       american: "behavior" },
+  { british: "behaviours",      american: "behaviors" },
+  { british: "honour",          american: "honor" },
+  { british: "labour",          american: "labor" },
+  { british: "colour",          american: "color" },
+  { british: "colours",         american: "colors" },
+  { british: "centre",          american: "center" },
+  { british: "centres",         american: "centers" },
+] as const;
+
+export type SpellingCorrection = (typeof spellingCorrections)[number];
+
 // ── Aggregate export ─────────────────────────────────────────────────
 
 export const tokens = {
@@ -222,6 +258,7 @@ export const tokens = {
   diagram,
   toneRegisters,
   bannedWords,
+  spellingCorrections,
 } as const;
 
 export type Tokens = typeof tokens;

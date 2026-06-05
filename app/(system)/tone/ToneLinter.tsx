@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { bannedWords } from "@/lib/design-tokens";
+import { bannedWords, spellingCorrections } from "@/lib/design-tokens";
 
 interface BannedMatch {
   word: string;
@@ -9,8 +9,16 @@ interface BannedMatch {
   length: number;
 }
 
+interface SpellingMatch {
+  british: string;
+  american: string;
+  index: number;
+  length: number;
+}
+
 interface LinterResult {
   bannedMatches: BannedMatch[];
+  spellingMatches: SpellingMatch[];
   register: string | null;
   confidence: "low" | "medium" | "high";
   signals: string[];
@@ -41,7 +49,30 @@ function findBannedWords(text: string): BannedMatch[] {
   return matches;
 }
 
-function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "clean"> {
+function findBritishSpellings(text: string): SpellingMatch[] {
+  const matches: SpellingMatch[] = [];
+  const lower = text.toLowerCase();
+
+  for (const { british, american } of spellingCorrections) {
+    const term = british.toLowerCase();
+    let start = 0;
+    while (true) {
+      const idx = lower.indexOf(term, start);
+      if (idx === -1) break;
+      const before = idx > 0 ? lower[idx - 1] : " ";
+      const after = idx + term.length < lower.length ? lower[idx + term.length] : " ";
+      const wordBoundary = /\W/.test(before) && /\W/.test(after);
+      if (wordBoundary) {
+        matches.push({ british, american, index: idx, length: term.length });
+      }
+      start = idx + 1;
+    }
+  }
+
+  return matches;
+}
+
+function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "spellingMatches" | "clean"> {
   const lower = text.toLowerCase();
   const signals: string[] = [];
 
@@ -130,30 +161,51 @@ function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "c
   return { register, confidence, signals: uniqueSignals };
 }
 
-// Render the input text with banned words highlighted
-function HighlightedText({ text, matches }: { text: string; matches: BannedMatch[] }) {
-  if (matches.length === 0) return <>{text}</>;
+// Render the input text with banned words and British spellings highlighted
+function HighlightedText({
+  text,
+  banned,
+  spelling,
+}: {
+  text: string;
+  banned: BannedMatch[];
+  spelling: SpellingMatch[];
+}) {
+  if (banned.length === 0 && spelling.length === 0) return <>{text}</>;
 
-  const sorted = [...matches].sort((a, b) => a.index - b.index);
+  type Highlight =
+    | { kind: "banned"; index: number; length: number }
+    | { kind: "spelling"; index: number; length: number };
+
+  const all: Highlight[] = [
+    ...banned.map((m) => ({ kind: "banned" as const, index: m.index, length: m.length })),
+    ...spelling.map((m) => ({ kind: "spelling" as const, index: m.index, length: m.length })),
+  ].sort((a, b) => a.index - b.index);
+
   const parts: React.ReactNode[] = [];
   let cursor = 0;
 
-  for (const m of sorted) {
-    if (m.index > cursor) {
-      parts.push(<span key={`t-${cursor}`}>{text.slice(cursor, m.index)}</span>);
+  for (const h of all) {
+    if (h.index < cursor) continue; // overlapping — skip
+    if (h.index > cursor) {
+      parts.push(<span key={`t-${cursor}`}>{text.slice(cursor, h.index)}</span>);
     }
+    const slice = text.slice(h.index, h.index + h.length);
     parts.push(
-      <mark
-        key={`m-${m.index}`}
-        className="bg-xco-dusk/20 text-xco-dusk border-b border-xco-dusk"
-      >
-        {text.slice(m.index, m.index + m.length)}
-      </mark>,
+      h.kind === "banned" ? (
+        <mark key={`m-${h.index}`} className="bg-xco-dusk/20 text-xco-dusk border-b border-xco-dusk">
+          {slice}
+        </mark>
+      ) : (
+        <mark key={`m-${h.index}`} className="bg-xco-ocean/15 text-xco-ocean border-b border-xco-ocean">
+          {slice}
+        </mark>
+      ),
     );
-    cursor = m.index + m.length;
+    cursor = h.index + h.length;
   }
   if (cursor < text.length) {
-    parts.push(<span key={`t-end`}>{text.slice(cursor)}</span>);
+    parts.push(<span key="t-end">{text.slice(cursor)}</span>);
   }
 
   return <>{parts}</>;
@@ -166,8 +218,16 @@ export function ToneLinter() {
   const analyse = useCallback(() => {
     if (!text.trim()) { setResult(null); return; }
     const bannedMatches = findBannedWords(text);
+    const spellingMatches = findBritishSpellings(text);
     const { register, confidence, signals } = classifyRegister(text);
-    setResult({ bannedMatches, register, confidence, signals, clean: bannedMatches.length === 0 });
+    setResult({
+      bannedMatches,
+      spellingMatches,
+      register,
+      confidence,
+      signals,
+      clean: bannedMatches.length === 0 && spellingMatches.length === 0,
+    });
   }, [text]);
 
   const confidenceColour = {
@@ -209,18 +269,22 @@ export function ToneLinter() {
 
       {result && (
         <div className="space-y-6 pt-6">
-          {result.bannedMatches.length > 0 && (
+          {(result.bannedMatches.length > 0 || result.spellingMatches.length > 0) && (
             <div className="space-y-3">
               <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Text with flags
               </p>
               <div className="font-body text-[24px] text-xco-ink leading-[26px] p-4 whitespace-pre-wrap">
-                <HighlightedText text={text} matches={result.bannedMatches} />
+                <HighlightedText
+                  text={text}
+                  banned={result.bannedMatches}
+                  spelling={result.spellingMatches}
+                />
               </div>
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
               <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Banned words
@@ -235,6 +299,27 @@ export function ToneLinter() {
                     <li key={i} className="flex items-baseline gap-3">
                       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">✗</span>
                       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{m.word}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+                Spelling
+              </p>
+              {result.spellingMatches.length === 0 ? (
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  ✓ US English throughout
+                </p>
+              ) : (
+                <ul className="space-y-1">
+                  {result.spellingMatches.map((m, i) => (
+                    <li key={i} className="flex items-baseline gap-2 flex-wrap">
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean">✗ {m.british}</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">✓ {m.american}</span>
                     </li>
                   ))}
                 </ul>
