@@ -80,6 +80,7 @@ INSTRUCTIONS:
 - Avoid: transformative, unprecedented, regenerative [as adjective], holistic, paradigm, ecosystem [as metaphor], unlock, leverage, empower, journey, "in this space"
 - Mark all uncertainty inline — do not drop uncertain claims, mark them: [unverified], [inference], [speculation]
 - If you don't have a number, say "X ha [unverified]" — don't omit the structure
+- Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 
 TEXT TO WRITE:
 [INSERT BRIEF OR BULLET POINTS HERE]`,
@@ -101,6 +102,7 @@ INSTRUCTIONS:
 - Allergic to: transformative, unprecedented, regenerative [as adjective], paradigm, ecosystem [as metaphor], unlock, leverage, empower, journey, "in this space"
 - No "we believe" or "we envision" — if you're stating a belief, state the reasoning instead
 - Mark all uncertainty: [unverified], [inference], [speculation]
+- Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 
 TEXT TO WRITE:
 [INSERT TOPIC OR QUESTION HERE]`,
@@ -125,6 +127,7 @@ INSTRUCTIONS:
 - Never drop an uncertain claim — mark it and keep it
 - Keep sentences short. One claim per sentence where possible.
 - No: transformative, unprecedented, holistic, paradigm, ecosystem [as metaphor]
+- Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 
 TEXT TO ANNOTATE (provide the claim to annotate, plus any context you have):
 [INSERT CLAIM + CONTEXT HERE]`,

@@ -2,7 +2,7 @@ import { WIP } from "@/components/WIP";
 import { CopyButton } from "@/components/CopyButton";
 import { ToneLinter } from "./ToneLinter";
 import { toneRegisters, promptTemplates } from "@/lib/tone-templates";
-import { bannedWords } from "@/lib/design-tokens";
+import { bannedWords, spellingCorrections } from "@/lib/design-tokens";
 
 export default function TonePage() {
   return (
@@ -101,6 +101,30 @@ export default function TonePage() {
           or corporate register (unlock, leverage, empower). None of them
           earn their space.
         </p>
+      </section>
+
+      {/* Spelling — US English */}
+      <section className="max-w-3xl">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
+          Spelling — US English Throughout
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8">
+          xCO writes in US English. The project name itself — Expanding
+          Civilizational Optionality — uses the American -{`>`}ization spelling.
+          Use -ize, not -ise. Use -or, not -our. Use -er, not -re.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-2">
+          {[...spellingCorrections].map(({ british, american }) => (
+            <div key={british} className="flex items-baseline gap-2">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean line-through opacity-70">
+                {british}
+              </span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                → {american}
+              </span>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Prompt templates */}
