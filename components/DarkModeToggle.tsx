@@ -13,6 +13,7 @@ export function DarkModeToggle() {
     const next = !dark;
     setDark(next);
     document.documentElement.classList.toggle("dark", next);
+    document.documentElement.dataset.theme = next ? "dark" : "light";
     localStorage.setItem("xco-theme", next ? "dark" : "light");
   };
 

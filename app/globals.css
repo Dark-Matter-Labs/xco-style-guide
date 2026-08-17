@@ -16,10 +16,26 @@
 }
 
 @font-face {
+  font-family: "Untitled Serif";
+  src: url("/fonts/UntitledSerifItalic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Untitled Sans";
   src: url("/fonts/UntitledSansRegular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Untitled Sans";
+  src: url("/fonts/UntitledSansItalic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -28,8 +44,8 @@
    Single source of truth: lib/design-tokens.ts (TypeScript)
    Tailwind utilities derived here via @theme.
 
-   Palette: 6 tokens. If you think you need more, you probably
-   need a new opacity stop, not a new hue.
+   Palette: warm paper system + 6 semantic meanings + domain colours.
+   Paper is never pure white. Ink is never pure black.
    ══════════════════════════════════════════════════════════════════ */
 
 @theme {
@@ -86,56 +102,99 @@
 /* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
 
 :root {
-  /* xCO dynamic palette — swap targets for .dark */
-  --xco-paper:     #FFFFFF;
-  --xco-ink:       #1C1B17;
-  --xco-ink-muted: #1C1B17;   /* no greys — maps to ink */
+  /* xCO surface — warm paper system */
+  --xco-paper:            #f4f1e9;
+  --xco-paper-raised:     #fffffc;
+  --xco-paper-quiet:      #e9e5dc;
+  --xco-paper-structural: #d7d2c8;
 
-  --background:           #FFFFFF;
-  --foreground:           #1C1B17;
-  --card:                 #FFFFFF;
-  --card-foreground:      #1C1B17;
-  --popover:              #FFFFFF;
-  --popover-foreground:   #1C1B17;
-  --primary:              #1C1B17;
-  --primary-foreground:   #FFFFFF;
-  --secondary:            #FFFFFF;
-  --secondary-foreground: #1C1B17;
-  --muted:                #FFFFFF;
-  --muted-foreground:     #1C1B17;
+  /* xCO ink system */
+  --xco-ink:       #20201e;
+  --xco-ink-muted: #514f4b;  /* 6.5:1 on paper */
+  --xco-ink-weak:  #686661;  /* 4.56:1 on paper — captions, annotations only */
+
+  /* Semantic meanings — colour + shape, never colour alone */
+  --meaning-continuity: #267b61;  /* ● circle  */
+  --meaning-system:     #50649f;  /* ■ square  */
+  --meaning-risk:       #a0567e;  /* ▲ triangle */
+  --meaning-agency:     #8e6713;  /* ◆ diamond  */
+  --meaning-contested:  #41376d;  /* ⬡ hexagon  */
+  --meaning-critical:   #60221e;  /* ✕ cross    */
+
+  /* Domain colours — orientational, not semantic */
+  --domain-bio:     #d56c53;
+  --domain-inst:    #1f9a91;
+  --domain-tech:    #7375b7;
+  --domain-culture: #cd6a95;
+
+  /* Border tokens */
+  --border-subtle:  rgba(32, 32, 30, 0.08);
+  --border-default: rgba(32, 32, 30, 0.14);
+  --border-strong:  rgba(32, 32, 30, 0.28);
+
+  /* shadcn tokens — mapped to xCO palette */
+  --background:           #f4f1e9;
+  --foreground:           #20201e;
+  --card:                 #fffffc;
+  --card-foreground:      #20201e;
+  --popover:              #fffffc;
+  --popover-foreground:   #20201e;
+  --primary:              #20201e;
+  --primary-foreground:   #f4f1e9;
+  --secondary:            #f4f1e9;
+  --secondary-foreground: #20201e;
+  --muted:                #f4f1e9;
+  --muted-foreground:     #514f4b;
   --accent:               #ff5a00;
-  --accent-foreground:    #FFFFFF;
+  --accent-foreground:    #f4f1e9;
   --destructive:          #ff5a00;
   --border:               transparent;
-  --input:                #1C1B17;
-  --ring:                 #1C1B17;
+  --input:                #20201e;
+  --ring:                 #20201e;
 }
 
-/* Dark mode — first-class register. Paper ↔ ink swap + shadcn tokens. */
-.dark {
-  /* xCO palette swap */
-  --xco-paper:     #1C1B17;
-  --xco-ink:       #FFFFFF;
-  --xco-ink-muted: #FFFFFF;   /* no greys — maps to ink */
+/* ── Inverse register — paper ↔ ink swap ─────────────────────────── */
+/* Applies when: reader toggles dark mode (.dark class),              */
+/* OR when authored section explicitly inverts ([data-register="inverse"]) */
 
-  --background:           #1C1B17;
-  --foreground:           #FFFFFF;
-  --card:                 #1C1B17;
-  --card-foreground:      #FFFFFF;
-  --popover:              #1C1B17;
-  --popover-foreground:   #FFFFFF;
-  --primary:              #FFFFFF;
-  --primary-foreground:   #1C1B17;
-  --secondary:            #1C1B17;
-  --secondary-foreground: #FFFFFF;
-  --muted:                #1C1B17;
-  --muted-foreground:     #FFFFFF;
+.dark,
+[data-theme="dark"],
+[data-register="inverse"] {
+  /* Surface */
+  --xco-paper:            #20201e;
+  --xco-paper-raised:     #2d2c29;
+  --xco-paper-quiet:      #1a1a18;
+  --xco-paper-structural: #3a3835;
+
+  /* Ink */
+  --xco-ink:       #f4f1e9;
+  --xco-ink-muted: #c8c4bc;
+  --xco-ink-weak:  #9e9b96;
+
+  /* Border tokens — lighter on dark ground */
+  --border-subtle:  rgba(244, 241, 233, 0.08);
+  --border-default: rgba(244, 241, 233, 0.14);
+  --border-strong:  rgba(244, 241, 233, 0.28);
+
+  /* shadcn tokens */
+  --background:           #20201e;
+  --foreground:           #f4f1e9;
+  --card:                 #2d2c29;
+  --card-foreground:      #f4f1e9;
+  --popover:              #2d2c29;
+  --popover-foreground:   #f4f1e9;
+  --primary:              #f4f1e9;
+  --primary-foreground:   #20201e;
+  --secondary:            #20201e;
+  --secondary-foreground: #f4f1e9;
+  --muted:                #20201e;
+  --muted-foreground:     #c8c4bc;
   --accent:               #ff5a00;
-  --accent-foreground:    #FFFFFF;
+  --accent-foreground:    #f4f1e9;
   --destructive:          #ff5a00;
   --border:               transparent;
-  --input:                #FFFFFF;
-  --ring:                 #FFFFFF;
+  --input:                #f4f1e9;
+  --ring:                 #f4f1e9;
 }
 
 @theme inline {
@@ -184,8 +243,8 @@
   .show-grid {
     background-image: repeating-linear-gradient(
       to right,
-      rgba(28, 27, 23, 0.04) 0px,
-      rgba(28, 27, 23, 0.04) 1px,
+      rgba(32, 32, 30, 0.04) 0px,
+      rgba(32, 32, 30, 0.04) 1px,
       transparent 1px,
       transparent calc(100% / 12)
     );
