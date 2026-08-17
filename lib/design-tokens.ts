@@ -3,6 +3,12 @@
 // These constants are consumed by: diagram-primitives (SVG), export API,
 // and prompt templates. Tailwind utilities are derived from globals.css.
 
+// ── System version ───────────────────────────────────────────────────
+// Single source of truth for the version badge shown on the home page
+// footer and every system/generator page. Bump here only.
+
+export const SYSTEM_VERSION = "v0.2" as const;
+
 // ── Colour ──────────────────────────────────────────────────────────
 
 export const colors = {

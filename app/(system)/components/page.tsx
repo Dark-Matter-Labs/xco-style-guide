@@ -11,7 +11,7 @@ export default function ComponentsPage() {
     <div className="space-y-24">
       <header className="flex items-baseline justify-between pb-6">
         <h1 className="font-display text-[60px] leading-[60px]">Components</h1>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
 
       <section className="max-w-2xl space-y-4">

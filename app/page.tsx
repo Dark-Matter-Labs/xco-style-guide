@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SYSTEM_VERSION } from "@/lib/design-tokens";
 
 const templateLinks = [
   {
@@ -131,7 +132,7 @@ export default function Home() {
           The system is the document.
         </p>
         <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk bg-xco-dusk/10 px-2 py-1 shrink-0">
-          [v0.1]
+          [{SYSTEM_VERSION}]
         </span>
       </footer>
     </main>

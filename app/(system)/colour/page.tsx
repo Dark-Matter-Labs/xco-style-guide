@@ -20,7 +20,7 @@ export default function ColourPage() {
     <div className="space-y-20">
       <header className="flex items-baseline justify-between pb-6">
         <h1 className="font-display text-[60px] leading-[60px]">Colour</h1>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
 
       {/* Principle */}

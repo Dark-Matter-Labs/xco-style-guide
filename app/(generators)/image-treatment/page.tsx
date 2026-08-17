@@ -11,7 +11,7 @@ export default function ImageTreatmentPage() {
             Dot-matrix → sharp · evolutionary resolution · Substack placeholders
           </p>
         </div>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
       <ImageTreatmentGenerator />
     </div>

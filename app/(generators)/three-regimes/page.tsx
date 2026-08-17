@@ -9,7 +9,7 @@ export default function ThreeRegimesPage() {
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-1">Generator</p>
           <h1 className="font-display text-[60px] leading-[60px]">Three Regimes of Optionality</h1>
         </div>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
 
       <section className="max-w-2xl">
