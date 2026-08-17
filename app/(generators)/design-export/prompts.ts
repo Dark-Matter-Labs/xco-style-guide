@@ -38,7 +38,7 @@ Eight tokens only. Never use arbitrary hex codes or add new colours.
 |---|---|---|---|
 ${colorRows}
 
-Rules and dividers: \`rgba(28, 27, 23, 0.12)\` — ink at 12% opacity. In Tailwind: \`border-xco-ink/[0.12]\`.
+Rules and dividers: \`rgba(32, 32, 30, 0.12)\` — ink at 12% opacity. In Tailwind: \`border-xco-ink/[0.12]\`.
 
 ## Typography
 
@@ -60,7 +60,7 @@ Body measure (max-width): 68ch for body text. Reduce for captions and mono.
 
 - **Corner radius**: near-zero (\`${spacing.gutter}\` gutter, \`0.125rem\` radius max). This is not a rounded-corner brand.
 - **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
-- **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) as a background — use \`ink\` and \`paper\` tokens.
+- **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) — use \`ink\` (#20201e) and \`paper\` (#f4f1e9) tokens.
 - **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
 - **No bold** on UI / Untitled Sans face. Use weight 400 or 500 only.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
@@ -93,14 +93,22 @@ Add this block to your \`globals.css\` or \`app/globals.css\`:
 
 \`\`\`css
 :root {
-  --color-xco-paper:     #FFFFFF;
-  --color-xco-ink:       #1C1B17;
-  --color-xco-ink-muted: #5F5C53;
+  --color-xco-paper:     #f4f1e9;
+  --color-xco-ink:       #20201e;
+  --color-xco-ink-muted: #514f4b;
   --color-xco-navy:      #000064;
   --color-xco-ocean:     #005096;
   --color-xco-teal:      #0082aa;
   --color-xco-sand:      #ffa064;
   --color-xco-dusk:      #ff5a00;
+
+  /* Semantic meanings — always pair with shape */
+  --meaning-continuity: #267b61; /* ● circle   */
+  --meaning-system:     #50649f; /* ■ square   */
+  --meaning-risk:       #a0567e; /* ▲ triangle */
+  --meaning-agency:     #8e6713; /* ◆ diamond  */
+  --meaning-contested:  #41376d; /* ⬡ hexagon  */
+  --meaning-critical:   #60221e; /* ✕ cross    */
 }
 \`\`\`
 

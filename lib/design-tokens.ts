@@ -7,28 +7,28 @@
 
 export const colors = {
   paper: {
-    hex: "#FFFFFF",
+    hex: "#f4f1e9",
     cssVar: "--color-xco-paper",
     twClass: "xco-paper",
-    usage: "Default page background. Never pure white.",
+    usage: "Default page background. Warm off-white — never pure white.",
   },
   ink: {
-    hex: "#1C1B17",
+    hex: "#20201e",
     cssVar: "--color-xco-ink",
     twClass: "xco-ink",
-    usage: "Body text, structural lines. Never #000.",
+    usage: "Body text, structural lines. Near-black — never #000.",
   },
   inkMuted: {
-    hex: "#1C1B17",
+    hex: "#514f4b",
     cssVar: "--color-xco-ink-muted",
     twClass: "xco-ink-muted",
-    usage: "Alias for ink. No greys in the system.",
+    usage: "Secondary text. Ink at reduced contrast (6.5:1 on paper).",
   },
   rule: {
-    hex: "#1C1B17",
+    hex: "#20201e",
     opacity: 0.12,
     // Not a standalone colour — always ink at 12% opacity.
-    // Use: rgba(28,27,23,0.12) or Tailwind border-xco-ink/[0.12]
+    // Use: rgba(32,32,30,0.12) or Tailwind border-xco-ink/[0.12]
     usage: "Rules, dividers, grid lines. Never a separate hue.",
   },
   // ── Extended diagram palette ─────────────────────────────────────
@@ -42,6 +42,97 @@ export const colors = {
 } as const;
 
 export type ColorName = keyof typeof colors;
+
+// ── Surface tokens ───────────────────────────────────────────────────
+// Four paper variants for depth/elevation on the warm ground.
+
+export const surfaceTokens = {
+  default:    { hex: "#f4f1e9", cssVar: "--xco-paper",            usage: "Primary page background." },
+  raised:     { hex: "#fffffc", cssVar: "--xco-paper-raised",     usage: "Cards, popovers — slightly lighter." },
+  quiet:      { hex: "#e9e5dc", cssVar: "--xco-paper-quiet",      usage: "Quiet backgrounds, recessed areas." },
+  structural: { hex: "#d7d2c8", cssVar: "--xco-paper-structural", usage: "Borders, dividers, structural surfaces." },
+} as const;
+
+export type SurfaceToken = keyof typeof surfaceTokens;
+
+// ── Semantic meanings ────────────────────────────────────────────────
+// Six meanings, each with two channels: colour and shape.
+// Colour is never the sole carrier — shape is the primary identifier.
+
+export const semanticMeanings = [
+  {
+    name: "continuity",
+    hex: "#267b61",
+    cssVar: "--meaning-continuity",
+    shape: "●",
+    shapeLabel: "circle",
+    usage: "Ongoing processes, maintenance, reproduction — what keeps going.",
+  },
+  {
+    name: "system",
+    hex: "#50649f",
+    cssVar: "--meaning-system",
+    shape: "■",
+    shapeLabel: "square",
+    usage: "Infrastructure, institutions, platforms — what structures action.",
+  },
+  {
+    name: "risk",
+    hex: "#a0567e",
+    cssVar: "--meaning-risk",
+    shape: "▲",
+    shapeLabel: "triangle",
+    usage: "Threats, instabilities, failure modes — what could break.",
+  },
+  {
+    name: "agency",
+    hex: "#8e6713",
+    cssVar: "--meaning-agency",
+    shape: "◆",
+    shapeLabel: "diamond",
+    usage: "Actor capacity, leverage points, decision power — who can act.",
+  },
+  {
+    name: "contested",
+    hex: "#41376d",
+    cssVar: "--meaning-contested",
+    shape: "⬡",
+    shapeLabel: "hexagon",
+    usage: "Disputed claims, competing narratives, unresolved tensions.",
+  },
+  {
+    name: "critical",
+    hex: "#60221e",
+    cssVar: "--meaning-critical",
+    shape: "✕",
+    shapeLabel: "cross",
+    usage: "Failures, urgent flags, decisions requiring immediate attention.",
+  },
+] as const;
+
+export type SemanticMeaning = (typeof semanticMeanings)[number];
+
+// ── Domain colours ───────────────────────────────────────────────────
+// Orientational — these tag domains, not meanings.
+// Never use domain colours as semantic signals.
+
+export const domainColors = [
+  { name: "bio",     hex: "#d56c53", cssVar: "--domain-bio",     usage: "Biological and ecological systems." },
+  { name: "inst",    hex: "#1f9a91", cssVar: "--domain-inst",    usage: "Institutional and governance contexts." },
+  { name: "tech",    hex: "#7375b7", cssVar: "--domain-tech",    usage: "Technology and infrastructure." },
+  { name: "culture", hex: "#cd6a95", cssVar: "--domain-culture", usage: "Cultural and social systems." },
+] as const;
+
+export type DomainColor = (typeof domainColors)[number];
+
+// ── Border tokens ────────────────────────────────────────────────────
+
+export const borderTokens = {
+  subtle:  "rgba(32, 32, 30, 0.08)",
+  default: "rgba(32, 32, 30, 0.14)",
+  strong:  "rgba(32, 32, 30, 0.28)",
+  focus:   "#20201e",
+} as const;
 
 // ── Typography ───────────────────────────────────────────────────────
 
@@ -253,6 +344,10 @@ export type SpellingCorrection = (typeof spellingCorrections)[number];
 
 export const tokens = {
   colors,
+  surfaceTokens,
+  semanticMeanings,
+  domainColors,
+  borderTokens,
   typography,
   spacing,
   diagram,

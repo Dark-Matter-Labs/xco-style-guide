@@ -1,36 +1,18 @@
-import { colors } from "@/lib/design-tokens";
+import { colors, surfaceTokens, semanticMeanings, domainColors } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
-
-type SwatchKey = keyof typeof colors;
-
-const orderedKeys: SwatchKey[] = [
-  "paper",
-  "ink",
-  "inkMuted",
-  "navy",
-  "ocean",
-  "teal",
-  "sand",
-  "dusk",
-];
-
-const swatchTextClass: Record<SwatchKey, string> = {
-  paper:    "text-xco-ink",
-  ink:      "text-xco-paper",
-  inkMuted: "text-xco-paper",
-  rule:     "text-xco-paper",
-  navy:     "text-xco-paper",
-  ocean:    "text-xco-paper",
-  teal:     "text-xco-paper",
-  sand:     "text-xco-ink",
-  dusk:     "text-xco-ink",
-};
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgb(${r}, ${g}, ${b})`;
+}
+
+function lightText(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.45;
 }
 
 export default function ColourPage() {
@@ -41,60 +23,237 @@ export default function ColourPage() {
         <WIP variant="v0.1" />
       </header>
 
-      {/* Palette principle */}
-      <section className="max-w-2xl">
+      {/* Principle */}
+      <section className="max-w-2xl space-y-4">
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-          Two surface colours: paper (#FFFFFF) and ink (#1C1B17). No greys.
-          Plus a five-colour extended palette for diagrams — two cool registers
-          (navy, ocean, teal) and two warm (sand, dusk). Never use all five at
-          once. The brand lives in structure and type, not colour variety.
+          A warm off-white paper — never pure white. Near-black ink — never pure black.
+          Six semantic meanings each carried by colour and shape together: colour is never
+          the sole carrier. The brand lives in structure and type, not colour variety.
+        </p>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+          Colour here is syntax. Each colour signals a specific thing. When it stops
+          signalling something specific, remove it.
         </p>
       </section>
 
-      {/* Swatches */}
+      {/* Surfaces */}
       <section>
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
-          Palette
+          Surfaces
         </h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {(Object.entries(surfaceTokens) as [keyof typeof surfaceTokens, typeof surfaceTokens[keyof typeof surfaceTokens]][]).map(([name, token]) => (
+            <div key={name}>
+              <div
+                className="h-32 flex flex-col justify-end p-4"
+                style={{ backgroundColor: token.hex, border: "1px solid rgba(32,32,30,0.14)" }}
+              >
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {token.hex}
+                </p>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
+                  {hexToRgb(token.hex)}
+                </p>
+              </div>
+              <div className="pt-3 space-y-1">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  paper-{name}
+                </p>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {token.cssVar}
+                </p>
+                <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+                  {token.usage}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Ink */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+          Ink
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
+          {[
+            {
+              name: "ink",
+              hex: colors.ink.hex,
+              cssVar: colors.ink.cssVar,
+              usage: colors.ink.usage,
+              contrast: "16.5:1",
+            },
+            {
+              name: "ink-secondary",
+              hex: colors.inkMuted.hex,
+              cssVar: colors.inkMuted.cssVar,
+              usage: "Secondary text, labels. Use for hierarchy, not decoration.",
+              contrast: "6.5:1",
+            },
+            {
+              name: "ink-weak",
+              hex: "#686661",
+              cssVar: "--xco-ink-weak",
+              usage: "Captions, annotations, placeholder text only.",
+              contrast: "4.56:1",
+            },
+          ].map((item) => (
+            <div key={item.name}>
+              <div
+                className="h-32 flex flex-col justify-end p-4"
+                style={{ backgroundColor: item.hex }}
+              >
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
+                  {item.hex}
+                </p>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9] opacity-60">
+                  {item.contrast} on paper
+                </p>
+              </div>
+              <div className="pt-3 space-y-1">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {item.name}
+                </p>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {item.cssVar}
+                </p>
+                <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+                  {item.usage}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Semantic meanings */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+          Semantic Meanings
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
+          Six meanings, each with two channels: colour and shape. The shape is the primary
+          identifier — colour reinforces but never substitutes. This ensures meaning is
+          accessible regardless of colour vision.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {orderedKeys.map((key) => {
-            const color = colors[key];
-            const textClass = swatchTextClass[key];
+          {semanticMeanings.map((m) => {
+            const useLight = lightText(m.hex);
+            const textColor = useLight ? "#f4f1e9" : "#20201e";
             return (
-              <div key={key}>
+              <div key={m.name}>
                 <div
-                  className="h-40 flex flex-col justify-end p-4"
-                  style={{ backgroundColor: color.hex }}
+                  className="h-40 flex flex-col justify-between p-4"
+                  style={{ backgroundColor: m.hex }}
                 >
-                  {"opacity" in color && color.opacity != null ? (
-                    <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass}`}>
-                      {color.hex} / {Math.round(color.opacity * 100)}% opacity
+                  <span
+                    className="text-[40px] leading-none font-body"
+                    style={{ color: textColor, opacity: 0.9 }}
+                  >
+                    {m.shape}
+                  </span>
+                  <div>
+                    <p
+                      className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
+                      style={{ color: textColor }}
+                    >
+                      {m.hex}
                     </p>
-                  ) : (
-                    <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass}`}>
-                      {color.hex}
+                    <p
+                      className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
+                      style={{ color: textColor, opacity: 0.7 }}
+                    >
+                      {m.shapeLabel}
                     </p>
-                  )}
-                  <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${textClass} opacity-60`}>
-                    {hexToRgb(color.hex)}
-                  </p>
+                  </div>
                 </div>
                 <div className="pt-4 space-y-1">
                   <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink capitalize">
-                    {key === "inkMuted" ? "ink-muted" : key}
+                    {m.name}
                   </p>
-                  {"cssVar" in color && (
-                    <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                      {color.cssVar}
-                    </p>
-                  )}
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                    {m.cssVar}
+                  </p>
                   <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-                    {color.usage}
+                    {m.usage}
                   </p>
                 </div>
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-8 max-w-2xl">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+            [rule] Always pair colour with its shape. A legend should list both the colour
+            swatch and the shape symbol. Never ask the viewer to distinguish meanings by
+            colour alone.
+          </p>
+        </div>
+      </section>
+
+      {/* Diagram palette */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+          Diagram Palette
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
+          Five tones in two registers. Never mix registers within a single diagram.
+          Pick cool (blueprint) or warm (field) — not both.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+          <div>
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
+              Cool — Blueprint
+            </p>
+            <div className="grid grid-cols-3 gap-4">
+              {(["navy", "ocean", "teal"] as const).map((key) => (
+                <div key={key}>
+                  <div
+                    className="h-24 flex flex-col justify-end p-3"
+                    style={{ backgroundColor: colors[key].hex }}
+                  >
+                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-[#f4f1e9]">
+                      {colors[key].hex}
+                    </p>
+                  </div>
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
+                    {key}
+                  </p>
+                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                    {colors[key].cssVar}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
+              Warm — Field
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              {(["sand", "dusk"] as const).map((key) => (
+                <div key={key}>
+                  <div
+                    className="h-24 flex flex-col justify-end p-3"
+                    style={{ backgroundColor: colors[key].hex }}
+                  >
+                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink">
+                      {colors[key].hex}
+                    </p>
+                  </div>
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
+                    {key}
+                  </p>
+                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                    {colors[key].cssVar}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -137,17 +296,75 @@ export default function ColourPage() {
         </div>
       </section>
 
-      {/* Dark mode note */}
+      {/* Domain colours */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+          Domain Colours
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
+          Four orientational tones — for tagging domains, not signalling meanings.
+          A bio-coloured element is not in "risk" or "agency": it is bio.
+          Never use domain colours as semantic signals.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {domainColors.map((d) => {
+            const useLight = lightText(d.hex);
+            const textColor = useLight ? "#f4f1e9" : "#20201e";
+            return (
+              <div key={d.name}>
+                <div
+                  className="h-28 flex flex-col justify-end p-3"
+                  style={{ backgroundColor: d.hex }}
+                >
+                  <p
+                    className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                    style={{ color: textColor }}
+                  >
+                    {d.hex}
+                  </p>
+                </div>
+                <div className="pt-3 space-y-1">
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                    {d.name}
+                  </p>
+                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                    {d.cssVar}
+                  </p>
+                  <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+                    {d.usage}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Inverse register / dark mode */}
       <section className="max-w-2xl pb-8">
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
-          Dark Mode
+          Inverse Register
         </h2>
-        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-          A dark-mode variant exists (paper ↔ ink swap) but is not the primary register.
-          Paper + ink is the default. Dark mode applies to: terminal output, code blocks,
-          embedded media. It is never the hero surface.
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
+          The inverse register swaps paper and ink: dark ground (#20201e) with warm ink
+          (#f4f1e9). It exists as a reader preference (dark mode) and as an authored choice
+          for high-contrast sections using <code className="font-mono text-[0.9375rem]">data-register="inverse"</code>.
         </p>
-        <WIP variant="wip" label="[wip] dark mode variant not yet designed" className="mt-4" />
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
+          Semantic meanings and domain colours are fixed — they do not swap in either register.
+          Only the surface tokens (paper, paper-raised, paper-quiet) and ink tokens invert.
+        </p>
+        <div
+          className="p-6 space-y-2"
+          style={{ backgroundColor: "#20201e" }}
+        >
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
+            paper: #20201e — ink: #f4f1e9
+          </p>
+          <p className="font-body text-[24px] leading-[26px] text-[#f4f1e9]">
+            Same type system. Same semantic colours. Inverted ground.
+          </p>
+        </div>
       </section>
     </div>
   );
