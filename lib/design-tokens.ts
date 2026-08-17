@@ -283,6 +283,40 @@ export const diagram = {
 
 export type NodeType = keyof typeof diagram.nodeTypes;
 
+// ── Domain tints ─────────────────────────────────────────────────────
+// Low-opacity domain backgrounds for callouts, ports, and tags.
+// Use on paper surfaces only — never as standalone fills.
+
+export const domainTints = {
+  bio:     { cssVar: "--bio-tint",     value: "rgba(213,108,83,0.08)",   usage: "Biological: warm coral at 8% — for callout backgrounds." },
+  inst:    { cssVar: "--inst-tint",    value: "rgba(31,154,145,0.08)",   usage: "Institutional: teal at 8% — for callout backgrounds." },
+  tech:    { cssVar: "--tech-tint",    value: "rgba(115,117,183,0.08)",  usage: "Technology: indigo at 8% — for callout backgrounds." },
+  culture: { cssVar: "--culture-tint", value: "rgba(205,106,149,0.08)",  usage: "Culture: rose at 8% — for callout backgrounds." },
+} as const;
+
+// ── Fibonacci spacing scale ──────────────────────────────────────────
+// φ-based steps: each multiplied by 1.618.
+// Use for padding, gap, margin — never ad-hoc pixel values.
+
+export const spacingScale = [
+  { step: 1, px: 8,   cssVar: "--s1", usage: "Micro: icon padding, tight inline gaps." },
+  { step: 2, px: 13,  cssVar: "--s2", usage: "Small: component padding, label gaps." },
+  { step: 3, px: 21,  cssVar: "--s3", usage: "Base: standard component padding." },
+  { step: 4, px: 34,  cssVar: "--s4", usage: "Medium: section padding, card gaps." },
+  { step: 5, px: 55,  cssVar: "--s5", usage: "Large: section spacing." },
+  { step: 6, px: 89,  cssVar: "--s6", usage: "XL: page section gaps." },
+  { step: 7, px: 144, cssVar: "--s7", usage: "XXL: hero-scale spacing." },
+] as const;
+
+// ── Motion tokens ────────────────────────────────────────────────────
+
+export const motionTokens = {
+  fast: { ms: 120,  cssVar: "--t-fast", usage: "Micro-interactions: hover states, focus rings." },
+  mid:  { ms: 240,  cssVar: "--t-mid",  usage: "Component transitions: callout reveal, tag fade." },
+  slow: { ms: 400,  cssVar: "--t-slow", usage: "Page transitions, overlays." },
+  ease: { value: "cubic-bezier(0.25,0,0.1,1)", cssVar: "--ease", usage: "Default easing — weighted deceleration." },
+} as const;
+
 // ── Tone registers ───────────────────────────────────────────────────
 
 export const toneRegisters = ["method", "hunch", "annotation"] as const;
@@ -347,9 +381,12 @@ export const tokens = {
   surfaceTokens,
   semanticMeanings,
   domainColors,
+  domainTints,
   borderTokens,
   typography,
   spacing,
+  spacingScale,
+  motionTokens,
   diagram,
   toneRegisters,
   bannedWords,

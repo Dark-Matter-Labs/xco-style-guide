@@ -126,6 +126,31 @@
   --domain-tech:    #7375b7;
   --domain-culture: #cd6a95;
 
+  /* Domain tints — full domain colour at low opacity for backgrounds */
+  --bio-tint:     rgba(213, 108,  83, 0.08);
+  --inst-tint:    rgba( 31, 154, 145, 0.08);
+  --tech-tint:    rgba(115, 117, 183, 0.08);
+  --culture-tint: rgba(205, 106, 149, 0.08);
+
+  /* Fibonacci spacing scale (φ-based: each step × 1.618) */
+  --s1:  8px;
+  --s2: 13px;
+  --s3: 21px;
+  --s4: 34px;
+  --s5: 55px;
+  --s6: 89px;
+  --s7: 144px;
+
+  /* Motion tokens */
+  --t-fast: 120ms;
+  --t-mid:  240ms;
+  --t-slow: 400ms;
+  --ease:   cubic-bezier(0.25, 0, 0.1, 1);
+
+  /* Layout tokens */
+  --measure: 65ch;   /* max comfortable reading line length */
+  --hang:    2ch;    /* hanging indent for lists */
+
   /* Border tokens */
   --border-subtle:  rgba(32, 32, 30, 0.08);
   --border-default: rgba(32, 32, 30, 0.14);
@@ -169,6 +194,12 @@
   --xco-ink:       #f4f1e9;
   --xco-ink-muted: #c8c4bc;
   --xco-ink-weak:  #9e9b96;
+
+  /* Domain tints — increase opacity on dark ground for legibility */
+  --bio-tint:     rgba(213, 108,  83, 0.13);
+  --inst-tint:    rgba( 31, 154, 145, 0.13);
+  --tech-tint:    rgba(115, 117, 183, 0.13);
+  --culture-tint: rgba(205, 106, 149, 0.13);
 
   /* Border tokens — lighter on dark ground */
   --border-subtle:  rgba(244, 241, 233, 0.08);
