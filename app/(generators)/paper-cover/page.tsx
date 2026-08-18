@@ -11,7 +11,7 @@ export default function PaperCoverPage() {
             A4 portrait · PDF-ready SVG · 2× PNG for print
           </p>
         </div>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
       <PaperCoverGenerator />
     </div>

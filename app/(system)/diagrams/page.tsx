@@ -6,7 +6,7 @@ export default function DiagramsPage() {
     <div className="space-y-16">
       <header className="flex items-baseline justify-between pb-6">
         <h1 className="font-display text-[60px] leading-[60px]">Diagrammatic Grammar</h1>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
 
       <section className="max-w-2xl space-y-4">

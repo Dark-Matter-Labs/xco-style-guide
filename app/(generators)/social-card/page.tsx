@@ -11,7 +11,7 @@ export default function SocialCardPage() {
             LinkedIn · Substack OG · Instagram square
           </p>
         </div>
-        <WIP variant="v0.1" />
+        <WIP variant="version" />
       </header>
       <SocialCardGenerator />
     </div>
