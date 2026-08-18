@@ -2,6 +2,9 @@
 
 import { forwardRef, useMemo } from "react";
 import { squarify } from "@/lib/squarify";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { paper: PAPER, ink: INK, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK } = paletteHex;
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -29,13 +32,6 @@ const DIMS: Record<TerritoryFormat, { vw: number; vh: number }> = {
   square: { vw: 1200, vh: 1200 },
 };
 
-const PAPER = "#FFFFFF";
-const INK   = "#1C1B17";
-const NAVY  = "#000064";
-const OCEAN = "#005096";
-const TEAL  = "#0082aa";
-const SAND  = "#ffa064";
-const DUSK  = "#ff5a00";
 
 // ── Colour map ───────────────────────────────────────────────────────────────
 

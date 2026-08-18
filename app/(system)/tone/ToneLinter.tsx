@@ -50,8 +50,10 @@ function findBannedWords(text: string): BannedMatch[] {
       // Whole-word check for single-word terms
       const before = idx > 0 ? lower[idx - 1] : " ";
       const after = idx + term.length < lower.length ? lower[idx + term.length] : " ";
-      const wordBoundary = /\W/.test(before) && /\W/.test(after);
-      if (wordBoundary || term.includes(" ")) {
+      // Boundaries are required for phrases too: a phrase entry begins and ends
+      // with a letter, so the same check correctly rejects "in this spaces".
+      // Previously phrases bypassed this via `|| term.includes(" ")`.
+      if (/\W/.test(before) && /\W/.test(after)) {
         matches.push({ word: w.trim(), index: idx, length: term.length });
       }
       start = idx + 1;

@@ -49,6 +49,27 @@ export const colors = {
 
 export type ColorName = keyof typeof colors;
 
+// ── Flat palette (hex only) ──────────────────────────────────────────
+// For SVG attributes and canvas fills, which need literal hex rather than
+// CSS variables so exported files stay self-contained.
+//
+// Import this instead of redeclaring hex constants locally. Diagram modules
+// used to each hold their own `const PAPER = "#FFFFFF"` / `const INK =
+// "#1C1B17"`; when the palette moved to warm paper those copies were missed,
+// so every exported asset kept rendering on pure white with the old ink while
+// the documentation showed the new system.
+
+export const paletteHex = {
+  paper:     colors.paper.hex,
+  ink:       colors.ink.hex,
+  inkMuted:  colors.inkMuted.hex,
+  navy:      colors.navy.hex,
+  ocean:     colors.ocean.hex,
+  teal:      colors.teal.hex,
+  sand:      colors.sand.hex,
+  dusk:      colors.dusk.hex,
+} as const;
+
 // ── Surface tokens ───────────────────────────────────────────────────
 // Four paper variants for depth/elevation on the warm ground.
 
@@ -341,41 +362,71 @@ export const bannedWords = [
   "leverage",
   "empower",
   "journey",
-  " space ",  // "in this space" — the idiom, not the character
+  // The idiom, spelled out as a phrase. This was previously " space ", but the
+  // linter trims each entry before matching, so it flagged every use of the
+  // word — including "the space of reachable futures", which is xCO's own
+  // core vocabulary. Phrases are matched whole.
+  "in this space",
 ] as const;
 
 // ── Spelling corrections — US English (linter) ───────────────────────
 // xCO writes in US English. Flag British spellings and show corrections.
 
+// Matching is whole-word, so every inflection needs its own entry — a base
+// form cannot catch its own plural. "civilisations" was listed as an error in
+// houseRules while being undetectable here, so the guide claimed enforcement
+// it did not have.
+//
+// Deliberately absent: "analyses". It is also correct US English as the plural
+// of "analysis", so flagging it would produce false positives on valid text.
+
 export const spellingCorrections = [
   { british: "civilisation",    american: "civilization" },
+  { british: "civilisations",   american: "civilizations" },
   { british: "civilisational",  american: "civilizational" },
   { british: "organise",        american: "organize" },
+  { british: "organises",       american: "organizes" },
   { british: "organised",       american: "organized" },
   { british: "organising",      american: "organizing" },
   { british: "organisation",    american: "organization" },
   { british: "organisations",   american: "organizations" },
+  { british: "organisational",  american: "organizational" },
   { british: "analyse",         american: "analyze" },
   { british: "analysed",        american: "analyzed" },
   { british: "analysing",       american: "analyzing" },
   { british: "recognise",       american: "recognize" },
+  { british: "recognises",      american: "recognizes" },
   { british: "recognised",      american: "recognized" },
   { british: "recognising",     american: "recognizing" },
   { british: "realise",         american: "realize" },
+  { british: "realises",        american: "realizes" },
   { british: "realised",        american: "realized" },
   { british: "realising",       american: "realizing" },
   { british: "optimise",        american: "optimize" },
+  { british: "optimises",       american: "optimizes" },
   { british: "optimised",       american: "optimized" },
+  { british: "optimising",      american: "optimizing" },
   { british: "maximise",        american: "maximize" },
+  { british: "maximises",       american: "maximizes" },
+  { british: "maximised",       american: "maximized" },
+  { british: "maximising",      american: "maximizing" },
   { british: "minimise",        american: "minimize" },
+  { british: "minimises",       american: "minimizes" },
+  { british: "minimised",       american: "minimized" },
+  { british: "minimising",      american: "minimizing" },
   { british: "behaviour",       american: "behavior" },
   { british: "behaviours",      american: "behaviors" },
+  { british: "behavioural",     american: "behavioral" },
   { british: "honour",          american: "honor" },
+  { british: "honours",         american: "honors" },
   { british: "labour",          american: "labor" },
+  { british: "labours",         american: "labors" },
   { british: "colour",          american: "color" },
   { british: "colours",         american: "colors" },
+  { british: "coloured",        american: "colored" },
   { british: "centre",          american: "center" },
   { british: "centres",         american: "centers" },
+  { british: "centred",         american: "centered" },
 ] as const;
 
 export type SpellingCorrection = (typeof spellingCorrections)[number];

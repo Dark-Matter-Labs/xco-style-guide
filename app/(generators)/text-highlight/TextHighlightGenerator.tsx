@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useRef, useLayoutEffect } from "react";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { sand: SAND, dusk: DUSK, teal: TEAL, ocean: OCEAN, navy: NAVY, ink: INK, paper: PAPER } = paletteHex;
 
 // ── Types ───────────────────────────────────────────────────────────
 
@@ -21,11 +24,11 @@ type Token =
 // ── Colour + size maps ──────────────────────────────────────────────
 
 const LEVEL_COLORS: Record<Level, { bg: string; fg: string; name: string }> = {
-  1: { bg: "#ffa064", fg: "#1C1B17", name: "Sand — critical" },
-  2: { bg: "#ff5a00", fg: "#1C1B17", name: "Dusk — important" },
-  3: { bg: "#0082aa", fg: "#FFFFFF", name: "Teal — contextual" },
-  4: { bg: "#005096", fg: "#FFFFFF", name: "Ocean — reference" },
-  5: { bg: "#000064", fg: "#FFFFFF", name: "Navy — peripheral" },
+  1: { bg: SAND, fg: INK, name: "Sand — critical" },
+  2: { bg: DUSK, fg: INK, name: "Dusk — important" },
+  3: { bg: TEAL, fg: PAPER, name: "Teal — contextual" },
+  4: { bg: OCEAN, fg: PAPER, name: "Ocean — reference" },
+  5: { bg: NAVY, fg: PAPER, name: "Navy — peripheral" },
 };
 
 const LEVEL_SIZE: Record<Level, { em: number; weight: number }> = {

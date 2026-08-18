@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 import { OptionFieldDiagram } from "./OptionFieldDiagram";
 import type { FieldFormat, FieldColorMode } from "./OptionFieldDiagram";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { navy: NAVY, ink: INK, paper: PAPER } = paletteHex;
 
 function svgToString(el: SVGSVGElement): string {
   return '<?xml version="1.0" standalone="no"?>\n' +
@@ -173,7 +176,7 @@ export function OptionFieldGenerator() {
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
         <div className="border border-xco-ink overflow-hidden"
-          style={{ background: colorMode === "inverted" ? "#1C1B17" : colorMode === "blueprint" ? "#000064" : "#FFFFFF" }}>
+          style={{ background: colorMode === "inverted" ? INK : colorMode === "blueprint" ? NAVY : PAPER }}>
           <OptionFieldDiagram {...props} format={format} />
         </div>
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">

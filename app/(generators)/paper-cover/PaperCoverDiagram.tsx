@@ -3,14 +3,12 @@
 import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK, sand: SAND, teal: TEAL, navy: NAVY , inkMuted: MUTED } = paletteHex;
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
-const PAPER = "#FFFFFF";
-const INK   = "#1C1B17";
-const MUTED = "#5F5C53";
-const OCEAN = "#005096";
-const DUSK  = "#ff5a00";
 
 // A4 at 96dpi — 794×1123
 export const COVER_W = 794;
@@ -75,11 +73,11 @@ function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number })
   return (
     <linearGradient id="cv-abstract" gradientUnits="userSpaceOnUse"
       x1={COVER_W / 2} y1={top} x2={COVER_W / 2} y2={bottom}>
-      <stop offset="0%"   stopColor="#000064" />
-      <stop offset="35%"  stopColor="#005096" />
-      <stop offset="55%"  stopColor="#0082aa" />
-      <stop offset="75%"  stopColor="#ffa064" />
-      <stop offset="100%" stopColor="#ff5a00" />
+      <stop offset="0%"   stopColor={NAVY} />
+      <stop offset="35%"  stopColor={OCEAN} />
+      <stop offset="55%"  stopColor={TEAL} />
+      <stop offset="75%"  stopColor={SAND} />
+      <stop offset="100%" stopColor={DUSK} />
     </linearGradient>
   );
 }
@@ -124,11 +122,11 @@ const COVER_TERRITORY_ITEMS = [
 ];
 
 const COVER_TERRITORY_PALETTE: [string, string][] = [
-  ["#ffa064", "#1C1B17"],
-  ["#ff5a00", "#1C1B17"],
-  ["#0082aa", "#FFFFFF"],
-  ["#005096", "#FFFFFF"],
-  ["#000064", "#FFFFFF"],
+  [SAND, INK],
+  [DUSK, INK],
+  [TEAL, PAPER],
+  [OCEAN, PAPER],
+  [NAVY, PAPER],
 ];
 
 function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
