@@ -65,6 +65,13 @@ Body measure (max-width): 68ch for body text. Reduce for captions and mono.
 - **No bold** on UI / Untitled Sans face. Use weight 400 or 500 only.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
 
+## House rules (non-negotiable)
+
+These apply to every string you write — UI copy, comments, alt text, commit messages.
+
+- **Spell civilization with a z**, never an s: civilization, civilizational, civilizations. Never civilisation, civilisational, civilisations. xCO writes in US English.
+- **Write the project name as \`xCO\`** — lowercase x, uppercase CO. Never XCO, xco, Xco, XCo, or xCo. The casing is semantic: the lowercase x is the expansion operator, CO is Civilizational Optionality, the thing being expanded.
+
 ## Three visual registers (diagram modes)
 
 - **Blueprint** (cool): navy → ocean → teal gradient. Use for systemic / structural diagrams.

@@ -380,6 +380,44 @@ export const spellingCorrections = [
 
 export type SpellingCorrection = (typeof spellingCorrections)[number];
 
+// ── House rules (linter) ─────────────────────────────────────────────
+// Non-negotiable rules that hold across every register and surface.
+// These are hard errors, not stylistic preferences.
+
+export const houseRules = [
+  {
+    id: "civilization-z",
+    rule: "Always spell civilization with a z, never an s.",
+    correct: "civilization, civilizational, civilizations",
+    incorrect: "civilisation, civilisational, civilisations",
+    why:
+      "xCO writes in US English. The word appears in the project's own name — " +
+      "an inconsistent spelling there undermines every other claim to precision.",
+  },
+  {
+    id: "xco-casing",
+    rule: "Always write xCO with a lowercase x and uppercase CO.",
+    correct: "xCO",
+    incorrect: "XCO, xco, Xco, XCo, xCo",
+    why:
+      "The casing is semantic, not decorative. The lowercase x is the expansion " +
+      "operator; CO is Civilizational Optionality, the thing being expanded. " +
+      "Flattening the case destroys the distinction the name is built on.",
+  },
+] as const;
+
+export type HouseRule = (typeof houseRules)[number];
+
+// Correct form of the brand name — the only accepted casing.
+export const BRAND_NAME = "xCO" as const;
+
+/**
+ * Casing variants the linter flags. Matched case-sensitively as whole words,
+ * so correct `xCO` never trips and unrelated words containing the letters
+ * (e.g. "Mexico") are not candidates.
+ */
+export const brandCasingErrors = ["XCO", "xco", "Xco", "XCo", "xCo"] as const;
+
 // ── Aggregate export ─────────────────────────────────────────────────
 
 export const tokens = {
@@ -397,6 +435,8 @@ export const tokens = {
   toneRegisters,
   bannedWords,
   spellingCorrections,
+  houseRules,
+  brandCasingErrors,
 } as const;
 
 export type Tokens = typeof tokens;

@@ -101,6 +101,19 @@
 /* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
 
 :root {
+  /* ── Diagram palette aliases ──────────────────────────────────────
+     @theme emits the palette as --color-xco-*, which Tailwind utilities
+     consume. Inline styles and SVG attributes need the short --xco-* form
+     to match the surface/ink tokens below; without these aliases a rule
+     like `border-left: 3px solid var(--xco-dusk)` resolves to an invalid
+     shorthand and is dropped silently, with no console error.
+     Aliases reference the @theme tokens — the hex is not repeated. */
+  --xco-navy:  var(--color-xco-navy);
+  --xco-ocean: var(--color-xco-ocean);
+  --xco-teal:  var(--color-xco-teal);
+  --xco-sand:  var(--color-xco-sand);
+  --xco-dusk:  var(--color-xco-dusk);
+
   /* xCO surface — warm paper system */
   --xco-paper:            #f4f1e9;
   --xco-paper-raised:     #fffffc;

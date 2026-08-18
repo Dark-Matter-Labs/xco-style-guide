@@ -2,7 +2,7 @@ import { WIP } from "@/components/WIP";
 import { CopyButton } from "@/components/CopyButton";
 import { ToneLinter } from "./ToneLinter";
 import { toneRegisters, promptTemplates } from "@/lib/tone-templates";
-import { bannedWords, spellingCorrections } from "@/lib/design-tokens";
+import { bannedWords, spellingCorrections, houseRules } from "@/lib/design-tokens";
 
 export default function TonePage() {
   return (
@@ -26,6 +26,45 @@ export default function TonePage() {
           Mark uncertainty inline — never drop a claim because it's uncertain,
           mark it and keep it.
         </p>
+      </section>
+
+      {/* House rules — non-negotiable, hold across every register */}
+      <section>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+          House Rules
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
+          Two rules hold everywhere, in every register, on every surface. These are
+          errors, not preferences. The linter below enforces both.
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {houseRules.map((r) => (
+            <div
+              key={r.id}
+              className="p-6 space-y-4"
+              style={{
+                borderLeft: "3px solid var(--xco-dusk)",
+                background: "var(--xco-paper-quiet)",
+              }}
+            >
+              <p className="font-body text-[24px] text-xco-ink leading-[26px]">{r.rule}</p>
+
+              <div className="space-y-1">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  ✓ {r.correct}
+                </p>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">
+                  ✗ {r.incorrect}
+                </p>
+              </div>
+
+              <p className="font-mono font-medium text-[0.75rem] leading-[1.5] text-xco-ink-muted">
+                {r.why}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Three registers */}
