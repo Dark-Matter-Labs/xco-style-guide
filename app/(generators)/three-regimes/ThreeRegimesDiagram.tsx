@@ -2,6 +2,9 @@
 
 import { forwardRef } from "react";
 import { colors } from "@/lib/design-tokens";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { navy: NAVY, ocean: OCEAN, teal: TEAL, dusk: DUSK } = paletteHex;
 
 export interface DiagramLabels {
   frontier: string;
@@ -66,10 +69,6 @@ const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;
 const MUTED = colors.inkMuted.hex;
 
-const NAVY  = "#000064";
-const OCEAN = "#005096";
-const TEAL  = "#0082aa";
-const DUSK  = "#ff5a00";
 
 // ── Shared primitives ───────────────────────────────────────────────────────
 

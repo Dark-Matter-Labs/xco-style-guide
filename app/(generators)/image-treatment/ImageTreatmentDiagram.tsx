@@ -2,11 +2,10 @@
 
 import { forwardRef, useMemo } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { paletteHex } from "@/lib/design-tokens";
 
-const PAPER = "#FFFFFF";
-const INK   = "#1C1B17";
-const OCEAN = "#005096";
-const DUSK  = "#ff5a00";
+const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK } = paletteHex;
+
 
 export type ColorMode       = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";

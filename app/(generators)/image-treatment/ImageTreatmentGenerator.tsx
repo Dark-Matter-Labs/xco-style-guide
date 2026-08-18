@@ -7,11 +7,10 @@ import {
 } from "./ImageTreatmentDiagram";
 import type { ColorMode, TreatmentFormat, TreatmentMode, SourceDiagram, DiagramVariant } from "./ImageTreatmentDiagram";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { paletteHex } from "@/lib/design-tokens";
 
-const INK   = "#1C1B17";
-const PAPER = "#FFFFFF";
-const DUSK  = "#ff5a00";
-const OCEAN = "#005096";
+const { ink: INK, paper: PAPER, dusk: DUSK, ocean: OCEAN } = paletteHex;
+
 
 type SourceMode   = "three-regimes" | "option-field" | "photo";
 type PhotoPalette = "mono" | "inverted" | "dusk" | "ocean" | "multi";

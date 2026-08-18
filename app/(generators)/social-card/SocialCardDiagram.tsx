@@ -3,14 +3,12 @@
 import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK, sand: SAND, teal: TEAL, navy: NAVY , inkMuted: MUTED } = paletteHex;
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
-const PAPER = "#FFFFFF";
-const INK   = "#1C1B17";
-const MUTED = "#5F5C53";
-const OCEAN = "#005096";
-const DUSK  = "#ff5a00";
 
 export type CardFormat  = "card" | "square";
 export type CardLayout  = "typographic" | "diagram" | "abstract";
@@ -108,11 +106,11 @@ const TERRITORY_ITEMS = [
 ];
 
 const TERRITORY_PALETTE: [string, string][] = [
-  ["#ffa064", "#1C1B17"],
-  ["#ff5a00", "#1C1B17"],
-  ["#0082aa", "#FFFFFF"],
-  ["#005096", "#FFFFFF"],
-  ["#000064", "#FFFFFF"],
+  [SAND, INK],
+  [DUSK, INK],
+  [TEAL, PAPER],
+  [OCEAN, PAPER],
+  [NAVY, PAPER],
 ];
 
 function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
@@ -157,11 +155,11 @@ function AbstractGradient({ vw, vh }: { vw: number; vh: number }) {
   return (
     <linearGradient id="sc-abstract" gradientUnits="userSpaceOnUse"
       x1={vw / 2} y1={0} x2={vw / 2} y2={vh}>
-      <stop offset="0%"   stopColor="#000064" />
-      <stop offset="35%"  stopColor="#005096" />
-      <stop offset="55%"  stopColor="#0082aa" />
-      <stop offset="75%"  stopColor="#ffa064" />
-      <stop offset="100%" stopColor="#ff5a00" />
+      <stop offset="0%"   stopColor={NAVY} />
+      <stop offset="35%"  stopColor={OCEAN} />
+      <stop offset="55%"  stopColor={TEAL} />
+      <stop offset="75%"  stopColor={SAND} />
+      <stop offset="100%" stopColor={DUSK} />
     </linearGradient>
   );
 }

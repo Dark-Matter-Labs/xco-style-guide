@@ -1,16 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { ink: INK, paper: PAPER, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK , inkMuted: MUTED } = paletteHex;
 
 // ── Palette ────────────────────────────────────────────────────────────────
-const INK   = "#1C1B17";
-const PAPER = "#FFFFFF";
-const NAVY  = "#000064";
-const OCEAN = "#005096";
-const TEAL  = "#0082aa";
-const SAND  = "#ffa064";
-const DUSK  = "#ff5a00";
-const MUTED = "#5F5C53";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type AlignPreset = "blueprint" | "ember" | "horizon" | "dusk" | "ink";
@@ -452,7 +447,7 @@ export function AlignGenerator() {
             onClick={handleCopyPrompt}
             className={`w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] border px-3 py-2 transition-colors ${
               copied
-                ? "bg-xco-teal text-white border-xco-teal"
+                ? "bg-xco-teal text-xco-paper border-xco-teal"
                 : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
             }`}
           >

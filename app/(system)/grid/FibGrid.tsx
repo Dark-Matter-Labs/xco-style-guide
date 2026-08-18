@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { paletteHex } from "@/lib/design-tokens";
+
+const { ink: INK, paper: PAPER, dusk: DUSK } = paletteHex;
 
 const PHI   = 1.618033988749895;
 const BASE  = 300;
 const VW    = PHI * BASE; // ~485.4
 const VH    = BASE;
 const FIB   = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
-const INK   = "#1C1B17";
-const PAPER = "#FFFFFF";
-const DUSK  = "#ff5a00";
 const MAX_DEPTH = 8;
 const FONT  = `"Untitled Sans", "Inter", Arial, sans-serif`;
 
