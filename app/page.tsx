@@ -14,14 +14,18 @@ const templateLinks = [
   },
 ];
 
+// Order matches the section nav in app/(system)/layout.tsx.
+// Numbers are derived from position, not written down — a hardcoded list
+// silently drifts out of step the moment an entry is added or reordered.
 const systemLinks = [
-  { href: "/typography",  label: "Typography",          n: "01" },
-  { href: "/colour",      label: "Colour",              n: "02" },
-  { href: "/grid",        label: "Grid",                n: "03" },
-  { href: "/diagrams",    label: "Diagrammatic Grammar", n: "04" },
-  { href: "/tone",        label: "Tone of Voice",       n: "05" },
-  { href: "/components",  label: "Components",          n: "06" },
-];
+  { href: "/logo",        label: "Logo" },
+  { href: "/typography",  label: "Typography" },
+  { href: "/colour",      label: "Colour" },
+  { href: "/grid",        label: "Grid" },
+  { href: "/diagrams",    label: "Diagrammatic Grammar" },
+  { href: "/tone",        label: "Tone of Voice" },
+  { href: "/components",  label: "Components" },
+].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
 
 const generatorLinks = [
   { href: "/three-regimes",   label: "Three Regimes" },
