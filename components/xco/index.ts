@@ -8,3 +8,4 @@ export { Chain } from "./Chain";
 export { Thesis } from "./Thesis";
 export { Stat, StatGrid } from "./Stat";
 export { Kicker } from "./Kicker";
+export { Logo } from "./Logo";

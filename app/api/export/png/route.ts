@@ -63,8 +63,15 @@ export async function POST(req: NextRequest) {
     // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers
     const svgClean = svg.replace(/@import url\([^)]+\);?/g, "");
 
-    // Add explicit pixel dimensions for correct rasterisation size
-    const svgWithSize = svgClean.replace("<svg", `<svg width="${width}" height="${height}"`);
+    // Add explicit pixel dimensions for correct rasterisation size.
+    // Any width/height already on the root <svg> must be dropped first —
+    // resvg rejects duplicate attributes outright ("attribute 'width' is
+    // already defined"), which standalone SVG files legitimately carry.
+    // Scoped to the root tag so nested width/height (rect, image) survive.
+    const svgWithSize = svgClean.replace(/<svg\b[^>]*>/, (rootTag) => {
+      const stripped = rootTag.replace(/\s(?:width|height)\s*=\s*(?:"[^"]*"|'[^']*')/g, "");
+      return stripped.replace("<svg", `<svg width="${width}" height="${height}"`);
+    });
 
     const resvg = new Resvg(svgWithSize, {
       font: {

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 const sections = [
+  { href: "/logo", label: "Logo" },
   { href: "/typography", label: "Typography" },
   { href: "/colour", label: "Colour" },
   { href: "/grid", label: "Grid" },
