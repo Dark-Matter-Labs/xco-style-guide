@@ -9,6 +9,7 @@ const sections = [
   { href: "/diagrams", label: "Diagrams" },
   { href: "/tone", label: "Tone" },
   { href: "/components", label: "Components" },
+  { href: "/grammar", label: "Grammar" },
 ];
 
 export default function SystemLayout({
