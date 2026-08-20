@@ -9,3 +9,10 @@ export { Thesis } from "./Thesis";
 export { Stat, StatGrid } from "./Stat";
 export { Kicker } from "./Kicker";
 export { Logo } from "./Logo";
+
+// ── Polyphonic grammar primitives ────────────────────────────────────
+export { LicenceBadge } from "./LicenceBadge";
+export { RelationEdge } from "./RelationEdge";
+export { AgentTag } from "./AgentTag";
+export { EvidenceCapsule } from "./EvidenceCapsule";
+export { AmbiguityTag } from "./AmbiguityTag";

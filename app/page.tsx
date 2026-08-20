@@ -25,6 +25,7 @@ const systemLinks = [
   { href: "/diagrams",    label: "Diagrammatic Grammar" },
   { href: "/tone",        label: "Tone of Voice" },
   { href: "/components",  label: "Components" },
+  { href: "/grammar",     label: "Polyphonic Grammar" },
 ].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
 
 const generatorLinks = [
