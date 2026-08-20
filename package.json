@@ -7,7 +7,8 @@
     "prebuild": "cp node_modules/@resvg/resvg-wasm/index_bg.wasm public/resvg.wasm",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

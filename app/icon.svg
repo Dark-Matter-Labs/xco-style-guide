@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="xCO">
+  <style>
+    svg { --bg: #f4f1e9; --fg: #20201e; }
+    @media (prefers-color-scheme: dark) { svg { --bg: #20201e; --fg: #f4f1e9; } }
+  </style>
+  <rect width="120" height="120" fill="var(--bg)"/>
+  <g transform="translate(-7.647 12.941) scale(0.588)"><path d="M 30 68 L 86 130" fill="none" stroke="#ff5a00" stroke-width="12" stroke-linecap="butt"/><path d="M 86 68 L 30 130" fill="none" stroke="#ff5a00" stroke-width="12" stroke-linecap="butt"/><path d="M 178.28 46.29 A 44 44 0 1 0 178.28 113.71" fill="none" stroke="var(--fg)" stroke-width="12" stroke-linecap="butt"/></g>
+</svg>
