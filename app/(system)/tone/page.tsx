@@ -6,9 +6,9 @@ import { bannedWords, spellingCorrections, houseRules } from "@/lib/design-token
 
 export default function TonePage() {
   return (
-    <div className="space-y-20">
+    <div className="max-w-6xl mx-auto px-8 py-12 space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Tone of Voice</h1>
+        <h1 className="doc-title text-xco-ink">Tone of Voice</h1>
         <WIP variant="version" />
       </header>
 
@@ -79,7 +79,7 @@ export default function TonePage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-1">
                   {reg.id}
                 </p>
-                <h3 className="font-display text-[60px] leading-[60px]">{reg.label}</h3>
+                <h3 className="doc-h2 text-xco-ink">{reg.label}</h3>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {reg.usage}
                 </p>

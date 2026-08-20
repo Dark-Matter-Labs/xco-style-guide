@@ -18,9 +18,9 @@ export default function LogoPage() {
   const g = logoGeometry;
 
   return (
-    <div className="space-y-24">
+    <div className="max-w-6xl mx-auto px-8 py-12 space-y-24">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Logo</h1>
+        <h1 className="doc-title text-xco-ink">Logo</h1>
         <WIP variant="version" />
       </header>
 
@@ -80,7 +80,7 @@ export default function LogoPage() {
               <dt className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
                 {item.k}
               </dt>
-              <dd className="font-display text-[36px] leading-[40px] text-xco-ink">{item.v}</dd>
+              <dd className="doc-h2 text-xco-ink">{item.v}</dd>
               <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {item.n}
               </p>

@@ -25,9 +25,9 @@ const pages = [
 
 export default function GrammarPage() {
   return (
-    <div className="space-y-24">
+    <div className="max-w-6xl mx-auto px-8 py-12 space-y-24">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Grammar</h1>
+        <h1 className="doc-title text-xco-ink">Grammar</h1>
         <WIP variant="version" />
       </header>
 
