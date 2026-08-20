@@ -1,4 +1,4 @@
-import { SiteNav, ReadingProgress, type NavLink } from "@/components/doc";
+import { SiteNav, ReadingProgress, Grain, type NavLink } from "@/components/doc";
 
 const generators: NavLink[] = [
   { href: "/three-regimes",   label: "Three Regimes" },
@@ -19,9 +19,10 @@ export default function GeneratorsLayout({
 }) {
   return (
     <div className="min-h-screen">
+      <Grain />
       <ReadingProgress />
-      <SiteNav links={generators} register="instruments" width="7xl" />
-      <div className="max-w-7xl mx-auto px-8 py-12">{children}</div>
+      <SiteNav links={generators} register="instruments" />
+      <div className="doc-wrap py-12">{children}</div>
     </div>
   );
 }

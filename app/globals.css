@@ -164,6 +164,45 @@
   --measure: 65ch;   /* max comfortable reading line length */
   --hang:    2ch;    /* hanging indent for lists */
 
+
+  /* Domain grounds + ink-safe text — XCO Design System v2.
+     Three tokens per domain: the saturated value is a stroke, border or fill;
+     -pale is a ground that ink sits on; -ink is the only form allowed to be
+     text. Domain colour is never text at its saturated value — it does not
+     clear 4.5:1 against paper. */
+  --bio-pale:     #efd1c8;
+  --bio-ink:      #b74b32;
+  --inst-pale:    #c8dfda;
+  --inst-ink:     #437670;
+  --tech-pale:    #d1d0e7;
+  --tech-ink:     #6566ae;
+  --culture-pale: #ecd0dc;
+  --culture-ink:  #ac4c78;
+
+  /* Structure is drawn, not shadowed. One rule token for every border. */
+  --rule: rgba(32, 32, 30, 0.2);
+
+  /* Faint fill for notes and code blocks — sits over paper without a border
+     of its own. */
+  --panel: rgba(255, 255, 255, 0.22);
+
+  /* The single shadow token, reserved for elements that genuinely float.
+     Anything else reaching for a drop shadow is fighting the system. */
+  --shadow-float: 0 7px 18px rgba(0, 0, 0, 0.16);
+
+  /* Grain — the only texture in the system. */
+  --grain-color: rgba(25, 23, 18, 0.09);
+  --grain-blend: multiply;
+  --grain-opacity: 0.16;
+
+  /* Layout — the whole page is built from two numbers. A 210px label column
+     with a 42px gutter sets the section heads; their sum, 252px, is the left
+     indent every callout, code block and pull-quote hangs from. */
+  --content: min(1180px, calc(100vw - 128px));
+  --label:   210px;
+  --gutter:  42px;
+  --hang:    252px;
+
   /* Border tokens */
   --border-subtle:  rgba(32, 32, 30, 0.08);
   --border-default: rgba(32, 32, 30, 0.14);
@@ -213,6 +252,25 @@
   --inst-tint:    rgba( 31, 154, 145, 0.13);
   --tech-tint:    rgba(115, 117, 183, 0.13);
   --culture-tint: rgba(205, 106, 149, 0.13);
+
+
+  /* Domain grounds invert; the ink-safe values brighten to hold contrast. */
+  --bio-pale:     #512419;
+  --bio-ink:      #d96f56;
+  --inst-pale:    #003c38;
+  --inst-ink:     #35a89e;
+  --tech-pale:    #2d2d55;
+  --tech-ink:     #8b8dc7;
+  --culture-pale: #4d2235;
+  --culture-ink:  #d97ba4;
+
+  --rule: rgba(244, 241, 233, 0.22);
+  --panel: rgba(243, 239, 230, 0.05);
+
+  /* Grain switches to screen on the dark ground, and quietens. */
+  --grain-color: rgba(243, 239, 230, 0.06);
+  --grain-blend: screen;
+  --grain-opacity: 0.1;
 
   /* Border tokens — lighter on dark ground */
   --border-subtle:  rgba(244, 241, 233, 0.08);
@@ -307,162 +365,194 @@
   }
 }
 
+
 /* ══════════════════════════════════════════════════════════════════
-   Document presentation layer
+   Document presentation layer — XCO Design System v2
 
-   The compositional language of the xCO Polyphonic Style Guide v5 —
-   sticky section numerals, a three-column reading grid, section
-   registers and a fluid display scale — expressed in the tokens this
-   guide already documents.
+   The compositional language of the v2 identity document, in this
+   repo's own faces. Two numbers govern the page: a 210px label column
+   with a 42px gutter, and their sum (252px) as the hanging indent
+   every callout, code block and pull-quote aligns to. That repetition
+   is what makes the page read as governed rather than composed.
 
-   Two things from v5 are deliberately NOT adopted, because the guide
-   states rules against them:
-     · v5's 20px 20px 6px 20px asymmetric corner. globals.css declares
-       --radius: 0.125rem, "this is not a round-corner brand".
-     · v5's serif body copy. The type scale documents Body as Untitled
-       Sans 24/26. Only DISPLAY type goes fluid here; the face is
-       unchanged.
+   Structure is drawn, not shadowed: every separation is a hairline off
+   --rule. One shadow token exists, for things that genuinely float.
+
+   Type is an opposition — display set tight and negative (−.04em),
+   every mono label set wide and positive (+.08em). Prose is serif;
+   anything that is machinery (state, code, metadata, labels) is mono;
+   small descriptive text is sans.
    ══════════════════════════════════════════════════════════════════ */
 
 @layer components {
-  /* ── Fluid display scale ─────────────────────────────────────────
-     The fixed px steps in lib/design-tokens.ts stay canonical for
-     generated assets, which need exact sizes. These fluid steps are
-     for site presentation only — same serif face, responsive size. */
+  /* ── Measure ─────────────────────────────────────────────────────── */
 
-  .doc-title {
+  .doc-wrap {
+    width: var(--content);
+    margin-inline: auto;
+  }
+
+  /* ── Type register ───────────────────────────────────────────────── */
+
+  .doc-display {
     font-family: var(--font-display);
-    font-size: clamp(44px, 6.2vw, 92px);
-    line-height: 0.93;
-    letter-spacing: -0.045em;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    max-width: 15ch;
+    text-wrap: balance;
   }
 
   .doc-h2 {
     font-family: var(--font-display);
-    font-size: clamp(30px, 3.2vw, 50px);
+    font-size: clamp(30px, 3.6vw, 46px);
+    font-weight: 400;
     line-height: 1.02;
-    letter-spacing: -0.032em;
+    letter-spacing: -0.035em;
+    max-width: 20ch;
+    text-wrap: balance;
   }
 
-  .doc-lede {
+  .doc-intro-copy {
     font-family: var(--font-display);
-    font-size: clamp(22px, 2.4vw, 36px);
-    line-height: 1.2;
-    letter-spacing: -0.022em;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .doc-dek {
+    font-family: var(--font-display);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--xco-ink-muted);
+    max-width: 640px;
+  }
+
+  /* Small descriptive text — the sans role. */
+  .doc-sans {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.55;
     color: var(--xco-ink-muted);
   }
 
-  /* ── Section shell ───────────────────────────────────────────────
-     Generous vertical rhythm with a hairline rule between sections,
-     so the page reads as a sequence of movements rather than a list. */
+  /* Labels and metadata — the mono role. Wide and positive. */
+  .doc-label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--xco-ink-muted);
+  }
+
+  .doc-code {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* ── Section rhythm ──────────────────────────────────────────────── */
 
   .doc-section {
-    position: relative;
-    padding-block: clamp(56px, 7vw, 116px);
-    border-top: 1px solid var(--border-default);
-    scroll-margin-top: 88px;
+    padding-block: clamp(56px, 7vw, 84px) clamp(60px, 7.5vw, 90px);
+    border-bottom: 1px solid var(--rule);
+    scroll-margin-top: 80px;
   }
 
-  .doc-section:first-of-type {
-    border-top: 0;
-  }
-
-  /* Two columns by default: numeral rail + reading column.
-     A third rail for side notes appears only when there is room. */
-  .doc-grid {
+  /* Label column + reading column. The kicker sits left, the heading right. */
+  .doc-head {
     display: grid;
-    grid-template-columns: 92px minmax(0, 1fr);
-    column-gap: clamp(20px, 3.5vw, 56px);
-    align-items: start;
+    grid-template-columns: var(--label) minmax(0, 1fr);
+    gap: var(--gutter);
+    margin-bottom: 44px;
   }
 
-  @media (min-width: 1200px) {
-    .doc-grid-rail {
-      grid-template-columns: 92px minmax(0, 700px) minmax(200px, 1fr);
-    }
+  .doc-intro {
+    display: grid;
+    grid-template-columns: var(--label) minmax(0, 690px);
+    gap: var(--gutter);
   }
 
-  @media (max-width: 640px) {
-    .doc-grid {
-      grid-template-columns: 1fr;
-      row-gap: var(--s3);
-    }
+  .doc-intro > * {
+    grid-column: 2;
   }
 
-  .doc-index {
-    position: sticky;
-    top: 92px;
+  /* The hanging measure. Callouts, code and pull-quotes align here. */
+  .doc-hang {
+    margin-left: var(--hang);
+    max-width: 730px;
   }
 
-  @media (max-width: 640px) {
-    .doc-index {
-      position: static;
-    }
+  /* ── Hairline cell grid ──────────────────────────────────────────
+     A 1px gap over a --rule ground, with paper-filled cells, draws the
+     dividers without any cell owning a border. */
+
+  .doc-cells {
+    display: grid;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
   }
 
-  .doc-numeral {
-    display: block;
+  .doc-cells > * {
+    background: var(--xco-paper);
+  }
+
+  /* ── Pull-quote — ink rules above and below, never a coloured bar ── */
+
+  .doc-thesis {
+    padding-block: 28px;
+    border-top: 1px solid var(--xco-ink);
+    border-bottom: 1px solid var(--xco-ink);
     font-family: var(--font-display);
-    font-size: 44px;
-    line-height: 0.9;
-    color: var(--xco-dusk);
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    max-width: 820px;
   }
 
-  .doc-numeral-rule {
-    display: block;
-    width: 52px;
-    height: 1px;
-    margin-top: 14px;
-    background: currentColor;
-    opacity: 0.3;
+  /* ── Line legend — the pattern channel ───────────────────────────── */
+
+  .doc-line-sample {
+    height: 0;
+    border-top: 2px solid var(--xco-ink);
+  }
+  .doc-line-sample.is-dotted { border-top-style: dotted; }
+  .doc-line-sample.is-dashed { border-top-style: dashed; }
+
+  /* ── Numbered inventory ──────────────────────────────────────────── */
+
+  .doc-inv {
+    counter-reset: inv;
+    border-top: 1px solid var(--xco-ink);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  .doc-side {
+  .doc-inv > li {
+    counter-increment: inv;
     display: grid;
-    gap: var(--s2);
+    grid-template-columns: 70px minmax(0, 1fr);
+    align-items: center;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: clamp(15px, 1.6vw, 20px);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
   }
 
-  @media (min-width: 1200px) {
-    .doc-side-sticky {
-      position: sticky;
-      top: 96px;
-    }
-  }
-
-  /* ── Section registers ───────────────────────────────────────────
-     "quiet" recesses a section; "dotted" adds a structural grid.
-     The dark register is not defined here — it uses the guide's own
-     data-register="inverse", which already swaps the surface tokens. */
-
-  .doc-quiet {
-    background: var(--xco-paper-quiet);
-  }
-
-  .doc-dotted {
-    background-image: radial-gradient(
-      circle,
-      rgba(32, 32, 30, 0.07) 1px,
-      transparent 1.2px
-    );
-    background-size: 22px 22px;
-  }
-
-  .dark .doc-dotted,
-  [data-register="inverse"] .doc-dotted {
-    background-image: radial-gradient(
-      circle,
-      rgba(244, 241, 233, 0.07) 1px,
-      transparent 1.2px
-    );
-  }
-
-  /* ── Note card ───────────────────────────────────────────────────
-     Sharp corners, hairline border. Sits in the side rail. */
-
-  .doc-note {
-    padding: var(--s3);
-    border: 1px solid var(--border-default);
-    background: color-mix(in srgb, var(--xco-paper-raised) 88%, transparent);
+  .doc-inv > li::before {
+    content: "0" counter(inv);
+    color: var(--xco-ink-weak);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.06em;
   }
 
   /* ── Chrome ──────────────────────────────────────────────────────── */
@@ -471,29 +561,12 @@
     position: sticky;
     top: 0;
     z-index: 40;
-    background: color-mix(in srgb, var(--xco-paper) 86%, transparent);
-    backdrop-filter: saturate(1.4) blur(12px);
-    -webkit-backdrop-filter: saturate(1.4) blur(12px);
-    border-bottom: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--xco-paper) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
   }
 
-  .doc-progress {
-    position: fixed;
-    z-index: 50;
-    inset: 0 0 auto 0;
-    height: 2px;
-    pointer-events: none;
-  }
-
-  .doc-progress > span {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: var(--xco-dusk);
-  }
-
-  /* Nav link with a dusk underline that grows on hover — the accent
-     appears at interaction, keeping it well inside the 5% budget. */
   .doc-navlink {
     position: relative;
     white-space: nowrap;
@@ -507,7 +580,7 @@
     right: 100%;
     bottom: -5px;
     height: 1.5px;
-    background: var(--xco-dusk);
+    background: var(--xco-ink);
     transition: right var(--t-mid) var(--ease);
   }
 
@@ -516,16 +589,108 @@
     right: 0;
   }
 
-  .doc-navlink[data-active="true"] {
-    color: var(--xco-ink);
+  .doc-navlink[data-active="true"] { color: var(--xco-ink); }
+
+  /* Register switch — two states, never a lone ambiguous toggle. */
+  .doc-register {
+    display: flex;
+    border: 1px solid var(--rule);
+    background: var(--xco-paper);
+  }
+
+  .doc-register button {
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--xco-ink-muted);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+  }
+
+  /* The pressed state is driven from the root attribute, which the FOUC
+     script sets before first paint. So the switch shows the correct register
+     even before React hydrates — aria-pressed then syncs on mount for
+     assistive tech. Keying it off component state alone made a returning
+     reader in the Ink register briefly see Paper as active. */
+  :root:not([data-theme="dark"]) .doc-register button[data-reg="light"],
+  :root[data-theme="dark"] .doc-register button[data-reg="dark"] {
+    background: var(--xco-ink);
+    color: var(--xco-paper);
+  }
+
+  /* ── Shape channel ───────────────────────────────────────────────
+     CSS shapes, not glyphs: they stay crisp at 8px, survive
+     forced-colors, and need no font to be present. */
+
+  .doc-mk {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    vertical-align: -1px;
+    background: currentColor;
+  }
+  .doc-mk-bio     { border-radius: 50%; }
+  .doc-mk-inst    { border-radius: 1px; }
+  .doc-mk-tech    { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .doc-mk-culture { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+}
+
+/* ── Grain — fixed overlay, the only texture in the system ────────── */
+
+.doc-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    transparent 0,
+    var(--grain-color) 0.7px,
+    transparent 1px,
+    transparent 4px
+  );
+  background-size: 5px 5px;
+}
+
+/* ── Responsive steps, as specified ───────────────────────────────── */
+
+@media (max-width: 1050px) {
+  :root {
+    --content: calc(100vw - 104px);
+    --label: 150px;
+    --hang: 192px;
   }
 }
 
+@media (max-width: 720px) {
+  :root {
+    --content: calc(100vw - 40px);
+    --hang: 0px;
+  }
+  .doc-head,
+  .doc-intro {
+    display: block;
+  }
+  .doc-intro > * { grid-column: auto; }
+  .doc-hang { margin-left: 0; }
+  .doc-inv > li { grid-template-columns: 44px 1fr; font-size: 14px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .doc-navlink::after {
-    transition: none;
-  }
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+/* Where hue is gone entirely, shape and word are what survive. */
+@media (forced-colors: active) {
+  .doc-line-sample { border-top: 2px solid ButtonText; }
 }

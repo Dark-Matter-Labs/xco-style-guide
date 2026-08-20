@@ -13,13 +13,13 @@ import { LABEL, BODY, MONO, SMALL, DISPLAY, ROW, RULE } from "../styles";
 
 export default function IntegrityPage() {
   return (
-    <div className="max-w-6xl mx-auto px-8 py-12 space-y-24">
+    <div className="doc-wrap py-12 space-y-24">
       <header className="space-y-4 pb-6">
         <Link href="/grammar" className={`${MONO} text-xco-ink-muted hover:text-xco-dusk transition-colors`}>
           ← Grammar
         </Link>
         <div className="flex items-baseline justify-between">
-          <h1 className="doc-title text-xco-ink">Integrity</h1>
+          <h1 className="doc-display text-xco-ink">Integrity</h1>
           <WIP variant="version" />
         </div>
       </header>

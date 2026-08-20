@@ -4,19 +4,15 @@ interface NoteProps {
   className?: string;
 }
 
-// Side-rail annotation. Sharp corners — the guide states this is not a
-// round-corner brand, so v5's rounded note card is squared off here.
+// Hairline annotation. Structure is drawn, never shadowed.
 export function Note({ tag, children, className = "" }: NoteProps) {
   return (
-    <div className={`doc-note ${className}`}>
-      {tag && (
-        <p className="font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-widest text-xco-ink-muted mb-3">
-          {tag}
-        </p>
-      )}
-      <div className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-        {children}
-      </div>
+    <div
+      className={`p-[21px] ${className}`}
+      style={{ border: "1px solid var(--rule)", background: "var(--panel, transparent)" }}
+    >
+      {tag && <p className="doc-label mb-3">{tag}</p>}
+      <div className="doc-sans !text-xco-ink">{children}</div>
     </div>
   );
 }

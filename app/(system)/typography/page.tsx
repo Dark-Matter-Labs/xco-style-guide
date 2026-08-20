@@ -18,9 +18,9 @@ const faceClass: Record<string, string> = {
 
 export default function TypographyPage() {
   return (
-    <div className="max-w-6xl mx-auto px-8 py-12 space-y-20">
+    <div className="doc-wrap py-12 space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="doc-title text-xco-ink">Typography</h1>
+        <h1 className="doc-display text-xco-ink">Typography</h1>
         <WIP variant="version" />
       </header>
 

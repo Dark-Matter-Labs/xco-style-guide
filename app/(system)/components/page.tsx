@@ -8,9 +8,9 @@ const DOMAINS: Domain[] = ["bio", "inst", "tech", "culture"];
 
 export default function ComponentsPage() {
   return (
-    <div className="max-w-6xl mx-auto px-8 py-12 space-y-24">
+    <div className="doc-wrap py-12 space-y-24">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="doc-title text-xco-ink">Components</h1>
+        <h1 className="doc-display text-xco-ink">Components</h1>
         <WIP variant="version" />
       </header>
 

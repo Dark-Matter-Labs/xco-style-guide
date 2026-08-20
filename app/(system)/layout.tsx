@@ -1,8 +1,8 @@
-import { SiteNav, ReadingProgress, type NavLink } from "@/components/doc";
+import { SiteNav, ReadingProgress, Grain, type NavLink } from "@/components/doc";
 
 const sections: NavLink[] = [
   { href: "/logo", label: "Logo" },
-  { href: "/typography", label: "Typography" },
+  { href: "/typography", label: "Type" },
   { href: "/colour", label: "Colour" },
   { href: "/grid", label: "Grid" },
   { href: "/diagrams", label: "Diagrams" },
@@ -18,6 +18,7 @@ export default function SystemLayout({
 }) {
   return (
     <div className="min-h-screen">
+      <Grain />
       <ReadingProgress />
       <SiteNav links={sections} register="system" />
       {children}
