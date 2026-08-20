@@ -47,9 +47,9 @@ const DIAGRAM_RULES = [
 
 export default function GridPage() {
   return (
-    <div className="space-y-20">
+    <div className="doc-wrap py-12 space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Grid</h1>
+        <h1 className="doc-display text-xco-ink">Grid</h1>
         <WIP variant="version" />
       </header>
 
@@ -75,14 +75,14 @@ export default function GridPage() {
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-[61.8fr_38.2fr] gap-12 mb-12">
           <div className="space-y-4">
-            <p className="font-display text-[60px] leading-[60px]">φ = 1.618</p>
+            <p className="doc-h2 text-xco-ink">φ = 1.618</p>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               Major — 61.8%
             </p>
             <div className="h-16 bg-xco-ink w-full" style={{ maxWidth: "61.8%" }} />
           </div>
           <div className="space-y-4">
-            <p className="font-display text-[60px] leading-[60px]">1 / φ = 0.618</p>
+            <p className="doc-h2 text-xco-ink">1 / φ = 0.618</p>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
               Minor — 38.2%
             </p>
@@ -197,7 +197,7 @@ export default function GridPage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
                   {d.id}
                 </p>
-                <h3 className="font-display text-[60px] leading-[60px]">{d.label}</h3>
+                <h3 className="doc-h2 text-xco-ink">{d.label}</h3>
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {d.usage}
                 </p>

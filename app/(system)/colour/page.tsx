@@ -8,18 +8,37 @@ function hexToRgb(hex: string) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function lightText(hex: string): boolean {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.45;
+const PAPER_HEX = "#f4f1e9";
+const INK_HEX = "#20201e";
+
+function relLuminance(hex: string): number {
+  const c = [1, 3, 5]
+    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+
+function contrastRatio(a: string, b: string): number {
+  const l1 = relLuminance(a);
+  const l2 = relLuminance(b);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+// Pick whichever of ink or paper actually contrasts better against the swatch.
+// The previous helper compared a weighted RGB average against a 0.45 cutoff,
+// which chose light text on mid-tones like teal and indigo where dark text
+// scores higher. This measures the real WCAG ratio instead of estimating it.
+function onSwatch(hex: string): string {
+  return contrastRatio(PAPER_HEX, hex) >= contrastRatio(INK_HEX, hex)
+    ? PAPER_HEX
+    : INK_HEX;
 }
 
 export default function ColourPage() {
   return (
-    <div className="space-y-20">
+    <div className="doc-wrap py-12 space-y-20">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Colour</h1>
+        <h1 className="doc-display text-xco-ink">Colour</h1>
         <WIP variant="version" />
       </header>
 
@@ -42,16 +61,21 @@ export default function ColourPage() {
           Surfaces
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {(Object.entries(surfaceTokens) as [keyof typeof surfaceTokens, typeof surfaceTokens[keyof typeof surfaceTokens]][]).map(([name, token]) => (
+          {(Object.entries(surfaceTokens) as [keyof typeof surfaceTokens, typeof surfaceTokens[keyof typeof surfaceTokens]][]).map(([name, token]) => {
+            // The swatch ground is a fixed hex, so its label must be a fixed
+            // colour too. A theme token here inverts in dark mode and puts
+            // light text on a light swatch.
+            const labelColor = onSwatch(token.hex);
+            return (
             <div key={name}>
               <div
                 className="h-32 flex flex-col justify-end p-4"
                 style={{ backgroundColor: token.hex, border: "1px solid rgba(32,32,30,0.14)" }}
               >
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {token.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] opacity-60" style={{ color: labelColor }}>
                   {hexToRgb(token.hex)}
                 </p>
               </div>
@@ -67,7 +91,8 @@ export default function ColourPage() {
                 </p>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -140,8 +165,7 @@ export default function ColourPage() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {semanticMeanings.map((m) => {
-            const useLight = lightText(m.hex);
-            const textColor = useLight ? "#f4f1e9" : "#20201e";
+            const textColor = onSwatch(m.hex);
             return (
               <div key={m.name}>
                 <div
@@ -215,7 +239,10 @@ export default function ColourPage() {
                     className="h-24 flex flex-col justify-end p-3"
                     style={{ backgroundColor: colors[key].hex }}
                   >
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-[#f4f1e9]">
+                    <p
+                      className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                      style={{ color: onSwatch(colors[key].hex) }}
+                    >
                       {colors[key].hex}
                     </p>
                   </div>
@@ -240,7 +267,10 @@ export default function ColourPage() {
                     className="h-24 flex flex-col justify-end p-3"
                     style={{ backgroundColor: colors[key].hex }}
                   >
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink">
+                    <p
+                      className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                      style={{ color: onSwatch(colors[key].hex) }}
+                    >
                       {colors[key].hex}
                     </p>
                   </div>
@@ -308,8 +338,7 @@ export default function ColourPage() {
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {domainColors.map((d) => {
-            const useLight = lightText(d.hex);
-            const textColor = useLight ? "#f4f1e9" : "#20201e";
+            const textColor = onSwatch(d.hex);
             return (
               <div key={d.name}>
                 <div

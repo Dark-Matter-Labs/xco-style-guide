@@ -8,9 +8,9 @@ const DOMAINS: Domain[] = ["bio", "inst", "tech", "culture"];
 
 export default function ComponentsPage() {
   return (
-    <div className="space-y-24">
+    <div className="doc-wrap py-12 space-y-24">
       <header className="flex items-baseline justify-between pb-6">
-        <h1 className="font-display text-[60px] leading-[60px]">Components</h1>
+        <h1 className="doc-display text-xco-ink">Components</h1>
         <WIP variant="version" />
       </header>
 
@@ -314,15 +314,15 @@ export default function ComponentsPage() {
           <div className="space-y-6">
             <div className="space-y-1">
               <Kicker>Framework</Kicker>
-              <p className="font-display text-[36px] leading-[40px] text-xco-ink">Optionality as civilizational commons</p>
+              <p className="doc-h2 text-xco-ink">Optionality as civilizational commons</p>
             </div>
             <div className="space-y-1">
               <Kicker domain="bio">Biological dimension</Kicker>
-              <p className="font-display text-[36px] leading-[40px] text-xco-ink">What the soil already knows</p>
+              <p className="doc-h2 text-xco-ink">What the soil already knows</p>
             </div>
             <div className="space-y-1">
               <Kicker domain="inst">Governance</Kicker>
-              <p className="font-display text-[36px] leading-[40px] text-xco-ink">Structures that remain open</p>
+              <p className="doc-h2 text-xco-ink">Structures that remain open</p>
             </div>
           </div>
 
@@ -353,7 +353,7 @@ export default function ComponentsPage() {
         >
           <div className="space-y-2">
             <Kicker>Field note — Aug 2026</Kicker>
-            <h3 className="font-display text-[36px] leading-[40px] text-xco-ink">
+            <h3 className="doc-h2 text-xco-ink">
               Distributed resilience, cross-domain
             </h3>
           </div>

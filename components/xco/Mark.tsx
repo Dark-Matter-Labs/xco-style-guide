@@ -1,35 +1,33 @@
 export type Domain = "bio" | "inst" | "tech" | "culture";
 
-const SHAPES: Record<Domain, { char: string; label: string }> = {
-  bio:     { char: "●", label: "circle — biological" },
-  inst:    { char: "■", label: "square — institutional" },
-  tech:    { char: "▲", label: "triangle — technology" },
-  culture: { char: "◆", label: "diamond — culture" },
+const LABELS: Record<Domain, string> = {
+  bio: "circle — biophysical",
+  inst: "square — institutional",
+  tech: "triangle — technological",
+  culture: "diamond — cultural",
 };
+
+const SIZES = { xs: 8, sm: 11, md: 16, lg: 26 } as const;
 
 interface MarkProps {
   domain: Domain;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: keyof typeof SIZES;
   className?: string;
 }
 
+// The shape channel. Drawn in CSS rather than set as a glyph (●■▲◆) so it
+// stays crisp at 8px, survives forced-colors mode, and does not depend on a
+// font being loaded. Colour reinforces; shape is what actually carries the
+// domain — which is the whole point, since the four hues collapse under
+// deuteranopia.
 export function Mark({ domain, size = "sm", className = "" }: MarkProps) {
-  const shape = SHAPES[domain];
-  const sizeStyle: Record<typeof size, string> = {
-    xs: "text-[10px]",
-    sm: "text-[14px]",
-    md: "text-[20px]",
-    lg: "text-[28px]",
-  };
-
+  const px = SIZES[size];
   return (
     <span
       role="img"
-      aria-label={shape.label}
-      className={`font-body leading-none select-none ${sizeStyle[size]} ${className}`}
-      style={{ color: `var(--domain-${domain})` }}
-    >
-      {shape.char}
-    </span>
+      aria-label={LABELS[domain]}
+      className={`doc-mk doc-mk-${domain} ${className}`}
+      style={{ width: px, height: px, color: `var(--domain-${domain})` }}
+    />
   );
 }
