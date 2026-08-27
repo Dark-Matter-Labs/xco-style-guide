@@ -1,4 +1,4 @@
-// Signal group avatars for the four xCO groups.
+// Signal group avatars for the five xCO groups.
 // Run: npm run avatars
 //
 // Signal masks avatars to a circle and lists them at roughly 48px, so this
@@ -12,6 +12,11 @@
 //
 //   channel 1   ground colour, one documented palette tone each
 //   channel 2   the angle of the C's aperture
+
+// With five groups the four cardinal apertures are used up, so the fifth takes
+// a diagonal. Every diagonal sits between two cardinals, so the one to pick is
+// the one whose angular neighbours are in a different luminance band from the
+// new ground — then even where the angles are close, the tiles are not.
 //
 // The second channel is what keeps them distinguishable in greyscale, for a
 // colour-blind reader, and under forced colours. It is also the logotype's own
@@ -111,6 +116,20 @@ const groups = [
     // apart only by glyph colour.
     why: "Green and white, after the flag.",
   },
+  {
+    file: "xco-madrid",
+    name: "xCO-Madrid",
+    ground: SAND,
+    c: INK,
+    x: INK, // ink variant — sand is a light ground, so ink carries at 8.13:1
+    // 135° rather than another diagonal. Sand's nearest neighbours in
+    // luminance are paper (1.78) and green (1.96); at 135° it sits a full
+    // 135° from both of those apertures, while its angular neighbours — ink
+    // at 90° and ocean at 180° — are dark grounds it separates from by
+    // 8.13 and 4.04. So the two channels never weaken at the same time.
+    aperture: 135, // opening upper-left
+    why: "Sand, the warm field register — the last free documented tone.",
+  },
 ];
 
 // ── Composition ───────────────────────────────────────────────────────
@@ -131,7 +150,7 @@ const ty = BOX / 2 - ((g.capTop + g.baseline) / 2) * scale;
 // Signal's dark list background sits at roughly #1b1b1b, which is within a
 // shade of ink — without this the inverse-register avatar has no visible edge
 // and reads as a hole. The ring is the system's own answer: structure is
-// drawn, not shadowed. Applied to all four so the set stays consistent.
+// drawn, not shadowed. Applied to every avatar so the set stays consistent.
 // 20px on a 1024px frame lands at ~1px once Signal scales to 48px.
 const RING = 20;
 
