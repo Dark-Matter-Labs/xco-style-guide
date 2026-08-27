@@ -47,6 +47,22 @@ const DUSK = "#ff5a00";
 const OCEAN = "#005096";
 const SAND = "#ffa064";
 
+// Not a system token. The documented palette has no unassigned green: the two
+// it does contain are reserved channels — --meaning-continuity (#267b61) means
+// "continuity" and --domain-inst (#1f9a91) means "institutional", and
+// borrowing either for a group would be the same misuse as handing a group a
+// domain colour. So this is a group-identity colour, declared here and only
+// here, holding the flag's green in the guide's muted register rather than at
+// full chroma (#138808).
+//
+// Value chosen by measurement, not by eye. It has to do three things at once:
+// clear 3:1 against the paper glyphs, sit far enough from ocean in luminance
+// that the two tiles do not merge in greyscale, and read as a tile against
+// Signal's dark list ground. A darker #157f3f gave better glyph contrast
+// (4.49:1) but collapsed toward ocean in greyscale at 1.60:1; this trades a
+// little glyph margin for 2.07:1 there and a clearer edge on dark.
+const INDIA_GREEN = "#1f9350";
+
 // Each avatar uses one of the three documented logo variants, set on a palette
 // ground. No group is assigned a domain colour or domain shape: those channels
 // mean "biophysical / institutional / technological / cultural", and these
@@ -86,11 +102,14 @@ const groups = [
   {
     file: "xco-india",
     name: "xCO-India",
-    ground: SAND,
-    c: INK,
-    x: INK, // ink variant — dusk on sand sits too close in hue
+    ground: INDIA_GREEN,
+    c: PAPER,
+    x: PAPER, // paper variant — white on green, per the flag
     aperture: 270, // opening down
-    why: "Sand, the warm field register.",
+    // Paper mark on green rather than a green mark on paper: the parent group
+    // already owns the paper ground, and at 48px two paper tiles would be told
+    // apart only by glyph colour.
+    why: "Green and white, after the flag.",
   },
 ];
 
