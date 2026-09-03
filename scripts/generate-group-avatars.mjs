@@ -1,4 +1,4 @@
-// Signal group avatars for the five xCO groups.
+// Signal group avatars for the six xCO groups.
 // Run: npm run avatars
 //
 // Signal masks avatars to a circle and lists them at roughly 48px, so this
@@ -13,10 +13,13 @@
 //   channel 1   ground colour, one documented palette tone each
 //   channel 2   the angle of the C's aperture
 
-// With five groups the four cardinal apertures are used up, so the fifth takes
-// a diagonal. Every diagonal sits between two cardinals, so the one to pick is
+// Past four groups the cardinal apertures are used up and the rest take
+// diagonals. Every diagonal sits between two cardinals, so the one to pick is
 // the one whose angular neighbours are in a different luminance band from the
 // new ground — then even where the angles are close, the tiles are not.
+//
+// The invariant this maintains: no two avatars may be weak on BOTH channels at
+// once. Close in value is fine if the apertures are far apart, and vice versa.
 //
 // The second channel is what keeps them distinguishable in greyscale, for a
 // colour-blind reader, and under forced colours. It is also the logotype's own
@@ -51,6 +54,7 @@ const PAPER = "#f4f1e9";
 const DUSK = "#ff5a00";
 const OCEAN = "#005096";
 const SAND = "#ffa064";
+const TEAL = "#0082aa";
 
 // Not a system token. The documented palette has no unassigned green: the two
 // it does contain are reserved channels — --meaning-continuity (#267b61) means
@@ -128,7 +132,22 @@ const groups = [
     // at 90° and ocean at 180° — are dark grounds it separates from by
     // 8.13 and 4.04. So the two channels never weaken at the same time.
     aperture: 135, // opening upper-left
-    why: "Sand, the warm field register — the last free documented tone.",
+    why: "Sand, the warm field register.",
+  },
+  {
+    file: "xco-santiago",
+    name: "xCO-Santiago",
+    ground: TEAL,
+    c: PAPER,
+    x: PAPER, // paper variant — paper carries on teal at 3.90:1, ink only 3.71:1
+    // 45° is the only free diagonal that works. Teal's nearest neighbour in
+    // luminance is the India green at 1.12:1 — nearly identical in greyscale —
+    // so the aperture has to carry the whole separation, and 45° sits 135° from
+    // India's 270°. At 225° or 315° it would land 45° from India: close in
+    // value AND close in angle, which is the one thing the two-channel scheme
+    // exists to prevent.
+    aperture: 45, // opening upper-right
+    why: "Teal — the documented open register: frontier, coastal.",
   },
 ];
 
