@@ -1,4 +1,4 @@
-// Signal group avatars for the six xCO groups.
+// Signal group avatars for the seven xCO groups.
 // Run: npm run avatars
 //
 // Signal masks avatars to a circle and lists them at roughly 48px, so this
@@ -55,6 +55,7 @@ const DUSK = "#ff5a00";
 const OCEAN = "#005096";
 const SAND = "#ffa064";
 const TEAL = "#0082aa";
+const NAVY = "#000064";
 
 // Not a system token. The documented palette has no unassigned green: the two
 // it does contain are reserved channels — --meaning-continuity (#267b61) means
@@ -148,6 +149,23 @@ const groups = [
     // exists to prevent.
     aperture: 45, // opening upper-right
     why: "Teal — the documented open register: frontier, coastal.",
+  },
+  {
+    file: "xco-positions-options-stewards",
+    name: "xCO — Positions & Options Stewards",
+    ground: NAVY,
+    c: PAPER,
+    x: PAPER, // paper on navy at 15.71:1, the strongest pairing in the set
+    // Navy's documented role is "Blueprint dark ground. Deep structural
+    // register", which fits a group stewarding the positions and options
+    // themselves rather than a place or a track.
+    //
+    // 315°, not 225°. Navy has two near neighbours and this angle clears both:
+    // ink is its value-twin at 1.09:1 (135° away here) and ocean is its
+    // hue-twin, the other dark blue (also 135° away). At 225° ocean would sit
+    // just 45° off, putting the two dark blues close on both channels at once.
+    aperture: 315, // opening lower-right
+    why: "Navy — the deep structural register.",
   },
 ];
 
