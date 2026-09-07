@@ -1,4 +1,4 @@
-// Signal group avatars for the seven xCO groups.
+// Signal group avatars for the eight xCO groups.
 // Run: npm run avatars
 //
 // Signal masks avatars to a circle and lists them at roughly 48px, so this
@@ -72,6 +72,23 @@ const NAVY = "#000064";
 // (4.49:1) but collapsed toward ocean in greyscale at 1.60:1; this trades a
 // little glyph margin for 2.07:1 there and a clearer edge on dark.
 const INDIA_GREEN = "#1f9350";
+
+// The second group-identity colour, and the point at which the documented
+// palette genuinely ran out: paper, ink, ocean, teal, sand and navy are all
+// taken, and dusk is the 5% accent rather than a ground. So this is declared
+// here, like the India green, and is not a system token.
+//
+// A light violet, chosen for two reasons. It is the only unused hue region in
+// the set — which by then held near-white, near-black, two blues, a green and
+// an amber — and it lands in the light band, where only paper and sand sat.
+//
+// The constraint that fixed the value: 225° has Oceans (180°) and India (270°)
+// as its 45° neighbours, so colour alone has to separate it from both. This
+// clears ocean at 4.15:1 and green at 2.01:1. The mid and dark plums that read
+// more "in palette" all failed against ocean — #7d3f6b at 1.08:1, #8d4a7a at
+// 1.31:1 — which would have been two tiles a colour-blind reader could not
+// separate, since the angle could not help either.
+const LEARNING_LILAC = "#cbb0d8";
 
 // Each avatar uses one of the three documented logo variants, set on a palette
 // ground. No group is assigned a domain colour or domain shape: those channels
@@ -166,6 +183,15 @@ const groups = [
     // just 45° off, putting the two dark blues close on both channels at once.
     aperture: 315, // opening lower-right
     why: "Navy — the deep structural register.",
+  },
+  {
+    file: "xco-learning-system",
+    name: "xCO — Learning System",
+    ground: LEARNING_LILAC,
+    c: INK,
+    x: INK, // ink on a light ground, 8.35:1
+    aperture: 225, // opening lower-left — the last free cardinal-or-diagonal
+    why: "Light violet — the one hue region the set had left.",
   },
 ];
 
