@@ -9,6 +9,7 @@ export { Thesis } from "./Thesis";
 export { Stat, StatGrid } from "./Stat";
 export { Kicker } from "./Kicker";
 export { Logo } from "./Logo";
+export { GroupMark, groundHex } from "./GroupMark";
 
 // ── Polyphonic grammar primitives ────────────────────────────────────
 export { LicenceBadge } from "./LicenceBadge";
