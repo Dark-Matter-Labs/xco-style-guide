@@ -41,7 +41,7 @@ const EXPORTS: {
     label: "Tailwind v4 — @theme",
     tag: "Tailwind 4",
     description:
-      "Add inside the @theme {} block in your globals.css. Creates Tailwind utilities like bg-xco-ocean, text-xco-dusk, font-body.",
+      "Add inside the @theme {} block in your globals.css. Creates Tailwind utilities like bg-xco-ocean, text-xco-dusk-ink, font-body.",
     filename: "xco-theme-v4.css",
     build: buildTailwindV4,
   },
@@ -104,7 +104,7 @@ export function DesignExportGenerator() {
               <span
                 className={`font-mono text-[10px] px-1.5 py-0.5 shrink-0 ${
                   active === id
-                    ? "bg-xco-ocean text-xco-paper"
+                    ? "bg-xco-ocean text-xco-on-accent"
                     : "bg-transparent text-xco-ink"
                 }`}
               >
@@ -132,7 +132,7 @@ export function DesignExportGenerator() {
             onClick={handleCopy}
             className={`w-full font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2.5 border transition-colors ${
               copied === active
-                ? "bg-xco-ocean text-xco-paper border-xco-ocean"
+                ? "bg-xco-ocean text-xco-on-accent border-xco-ocean"
                 : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
             }`}
           >
@@ -174,7 +174,7 @@ export function DesignExportGenerator() {
         </div>
 
         <div className="border border-xco-ink overflow-hidden">
-          <pre className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
+          <pre tabIndex={0} aria-label="Export preview" className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
             {content}
           </pre>
         </div>

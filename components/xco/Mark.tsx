@@ -27,6 +27,7 @@ export function Mark({ domain, size = "sm", className = "" }: MarkProps) {
       role="img"
       aria-label={LABELS[domain]}
       className={`doc-mk doc-mk-${domain} ${className}`}
+      // a11y: non-text — the colour fills a shape (1.4.11, 3:1), not text.
       style={{ width: px, height: px, color: `var(--domain-${domain})` }}
     />
   );

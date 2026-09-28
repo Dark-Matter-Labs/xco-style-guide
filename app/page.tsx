@@ -36,6 +36,7 @@ const systemLinks = [
   { href: "/tone",        label: "Tone of Voice",        blurb: "Three registers, live linter, US English." },
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },
+  { href: "/accessibility", label: "Accessibility",      blurb: "WCAG 2.2 AA, measured on every build." },
 ].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
 
 const generatorLinks = [
@@ -61,7 +62,7 @@ const domains = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main id="main" tabIndex={-1} className="min-h-screen">
       <Grain />
       <ReadingProgress />
 
@@ -191,7 +192,7 @@ export default function Home() {
           {systemLinks.map(({ href, label, blurb }) => (
             <li key={href}>
               <Link href={href} className="group flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                <span className="text-xco-ink group-hover:opacity-60 transition-opacity">
+                <span className="text-xco-ink group-hover:text-xco-ink-muted transition-colors">
                   {label}
                 </span>
                 <span className="doc-sans !text-[12px]">{blurb}</span>
@@ -216,7 +217,7 @@ export default function Home() {
         <Cells cols={3} className="mt-10">
           {generatorLinks.map(({ href, label }) => (
             <Link key={href} href={href} className="group block px-5 py-6">
-              <b className="block font-display text-[17px] font-normal text-xco-ink group-hover:opacity-60 transition-opacity">
+              <b className="block font-display text-[17px] font-normal text-xco-ink group-hover:text-xco-ink-muted transition-colors">
                 {label}
               </b>
               <span className="doc-label !text-[9px] mt-2 block">open ↗</span>
@@ -247,7 +248,7 @@ export default function Home() {
               className="group flex items-baseline justify-between gap-4 py-4"
               style={{ borderTop: "1px solid var(--rule)" }}
             >
-              <span className="font-display text-[20px] group-hover:opacity-60 transition-opacity">
+              <span className="font-display text-[20px] group-hover:text-xco-ink-muted transition-colors">
                 {label}
               </span>
               <span className="doc-label !text-[9px] shrink-0">{meta} ↗</span>

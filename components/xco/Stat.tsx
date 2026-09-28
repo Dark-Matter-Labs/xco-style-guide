@@ -12,7 +12,7 @@ export function Stat({ value, label, domain, className = "" }: StatProps) {
     <div className={`space-y-1 ${className}`}>
       <p
         className="font-display text-[60px] leading-[60px]"
-        style={{ color: domain ? `var(--domain-${domain})` : "var(--xco-ink)" }}
+        style={{ color: domain ? `var(--${domain}-ink)` : "var(--xco-ink)" }}
       >
         {value}
       </p>

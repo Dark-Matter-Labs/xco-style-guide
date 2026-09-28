@@ -9,6 +9,7 @@ const sections: NavLink[] = [
   { href: "/tone", label: "Tone" },
   { href: "/components", label: "Components" },
   { href: "/grammar", label: "Grammar" },
+  { href: "/accessibility", label: "Access" },
 ];
 
 export default function SystemLayout({
@@ -21,7 +22,7 @@ export default function SystemLayout({
       <Grain />
       <ReadingProgress />
       <SiteNav links={sections} register="system" />
-      {children}
+      <main id="main" tabIndex={-1}>{children}</main>
     </div>
   );
 }

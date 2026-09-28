@@ -35,7 +35,7 @@ function Field({ label, value, onChange, hint, mono, rows }: {
   label: string; value: string; onChange: (v: string) => void;
   hint?: string; mono?: boolean; rows?: number;
 }) {
-  const cls = `w-full bg-transparent border-b border-xco-ink text-[24px] text-xco-ink py-1 focus:outline-none focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`;
+  const cls = `w-full bg-transparent border-b border-xco-ink text-[24px] text-xco-ink py-1 focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`;
   return (
     <label className="block space-y-1">
       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>

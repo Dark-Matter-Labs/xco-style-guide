@@ -75,9 +75,9 @@ function Slider({
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between">
         <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">{label}</span>
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{display ?? value}</span>
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{display ?? value}</span>
       </div>
-      <input type="range" min={min} max={max} step={step} value={value}
+      <input type="range" aria-label={label} min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
         className="w-full accent-xco-dusk" />
     </div>
@@ -176,14 +176,16 @@ export function TerritoryGenerator() {
                     value={item.label}
                     onChange={e => updateItem(item.id, { label: e.target.value })}
                     placeholder="Concept"
-                    className="w-full bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink placeholder:text-xco-ink/50"
+                    aria-label="Concept"
+                    className="w-full bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:border-xco-ink placeholder:text-xco-ink-weak"
                   />
                   <input
                     type="text"
                     value={item.sublabel ?? ""}
                     onChange={e => updateItem(item.id, { sublabel: e.target.value })}
                     placeholder="sublabel"
-                    className="w-full bg-transparent font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none placeholder:opacity-40"
+                    aria-label={`Sublabel for ${item.label || "concept"}`}
+                    className="w-full bg-transparent font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 placeholder:text-xco-ink-weak"
                   />
                 </div>
                 <div className="flex items-center gap-1 shrink-0 pt-0.5">
@@ -191,13 +193,15 @@ export function TerritoryGenerator() {
                     type="number"
                     value={item.weight}
                     min={1} max={999}
+                    aria-label={`Weight of ${item.label || "concept"}`}
                     onChange={e => updateItem(item.id, { weight: Math.max(1, Number(e.target.value)) })}
-                    className="w-12 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk text-right py-0.5 focus:outline-none"
+                    className="w-12 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink text-right py-0.5"
                   />
                   <button
                     onClick={() => removeItem(item.id)}
                     disabled={items.length <= 2}
-                    className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-none text-xco-ink hover:text-xco-ink transition-colors disabled:opacity-20 px-0.5"
+                    aria-label={`Remove ${item.label || "concept"}`}
+                    className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-none text-xco-ink hover:text-xco-ink transition-colors disabled:opacity-20 min-w-6 min-h-6 inline-flex items-center justify-center"
                   >
                     ×
                   </button>

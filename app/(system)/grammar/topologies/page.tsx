@@ -15,7 +15,7 @@ export default function TopologiesPage() {
   return (
     <div className="doc-wrap py-12 space-y-24">
       <header className="space-y-4 pb-6">
-        <Link href="/grammar" className={`${MONO} text-xco-ink-muted hover:text-xco-dusk transition-colors`}>
+        <Link href="/grammar" className={`${MONO} text-xco-ink-muted hover:text-xco-dusk-ink transition-colors`}>
           ← Grammar
         </Link>
         <div className="flex items-baseline justify-between">
@@ -85,7 +85,7 @@ export default function TopologiesPage() {
             <div key={e.element} className="grid grid-cols-1 lg:grid-cols-[200px_1fr_1fr] gap-4 py-4" style={{ borderBottom: ROW }}>
               <p className={`${MONO} text-xco-ink`}>{e.element}</p>
               <p className={`${SMALL} text-xco-ink`}>{e.required}</p>
-              <p className={`${SMALL}`} style={{ color: "var(--xco-dusk)" }}>✗ {e.failure}</p>
+              <p className={`${SMALL}`} style={{ color: "var(--xco-dusk-ink)" }}>✗ {e.failure}</p>
             </div>
           ))}
         </div>

@@ -6,4 +6,5 @@ export { Note } from "./Note";
 export { ReadingProgress } from "./ReadingProgress";
 export { RegisterSwitch } from "./RegisterSwitch";
 export { SiteNav } from "./SiteNav";
+export { SkipLink } from "./SkipLink";
 export type { NavLink } from "./SiteNav";

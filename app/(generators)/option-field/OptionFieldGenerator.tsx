@@ -56,11 +56,11 @@ function Slider({
         <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
           {label}
         </span>
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">
+        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
           {display ?? value.toFixed(2)}
         </span>
       </div>
-      <input type="range" min={min} max={max} step={step} value={value}
+      <input type="range" aria-label={label} min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-xco-dusk" />
       {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}

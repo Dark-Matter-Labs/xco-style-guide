@@ -182,7 +182,7 @@ export function LogoDownloads() {
           </button>
         </div>
         {error && (
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
             {error}
           </p>
         )}
@@ -195,10 +195,12 @@ export function LogoDownloads() {
 
       {/* Source */}
       <details className="pt-2">
-        <summary className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink cursor-pointer hover:text-xco-dusk transition-colors">
+        <summary className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink cursor-pointer hover:text-xco-dusk-ink transition-colors">
           View SVG source
         </summary>
         <pre
+          tabIndex={0}
+          aria-label="SVG source"
           className="mt-4 p-4 overflow-x-auto font-mono font-medium text-[0.75rem] leading-[1.5] text-xco-ink-muted"
           style={{ background: "var(--xco-paper-quiet)" }}
         >

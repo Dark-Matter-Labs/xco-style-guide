@@ -17,12 +17,12 @@ export function AmbiguityTag({ code, className = "" }: AmbiguityTagProps) {
       className={`inline-flex items-baseline gap-2 px-2 py-0.5 font-mono font-medium text-[0.75rem] leading-[1.4] tracking-widest ${className}`}
       style={{
         border: `1px solid ${a.licensed ? "var(--xco-ink)" : "var(--xco-dusk)"}`,
-        color: a.licensed ? "var(--xco-ink)" : "var(--xco-dusk)",
+        color: a.licensed ? "var(--xco-ink)" : "var(--xco-dusk-ink)",
       }}
       title={a.detail}
     >
       <span>{a.code}</span>
-      <span className="opacity-70 normal-case tracking-normal">{a.name}</span>
+      <span className="normal-case tracking-normal">{a.name}</span>
     </span>
   );
 }

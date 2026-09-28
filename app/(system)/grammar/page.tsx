@@ -162,15 +162,15 @@ export default function GrammarPage() {
       {/* Sub-pages */}
       <section className="space-y-8 pb-8">
         <h2 className={LABEL}>In detail</h2>
-        <nav className="space-y-0">
+        <nav className="space-y-0" aria-label="Grammar pages">
           {pages.map((p) => (
             <Link
               key={p.href}
               href={p.href}
-              className="group flex items-baseline justify-between gap-6 py-4 hover:text-xco-ocean transition-colors"
+              className="group flex items-baseline justify-between gap-6 py-4 hover:text-xco-ocean-ink transition-colors"
               style={{ borderBottom: "1px solid var(--border-subtle)" }}
             >
-              <span className={`${BODY} group-hover:text-xco-ocean transition-colors`}>
+              <span className={`${BODY} group-hover:text-xco-ocean-ink transition-colors`}>
                 {p.label}
               </span>
               <span className={`${SMALL} text-xco-ink-muted text-right shrink-0 max-w-xs`}>

@@ -54,7 +54,7 @@ export default function TonePage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ {r.correct}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
                   ✗ {r.incorrect}
                 </p>
               </div>
@@ -104,10 +104,10 @@ export default function TonePage() {
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
+                      <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                         ✗ not that
                       </p>
-                      <p className="font-body text-[24px] text-xco-ink line-through leading-[26px] opacity-60">
+                      <p className="font-body text-[24px] text-xco-ink-muted line-through leading-[26px]">
                         {ex.bad}
                       </p>
                     </div>
@@ -128,7 +128,7 @@ export default function TonePage() {
           {[...bannedWords].map((w) => (
             <span
               key={w}
-              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk px-2 py-1"
+              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink px-2 py-1"
             >
               {w.trim()}
             </span>
@@ -155,7 +155,7 @@ export default function TonePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-2">
           {[...spellingCorrections].map(({ british, american }) => (
             <div key={british} className="flex items-baseline gap-2">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean line-through opacity-70">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean-ink line-through">
                 {british}
               </span>
               <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">

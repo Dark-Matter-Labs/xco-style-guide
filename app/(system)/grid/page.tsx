@@ -104,7 +104,7 @@ export default function GridPage() {
             </div>
           </div>
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            Tailwind: <span className="text-xco-dusk">grid-cols-[61.8fr_38.2fr]</span>
+            Tailwind: <span className="text-xco-dusk-ink">grid-cols-[61.8fr_38.2fr]</span>
           </p>
         </div>
       </section>
@@ -221,7 +221,7 @@ export default function GridPage() {
         <ul className="space-y-3 max-w-2xl">
           {DIAGRAM_RULES.map((rule, i) => (
             <li key={i} className="flex items-baseline gap-4">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk shrink-0">
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink shrink-0">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="font-body text-[24px] text-xco-ink leading-[26px]">

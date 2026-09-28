@@ -370,9 +370,9 @@ export function AlignGenerator() {
         <div className="space-y-3 pt-4">
           <div className="flex items-baseline justify-between">
             <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Contrast</h2>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{midLabel}</span>
+            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{midLabel}</span>
           </div>
-          <input type="range" min={10} max={70} step={1}
+          <input type="range" aria-label="Contrast" min={10} max={70} step={1}
             value={Math.round(midpoint * 100)}
             onChange={(e) => setMidpoint(Number(e.target.value) / 100)}
             className="w-full accent-xco-dusk" />
@@ -400,9 +400,9 @@ export function AlignGenerator() {
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Resolution</span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{spacing}px</span>
+                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{spacing}px</span>
                 </div>
-                <input type="range" min={0} max={100} step={1}
+                <input type="range" aria-label="Resolution" min={0} max={100} step={1}
                   value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
                   className="w-full accent-xco-dusk" />
                 <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
@@ -447,7 +447,7 @@ export function AlignGenerator() {
             onClick={handleCopyPrompt}
             className={`w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] border px-3 py-2 transition-colors ${
               copied
-                ? "bg-xco-teal text-xco-paper border-xco-teal"
+                ? "bg-xco-ocean text-xco-on-accent border-xco-ocean"
                 : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
             }`}
           >
@@ -480,7 +480,7 @@ export function AlignGenerator() {
             style={{ aspectRatio: "1200/630" }}>
             <div className="text-center space-y-2 p-8">
               <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload an image to preview</p>
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink opacity-60">
+              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                 Tritone maps shadow / mid / highlight luminance bands<br />
                 to xCO palette stops — output matches your image aspect ratio
               </p>

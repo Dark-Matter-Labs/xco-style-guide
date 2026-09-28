@@ -16,7 +16,7 @@ export default function ReaderPage() {
   return (
     <div className="doc-wrap py-12 space-y-24">
       <header className="space-y-4 pb-6">
-        <Link href="/grammar" className={`${MONO} text-xco-ink-muted hover:text-xco-dusk transition-colors`}>
+        <Link href="/grammar" className={`${MONO} text-xco-ink-muted hover:text-xco-dusk-ink transition-colors`}>
           ← Grammar
         </Link>
         <div className="flex items-baseline justify-between">

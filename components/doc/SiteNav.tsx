@@ -21,7 +21,7 @@ export function SiteNav({ links, register }: SiteNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="doc-nav">
+    <nav className="doc-nav" aria-label="Site">
       <div className="doc-wrap h-14 flex items-center gap-8">
         {/* h-11: a 44px target. The mark is 15px tall, so without this the link
             was a thin strip — under the guide's own 44px minimum. */}

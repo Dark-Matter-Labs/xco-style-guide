@@ -95,9 +95,9 @@ export default function LogoPage() {
                 {item.k}
               </dt>
               <dd className="doc-h2 text-xco-ink">{item.v}</dd>
-              <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <dd className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {item.n}
-              </p>
+              </dd>
             </div>
           ))}
         </dl>
@@ -136,7 +136,7 @@ export default function LogoPage() {
           ))}
           <div className="space-y-3 opacity-40">
             <Logo height={16} />
-            <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-dusk">
+            <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-dusk-ink">
               16px — too small
             </p>
           </div>
@@ -273,7 +273,7 @@ export default function LogoPage() {
                     </p>
                     <a
                       href={`/signal-groups/${m.file}.png`}
-                      className="inline-block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted hover:text-xco-dusk transition-colors"
+                      className="inline-block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors"
                     >
                       {m.file}.png ↓
                     </a>
@@ -330,7 +330,7 @@ export default function LogoPage() {
                       <p
                         key={`${p.a}-${p.b}`}
                         className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                        style={{ color: "var(--xco-dusk)" }}
+                        style={{ color: "var(--xco-dusk-ink)" }}
                       >
                         ✗ {p.a} vs {p.b} — value {p.value.toFixed(2)}:1, angle {p.angle}°
                       </p>

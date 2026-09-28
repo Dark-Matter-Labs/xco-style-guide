@@ -18,7 +18,7 @@ export function AgentTag({ type, className = "" }: AgentTagProps) {
       className={`inline-block px-2 py-0.5 font-mono font-medium text-[0.75rem] leading-[1.4] tracking-widest ${className}`}
       style={{
         border: `1px ${a.legitimate ? "solid" : "dashed"} var(--xco-ink)`,
-        color: a.legitimate ? "var(--xco-ink)" : "var(--xco-dusk)",
+        color: a.legitimate ? "var(--xco-ink)" : "var(--xco-dusk-ink)",
         textDecoration: a.legitimate ? "none" : "line-through",
       }}
       title={a.meaning}

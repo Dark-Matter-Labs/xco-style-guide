@@ -696,7 +696,7 @@ export function ImageTreatmentGenerator() {
                     setUploadedImgs((prev) => prev.filter((_, j) => j !== i));
                     setActiveIdx((a) => Math.min(a, Math.max(0, uploadedImgs.length - 2)));
                   }}
-                  className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors"
+                  className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors"
                 >
                   ✕
                 </button>
@@ -758,9 +758,9 @@ export function ImageTreatmentGenerator() {
           <div className="space-y-3 pt-4">
             <div className="flex items-baseline justify-between">
               <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Resolution</h2>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{dotSpacing}px grid</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{dotSpacing}px grid</span>
             </div>
-            <input type="range" min={0} max={100} step={1}
+            <input type="range" aria-label="Resolution" min={0} max={100} step={1}
               value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
               className="w-full accent-xco-dusk" />
             <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
@@ -853,9 +853,9 @@ export function ImageTreatmentGenerator() {
             </div>
             <div className="flex items-baseline justify-between">
               <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Hold per frame</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{(animSpeed / 1000).toFixed(1)}s</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{(animSpeed / 1000).toFixed(1)}s</span>
             </div>
-            <input type="range" min={500} max={6000} step={100}
+            <input type="range" aria-label="Hold per frame" min={500} max={6000} step={100}
               value={animSpeed} onChange={(e) => setAnimSpeed(Number(e.target.value))}
               className="w-full accent-xco-dusk" />
             <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
