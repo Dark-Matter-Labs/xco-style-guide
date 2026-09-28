@@ -21,11 +21,19 @@ const X_HEIGHT = Math.round(CAP / 1.618);  // 62 — φ subdivision of cap
 const PAD = 30;                     // clear space built into the viewBox
 const X_WIDTH = 56;                 // lowercase x advance
 
-// Optical gaps, not metric ones. Round-to-round sits far tighter than
-// flat-to-round: at equal metric gaps the C/O pair reads as a hole. Tuned by
-// eye at 4× and held here so the mark cannot drift.
+// Optical gaps, not metric ones — measured, not eyeballed. Each pair is
+// spaced so the mean white per row across the x-height band is equal, with
+// each glyph's profile clamped a fixed depth behind its own extreme (the
+// method letterspacing tools use, so open forms count as deep but finite).
+//
+// C → O is NEGATIVE, and has to be. The C's aperture faces the O, so the
+// mouth pours a large pocket of white into that gap; the bounding boxes must
+// overlap before the pair holds as much space as x → C. At the previous +4 the
+// pair measured 1.61× the optical space of x → C and the O read as detached —
+// the kerning feedback. At −10 the ratio is 1.01×. Re-measure before changing:
+// scripts/measure-logo-spacing.mjs.
 const GAP_XC = 14;                  // x → C  (flat diagonal to round)
-const GAP_CO = 4;                   // C → O  (round to round)
+const GAP_CO = -10;                 // C → O  (round to open round: boxes overlap)
 
 const R = CAP / 2 - STROKE / 2;     // 44 — centreline radius of C and O
 const CAP_TOP = PAD;                // 30
@@ -38,7 +46,7 @@ const C_APERTURE = 100;
 // Glyph origins along the baseline
 const X_LEFT = PAD;                                 // 30
 const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
-const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 254
+const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
 
 export const logoGeometry = {
   cap: CAP,
@@ -56,8 +64,27 @@ export const logoGeometry = {
   xWidth: X_WIDTH,
   cCx: C_CX,
   oCx: O_CX,
-  width: O_CX + CAP / 2 + PAD,   // 352
+  width: O_CX + CAP / 2 + PAD,   // 320
   height: BASELINE + PAD,        // 160
+} as const;
+
+// ── Ink bounds ───────────────────────────────────────────────────────
+// The actual extent of the ink, without the built-in clear space — for inline
+// use (nav, masthead) where the surrounding layout supplies the spacing.
+//
+// The x's diagonals end in butt caps cut perpendicular to the stroke, so their
+// corners overhang the path endpoints: 4.45 sideways and 4.02 vertically. That
+// overhang is why the x's feet sit below the baseline the C and O rest on.
+
+const X_DIAGONAL = Math.hypot(X_WIDTH, X_HEIGHT);
+const X_CAP_DX = (STROKE / 2) * (X_HEIGHT / X_DIAGONAL);   // 4.45
+const X_CAP_DY = (STROKE / 2) * (X_WIDTH / X_DIAGONAL);    // 4.02
+
+export const inkBounds = {
+  left: X_LEFT - X_CAP_DX,
+  right: O_CX + CAP / 2,
+  top: Math.min(CAP_TOP, BASELINE - X_HEIGHT - X_CAP_DY),
+  bottom: BASELINE + X_CAP_DY,
 } as const;
 
 // ── Path construction ────────────────────────────────────────────────
@@ -160,7 +187,7 @@ const DESC_SPACE = 44;             // extra viewBox height when present
 const MONO_ADVANCE = 0.6;          // DM Mono advance width, in em
 
 /** Horizontal span of the glyphs, PAD to PAD. */
-const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 274
+const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 260
 
 /**
  * Letter-spacing that makes `descriptor` fill MARK_SPAN at DESC_SIZE.

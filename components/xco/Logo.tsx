@@ -6,6 +6,7 @@ import {
   xPaths,
   descriptor,
   descriptorMetrics,
+  inkBounds,
   type LogoVariant,
 } from "@/lib/logo";
 
@@ -14,6 +15,19 @@ interface LogoProps {
   withDescriptor?: boolean;
   /** Rendered height in px. Width follows the mark's ratio. */
   height?: number;
+  /**
+   * Crop to the ink, dropping the built-in clear space. For the mark set
+   * inside a layout that already spaces it — the nav, a masthead. Height then
+   * measures the ink rather than the padded frame.
+   */
+  inline?: boolean;
+  /**
+   * Override every glyph's colour, e.g. "currentColor" so the mark follows the
+   * Paper/Ink register. Without it, the variant's fixed colours are used.
+   */
+  color?: string;
+  /** Accessible name. Shorten it where the full name is already spelled out beside the mark. */
+  label?: string;
   className?: string;
 }
 
@@ -21,6 +35,9 @@ export function Logo({
   variant = "ink",
   withDescriptor = false,
   height = 64,
+  inline = false,
+  color,
+  label = "xCO — Expanding Civilizational Optionality",
   className = "",
 }: LogoProps) {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
@@ -29,23 +46,36 @@ export function Logo({
   const d = descriptorMetrics;
   const totalHeight = gh + (withDescriptor ? d.space : 0);
   const [x1, x2] = xPaths();
+  const fg = color ?? v.fg;
+  const xFg = color ?? v.xFg;
+
+  // An inline mark has no descriptor: the descriptor belongs to the lockup,
+  // and the lockup carries its own clear space.
+  const box = inline
+    ? {
+        x: inkBounds.left,
+        y: inkBounds.top,
+        w: inkBounds.right - inkBounds.left,
+        h: inkBounds.bottom - inkBounds.top,
+      }
+    : { x: 0, y: 0, w: width, h: totalHeight };
 
   return (
     <svg
-      viewBox={`0 0 ${width} ${totalHeight}`}
+      viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`}
       height={height}
-      width={(width / totalHeight) * height}
+      width={(box.w / box.h) * height}
       role="img"
-      aria-label="xCO — Expanding Civilizational Optionality"
+      aria-label={label}
       className={className}
     >
       <g fill="none" strokeWidth={stroke} strokeLinecap="butt">
-        <path d={x1} stroke={v.xFg} />
-        <path d={x2} stroke={v.xFg} />
-        <path d={cPath()} stroke={v.fg} />
-        <path d={oPath()} stroke={v.fg} />
+        <path d={x1} stroke={xFg} />
+        <path d={x2} stroke={xFg} />
+        <path d={cPath()} stroke={fg} />
+        <path d={oPath()} stroke={fg} />
       </g>
-      {withDescriptor && (
+      {withDescriptor && !inline && (
         <text
           x={pad}
           y={baseline + d.baselineGap}
@@ -53,7 +83,7 @@ export function Logo({
           fontSize={d.size}
           fontWeight={500}
           letterSpacing={d.tracking}
-          fill={v.fg}
+          fill={fg}
         >
           {descriptor}
         </text>

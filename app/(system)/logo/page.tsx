@@ -88,7 +88,7 @@ export default function LogoPage() {
             { k: "x-height", v: `${g.xHeight}`, n: "cap ÷ φ" },
             { k: "Radius", v: `${g.radius}`, n: "shared by C and O" },
             { k: "Aperture", v: `${g.aperture}°`, n: "the C's opening" },
-            { k: "Gaps", v: `${g.gapXC} / ${g.gapCO}`, n: "x→C / C→O, optical" },
+            { k: "Gaps", v: `${g.gapXC} / ${String(g.gapCO).replace("-", "\u2212")}`, n: "x→C / C→O, measured" },
           ].map((item) => (
             <div key={item.k} className="space-y-1">
               <dt className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
@@ -104,9 +104,11 @@ export default function LogoPage() {
 
         <div className="max-w-2xl">
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [rule] The two gaps differ on purpose. Round-to-round sits far tighter than
-            flat-to-round — at equal metric gaps the C/O pair reads as a hole. The values are
-            tuned by eye and held in code so the mark cannot drift.
+            [rule] The two gaps are equal in optical space, not in metric distance. The
+            C&apos;s aperture faces the O and pours white into that gap, so C→O is negative:
+            the boxes overlap before the pair holds as much space as x→C. Measured, not
+            eyeballed — <code className="font-mono">npm run logo:spacing</code> fails if the
+            pairs drift more than 10% apart.
           </p>
         </div>
       </section>
