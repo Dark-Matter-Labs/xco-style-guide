@@ -44,6 +44,7 @@ const generatorLinks = [
   { href: "/territory",       label: "Territory" },
   { href: "/social-card",     label: "Social Card" },
   { href: "/paper-cover",     label: "Paper Cover" },
+  { href: "/event-series",    label: "Event Series" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/align",           label: "Align" },
   { href: "/text-highlight",  label: "Text Highlight" },
