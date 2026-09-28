@@ -32,7 +32,7 @@ const X_WIDTH = 56;                 // lowercase x advance
 // pair measured 1.61× the optical space of x → C and the O read as detached —
 // the kerning feedback. At −10 the ratio is 1.01×. Re-measure before changing:
 // scripts/measure-logo-spacing.mjs.
-const GAP_XC = 14;                  // x → C  (flat diagonal to round)
+const GAP_XC = 11;                  // x → C  (diagonal to round; 11 is the only integer within tolerance at every depth)
 const GAP_CO = -10;                 // C → O  (round to open round: boxes overlap)
 
 const R = CAP / 2 - STROKE / 2;     // 44 — centreline radius of C and O
@@ -45,8 +45,8 @@ const C_APERTURE = 100;
 
 // Glyph origins along the baseline
 const X_LEFT = PAD;                                 // 30
-const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
-const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
+const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 147
+const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 237
 
 export const logoGeometry = {
   cap: CAP,
@@ -64,27 +64,37 @@ export const logoGeometry = {
   xWidth: X_WIDTH,
   cCx: C_CX,
   oCx: O_CX,
-  width: O_CX + CAP / 2 + PAD,   // 320
+  width: O_CX + CAP / 2 + PAD,   // 317
   height: BASELINE + PAD,        // 160
 } as const;
 
-// ── Ink bounds ───────────────────────────────────────────────────────
-// The actual extent of the ink, without the built-in clear space — for inline
-// use (nav, masthead) where the surrounding layout supplies the spacing.
+// ── The x's butt-cap overhang ────────────────────────────────────────
+// The x's diagonals end in butt caps cut perpendicular to the stroke — the
+// same cut as the C's terminals, so the whole mark shares one stroke language.
+// On a diagonal those caps overhang the endpoints: 4.45 sideways, 4.02 up and
+// down. Drawn to the band itself, the x's ink ran 64 → 134 against a band of
+// 68 → 130, dipping below the baseline the C and O sit on — inverted from type
+// practice, where pointed forms sit on the line.
 //
-// The x's diagonals end in butt caps cut perpendicular to the stroke, so their
-// corners overhang the path endpoints: 4.45 sideways and 4.02 vertically. That
-// overhang is why the x's feet sit below the baseline the C and O rest on.
+// So the endpoints are inset along the diagonal by exactly the vertical
+// overhang: the ink's outer corners now land on the baseline and x-height.
+// X_WIDTH and X_HEIGHT stay the design box; only where the stroke stops moves.
 
 const X_DIAGONAL = Math.hypot(X_WIDTH, X_HEIGHT);
 const X_CAP_DX = (STROKE / 2) * (X_HEIGHT / X_DIAGONAL);   // 4.45
 const X_CAP_DY = (STROKE / 2) * (X_WIDTH / X_DIAGONAL);    // 4.02
+const X_INSET_DY = X_CAP_DY;                               // pull each end in this far vertically
+const X_INSET_DX = X_INSET_DY * (X_WIDTH / X_HEIGHT);      // 3.63 — the same move, along the diagonal
+
+// ── Ink bounds ───────────────────────────────────────────────────────
+// The actual extent of the ink, without the built-in clear space — for inline
+// use (nav, masthead) where the surrounding layout supplies the spacing.
 
 export const inkBounds = {
-  left: X_LEFT - X_CAP_DX,
+  left: X_LEFT + X_INSET_DX - X_CAP_DX,                    // 29.18
   right: O_CX + CAP / 2,
-  top: Math.min(CAP_TOP, BASELINE - X_HEIGHT - X_CAP_DY),
-  bottom: BASELINE + X_CAP_DY,
+  top: CAP_TOP,                                            // the x now stops at x-height
+  bottom: BASELINE,                                        // …and at the baseline
 } as const;
 
 // ── Path construction ────────────────────────────────────────────────
@@ -125,13 +135,19 @@ export function oPath(): string {
   return `${top} ${bottom}`;
 }
 
-/** The lowercase x: two crossing strokes, x-height tall. */
+/**
+ * The lowercase x: two crossing strokes whose INK is exactly x-height tall and
+ * sits on the baseline. Endpoints are inset so the perpendicular butt caps land
+ * on the lines rather than overshooting them.
+ */
 export function xPaths(): [string, string] {
-  const top = BASELINE - X_HEIGHT;
-  const right = X_LEFT + X_WIDTH;
+  const top = round(BASELINE - X_HEIGHT + X_INSET_DY);
+  const bottom = round(BASELINE - X_INSET_DY);
+  const left = round(X_LEFT + X_INSET_DX);
+  const right = round(X_LEFT + X_WIDTH - X_INSET_DX);
   return [
-    `M ${X_LEFT} ${top} L ${right} ${BASELINE}`,
-    `M ${right} ${top} L ${X_LEFT} ${BASELINE}`,
+    `M ${left} ${top} L ${right} ${bottom}`,
+    `M ${right} ${top} L ${left} ${bottom}`,
   ];
 }
 
@@ -187,7 +203,7 @@ const DESC_SPACE = 44;             // extra viewBox height when present
 const MONO_ADVANCE = 0.6;          // DM Mono advance width, in em
 
 /** Horizontal span of the glyphs, PAD to PAD. */
-const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 260
+const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 257
 
 /**
  * Letter-spacing that makes `descriptor` fill MARK_SPAN at DESC_SIZE.
