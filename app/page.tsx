@@ -9,7 +9,7 @@ import {
   ReadingProgress,
   RegisterSwitch,
 } from "@/components/doc";
-import { Mark } from "@/components/xco";
+import { Mark, Logo } from "@/components/xco";
 
 const templateLinks = [
   {
@@ -76,12 +76,7 @@ export default function Home() {
         style={{ borderBottom: "1px solid var(--xco-ink)" }}
       >
         <div className="flex items-start gap-[18px] mb-[52px]">
-          <div
-            className="font-display text-[36px] leading-[0.9] text-xco-ink"
-            style={{ letterSpacing: "-0.04em" }}
-          >
-            xCO
-          </div>
+          <Logo inline height={26} color="currentColor" label="xCO" className="text-xco-ink shrink-0" />
           <div className="doc-label pt-1 !text-[10px] !leading-[1.45]" style={{ letterSpacing: "0.14em" }}>
             Expanding<br />Civilizational Optionality
           </div>

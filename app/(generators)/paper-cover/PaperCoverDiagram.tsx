@@ -4,8 +4,40 @@ import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
 import { paletteHex } from "@/lib/design-tokens";
+import { logoGeometry, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
 
 const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK, sand: SAND, teal: TEAL, navy: NAVY , inkMuted: MUTED } = paletteHex;
+
+// Header wordmark. Drawn from lib/logo.ts, never set in a font: the PNG
+// export only loads DM Mono, so a <text> in Untitled Serif rendered as DM Mono
+// italic in every exported cover. Paths need no font at all.
+const HEADER_CAP = 11;                                   // px, matches the old 16px serif cap
+const HEADER_SCALE = HEADER_CAP / logoGeometry.cap;
+const HEADER_BASELINE = 88;
+const HEADER_MARK_W = (inkBounds.right - inkBounds.left) * HEADER_SCALE;
+const HEADER_GAP = 8;                                    // mark → descriptor
+
+function HeaderMark({ x, fill }: { x: number; fill: string }) {
+  const [xa, xb] = xPaths();
+  const tx = x - inkBounds.left * HEADER_SCALE;
+  const ty = HEADER_BASELINE - logoGeometry.baseline * HEADER_SCALE;
+  return (
+    <g
+      transform={`translate(${tx} ${ty}) scale(${HEADER_SCALE})`}
+      fill="none"
+      stroke={fill}
+      strokeWidth={logoGeometry.stroke}
+      strokeLinecap="butt"
+      aria-label="xCO"
+      role="img"
+    >
+      <path d={xa} />
+      <path d={xb} />
+      <path d={cPath()} />
+      <path d={oPath()} />
+    </g>
+  );
+}
 
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
 
@@ -231,13 +263,10 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
           />
         )}
 
-        {/* Header — xCO wordmark */}
-        <text x={PAD} y={88}
-          fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif" fontStyle="italic"
-          fontSize={16} fill={INK} fillOpacity={0.8}>
-          xCO
-        </text>
-        <text x={PAD + 38} y={88}
+        {/* Header — xCO wordmark, drawn. Full ink: the logo has three
+            variants and an 80% tint is not one of them. */}
+        <HeaderMark x={PAD} fill={INK} />
+        <text x={PAD + HEADER_MARK_W + HEADER_GAP} y={HEADER_BASELINE}
           fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.7}>
           Expanding Civilizational Optionality
         </text>

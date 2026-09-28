@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Logo } from "@/components/xco/Logo";
 import { RegisterSwitch } from "./RegisterSwitch";
 
 export interface NavLink {
@@ -22,13 +23,12 @@ export function SiteNav({ links, register }: SiteNavProps) {
   return (
     <nav className="doc-nav">
       <div className="doc-wrap h-14 flex items-center gap-8">
-        <Link href="/" className="shrink-0 flex items-baseline gap-2.5 group" aria-label="xCO home">
-          <span
-            className="font-display text-[20px] leading-none text-xco-ink"
-            style={{ letterSpacing: "-0.04em" }}
-          >
-            xCO
-          </span>
+        {/* h-11: a 44px target. The mark is 15px tall, so without this the link
+            was a thin strip — under the guide's own 44px minimum. */}
+        <Link href="/" className="shrink-0 flex items-center gap-2.5 h-11 group" aria-label="xCO home">
+          {/* The drawn mark, not the name set in a font — the logo page's own
+              rule. Set type leaves the x→C→O spacing to the typeface. */}
+          <Logo inline height={15} color="currentColor" className="text-xco-ink" />
           <span className="doc-label !text-[9px]">{register}</span>
         </Link>
 
