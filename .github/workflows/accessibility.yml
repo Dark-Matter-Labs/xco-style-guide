@@ -1,0 +1,48 @@
+# Accessibility, checked on every pull request and every push to main.
+#
+# The build runs the static gate first (npm run a11y, as prebuild), then the
+# browser audit opens every page of the production build in both registers
+# and runs axe-core. Either failing fails the check. The rules and the
+# thresholds live in lib/a11y; the /accessibility page documents them.
+
+name: Accessibility
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: a11y-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (runs the static accessibility gate first)
+        run: npm run build
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Audit every page in both registers
+        run: npm run a11y:audit -- --json=a11y-report.json
+
+      - name: Keep the report when the audit fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: a11y-report.json
+          if-no-files-found: ignore

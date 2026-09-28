@@ -27,11 +27,11 @@ export default function TypographyPage() {
       {/* Caveat */}
       <section className="max-w-2xl">
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-          <span className="text-xco-dusk">[note]</span> Untitled Serif and Untitled Sans are
+          <span className="text-xco-dusk-ink">[note]</span> Untitled Serif and Untitled Sans are
           licensed typefaces from Klim Type Foundry. Drop{" "}
-          <span className="text-xco-dusk">UntitledSerifRegular.woff2</span> and{" "}
-          <span className="text-xco-dusk">UntitledSansRegular.woff2</span> into{" "}
-          <span className="text-xco-dusk">public/fonts/</span> to activate. Until then the system
+          <span className="text-xco-dusk-ink">UntitledSerifRegular.woff2</span> and{" "}
+          <span className="text-xco-dusk-ink">UntitledSansRegular.woff2</span> into{" "}
+          <span className="text-xco-dusk-ink">public/fonts/</span> to activate. Until then the system
           falls back to Crimson Pro (serif) and Inter (sans), both loaded via Google Fonts. DM Mono is also loaded via
           Google Fonts.
         </p>
@@ -49,7 +49,7 @@ export default function TypographyPage() {
               className="grid grid-cols-[160px_1fr] gap-8 items-start py-8"
             >
               <div className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink space-y-0.5 pt-1 shrink-0">
-                <p className="text-xco-dusk">{step.label}</p>
+                <p className="text-xco-dusk-ink">{step.label}</p>
                 <p>{step.size}</p>
                 <p>/{step.lineHeight} lh</p>
                 <p>{step.tailwind.split(" ")[0]}</p>
@@ -86,7 +86,7 @@ export default function TypographyPage() {
             <div key={key} className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
               <div className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
                 <p>{key}</p>
-                <p className="text-xco-dusk">{(face.weights as readonly string[]).join(" / ")}</p>
+                <p className="text-xco-dusk-ink">{(face.weights as readonly string[]).join(" / ")}</p>
               </div>
               <div>
                 <p className={`${faceClass[key]} text-[24px] leading-[26px] text-xco-ink`}>

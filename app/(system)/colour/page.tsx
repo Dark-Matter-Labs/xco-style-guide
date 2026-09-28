@@ -1,5 +1,7 @@
 import { colors, surfaceTokens, semanticMeanings, domainColors } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
+import { bestOn, contrastRatio, formatRatio, WCAG } from "@/lib/a11y/contrast";
+import { colorIn } from "@/lib/a11y/css-tokens";
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -8,31 +10,26 @@ function hexToRgb(hex: string) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-const PAPER_HEX = "#f4f1e9";
-const INK_HEX = "#20201e";
+const PAPER_HEX = colors.paper.hex;
+const INK_HEX = colors.ink.hex;
 
-function relLuminance(hex: string): number {
-  const c = [1, 3, 5]
-    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-    .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
-  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+// Pick whichever of ink or paper actually contrasts better against the swatch
+// — measured with the system's one contrast implementation, not estimated.
+const onSwatch = (hex: string): string => bestOn(hex, PAPER_HEX, INK_HEX);
+
+// A text label on a swatch. Mid-tones like teal and tech clear 4.5:1 with
+// neither ink nor paper, so their label sits on a paper chip instead of being
+// shown too faint to read.
+function swatchLabel(hex: string): React.CSSProperties {
+  const best = onSwatch(hex);
+  return contrastRatio(best, hex) >= WCAG.text
+    ? { color: best }
+    : { color: INK_HEX, background: PAPER_HEX, padding: "0 4px", alignSelf: "flex-start" };
 }
 
-function contrastRatio(a: string, b: string): number {
-  const l1 = relLuminance(a);
-  const l2 = relLuminance(b);
-  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-}
-
-// Pick whichever of ink or paper actually contrasts better against the swatch.
-// The previous helper compared a weighted RGB average against a 0.45 cutoff,
-// which chose light text on mid-tones like teal and indigo where dark text
-// scores higher. This measures the real WCAG ratio instead of estimating it.
-function onSwatch(hex: string): string {
-  return contrastRatio(PAPER_HEX, hex) >= contrastRatio(INK_HEX, hex)
-    ? PAPER_HEX
-    : INK_HEX;
-}
+// Ratios are measured from the shipped CSS at build time, never typed: the
+// hand-written "16.5:1 / 6.5:1 / 4.56:1" that stood here had drifted to wrong.
+const onPaper = (token: string) => formatRatio(contrastRatio(colorIn("paper", token), colorIn("paper", "--xco-paper")));
 
 export default function ColourPage() {
   return (
@@ -75,7 +72,7 @@ export default function ColourPage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {token.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] opacity-60" style={{ color: labelColor }}>
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {hexToRgb(token.hex)}
                 </p>
               </div>
@@ -108,21 +105,21 @@ export default function ColourPage() {
               hex: colors.ink.hex,
               cssVar: colors.ink.cssVar,
               usage: colors.ink.usage,
-              contrast: "16.5:1",
+              contrast: onPaper("--xco-ink"),
             },
             {
               name: "ink-secondary",
               hex: colors.inkMuted.hex,
               cssVar: colors.inkMuted.cssVar,
               usage: "Secondary text, labels. Use for hierarchy, not decoration.",
-              contrast: "6.5:1",
+              contrast: onPaper("--xco-ink-muted"),
             },
             {
               name: "ink-weak",
-              hex: "#686661",
+              hex: colorIn("paper", "--xco-ink-weak"),
               cssVar: "--xco-ink-weak",
               usage: "Captions, annotations, placeholder text only.",
-              contrast: "4.56:1",
+              contrast: onPaper("--xco-ink-weak"),
             },
           ].map((item) => (
             <div key={item.name}>
@@ -133,7 +130,7 @@ export default function ColourPage() {
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
                   {item.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9] opacity-60">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
                   {item.contrast} on paper
                 </p>
               </div>
@@ -174,20 +171,20 @@ export default function ColourPage() {
                 >
                   <span
                     className="text-[40px] leading-none font-body"
-                    style={{ color: textColor, opacity: 0.9 }}
+                    style={{ color: textColor }}
                   >
                     {m.shape}
                   </span>
                   <div>
                     <p
                       className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
-                      style={{ color: textColor }}
+                      style={swatchLabel(m.hex)}
                     >
                       {m.hex}
                     </p>
                     <p
                       className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
-                      style={{ color: textColor, opacity: 0.7 }}
+                      style={swatchLabel(m.hex)}
                     >
                       {m.shapeLabel}
                     </p>
@@ -241,7 +238,7 @@ export default function ColourPage() {
                   >
                     <p
                       className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                      style={{ color: onSwatch(colors[key].hex) }}
+                      style={swatchLabel(colors[key].hex)}
                     >
                       {colors[key].hex}
                     </p>
@@ -269,7 +266,7 @@ export default function ColourPage() {
                   >
                     <p
                       className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                      style={{ color: onSwatch(colors[key].hex) }}
+                      style={swatchLabel(colors[key].hex)}
                     >
                       {colors[key].hex}
                     </p>
@@ -347,7 +344,7 @@ export default function ColourPage() {
                 >
                   <p
                     className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                    style={{ color: textColor }}
+                    style={swatchLabel(d.hex)}
                   >
                     {d.hex}
                   </p>

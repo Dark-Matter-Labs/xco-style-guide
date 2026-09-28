@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Crimson_Pro, DM_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SkipLink } from "@/components/doc/SkipLink";
 
 const dmMono = DM_Mono({
   subsets: ["latin"],
@@ -54,7 +55,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <SkipLink />
+        {children}
+      </body>
     </html>
   );
 }

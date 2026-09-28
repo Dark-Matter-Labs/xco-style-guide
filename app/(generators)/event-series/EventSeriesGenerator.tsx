@@ -117,7 +117,7 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
             <select
               value={presetId}
               onChange={(e) => choosePreset(e.target.value)}
-              className={`w-full min-h-11 bg-transparent border border-xco-ink px-2 ${labelClass} focus-visible:outline focus-visible:outline-2 focus-visible:outline-xco-dusk`}
+              className={`w-full min-h-11 bg-transparent border border-xco-ink px-2 ${labelClass}`}
             >
               {programme.map((p) => (
                 <option key={p.id} value={p.id}>{p.label}</option>
@@ -191,7 +191,7 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
             {video?.ext === "webm" && (
               <p className={`${labelClass} text-xco-ink-muted`}>This browser records WebM. For Instagram, export from Chrome or Safari to get MP4.</p>
             )}
-            <p role="status" aria-live="polite" className={`${labelClass} text-xco-dusk`}>{message ?? assetError ?? ""}</p>
+            <p role="status" aria-live="polite" className={`${labelClass} text-xco-dusk-ink`}>{message ?? assetError ?? ""}</p>
           </div>
         </Section>
       </aside>

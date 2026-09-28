@@ -27,7 +27,7 @@ export interface Palette {
   panelIsLight: boolean;
 }
 
-const { paper, ink, dusk, sand } = paletteHex;
+const { paper, ink, dusk, sand, duskInk } = paletteHex;
 
 export const palettes: Record<PaletteId, Palette> = {
   dusk: {
@@ -54,7 +54,7 @@ export const palettes: Record<PaletteId, Palette> = {
     onPanel: paper,
     onGround: ink,
     accentOnPanel: sand,
-    accentOnGround: dusk,
+    accentOnGround: duskInk,   // dusk itself is 2.77:1 on paper
     groundIsLight: true,
     panelIsLight: false,
   },

@@ -57,6 +57,13 @@
   --color-xco-sand:      #ffa064;
   --color-xco-dusk:      #ff5a00;
 
+  /* Text on a saturated ground (ocean, navy). Static: unlike text-xco-paper
+     it does not flip in the ink register, where paper-coloured text becomes
+     ink and vanishes on ocean. Dusk and sand take ink instead — paper on
+     dusk is 2.77:1. */
+  --color-xco-on-accent: #f4f1e9;
+  --color-xco-ink-fixed: #20201e;
+
   /* ── Typography — four-scale system ────────────────────────────── */
   /* Logo:     Untitled Serif          100px / 90px                   */
   /* Heading:  Untitled Serif (serif)   60px / 60px                   */
@@ -96,6 +103,10 @@
   --color-xco-paper:     var(--xco-paper);
   --color-xco-ink:       var(--xco-ink);
   --color-xco-ink-muted: var(--xco-ink-muted);
+  --color-xco-ink-weak:  var(--xco-ink-weak);
+  --color-xco-dusk-ink:  var(--xco-dusk-ink);
+  --color-xco-ocean-ink: var(--xco-ocean-ink);
+  --color-xco-teal-ink:  var(--xco-teal-ink);
 }
 
 /* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
@@ -122,8 +133,26 @@
 
   /* xCO ink system */
   --xco-ink:       #20201e;
-  --xco-ink-muted: #514f4b;  /* 6.5:1 on paper */
-  --xco-ink-weak:  #686661;  /* 4.56:1 on paper — captions, annotations only */
+  --xco-ink-muted: #514f4b;  /* secondary text — ratios: npm run a11y */
+  --xco-ink-weak:  #686661;  /* captions, annotations only */
+
+  /* Ink-safe accents — the only forms of dusk, ocean and teal allowed to be
+     text. The saturated values are fills and strokes: dusk on paper is
+     2.77:1, under the 4.5:1 text bar. Solved for 4.6:1 on every text surface
+     (paper, raised, quiet) at the original hue — see lib/a11y. Ratios are
+     not written here: npm run a11y measures them, and fails the build if any
+     falls short. */
+  --xco-dusk-ink:  #b33f00;
+  --xco-ocean-ink: #005096;
+  --xco-teal-ink:  #006e8f;
+
+  /* The WIP / version badge ground: dusk at 10% over the surface. At 15% the
+     dusk-ink label fell to 4.35:1. */
+  --wip-ground: rgba(255, 90, 0, 0.1);
+
+  /* Focus — one ring for every focusable element, in full ink so it clears
+     3:1 on every surface in both registers (WCAG 2.4.7, 2.4.11). */
+  --focus-ring: var(--xco-ink);
 
   /* Semantic meanings — colour + shape, never colour alone */
   --meaning-continuity: #267b61;  /* ● circle  */
@@ -171,13 +200,13 @@
      text. Domain colour is never text at its saturated value — it does not
      clear 4.5:1 against paper. */
   --bio-pale:     #efd1c8;
-  --bio-ink:      #b74b32;
+  --bio-ink:      #ad472f;
   --inst-pale:    #c8dfda;
-  --inst-ink:     #437670;
+  --inst-ink:     #3f6f69;
   --tech-pale:    #d1d0e7;
-  --tech-ink:     #6566ae;
+  --tech-ink:     #5f60a4;
   --culture-pale: #ecd0dc;
-  --culture-ink:  #ac4c78;
+  --culture-ink:  #a34872;
 
   /* Structure is drawn, not shadowed. One rule token for every border. */
   --rule: rgba(32, 32, 30, 0.2);
@@ -222,7 +251,7 @@
   --muted:                #f4f1e9;
   --muted-foreground:     #514f4b;
   --accent:               #ff5a00;
-  --accent-foreground:    #f4f1e9;
+  --accent-foreground:    #20201e;  /* ink on dusk — paper on dusk fails at 2.77:1 */
   --destructive:          #ff5a00;
   --border:               transparent;
   --input:                #20201e;
@@ -247,6 +276,11 @@
   --xco-ink-muted: #c8c4bc;
   --xco-ink-weak:  #9e9b96;
 
+  /* Ink-safe accents brighten on the dark ground. */
+  --xco-dusk-ink:  #ff6009;
+  --xco-ocean-ink: #1f97ff;
+  --xco-teal-ink:  #00a0d2;
+
   /* Domain tints — increase opacity on dark ground for legibility */
   --bio-tint:     rgba(213, 108,  83, 0.13);
   --inst-tint:    rgba( 31, 154, 145, 0.13);
@@ -256,11 +290,11 @@
 
   /* Domain grounds invert; the ink-safe values brighten to hold contrast. */
   --bio-pale:     #512419;
-  --bio-ink:      #d96f56;
+  --bio-ink:      #dc7962;
   --inst-pale:    #003c38;
   --inst-ink:     #35a89e;
   --tech-pale:    #2d2d55;
-  --tech-ink:     #8b8dc7;
+  --tech-ink:     #8e90c9;
   --culture-pale: #4d2235;
   --culture-ink:  #d97ba4;
 
@@ -291,7 +325,7 @@
   --muted:                #20201e;
   --muted-foreground:     #c8c4bc;
   --accent:               #ff5a00;
-  --accent-foreground:    #f4f1e9;
+  --accent-foreground:    #20201e;  /* ink on dusk — paper on dusk fails at 2.77:1 */
   --destructive:          #ff5a00;
   --border:               transparent;
   --input:                #f4f1e9;
@@ -328,6 +362,31 @@
   * {
     @apply outline-ring/50;
   }
+
+  /* One visible focus ring, everywhere, for keyboard users. Components do not
+     remove it: npm run a11y fails on outline-none without a focus-visible
+     replacement in the same class list. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* The skip link's target takes focus programmatically; no ring on it. */
+  main:focus { outline: none; }
+
+  .skip-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 100;
+    padding: 12px 16px;
+    background: var(--xco-ink);
+    color: var(--xco-paper);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    transform: translateY(-200%);
+  }
+  .skip-link:focus-visible { transform: none; }
   body {
     @apply text-xco-ink font-body text-[24px] leading-[26px];
     /* Atmospheric wash. Both tints sit at 5% — the dusk budget documented on

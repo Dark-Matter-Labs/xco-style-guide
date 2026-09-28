@@ -20,7 +20,7 @@ export function WIP({ variant = "wip", label, className = "" }: WIPProps) {
   const display = label ?? `[${text}]`;
   return (
     <span
-      className={`font-mono text-xs bg-xco-dusk/15 text-xco-dusk px-1.5 py-0.5 inline-block ${className}`}
+      className={`font-mono text-xs bg-[var(--wip-ground)] text-xco-dusk-ink px-1.5 py-0.5 inline-block ${className}`}
     >
       {display}
     </span>

@@ -139,6 +139,30 @@ No Supabase yet — Phase 2 (decisions log, generated-asset table).
 
 **Before adding any dependency**, surface it here as a question. The stack is deliberately minimal.
 
+Dev dependencies added for accessibility checking — none ship to the browser:
+
+```
+tsx                    runs the TypeScript checks with the @/ path aliases
+playwright             drives Chromium for the page audit
+@axe-core/playwright   the WCAG rule engine the audit runs
+```
+
+---
+
+## Accessibility
+
+Every colour pairing, text utility and focus style is checked, not trusted. The rules live in `lib/a11y/` and are documented at [/accessibility](http://localhost:3000/accessibility).
+
+```bash
+npm run a11y           # static gate — runs before every build, fails it on any violation
+npm run a11y:audit     # axe-core over every page, both registers (needs a build first)
+```
+
+- **Adding a colour** means adding its pairings to `lib/a11y/pairings.ts`. The gate measures each one in the paper and ink registers from `app/globals.css`, the values that ship.
+- **Text is never a saturated accent.** Use `text-xco-dusk-ink`, `-ocean-ink`, `-teal-ink`, or `var(--<domain>-ink)` — the gate fails `text-xco-dusk`, faded text (`opacity-60`) and saturated inline `color:`.
+- **Never remove focus.** A global ring (2px ink) covers every element; `outline-none` fails the gate unless the same class list gives a `focus-visible:` outline or ring.
+- CI (`.github/workflows/accessibility.yml`) runs the build and the audit on every pull request.
+
 ---
 
 ## Local development

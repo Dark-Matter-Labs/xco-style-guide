@@ -1,5 +1,6 @@
 // Single source of truth for all xCO design tokens.
-// CSS equivalents live in app/globals.css @theme — keep in sync manually.
+// CSS equivalents live in app/globals.css. npm run a11y fails the build if a
+// hex here stops matching the CSS it mirrors.
 // These constants are consumed by: diagram-primitives (SVG), export API,
 // and prompt templates. Tailwind utilities are derived from globals.css.
 
@@ -28,7 +29,7 @@ export const colors = {
     hex: "#514f4b",
     cssVar: "--color-xco-ink-muted",
     twClass: "xco-ink-muted",
-    usage: "Secondary text. Ink at reduced contrast (6.5:1 on paper).",
+    usage: "Secondary text. Ink at reduced contrast — clears 4.5:1 on every text surface.",
   },
   rule: {
     hex: "#20201e",
@@ -45,6 +46,13 @@ export const colors = {
   teal:  { hex: "#0082aa", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Open register — frontier, coastal, lighter blue." },
   sand:  { hex: "#ffa064", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Warm field register — terrestrial, amber light." },
   dusk:  { hex: "#ff5a00", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Warm convergence — orange-ember, the meeting point." },
+  // ── Ink-safe accents ─────────────────────────────────────────────
+  // The only forms of dusk, ocean and teal allowed to be text. Paper-register
+  // values; the ink register brightens them in globals.css. npm run a11y
+  // measures both and checks these copies against the CSS.
+  duskInk:  { hex: "#b33f00", cssVar: "--color-xco-dusk-ink",  twClass: "xco-dusk-ink",  usage: "Accent text. Dusk on paper is 2.77:1; this clears 4.5:1." },
+  oceanInk: { hex: "#005096", cssVar: "--color-xco-ocean-ink", twClass: "xco-ocean-ink", usage: "Structural accent text." },
+  tealInk:  { hex: "#006e8f", cssVar: "--color-xco-teal-ink",  twClass: "xco-teal-ink",  usage: "Open-register accent text." },
 } as const;
 
 export type ColorName = keyof typeof colors;
@@ -68,6 +76,7 @@ export const paletteHex = {
   teal:      colors.teal.hex,
   sand:      colors.sand.hex,
   dusk:      colors.dusk.hex,
+  duskInk:   colors.duskInk.hex,
 } as const;
 
 // ── Surface tokens ───────────────────────────────────────────────────

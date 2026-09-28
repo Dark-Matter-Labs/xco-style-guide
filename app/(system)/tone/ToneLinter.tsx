@@ -254,10 +254,10 @@ function HighlightedText({
     const slice = text.slice(h.index, h.index + h.length);
     const markClass =
       h.kind === "banned"
-        ? "bg-xco-dusk/20 text-xco-dusk border-b border-xco-dusk"
+        ? "bg-xco-dusk/20 text-xco-dusk-ink border-b border-xco-dusk"
         : h.kind === "spelling"
-          ? "bg-xco-ocean/15 text-xco-ocean border-b border-xco-ocean"
-          : "bg-xco-teal/20 text-xco-teal border-b-2 border-xco-teal";
+          ? "bg-xco-ocean/15 text-xco-ocean-ink border-b border-xco-ocean"
+          : "bg-xco-teal/20 text-xco-teal-ink border-b-2 border-xco-teal";
     parts.push(
       <mark key={`m-${h.index}`} className={markClass}>
         {slice}
@@ -297,7 +297,7 @@ export function ToneLinter() {
   }, [text]);
 
   const confidenceColour = {
-    low: "text-xco-dusk",
+    low: "text-xco-dusk-ink",
     medium: "text-xco-ink",
     high: "text-xco-ink",
   };
@@ -311,7 +311,7 @@ export function ToneLinter() {
           onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) analyse(); }}
           placeholder="Paste a paragraph of draft text here — the linter will flag banned words and suggest which register it belongs to."
           rows={6}
-          className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink p-4 focus:outline-none transition-colors resize-none placeholder:text-xco-ink/40"
+          className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink p-4 transition-colors resize-none placeholder:text-xco-ink-weak"
         />
         <div className="flex items-center gap-4">
           <button
@@ -325,7 +325,7 @@ export function ToneLinter() {
           {text && (
             <button
               onClick={() => { setText(""); setResult(null); }}
-              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk transition-colors ml-auto"
+              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors ml-auto"
             >
               clear
             </button>
@@ -366,8 +366,8 @@ export function ToneLinter() {
                 <ul className="space-y-1">
                   {result.bannedMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-3">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">✗</span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk">{m.word}</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">✗</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{m.word}</span>
                     </li>
                   ))}
                 </ul>
@@ -386,7 +386,7 @@ export function ToneLinter() {
                 <ul className="space-y-1">
                   {result.spellingMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-2 flex-wrap">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean">✗ {m.british}</span>
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean-ink">✗ {m.british}</span>
                       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
                       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">✓ {m.american}</span>
                     </li>
@@ -407,7 +407,7 @@ export function ToneLinter() {
                 <ul className="space-y-1">
                   {result.casingMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-2 flex-wrap">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-teal">
+                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-teal-ink">
                         ✗ {m.found}
                       </span>
                       <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
@@ -428,7 +428,7 @@ export function ToneLinter() {
                 <div className="space-y-2">
                   <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${confidenceColour[result.confidence]}`}>
                     {result.register}{" "}
-                    <span className="opacity-60">({result.confidence} confidence)</span>
+                    <span className="opacity-80">({result.confidence} confidence)</span>
                   </p>
                   {result.signals.length > 0 && (
                     <ul className="space-y-0.5">

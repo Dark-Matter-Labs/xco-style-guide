@@ -26,6 +26,8 @@
 // through lib/design-tokens.ts and no hex is duplicated — except the two
 // group-identity colours, which have no token and are defined here.
 
+import { contrastRatio } from "./a11y/contrast";
+
 // ── Aperture positions ───────────────────────────────────────────────
 // 45° steps. Half-steps are deliberately not used: at the ~48px an avatar is
 // listed at, a 22.5° difference is not readable.
@@ -181,21 +183,9 @@ export const groupMarks: GroupMark[] = [
 ];
 
 // ── Contrast maths ───────────────────────────────────────────────────
-// WCAG relative luminance, not a weighted-RGB estimate. The estimate picks
-// light text on mid-tones where dark actually scores higher.
+// The system's one implementation, re-exported for the logo page.
 
-export function relLuminance(hex: string): number {
-  const c = [1, 3, 5]
-    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-    .map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
-  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-}
-
-export function contrastRatio(a: string, b: string): number {
-  const l1 = relLuminance(a);
-  const l2 = relLuminance(b);
-  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-}
+export { relLuminance, contrastRatio } from "./a11y/contrast";
 
 /** Shortest angle between two apertures, 0–180. */
 export function apertureDistance(a: number, b: number): number {

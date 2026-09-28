@@ -7,38 +7,27 @@
 // Signal masks avatars to a circle and lists them near 48px, so the mark sits
 // well inside the inscribed circle and carries no text.
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { tsImport } from "tsx/esm/api";
 
 const require = createRequire(import.meta.url);
-const ts = require("typescript");
 const sharp = require("sharp");
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public/signal-groups");
-const TMP = path.join(ROOT, ".avatar-build");
-
-mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });
 
-// Transpile the TypeScript sources we need and import them. Parsing values out
-// with regexes would be a second copy of them, which is the drift this repo
-// keeps having to fix. Each module is transpiled alone, so none of them may
-// import another — which is why group-marks.ts stores token NAMES and this
-// script resolves them against design-tokens.ts.
-function loadTs(rel, outName) {
-  const js = ts.transpileModule(readFileSync(path.join(ROOT, rel), "utf8"), {
-    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
-  }).outputText;
-  const p = path.join(TMP, outName);
-  writeFileSync(p, js);
-  return import(`file://${p}`);
-}
-
-const logo = await loadTs("lib/logo.ts", "logo.mjs");
-const tokens = await loadTs("lib/design-tokens.ts", "tokens.mjs");
-const marks = await loadTs("lib/group-marks.ts", "marks.mjs");
+// Import the TypeScript sources directly (tsx resolves the @/ aliases), so the
+// registry, the geometry and the contrast maths are the ones the site uses.
+// Parsing values out with regexes would be a second copy of them, which is the
+// drift this repo keeps having to fix.
+const load = (rel) => tsImport(pathToFileURL(path.join(ROOT, rel)).href, import.meta.url);
+const logo = await load("lib/logo.ts");
+const tokens = await load("lib/design-tokens.ts");
+const marks = await load("lib/group-marks.ts");
 
 const g = logo.logoGeometry;
 const { paletteHex } = tokens;
@@ -115,4 +104,3 @@ if (failing.length) {
   console.log("pair audit: no pair weak on both channels");
 }
 
-rmSync(TMP, { recursive: true, force: true });

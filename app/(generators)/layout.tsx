@@ -23,7 +23,7 @@ export default function GeneratorsLayout({
       <Grain />
       <ReadingProgress />
       <SiteNav links={generators} register="instruments" />
-      <div className="doc-wrap py-12">{children}</div>
+      <main id="main" tabIndex={-1} className="doc-wrap py-12">{children}</main>
     </div>
   );
 }

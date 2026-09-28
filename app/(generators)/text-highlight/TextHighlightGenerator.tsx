@@ -237,15 +237,17 @@ export function TextHighlightGenerator() {
                   type="text"
                   value={ann.term}
                   onChange={(e) => updateAnn(ann.id, { term: e.target.value })}
-                  className="flex-1 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:outline-none focus:border-xco-ink"
+                  aria-label={`Annotation ${ann.id} term`}
+                  className="flex-1 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:border-xco-ink"
                 />
                 {/* Level */}
                 <select
                   value={ann.level}
+                  aria-label={`Annotation ${ann.id} level`}
                   onChange={(e) =>
                     updateAnn(ann.id, { level: Number(e.target.value) as Level })
                   }
-                  className="bg-transparent border border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink px-1 py-0.5 focus:outline-none"
+                  className="bg-transparent border border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink px-1 py-0.5"
                 >
                   {([1, 2, 3, 4, 5] as Level[]).map((l) => (
                     <option key={l} value={l}>
@@ -257,8 +259,9 @@ export function TextHighlightGenerator() {
               <textarea
                 value={ann.note}
                 onChange={(e) => updateAnn(ann.id, { note: e.target.value })}
+                aria-label={`Annotation ${ann.id} note`}
                 rows={2}
-                className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-1 px-2 focus:outline-none focus:border-xco-ink resize-none"
+                className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-1 px-2 focus:border-xco-ink resize-none"
               />
             </div>
           ))}
@@ -272,8 +275,9 @@ export function TextHighlightGenerator() {
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
+            aria-label="Body text"
             rows={7}
-            className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:outline-none focus:border-xco-ink resize-none leading-snug"
+            className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:border-xco-ink resize-none leading-snug"
           />
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             Terms are matched case-insensitively on first occurrence.

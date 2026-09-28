@@ -63,7 +63,7 @@ export function TextField({
   multiline?: boolean;
 }) {
   const input =
-    "w-full bg-transparent border-b border-xco-ink font-body text-[20px] leading-[26px] text-xco-ink py-1 focus:outline-none focus-visible:border-xco-dusk transition-colors";
+    "w-full bg-transparent border-b border-xco-ink font-body text-[20px] leading-[26px] text-xco-ink py-1 transition-colors";
   return (
     <label className="block space-y-1">
       <span className={`${label} uppercase tracking-wider`}>{text}</span>
@@ -94,7 +94,7 @@ export function Button({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={pressed}
-      className={`w-full min-h-11 text-left ${label} border border-xco-ink px-3 py-2 hover:bg-xco-ink/[0.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-xco-dusk transition-colors disabled:opacity-40`}
+      className={`w-full min-h-11 text-left ${label} border border-xco-ink px-3 py-2 hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40`}
     >
       {children}
     </button>
