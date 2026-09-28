@@ -150,9 +150,9 @@ export default function LogoPage() {
             Clear space
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-            Clear space equals the x-height on every side, and it is already inside the
-            file&apos;s viewBox. Place the mark flush and the spacing is correct — do not add
-            your own padding on top.
+            Clear space is {g.pad} units on every side — {Math.round((g.pad / g.cap) * 100)}% of
+            the cap height — and it is already inside the file&apos;s viewBox. Place the mark
+            flush and the spacing is correct — do not add your own padding on top.
           </p>
         </div>
 
