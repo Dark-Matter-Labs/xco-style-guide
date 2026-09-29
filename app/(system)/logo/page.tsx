@@ -396,9 +396,9 @@ export default function LogoPage() {
             and this page updates from the same registry.
           </p>
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [note] Both channels are now fully allocated —{" "}
-            {allocationStatus.aperturesUsed}/{allocationStatus.aperturesTotal} apertures,
-            every documented tone, plus {allocationStatus.groupColorsUsed} group colours.
+            [note] {allocationStatus.marks} marks on {allocationStatus.aperturesUsed}/
+            {allocationStatus.aperturesTotal} apertures, every documented tone, plus{" "}
+            {allocationStatus.groupColorsUsed} group colours — so apertures are now shared.
           </p>
           <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
             {allocationStatus.nextNeeds}
