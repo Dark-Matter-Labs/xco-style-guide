@@ -69,6 +69,11 @@ export const groupColors = {
     label: "group lilac",
     note: "The one unused hue region, in the light band. Every mid or dark plum failed against ocean — #7d3f6b at 1.08:1, claret at 1.00:1.",
   },
+  amber: {
+    hex: "#e0a526",
+    label: "group amber",
+    note: "Gold for capital, and the one yellow in the set. Its lightness sits at the midpoint that separates it best from both neighbours it shares 45° with: paper at 1.94:1 and teal at 2.01:1. A darker gold (#c99a2e) fell to 1.71:1 against teal.",
+  },
 } as const;
 
 export type GroupColor = keyof typeof groupColors;
@@ -180,6 +185,16 @@ export const groupMarks: GroupMark[] = [
     aperture: 225,
     note: "Light violet. 225° sits between ocean and green, so colour alone had to separate it from both: 4.15:1 and 2.01:1.",
   },
+  {
+    id: "capital",
+    name: "xCO — Capital",
+    file: "xco-capital",
+    ground: { kind: "group", color: "amber" },
+    c: "ink",
+    x: "ink",
+    aperture: 0,
+    note: "The first mark to share an aperture: the parent's unrotated 0°, carried apart by ground — amber against paper at 1.94:1, with ink glyphs at 7.44:1. Of every ground and angle that holds the pair audit, this had the widest greyscale margin in the warm register.",
+  },
 ];
 
 // ── Contrast maths ───────────────────────────────────────────────────
@@ -274,16 +289,18 @@ export const markRules = [
 ] as const;
 
 /**
- * Both channels are now fully allocated: eight apertures used, and every
- * documented tone. A ninth mark needs a third channel — ring weight or a
- * doubled ring is the cheapest addition that fits, since the hairline is
- * already a system device.
+ * Every aperture and every documented tone is now in use, so marks share
+ * apertures. That is what the invariant always allowed: a pair may be close
+ * on one channel, never on both — so a mark may take an aperture already in
+ * use wherever its ground clears VALUE_TWIN_MAX against every mark within
+ * ANGLE_TWIN_MAX. When no ground can, the family needs a third channel.
  */
 export const allocationStatus = {
-  aperturesUsed: groupMarks.length,
+  marks: groupMarks.length,
+  aperturesUsed: new Set(groupMarks.map((m) => m.aperture)).size,
   aperturesTotal: aperturePositions.length,
   documentedTonesUsed: groupMarks.filter((m) => m.ground.kind === "token").length,
   groupColorsUsed: Object.keys(groupColors).length,
   nextNeeds:
-    "A third channel. Ring weight or a doubled ring fits best — the hairline is already a system device. A 22.5° aperture step is the alternative and is not recommended: half-steps do not read at listing size.",
+    "New marks share an aperture where the pair audit holds. When no ground can clear it, add a third channel: ring weight or a doubled ring fits best, since the hairline is already a system device. A 22.5° aperture step is not recommended — half-steps do not read at listing size.",
 } as const;
