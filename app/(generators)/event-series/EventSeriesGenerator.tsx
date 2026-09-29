@@ -8,7 +8,8 @@ import { Button, labelClass, RadioList, Section, TextField } from "./controls";
 import { download, renderPNG, renderVideo, videoSupport } from "./render/export";
 import { paletteList } from "./render/palettes";
 import { templateList } from "./render/templates";
-import type { CardSpec, PaletteId, TemplateId, TitleFace } from "./render/types";
+import { imageryList } from "./render/imagery";
+import type { CardSpec, ImageryId, PaletteId, TemplateId, TitleFace } from "./render/types";
 import { useCardAssets } from "./useCardAssets";
 
 // Each template opens in the palette it was designed in; any can be switched.
@@ -34,6 +35,7 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
   const [content, setContent] = useState<EventContent>(programme[2].content);
   const [template, setTemplate] = useState<TemplateId>("window");
   const [palette, setPalette] = useState<PaletteId>(DEFAULT_PALETTE.window);
+  const [imagery, setImagery] = useState<ImageryId>("globe");
   const [formatId, setFormatId] = useState<CardFormatId>("square");
   const [titleFace, setTitleFace] = useState<TitleFace>("xco");
   const [uppercase, setUppercase] = useState(false);
@@ -50,8 +52,8 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
 
   const format = formatById(formatId);
   const spec: CardSpec = useMemo(
-    () => ({ template, palette, format, content, titleFace, uppercase, seed }),
-    [template, palette, format, content, titleFace, uppercase, seed],
+    () => ({ template, palette, imagery, format, content, titleFace, uppercase, seed }),
+    [template, palette, imagery, format, content, titleFace, uppercase, seed],
   );
   // Read after mount: the server cannot know what this browser can record.
   const [video, setVideo] = useState<ReturnType<typeof videoSupport>>(null);
@@ -70,7 +72,7 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
   };
   const edit = (key: keyof EventContent) => (v: string) => setContent((c) => ({ ...c, [key]: v }));
 
-  const name = (f = format) => `xco-medulla-${slug(content.title)}-${template}-${f.id}`;
+  const name = (f = format) => `xco-medulla-${slug(content.title)}-${template}-${imagery}-${f.id}`;
 
   async function run(id: string, job: () => Promise<void>) {
     if (!assets) return;
@@ -136,6 +138,10 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
           <RadioList name="template" value={template} options={templateList} onChange={chooseTemplate} />
         </Section>
 
+        <Section title="Imagery">
+          <RadioList name="imagery" value={imagery} options={imageryList} onChange={setImagery} />
+        </Section>
+
         <Section title="Palette">
           <RadioList name="palette" value={palette} options={paletteList.map((p) => ({ id: p.id, label: p.label }))} onChange={setPalette} />
         </Section>
@@ -164,11 +170,11 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
           <label className="block space-y-1 pt-2">
             <span className={`${labelClass} uppercase tracking-wider`}>Still frame — {Math.round(stillPhase * 100)}%</span>
             <input
-              type="range" min={0} max={0.5} step={0.01} value={stillPhase}
+              type="range" min={0} max={0.99} step={0.01} value={stillPhase}
               onChange={(e) => { setPlaying(false); setStillPhase(Number(e.target.value)); }}
               className="w-full accent-xco-dusk"
             />
-            <p className={`${labelClass} text-xco-ink-muted`}>0% is the globe as drawn; 50% is fully resolved into squares. PNGs export this frame.</p>
+            <p className={`${labelClass} text-xco-ink-muted`}>Where in the loop the still is taken — PNGs export this frame. For the globes, 0% is as drawn and 50% fully resolved.</p>
           </label>
           <Button onClick={() => setSeed((s) => (s * 1103515245 + 12345) >>> 0)}>↻ New field pattern</Button>
         </Section>

@@ -4,10 +4,13 @@ import type { EventContent } from "@/lib/event-series/programme";
 export type TemplateId = "window" | "corner" | "globe";
 export type PaletteId = "dusk" | "paper" | "ink";
 export type TitleFace = "xco" | "medulla";
+export type ImageryId = "globe" | "ascii-globe" | "storm" | "collapse" | "lattice";
 
 export interface CardSpec {
   template: TemplateId;
   palette: PaletteId;
+  /** What fills the image slot — the globe, or one of the ASCII fields. */
+  imagery: ImageryId;
   format: CardFormat;
   content: EventContent;
   titleFace: TitleFace;

@@ -1,5 +1,5 @@
 import { drawField } from "./field";
-import { drawGlobe } from "./globe";
+import { drawImagery } from "./imagery";
 import { lockupWidth } from "./lockup";
 import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
@@ -12,7 +12,8 @@ type Template = (ctx: Ctx, spec: CardSpec, phase: number, assets: Assets) => voi
 // event posters — the offset window over a textured ground, and the heavy
 // L-band that carries the details — so the series sits in their programme;
 // the imagery, type and colour are xCO's. The third is xCO's alone, for the
-// series announcement.
+// series announcement. Each describes an image slot; render/imagery.ts fills it
+// with the globe or one of the ASCII fields.
 
 function metrics(spec: CardSpec) {
   const { w: W, h: H } = spec.format;
@@ -27,6 +28,11 @@ function metrics(spec: CardSpec) {
 }
 
 const clear = "rgba(0,0,0,0)";
+
+/** The photograph is bright and busy; a glyph field is quieter texture. Text
+ *  over a field needs less of the ground pulled across it. */
+const scrimFor = (spec: CardSpec, full: number) =>
+  spec.imagery === "globe" || spec.imagery === "ascii-globe" ? full : full * 0.75;
 
 // ── Window ───────────────────────────────────────────────────────────
 // After Medulla's "The Words of Fallen Leaf": the generative field as ground,
@@ -56,16 +62,17 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
   // Large enough to bleed off the bottom-right, small enough that its edge
   // still turns inside the window — it has to read as a globe.
   const D = Math.min(pw, ph) * (landscape ? 1.15 : 0.98);
-  drawGlobe(ctx, {
+  drawImagery(ctx, spec.imagery, {
     cx: W - D * (landscape ? 0.36 : 0.4),
     cy: H - D * (landscape ? 0.46 : 0.42),
     diameter: D,
-    phase,
+    area: { x: ox, y: oy, w: pw, h: ph },
     color: p.onPanel,
-    photo: assets.photo,
-  });
+    accent: p.accentOnPanel,
+    u,
+  }, phase, spec.seed, assets);
   // Hold the text side of the window: fade the globe out towards the left.
-  scrim(ctx, { x: ox, y: oy, w: pw * 0.72, h: ph }, p.panel, "left", 0.9);
+  scrim(ctx, { x: ox, y: oy, w: pw * 0.72, h: ph }, p.panel, "left", scrimFor(spec, 0.9));
   ctx.restore();
 
   const ink: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: p.panel, onLight: p.panelIsLight };
@@ -101,17 +108,18 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
   const by = H - b - S * (landscape ? 0.08 : 0.13) - safeBottom; // horizontal bar, top edge
 
   const D = S * (landscape ? 1.25 : tall ? 1.2 : 0.95);
-  drawGlobe(ctx, {
+  drawImagery(ctx, spec.imagery, {
     cx: bx + b * 0.5 + (landscape ? W * 0.12 : 0),
     cy: by + b * 0.5 - (tall ? H * 0.1 : 0),
     diameter: D,
-    phase,
+    area: { x: 0, y: 0, w: W, h: H },
     color: p.onGround,
-    photo: assets.photo,
-  });
+    accent: p.accentOnGround,
+    u,
+  }, phase, spec.seed, assets);
 
   // Quiet the globe under the title, which sits in the top of the open quarter.
-  scrim(ctx, { x: bx + b, y: 0, w: W - bx - b, h: by * 0.9 }, p.ground, "top", 0.92);
+  scrim(ctx, { x: bx + b, y: 0, w: W - bx - b, h: by * 0.9 }, p.ground, "top", scrimFor(spec, 0.92));
 
   // The band: an L cut from two rounded rectangles, even-odd.
   const r = S * 0.012;
@@ -157,21 +165,22 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
   });
 
   const D = landscape ? H * 1.12 : tall ? W * 1.15 : S * 0.98;
-  drawGlobe(ctx, {
+  drawImagery(ctx, spec.imagery, {
     cx: landscape ? W - D * 0.36 : W * (tall ? 0.6 : 0.66),
     cy: landscape ? H * 0.56 : H * (tall ? 0.58 : 0.62),
     diameter: D,
-    phase,
+    area: { x: 0, y: 0, w: W, h: H },
     color: p.onGround,
-    photo: assets.photo,
-  });
+    accent: p.accentOnGround,
+    u,
+  }, phase, spec.seed, assets);
 
   // Fade the globe where the headline and the details sit.
   if (landscape) {
-    scrim(ctx, { x: 0, y: 0, w: W * 0.7, h: H }, p.ground, "left", 0.9);
+    scrim(ctx, { x: 0, y: 0, w: W * 0.7, h: H }, p.ground, "left", scrimFor(spec, 0.9));
   } else {
-    scrim(ctx, { x: 0, y: 0, w: W, h: H * (tall ? 0.44 : 0.5) }, p.ground, "top", 0.92);
-    scrim(ctx, { x: 0, y: H * (tall ? 0.68 : 0.7), w: W, h: H * (tall ? 0.32 : 0.3) }, p.ground, "bottom", 0.9);
+    scrim(ctx, { x: 0, y: 0, w: W, h: H * (tall ? 0.44 : 0.5) }, p.ground, "top", scrimFor(spec, 0.92));
+    scrim(ctx, { x: 0, y: H * (tall ? 0.68 : 0.7), w: W, h: H * (tall ? 0.32 : 0.3) }, p.ground, "bottom", scrimFor(spec, 0.9));
   }
 
   const ink: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight };
