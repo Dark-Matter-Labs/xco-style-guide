@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { cardFormats, formatById, LOOP_SECONDS, type CardFormatId } from "@/lib/event-series/formats";
 import { programme, type EventContent } from "@/lib/event-series/programme";
 import { CardPreview } from "./CardPreview";
-import { Button, labelClass, RadioList, Section, TextField } from "./controls";
+import { Button, labelClass, RadioList, Section, TextField } from "@/components/generator-controls";
 import { download, renderPNG, renderVideo, videoSupport } from "./render/export";
 import { paletteList } from "./render/palettes";
 import { templateList } from "./render/templates";
