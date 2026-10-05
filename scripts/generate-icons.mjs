@@ -47,9 +47,9 @@ const { logoGeometry: g, cPath } = logo;
 const BOX = 120;
 const PAD = 10;
 
-const INK = "#20201e";
-const PAPER = "#f4f1e9";
-const DUSK = "#ff5a00";
+const INK = "#101F24";
+const PAPER = "#F6F1E5";
+const DUSK = "#F47743";
 
 // x-left edge to C-right edge, then scaled to the padded box.
 const glyphW = g.cCx + g.cap / 2 - g.xLeft;

@@ -1,7 +1,13 @@
 // Generates the three exportable design token artifacts from lib/design-tokens.ts.
 // Pure functions — no React, safe to call server or client side.
 
-import { colors, typography, spacing, diagram, bannedWords } from "@/lib/design-tokens";
+import { colors, typography, spacing, diagram, bannedWords, semanticMeanings } from "@/lib/design-tokens";
+
+// Ink as an rgb triple, for the rule colour (ink at 12%).
+function rgbOf(hex: string): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+}
 
 // ── CLAUDE.md system prompt ─────────────────────────────────────────────────
 
@@ -26,19 +32,28 @@ export function buildClaudePrompt(): string {
 
   const banned = bannedWords.map((w) => `\`${w.trim()}\``).join(", ");
 
+  const tokenLines = Object.values(colors)
+    .filter((v): v is Extract<typeof v, { cssVar: string }> => "cssVar" in v)
+    .map((c) => `  ${c.cssVar}:${" ".repeat(Math.max(1, 24 - c.cssVar.length))}${c.hex};`)
+    .join("\n");
+
+  const meaningLines = semanticMeanings
+    .map((m) => `  ${m.cssVar}:${" ".repeat(Math.max(1, 22 - m.cssVar.length))}${m.hex}; /* ${m.shape} ${m.shapeLabel} */`)
+    .join("\n");
+
   return `# xCO Design System — Claude Code Reference
 
 You are implementing the xCO visual language by Dark Matter Labs (Expanding Civilizational Optionality). Apply these exact tokens and rules to every UI decision. Do not introduce any colours, fonts, or radius values outside this system.
 
 ## Colour palette
 
-Eight tokens only. Never use arbitrary hex codes or add new colours.
+These tokens only, drawn from the xCO identity scales (Field, Signal, Matter). Never use arbitrary hex codes or add new colours.
 
 | CSS Variable | Hex | Tailwind class | Usage |
 |---|---|---|---|
 ${colorRows}
 
-Rules and dividers: \`rgba(32, 32, 30, 0.12)\` — ink at 12% opacity. In Tailwind: \`border-xco-ink/[0.12]\`.
+Rules and dividers: \`rgba(${rgbOf(colors.ink.hex)}, ${colors.rule.opacity})\` — ink at 12% opacity. In Tailwind: \`border-xco-ink/[0.12]\`.
 
 ## Typography
 
@@ -60,7 +75,7 @@ Body measure (max-width): 68ch for body text. Reduce for captions and mono.
 
 - **Corner radius**: near-zero (\`${spacing.gutter}\` gutter, \`0.125rem\` radius max). This is not a rounded-corner brand.
 - **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
-- **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) — use \`ink\` (#20201e) and \`paper\` (#f4f1e9) tokens.
+- **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) — use \`ink\` (${colors.ink.hex}) and \`paper\` (${colors.paper.hex}) tokens.
 - **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
 - **No bold** on UI / Untitled Sans face. Use weight 400 or 500 only.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
@@ -100,22 +115,10 @@ Add this block to your \`globals.css\` or \`app/globals.css\`:
 
 \`\`\`css
 :root {
-  --color-xco-paper:     #f4f1e9;
-  --color-xco-ink:       #20201e;
-  --color-xco-ink-muted: #514f4b;
-  --color-xco-navy:      #000064;
-  --color-xco-ocean:     #005096;
-  --color-xco-teal:      #0082aa;
-  --color-xco-sand:      #ffa064;
-  --color-xco-dusk:      #ff5a00;
+${tokenLines}
 
   /* Semantic meanings — always pair with shape */
-  --meaning-continuity: #267b61; /* ● circle   */
-  --meaning-system:     #50649f; /* ■ square   */
-  --meaning-risk:       #a0567e; /* ▲ triangle */
-  --meaning-agency:     #8e6713; /* ◆ diamond  */
-  --meaning-contested:  #41376d; /* ⬡ hexagon  */
-  --meaning-critical:   #60221e; /* ✕ cross    */
+${meaningLines}
 }
 \`\`\`
 

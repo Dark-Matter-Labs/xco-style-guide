@@ -62,17 +62,17 @@ export const groupColors = {
   green: {
     hex: "#1f9350",
     label: "group green",
-    note: "After the Indian flag. A darker #157f3f held better glyph contrast but collapsed toward ocean in greyscale at 1.60:1.",
+    note: "After the Indian flag. A darker #157f3f held better glyph contrast but collapsed toward ocean in greyscale at 1.39:1.",
   },
   lilac: {
     hex: "#cbb0d8",
     label: "group lilac",
-    note: "The one unused hue region, in the light band. Every mid or dark plum failed against ocean — #7d3f6b at 1.08:1, claret at 1.00:1.",
+    note: "The one unused hue region, in the light band. Every mid or dark plum failed against ocean — #7d3f6b measures 1.06:1.",
   },
   amber: {
     hex: "#e0a526",
     label: "group amber",
-    note: "Gold for capital, and the one yellow in the set. Its lightness sits at the midpoint that separates it best from both neighbours it shares 45° with: paper at 1.94:1 and teal at 2.01:1. A darker gold (#c99a2e) fell to 1.71:1 against teal.",
+    note: "Gold for capital, and the one yellow in the set. Its lightness sits at the midpoint that separates it best from both neighbours it shares 45° with: paper at 1.94:1 and teal at 2.57:1. A darker gold (#c99a2e) fell to 2.18:1 against teal.",
   },
 } as const;
 
@@ -113,7 +113,7 @@ export const groupMarks: GroupMark[] = [
     c: "ink",
     x: "ink",
     aperture: 0,
-    note: "Parent group. The default ink variant, unrotated. Dusk on paper measures 2.77:1, under the non-text bar, so the accent sits on Berlin instead.",
+    note: "Parent group. The default ink variant, unrotated. Dusk (the ember, Signal 500) on paper measures 2.46:1, under the non-text bar, so the accent sits on Berlin instead.",
   },
   {
     id: "berlin-medulla",
@@ -123,7 +123,7 @@ export const groupMarks: GroupMark[] = [
     c: "paper",
     x: "dusk",
     aperture: 90,
-    note: "The inverse register, and the one mark carrying dusk — 5.22:1 here, which the accent variant permits at one instance per set.",
+    note: "The inverse register, and the one mark carrying dusk — 6.08:1 here, which the accent variant permits at one instance per set.",
   },
   {
     id: "oceans-continuity-studio",
@@ -153,7 +153,7 @@ export const groupMarks: GroupMark[] = [
     c: "ink",
     x: "ink",
     aperture: 135,
-    note: "Sand. Teal and navy were the alternatives and both collapse in greyscale — against green at 1.12:1 and ink at 1.09:1.",
+    note: "Sand. Teal and navy were the alternatives and both collapse in greyscale — against green at 1.43:1 and ink at 1.01:1.",
   },
   {
     id: "santiago",
@@ -163,7 +163,7 @@ export const groupMarks: GroupMark[] = [
     c: "paper",
     x: "paper",
     aperture: 45,
-    note: "Teal, the open register: frontier, coastal. 45° puts it 135° from green, its value twin at 1.12:1.",
+    note: "Teal, the open register: frontier, coastal. 45° puts it 135° from both its value twins — green at 1.43:1 and ocean at 1.26:1, which 8.1 brought close in tone.",
   },
   {
     id: "positions-options-stewards",
@@ -183,7 +183,7 @@ export const groupMarks: GroupMark[] = [
     c: "ink",
     x: "ink",
     aperture: 225,
-    note: "Light violet. 225° sits between ocean and green, so colour alone had to separate it from both: 4.15:1 and 2.01:1.",
+    note: "Light violet. 225° sits between ocean and green, so colour alone had to separate it from both: 3.62:1 and 2.01:1.",
   },
   {
     id: "capital",
@@ -193,7 +193,7 @@ export const groupMarks: GroupMark[] = [
     c: "ink",
     x: "ink",
     aperture: 0,
-    note: "The first mark to share an aperture: the parent's unrotated 0°, carried apart by ground — amber against paper at 1.94:1, with ink glyphs at 7.44:1. Of every ground and angle that holds the pair audit, this had the widest greyscale margin in the warm register.",
+    note: "The first mark to share an aperture: the parent's unrotated 0°, carried apart by ground — amber against paper at 1.94:1, with ink glyphs at 7.70:1. Of every ground and angle that holds the pair audit, this had the widest greyscale margin in the warm register.",
   },
 ];
 

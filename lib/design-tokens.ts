@@ -11,48 +11,53 @@
 export const SYSTEM_VERSION = "v0.2" as const;
 
 // ── Colour ──────────────────────────────────────────────────────────
+// Since the Polyphonic Style Guide v8.1 (5 October 2026), the system's
+// colours are drawn from its identity: Field (prussian and atmospheric
+// blue), Signal (the ember), Matter (chalk to ink). Token NAMES are kept —
+// paper, ink, dusk, ocean… — so nothing that uses them changes; their values
+// are 8.1 stops. The full scales are identityScales, below.
 
 export const colors = {
   paper: {
-    hex: "#f4f1e9",
+    hex: "#F6F1E5",
     cssVar: "--color-xco-paper",
     twClass: "xco-paper",
-    usage: "Default page background. Warm off-white — never pure white.",
+    usage: "Default page background. Chalk (Matter 50) — never pure white.",
   },
   ink: {
-    hex: "#20201e",
+    hex: "#101F24",
     cssVar: "--color-xco-ink",
     twClass: "xco-ink",
-    usage: "Body text, structural lines. Near-black — never #000.",
+    usage: "Body text, structural lines. Matter 950, a blue-black — never #000.",
   },
   inkMuted: {
-    hex: "#514f4b",
+    hex: "#374E4A",
     cssVar: "--color-xco-ink-muted",
     twClass: "xco-ink-muted",
     usage: "Secondary text. Ink at reduced contrast — clears 4.5:1 on every text surface.",
   },
   rule: {
-    hex: "#20201e",
+    hex: "#101F24",
     opacity: 0.12,
     // Not a standalone colour — always ink at 12% opacity.
-    // Use: rgba(32,32,30,0.12) or Tailwind border-xco-ink/[0.12]
+    // Use: rgba(16,31,36,0.12) or Tailwind border-xco-ink/[0.12]
     usage: "Rules, dividers, grid lines. Never a separate hue.",
   },
   // ── Extended diagram palette ─────────────────────────────────────
-  // Five-color system for blueprint / warmth diagram modes.
+  // Five colours for blueprint / warmth diagram modes, drawn from 8.1.
   // Never use all five at once — pick a register (cool or warm).
-  navy:  { hex: "#000064", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Blueprint dark ground. Deep structural register." },
-  ocean: { hex: "#005096", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Structural blue — nav accent, systemic diagram elements." },
-  teal:  { hex: "#0082aa", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Open register — frontier, coastal, lighter blue." },
-  sand:  { hex: "#ffa064", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Warm field register — terrestrial, amber light." },
-  dusk:  { hex: "#ff5a00", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Warm convergence — orange-ember, the meeting point." },
+  navy:  { hex: "#101F2D", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Field 950. Blueprint dark ground — the deepest blue." },
+  ocean: { hex: "#335D76", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Field 600. Prussian blue — nav accent, systemic diagram elements." },
+  teal:  { hex: "#406D82", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Field 500. Atmospheric blue — the open register." },
+  sand:  { hex: "#F6A577", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Signal 300. Warm field register — amber light." },
+  dusk:  { hex: "#F47743", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Signal 500. The ember — a declared hinge, transition or presence." },
   // ── Ink-safe accents ─────────────────────────────────────────────
   // The only forms of dusk, ocean and teal allowed to be text. Paper-register
   // values; the ink register brightens them in globals.css. npm run a11y
   // measures both and checks these copies against the CSS.
-  duskInk:  { hex: "#b33f00", cssVar: "--color-xco-dusk-ink",  twClass: "xco-dusk-ink",  usage: "Accent text. Dusk on paper is 2.77:1; this clears 4.5:1." },
-  oceanInk: { hex: "#005096", cssVar: "--color-xco-ocean-ink", twClass: "xco-ocean-ink", usage: "Structural accent text." },
-  tealInk:  { hex: "#006e8f", cssVar: "--color-xco-teal-ink",  twClass: "xco-teal-ink",  usage: "Open-register accent text." },
+  duskInk:  { hex: "#A13E25", cssVar: "--color-xco-dusk-ink",  twClass: "xco-dusk-ink",  usage: "Signal 700. Small warm text on pale grounds (8.1); the ember itself is a surface." },
+  oceanInk: { hex: "#335D76", cssVar: "--color-xco-ocean-ink", twClass: "xco-ocean-ink", usage: "Field 600. Structural accent text." },
+  tealInk:  { hex: "#406D82", cssVar: "--color-xco-teal-ink",  twClass: "xco-teal-ink",  usage: "Field 500. Open-register accent text." },
 } as const;
 
 export type ColorName = keyof typeof colors;
@@ -79,14 +84,54 @@ export const paletteHex = {
   duskInk:   colors.duskInk.hex,
 } as const;
 
+// ── Identity scales (Polyphonic Style Guide v8.1, §11) ───────────────
+// The reusable colour contract. Every system colour above is one of these
+// stops; npm run a11y checks this copy against the CSS custom properties.
+
+export const identityScales = {
+  field: { 50: "#EDF1EC", 100: "#D7E2DF", 200: "#B3C7C9", 300: "#8FABAF", 400: "#668B99", 500: "#406D82", 600: "#335D76", 700: "#24475F", 800: "#1B344B", 900: "#152939", 950: "#101F2D" },
+  signal: { 50: "#FCF0E6", 100: "#F8DDC9", 200: "#F5C3A4", 300: "#F6A577", 400: "#F58A57", 500: "#F47743", 600: "#B84826", 700: "#A13E25", 800: "#753122", 900: "#4A271F", 950: "#2D1C18" },
+  matter: { 50: "#F6F1E5", 100: "#E8E7DC", 200: "#D2D8CF", 300: "#B4C0B9", 400: "#93A39D", 500: "#7C8C84", 600: "#516962", 700: "#374E4A", 800: "#263A38", 900: "#1B2D31", 950: "#101F24" },
+} as const;
+
+export const identityScaleMeta = {
+  field: { name: "Field", gloss: "Prussian and atmospheric blue — atmosphere, relation, the wider field" },
+  signal: { name: "Signal", gloss: "The ember — presence, hinge, transition; declared locally" },
+  matter: { name: "Matter", gloss: "Chalk to ink — ground, evidence, rule, readable structure" },
+} as const;
+
+/** TRACE — analytic accents. Name domain, never truth (8.1). */
+export const traceColors = [
+  { name: "Biophysical", hex: "#6F9A8E" },
+  { name: "Institutional", hex: "#70858B" },
+  { name: "Technical", hex: "#768197" },
+  { name: "Cultural", hex: "#956A73" },
+  { name: "Capital", hex: "#8D765B" },
+] as const;
+
+/** Exact-span highlight fills — local roles behind Matter 900 text, always named. */
+export const highlightTokens = [
+  { id: "premise", label: "Premise / object", hex: "#EFC4B7", cssVar: "--xco-hl-premise" },
+  { id: "capability", label: "Capability", hex: "#C4D6C7", cssVar: "--xco-hl-capability" },
+  { id: "condition", label: "Condition", hex: "#B9D4DA", cssVar: "--xco-hl-condition" },
+  { id: "provisional", label: "Provisional", hex: "#CCD0DF", cssVar: "--xco-hl-provisional" },
+  { id: "transition", label: "Transition", hex: "#F5C3A4", cssVar: "--xco-hl-transition" },
+] as const;
+
+/** Route identities — distinguish constructed routes; confer no rank. */
+export const routeColors = [
+  { id: "a", hex: "#335D76", cssVar: "--xco-route-a" },
+  { id: "b", hex: "#A13E25", cssVar: "--xco-route-b" },
+] as const;
+
 // ── Surface tokens ───────────────────────────────────────────────────
 // Four paper variants for depth/elevation on the warm ground.
 
 export const surfaceTokens = {
-  default:    { hex: "#f4f1e9", cssVar: "--xco-paper",            usage: "Primary page background." },
-  raised:     { hex: "#fffffc", cssVar: "--xco-paper-raised",     usage: "Cards, popovers — slightly lighter." },
-  quiet:      { hex: "#e9e5dc", cssVar: "--xco-paper-quiet",      usage: "Quiet backgrounds, recessed areas." },
-  structural: { hex: "#d7d2c8", cssVar: "--xco-paper-structural", usage: "Borders, dividers, structural surfaces." },
+  default:    { hex: "#F6F1E5", cssVar: "--xco-paper",            usage: "Primary page background." },
+  raised:     { hex: "#FCFAF5", cssVar: "--xco-paper-raised",     usage: "Cards, popovers — slightly lighter." },
+  quiet:      { hex: "#E8E7DC", cssVar: "--xco-paper-quiet",      usage: "Quiet backgrounds, recessed areas." },
+  structural: { hex: "#D2D8CF", cssVar: "--xco-paper-structural", usage: "Borders, dividers, structural surfaces." },
 } as const;
 
 export type SurfaceToken = keyof typeof surfaceTokens;
@@ -151,12 +196,14 @@ export type SemanticMeaning = (typeof semanticMeanings)[number];
 // ── Domain colours ───────────────────────────────────────────────────
 // Orientational — these tag domains, not meanings.
 // Never use domain colours as semantic signals.
+// 8.1's TRACE families: "TRACE names domain — not truth". Biophysical is a
+// step darker than its TRACE 500 (#6F9A8E) so it clears 3:1 as a mark.
 
 export const domainColors = [
-  { name: "bio",     hex: "#d56c53", cssVar: "--domain-bio",     usage: "Biological and ecological systems." },
-  { name: "inst",    hex: "#1f9a91", cssVar: "--domain-inst",    usage: "Institutional and governance contexts." },
-  { name: "tech",    hex: "#7375b7", cssVar: "--domain-tech",    usage: "Technology and infrastructure." },
-  { name: "culture", hex: "#cd6a95", cssVar: "--domain-culture", usage: "Cultural and social systems." },
+  { name: "bio",     hex: "#699287", cssVar: "--domain-bio",     usage: "Biological and ecological systems. TRACE biophysical." },
+  { name: "inst",    hex: "#70858B", cssVar: "--domain-inst",    usage: "Institutional and governance contexts. TRACE institutional." },
+  { name: "tech",    hex: "#768197", cssVar: "--domain-tech",    usage: "Technology and infrastructure. TRACE technical." },
+  { name: "culture", hex: "#956A73", cssVar: "--domain-culture", usage: "Cultural and social systems. TRACE cultural." },
 ] as const;
 
 export type DomainColor = (typeof domainColors)[number];
@@ -164,10 +211,10 @@ export type DomainColor = (typeof domainColors)[number];
 // ── Border tokens ────────────────────────────────────────────────────
 
 export const borderTokens = {
-  subtle:  "rgba(32, 32, 30, 0.08)",
-  default: "rgba(32, 32, 30, 0.14)",
-  strong:  "rgba(32, 32, 30, 0.28)",
-  focus:   "#20201e",
+  subtle:  "rgba(16, 31, 36, 0.08)",
+  default: "rgba(16, 31, 36, 0.14)",
+  strong:  "rgba(16, 31, 36, 0.28)",
+  focus:   "#101F24",
 } as const;
 
 // ── Typography ───────────────────────────────────────────────────────
@@ -324,10 +371,10 @@ export type NodeType = keyof typeof diagram.nodeTypes;
 // Use on paper surfaces only — never as standalone fills.
 
 export const domainTints = {
-  bio:     { cssVar: "--bio-tint",     value: "rgba(213,108,83,0.08)",   usage: "Biological: warm coral at 8% — for callout backgrounds." },
-  inst:    { cssVar: "--inst-tint",    value: "rgba(31,154,145,0.08)",   usage: "Institutional: teal at 8% — for callout backgrounds." },
-  tech:    { cssVar: "--tech-tint",    value: "rgba(115,117,183,0.08)",  usage: "Technology: indigo at 8% — for callout backgrounds." },
-  culture: { cssVar: "--culture-tint", value: "rgba(205,106,149,0.08)",  usage: "Culture: rose at 8% — for callout backgrounds." },
+  bio:     { cssVar: "--bio-tint",     value: "rgba(105,146,135,0.08)",  usage: "Biological: sage green at 8% — for callout backgrounds." },
+  inst:    { cssVar: "--inst-tint",    value: "rgba(112,133,139,0.08)",  usage: "Institutional: slate at 8% — for callout backgrounds." },
+  tech:    { cssVar: "--tech-tint",    value: "rgba(118,129,151,0.08)",  usage: "Technology: steel blue at 8% — for callout backgrounds." },
+  culture: { cssVar: "--culture-tint", value: "rgba(149,106,115,0.08)",  usage: "Culture: mauve at 8% — for callout backgrounds." },
 } as const;
 
 // ── Fibonacci spacing scale ──────────────────────────────────────────

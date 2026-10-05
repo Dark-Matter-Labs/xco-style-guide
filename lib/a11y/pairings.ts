@@ -75,6 +75,17 @@ export const pairings: Pairing[] = [
     only: "paper",
   })),
 
+  // 8.1 exact-span highlights: every fill carries Matter 900 text (§11).
+  ...["premise", "capability", "condition", "provisional", "transition"].map((h): Pairing => ({
+    id: `hl-${h}`,
+    fg: "--xco-matter-900",
+    bg: `--xco-hl-${h}`,
+    use: "text",
+    where: `Exact-span highlight: ${h} — role named in the language too`,
+  })),
+  { id: "route-a/paper", fg: "--xco-route-a", bg: "--xco-paper", use: "non-text", where: "Route A line in an atlas", only: "paper" },
+  { id: "route-b/paper", fg: "--xco-route-b", bg: "--xco-paper", use: "non-text", where: "Route B line in an atlas", only: "paper" },
+
   // Controls and focus
   { id: "field-border", fg: "--xco-ink", bg: "--xco-paper", use: "non-text", where: "Input and select borders (1.4.11)" },
   { id: "focus-ring", fg: "--focus-ring", bg: "--xco-paper", use: "non-text", where: "The focus outline on every surface (2.4.7, 2.4.11)" },
