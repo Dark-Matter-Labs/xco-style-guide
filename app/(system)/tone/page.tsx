@@ -1,6 +1,7 @@
 import { WIP } from "@/components/WIP";
 import { CopyButton } from "@/components/CopyButton";
 import { ToneLinter } from "./ToneLinter";
+import { VoicePrinciples } from "./VoicePrinciples";
 import { toneRegisters, promptTemplates } from "@/lib/tone-templates";
 import { bannedWords, spellingCorrections, houseRules } from "@/lib/design-tokens";
 
@@ -12,19 +13,26 @@ export default function TonePage() {
         <WIP variant="version" />
       </header>
 
-      {/* Principle */}
-      <section className="max-w-2xl space-y-4">
+      {/* The voice — the governing layer */}
+      <VoicePrinciples />
+
+      {/* How the voice is set */}
+      <section className="max-w-2xl space-y-4" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase pt-6">
+          Setting the voice
+        </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-          Three registers. Pick deliberately. The writing fails if the register
-          is chosen by accident — an annotation that reads like a hunch, a
-          method text that reads like an annotation, a hunch mistaken for a
-          conclusion.
+          One voice, three registers. The principles above hold everywhere; a
+          register sets the voice for its surface — a paper, a post, a caption.
+          Pick deliberately. The writing fails if the register is chosen by
+          accident — an annotation that reads like a hunch, a method text that
+          reads like an annotation, a hunch mistaken for a conclusion.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Across all registers: declarative about the question, tentative about
-          the answer. Specific verbs, real numbers, named places where possible.
-          Mark uncertainty inline — never drop a claim because it's uncertain,
-          mark it and keep it.
+          the answer — the conjecture made visible. Specific verbs, real
+          numbers, named places where possible. Mark uncertainty inline — never
+          drop a claim because it&apos;s uncertain, mark it and keep it.
         </p>
       </section>
 
@@ -173,8 +181,9 @@ export default function TonePage() {
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
           Copy into Claude or ChatGPT. Fill in the brief at the bottom.
-          Each template enforces the register, bans the banned words, and
-          requires uncertainty markers.
+          Each template opens with the voice principles and compass, then
+          enforces its register, bans the banned words, and requires
+          uncertainty markers.
         </p>
         <div className="space-y-8">
           {toneRegisters.map((reg) => (

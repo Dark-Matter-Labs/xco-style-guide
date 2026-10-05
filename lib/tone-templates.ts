@@ -1,6 +1,12 @@
 // Prompt templates for each xCO tone register.
 // Paste into Claude / ChatGPT to draft text in the correct voice.
-// Each template includes: the rule, two example pairs, uncertainty instructions.
+// Each template opens with the voice principles (lib/voice-principles.ts) —
+// the one voice — then sets its register: the rule, two example pairs and the
+// uncertainty instructions.
+
+import { voiceBrief } from "./voice-principles";
+
+const VOICE = voiceBrief();
 
 export const toneRegisters = [
   {
@@ -16,7 +22,7 @@ export const toneRegisters = [
         bad: "We are exploring transformative pathways for urban climate resilience through integrated, multi-stakeholder approaches.",
       },
       {
-        good: "Arctic destabilisation is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact.",
+        good: "Arctic destabilization is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact.",
         bad: "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilizational risk.",
       },
     ],
@@ -66,13 +72,17 @@ export type RegisterId = (typeof toneRegisters)[number]["id"];
 export const promptTemplates: Record<RegisterId, string> = {
   method: `You are writing in the METHOD register of Expanding Civilizational Optionality (xCO).
 
+${VOICE}
+
+The voice holds across every register. This one sets it for its surface.
+
 RULE: Specific verbs, real numbers, named places. No abstractions or process-hedging.
 
 EXAMPLES OF THE REGISTER:
 ✓ "Madrid faces +7.5°C. The portfolio combines a peri-urban food forest, mistifier networks at the street scale, and community energy storage."
 ✗ "We are exploring transformative pathways for urban climate resilience through integrated, multi-stakeholder approaches."
 
-✓ "Arctic destabilisation is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact."
+✓ "Arctic destabilization is running 4× faster than IPCC median projections. The response portfolio requires 40,000 ha of rewetted peatland and a 23-municipality governance compact."
 ✗ "We believe unprecedented action is needed to holistically address the systemic challenge of Arctic systems at civilizational risk."
 
 INSTRUCTIONS:
@@ -87,6 +97,10 @@ TEXT TO WRITE:
 [INSERT BRIEF OR BULLET POINTS HERE]`,
 
   hunch: `You are writing in the HUNCH register of Expanding Civilizational Optionality (xCO).
+
+${VOICE}
+
+The voice holds across every register. This one sets it for its surface.
 
 RULE: Declarative about the question, tentative about the answer. You know what the problem is. You don't know the solution yet.
 
@@ -110,6 +124,10 @@ TEXT TO WRITE:
 [INSERT TOPIC OR QUESTION HERE]`,
 
   annotation: `You are writing in the ANNOTATION register of Expanding Civilizational Optionality (xCO).
+
+${VOICE}
+
+The voice holds across every register. This one sets it for its surface.
 
 RULE: Show the working. Mark every assumption, dependency, and uncertainty inline. Never assert more than you know.
 
