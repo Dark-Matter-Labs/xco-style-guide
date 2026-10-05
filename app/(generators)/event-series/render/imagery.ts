@@ -23,13 +23,35 @@ export interface ImageSlot {
   u: number;
 }
 
-export const imageryList: { id: ImageryId; label: string; hint: string }[] = [
-  { id: "globe",       label: "Globe",       hint: "Photograph and halftone squares, the seam sweeping" },
-  { id: "ascii-globe", label: "ASCII globe", hint: "The same globe, its halftone set in glyphs" },
-  { id: "storm",       label: "Storm",       hint: "Rain-bands turning round a calm eye — from the optionality site" },
-  { id: "collapse",    label: "Collapse",    hint: "Turbulent glyph noise, three dusk beacons of hope" },
-  { id: "lattice",     label: "Lattice",     hint: "The arrival: an ordered, twinkling lattice" },
+// Every image declares its status (Polyphonic Communication Style Guide v6.1,
+// §08): readers must be able to tell a record from a construction. The globe
+// starts from a photograph of the Earth and is transformed — halftoned, its
+// seam animated; the ASCII fields are generated outright. The status is drawn
+// on every card, not offered as an option.
+export type ImageStatus = "transformed" | "generated";
+
+export const imageStatusLabel: Record<ImageStatus, string> = {
+  transformed: "[ IMAGE / PHOTOGRAPH, TRANSFORMED ]",
+  generated: "[ IMAGE / GENERATED ]",
+};
+
+/** The same status in words, for accessible names and alt text. */
+export const imageStatusText: Record<ImageStatus, string> = {
+  transformed: "Image: a photograph of the Earth, transformed into halftone.",
+  generated: "Image: a generated pattern, not a record.",
+};
+
+export const imageryList: { id: ImageryId; label: string; hint: string; status: ImageStatus }[] = [
+  { id: "globe",       label: "Globe",       hint: "Photograph and halftone squares, the seam sweeping", status: "transformed" },
+  { id: "ascii-globe", label: "ASCII globe", hint: "The same globe, its halftone set in glyphs", status: "transformed" },
+  { id: "storm",       label: "Storm",       hint: "Rain-bands turning round a calm eye — from the optionality site", status: "generated" },
+  { id: "collapse",    label: "Collapse",    hint: "Turbulent glyph noise, three dusk beacons of hope", status: "generated" },
+  { id: "lattice",     label: "Lattice",     hint: "The arrival: an ordered, twinkling lattice", status: "generated" },
 ];
+
+export function statusOf(imagery: ImageryId): ImageStatus {
+  return imageryList.find((i) => i.id === imagery)?.status ?? "generated";
+}
 
 export function drawImagery(
   ctx: Ctx,

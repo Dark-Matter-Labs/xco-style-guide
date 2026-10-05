@@ -16,6 +16,8 @@ export interface Ink {
    *  imagery. Transparent to turn off. */
   halo: string;
   onLight: boolean;
+  /** Solid surface colour behind small labels that must not break up. */
+  plate: string;
 }
 
 /** Draws twice under a shadow — a wide glow, then a tight one — so text holds
@@ -121,6 +123,26 @@ export function drawHeadline(
 }
 
 /** Date / time on one line, place on the next — in mono. Returns the block height. */
+/**
+ * Alt text for a posted card: everything the card says, in reading order,
+ * ending with what the image is. Text inside an image is not readable by a
+ * screen reader, so this is the card's text equivalent.
+ */
+export function altText(spec: CardSpec, imageStatus: string): string {
+  const { kicker, title, subtitle, date, time, location } = spec.content;
+  const when = [date, time].map((s) => s.trim()).filter(Boolean).join(", ");
+  return [
+    kicker.trim() && `${kicker.trim()}:`,
+    `${title.trim()}${subtitle.trim() ? ` — ${subtitle.trim()}` : ""}.`,
+    when && `${when}.`,
+    location.trim() && `${location.trim()}.`,
+    "xCO × Medulla.",
+    imageStatus,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 export function detailLines(spec: CardSpec): string[] {
   const { date, time, location } = spec.content;
   const when = [date, time].map((s) => s.trim()).filter(Boolean).join("  /  ");
@@ -159,6 +181,40 @@ export function drawDetails(
   });
   setTracking(ctx, 0);
   return height;
+}
+
+/**
+ * The image-status label: mono, uppercase, tracked, in the surface's text
+ * colour on a plate of the surface colour. The plate is what guarantees it is
+ * legible — a halo alone breaks up over the brightest halftone squares — and
+ * it makes the label's contrast exactly the surface-text pairing the
+ * accessibility gate measures for every palette. `y` is the label's baseline.
+ */
+export function drawImageStatus(
+  ctx: Ctx,
+  text: string,
+  x: number,
+  y: number,
+  ink: Ink,
+  u: number,
+  fonts: Assets["fonts"],
+  align: CanvasTextAlign = "right",
+): void {
+  const size = 16 * u;
+  ctx.save();
+  ctx.font = font(size, fonts.mono, 500);
+  setTracking(ctx, size * 0.08);
+  ctx.textAlign = align;
+  ctx.textBaseline = "alphabetic";
+  const w = ctx.measureText(text).width;
+  const padX = 10 * u;
+  const padY = 7 * u;
+  const left = align === "right" ? x - w : align === "center" ? x - w / 2 : x;
+  ctx.fillStyle = ink.plate;
+  ctx.fillRect(left - padX, y - size * 0.82 - padY, w + padX * 2, size * 1.05 + padY * 2);
+  ctx.fillStyle = ink.text;
+  ctx.fillText(text, x, y);
+  ctx.restore();
 }
 
 export function drawCoLockup(
