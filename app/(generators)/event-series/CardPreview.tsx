@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { LOOP_SECONDS } from "@/lib/event-series/formats";
 import { drawCard } from "./render/templates";
+import { altText } from "./render/blocks";
+import { imageStatusText, statusOf } from "./render/imagery";
 import type { Assets, CardSpec } from "./render/types";
 
 interface CardPreviewProps {
@@ -43,7 +45,7 @@ export function CardPreview({ spec, assets, playing, stillPhase }: CardPreviewPr
       width={w}
       height={h}
       role="img"
-      aria-label={`${label} event card: ${spec.content.title}, ${spec.content.date}`}
+      aria-label={`${label} event card. ${altText(spec, imageStatusText[statusOf(spec.imagery)])}`}
       className="block w-full h-auto"
       style={{ aspectRatio: `${w} / ${h}` }}
     />

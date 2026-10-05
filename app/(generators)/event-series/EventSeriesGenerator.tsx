@@ -8,7 +8,9 @@ import { Button, labelClass, RadioList, Section, TextField } from "./controls";
 import { download, renderPNG, renderVideo, videoSupport } from "./render/export";
 import { paletteList } from "./render/palettes";
 import { templateList } from "./render/templates";
-import { imageryList } from "./render/imagery";
+import { imageryList, imageStatusText, statusOf } from "./render/imagery";
+import { altText } from "./render/blocks";
+import { CopyButton } from "@/components/CopyButton";
 import type { CardSpec, ImageryId, PaletteId, TemplateId, TitleFace } from "./render/types";
 import { useCardAssets } from "./useCardAssets";
 
@@ -109,6 +111,7 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
     });
 
   const recording = busy?.startsWith("video");
+  const alt = altText(spec, imageStatusText[statusOf(imagery)]);
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -212,6 +215,16 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
           )}
         </div>
         <p className={labelClass}>{format.w} × {format.h} — {format.use}</p>
+        <div className="space-y-2 pt-2" style={{ borderTop: "1px solid var(--border-default)" }}>
+          <div className="flex items-baseline justify-between gap-4">
+            <p className={`${labelClass} uppercase tracking-wider`}>Alt text</p>
+            <CopyButton text={alt} label="Copy alt text" />
+          </div>
+          <p className={`${labelClass} text-xco-ink-muted`}>{alt}</p>
+          <p className={`${labelClass} text-xco-ink-muted`}>
+            Paste this as the image description on Luma, LinkedIn or Instagram — the card&apos;s text is not readable to a screen reader.
+          </p>
+        </div>
       </div>
     </div>
   );

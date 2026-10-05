@@ -1,7 +1,7 @@
 import { drawField } from "./field";
-import { drawImagery } from "./imagery";
+import { drawImagery, imageStatusLabel, statusOf } from "./imagery";
 import { lockupWidth } from "./lockup";
-import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
+import { drawCoLockup, drawDetails, drawHeadline, drawImageStatus, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
 import type { Assets, CardSpec, TemplateId } from "./types";
 
@@ -75,7 +75,7 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
   scrim(ctx, { x: ox, y: oy, w: pw * 0.72, h: ph }, p.panel, "left", scrimFor(spec, 0.9));
   ctx.restore();
 
-  const ink: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: p.panel, onLight: p.panelIsLight };
+  const ink: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: p.panel, onLight: p.panelIsLight, plate: p.panel };
   const box = { x: ox + m, y: oy + m, w: (pw - 2 * m) * (landscape ? 0.66 : 0.9), h: ph - 2 * m };
   drawHeadline(ctx, spec, assets, box, ink, u, {
     maxSize: landscape ? 120 : tall ? 150 : 120,
@@ -86,6 +86,8 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
   const lockTop = H - m - cap - safeBottom;
   drawCoLockup(ctx, ox + m, lockTop, cap, ink);
   drawDetails(ctx, spec, assets, ox + m, lockTop - 30 * u, pw - 2 * m, ink, u);
+  // Image status, on the lockup's baseline at the panel's right edge.
+  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, lockTop + cap, ink, u, assets.fonts);
 };
 
 // ── Corner ───────────────────────────────────────────────────────────
@@ -131,7 +133,7 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
   ctx.fill("evenodd");
 
   // Title in the open quarter, right-aligned as on the Medulla poster.
-  const ground: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight };
+  const ground: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight, plate: p.ground };
   const qx = bx + b + m;
   const qy = m * 1.2 + safeTop;
   drawHeadline(ctx, spec, assets, { x: qx, y: qy, w: W - qx - m, h: (by - qy - m * 1.2) * (tall ? 0.7 : 1) }, ground, u, {
@@ -140,8 +142,11 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
     align: "right",
   });
 
+  // Image status, on the ground just above the band.
+  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, by - 18 * u, ground, u, assets.fonts);
+
   // In the band: the lockup, then the details.
-  const band: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: clear, onLight: p.panelIsLight };
+  const band: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: clear, onLight: p.panelIsLight, plate: p.panel };
   const cap = Math.min(40 * u, b * 0.3);
   const lockLeft = bx + b * 0.28;
   drawCoLockup(ctx, lockLeft, by + (b - cap) / 2, cap, band);
@@ -183,7 +188,7 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
     scrim(ctx, { x: 0, y: H * (tall ? 0.68 : 0.7), w: W, h: H * (tall ? 0.32 : 0.3) }, p.ground, "bottom", scrimFor(spec, 0.9));
   }
 
-  const ink: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight };
+  const ink: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight, plate: p.ground };
   drawHeadline(ctx, spec, assets, { x: m, y: m + safeTop, w: (W - 2 * m) * (landscape ? 0.6 : 0.86), h: H * (tall ? 0.3 : 0.5) }, ink, u, {
     maxSize: landscape ? 124 : tall ? 150 : 124,
     titleShare: 0.62,
@@ -193,6 +198,7 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
   const lockTop = H - m - cap - safeBottom;
   drawCoLockup(ctx, m, lockTop, cap, ink);
   drawDetails(ctx, spec, assets, m, lockTop - 30 * u, (W - 2 * m) * (landscape ? 0.6 : 1), ink, u);
+  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, lockTop + cap, ink, u, assets.fonts);
 };
 
 export const templates: Record<TemplateId, Template> = {

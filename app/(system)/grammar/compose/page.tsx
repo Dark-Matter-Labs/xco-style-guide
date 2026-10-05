@@ -62,9 +62,10 @@ export default function ComposePage() {
         <div className="space-y-2">
           <h2 className={LABEL}>Working with imagery</h2>
           <p className={`${BODY} max-w-2xl`}>
-            Every image declares its status. That includes the system&apos;s own
-            generators: the event-series cards transform a photograph into
-            halftone and generate their ASCII fields.
+            Every image declares its status. The system&apos;s own generators
+            do: each event-series card carries [ IMAGE / PHOTOGRAPH,
+            TRANSFORMED ] for the globes and [ IMAGE / GENERATED ] for the
+            ASCII fields.
           </p>
         </div>
         <div className="space-y-0 max-w-4xl">
