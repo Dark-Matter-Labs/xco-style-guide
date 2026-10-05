@@ -1,12 +1,32 @@
 // Prompt templates for each xCO tone register.
 // Paste into Claude / ChatGPT to draft text in the correct voice.
 // Each template opens with the voice principles (lib/voice-principles.ts) —
-// the one voice — then sets its register: the rule, two example pairs and the
-// uncertainty instructions.
+// the one voice — and the writing practices (lib/writing-practice.ts), then
+// sets its register: the rule, two example pairs and the uncertainty
+// instructions. It asks the writer for audience, signature and sources, and
+// makes the model end with the pause: questions for the writer, unanswered.
 
 import { voiceBrief } from "./voice-principles";
+import { pauseQuestions } from "./writing-practice";
 
 const VOICE = voiceBrief();
+
+// The writing practices (writing-practice.ts), as instructions to the model.
+const PRACTICE = `PRACTICE:
+- Brevity: say what we mean, and nothing more. Cut repetition unless it is deliberate. Cut words, not complexity — keep uncertainty, disagreement and critical perspectives.
+- Audience: write for the reader named in the brief. If no reader is named, ask who it is before drafting.
+- Attribution: name and link the work this draws on — Dark Matter Labs' and others'. Never invent a source; mark a gap [source needed].
+- Positionality: if the piece is signed, ask the author whether to say where they write from. Do not write it for them.
+- Ownership: this is a draft for a person to edit, not a finished text.
+
+END YOUR DRAFT WITH a short section headed "Before this goes out" that lists these questions for the writer — do not answer them:
+${pauseQuestions().map((q, i) => `${i + 1}. ${q}`).join("\n")}`;
+
+// Asked of the writer at the foot of every template.
+const BRIEF_FIELDS = `AUDIENCE (the one reader this must reach): [ ]
+SIGNED BY (if any): [ ]
+DRAWS ON (work to credit and link): [ ]
+`;
 
 export const toneRegisters = [
   {
@@ -76,6 +96,8 @@ ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
 
+${PRACTICE}
+
 RULE: Specific verbs, real numbers, named places. No abstractions or process-hedging.
 
 EXAMPLES OF THE REGISTER:
@@ -93,6 +115,7 @@ INSTRUCTIONS:
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 
+${BRIEF_FIELDS}
 TEXT TO WRITE:
 [INSERT BRIEF OR BULLET POINTS HERE]`,
 
@@ -101,6 +124,8 @@ TEXT TO WRITE:
 ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
+
+${PRACTICE}
 
 RULE: Declarative about the question, tentative about the answer. You know what the problem is. You don't know the solution yet.
 
@@ -120,6 +145,7 @@ INSTRUCTIONS:
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 
+${BRIEF_FIELDS}
 TEXT TO WRITE:
 [INSERT TOPIC OR QUESTION HERE]`,
 
@@ -128,6 +154,8 @@ TEXT TO WRITE:
 ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
+
+${PRACTICE}
 
 RULE: Show the working. Mark every assumption, dependency, and uncertainty inline. Never assert more than you know.
 
@@ -150,6 +178,7 @@ INSTRUCTIONS:
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 
+${BRIEF_FIELDS}
 TEXT TO ANNOTATE (provide the claim to annotate, plus any context you have):
 [INSERT CLAIM + CONTEXT HERE]`,
 };

@@ -2,6 +2,7 @@ import { WIP } from "@/components/WIP";
 import { CopyButton } from "@/components/CopyButton";
 import { ToneLinter } from "./ToneLinter";
 import { VoicePrinciples } from "./VoicePrinciples";
+import { WritingPractice } from "./WritingPractice";
 import { toneRegisters, promptTemplates } from "@/lib/tone-templates";
 import { bannedWords, spellingCorrections, houseRules } from "@/lib/design-tokens";
 
@@ -15,6 +16,9 @@ export default function TonePage() {
 
       {/* The voice — the governing layer */}
       <VoicePrinciples />
+
+      {/* What a writer does before a text goes out */}
+      <WritingPractice />
 
       {/* How the voice is set */}
       <section className="max-w-2xl space-y-4" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
@@ -181,9 +185,10 @@ export default function TonePage() {
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
           Copy into Claude or ChatGPT. Fill in the brief at the bottom.
-          Each template opens with the voice principles and compass, then
-          enforces its register, bans the banned words, and requires
-          uncertainty markers.
+          Each template opens with the voice principles and compass and the
+          writing practices, then enforces its register, bans the banned words
+          and requires uncertainty markers. It asks for the audience, signature
+          and sources, and ends the draft with the pause.
         </p>
         <div className="space-y-8">
           {toneRegisters.map((reg) => (
@@ -209,8 +214,9 @@ export default function TonePage() {
           Linter
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
-          Paste draft text. The linter flags banned words and suggests which
-          register the writing is closest to.{" "}
+          Paste draft text. The linter flags banned words, spelling and brand
+          casing, suggests which register the writing is closest to, and takes a
+          red pencil to it — places to look, not errors.{" "}
           <WIP
             variant="inference"
             label="[inference] register detection is heuristic, not NLP — treat suggestions as prompts, not verdicts"
