@@ -1,10 +1,12 @@
 // xCO Polyphonic Communication Grammar.
 //
-// Encoded from the xCO Polyphonic Communication Style Guide v6.1 (6 September
-// 2026), which supersedes v5. 6.1 keeps v5's foundations whole and adds a
-// generative centre: reader capability as a purpose, situated voices, the
-// Inquiry Field, precise commitments, material attention and a reader-benefit
-// release test. Its token registry is identical to v5's.
+// Encoded from the xCO Polyphonic Communication Style Guide v8.1 (5 October
+// 2026), which supersedes v6.1. 6.1 added a generative centre to v5: reader
+// capability as a purpose, situated voices, the Inquiry Field, precise
+// commitments, material attention and a reader-benefit release test. 7.0–8.1
+// keep all of that and add seven references and five grammars: the page and
+// its questioning margin, the proof block, the situated atlas, material worlds
+// and a reusable production layer. 8.1 also sets the palette (design-tokens.ts).
 // This layer governs *communication* — what a composition does to a reader and
 // with what consequence. It sits alongside design-tokens.ts, which governs the
 // *visual* system (palette, type, spacing).
@@ -103,13 +105,76 @@ export {
   compositionBriefText,
 } from "./compose";
 
+export { referencesIntro, referenceStudies, referenceGrammars, referenceDepths } from "./references";
+export type { ReferenceStudy } from "./references";
+
+export {
+  pageGrammarIntro,
+  pageLayers,
+  pageSpecimen,
+  annotationContract,
+  annotationRecord,
+  pageStartingValues,
+  pageByLicence,
+  highlightKeyRule,
+} from "./page-grammar";
+
+export {
+  proofIntro,
+  proofSpecimen,
+  proofBands,
+  proofMinimumRecord,
+  proofNeighbours,
+  proofClose,
+} from "./proof";
+export type { ProofBand, ProofLine, HighlightRole } from "./proof";
+
+export {
+  atlasIntro,
+  atlasRoutes,
+  atlasCrossing,
+  atlasLineContract,
+  atlasConnections,
+  atlasScopedNames,
+  atlasRules,
+  atlasClose,
+} from "./atlas";
+export type { AtlasRoute, AtlasStep } from "./atlas";
+
+export {
+  materialWorldIntro,
+  materialWorldSteps,
+  worldGrammar,
+  imageBrief,
+  imageBriefMedium,
+  materialWorldClose,
+  questionToForm,
+  formCompositions,
+} from "./worlds";
+
+export {
+  identityIntro,
+  typeAffordances,
+  semanticRegistry,
+  implementationRequirements,
+  productionIntro,
+  productionContract,
+  proofFragmentHTML,
+  proofFragmentCSS,
+  addressConvention,
+  portableRecord,
+  revisionRule,
+} from "./identity";
+
 // Source provenance — this grammar is a governed object (§10 gate 08).
 export const GRAMMAR_SOURCE = {
   title: "xCO Polyphonic Communication Style Guide",
-  version: "v6.1",
-  date: "6 September 2026",
-  supersedes: "v5",
-  question: "What becomes possible when different voices can change the question?",
+  version: "v8.1",
+  date: "5 October 2026",
+  supersedes: "v6.1",
+  subtitle: "A language for worlds still becoming.",
+  opening: "What can a language hold open?",
+  question: "What must remain open for another world to become possible?",
   governingProposition:
     "Polyphonic communication composes relations through which people can become more capable of perceiving, questioning and participating together.",
   constitutionalLine: "A shared question. Distinct voices. Greater capacity to participate.",

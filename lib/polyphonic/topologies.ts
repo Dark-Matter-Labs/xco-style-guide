@@ -1,9 +1,10 @@
 // Explanatory topologies — modules with typed imports and exports.
 //
-// From the xCO Polyphonic Communication Style Guide v6.1, §05A–§05C, §06, §09.
-// 6.1 adds four modules beside v5's five: Situated Accounts and the Inquiry
-// Field to the explanatory grammar, and the Purpose Field and Service Score
-// developed from the supplied reference studies.
+// From the xCO Polyphonic Communication Style Guide v8.1, §05A–§05D, §06–§06C,
+// §08B, §09. 6.1 added Situated Accounts, the Inquiry Field, the Purpose Field
+// and the Service Score beside v5's five. 7.1 joined four more to the
+// import/export table: the Proof Block, the Situated Atlas, the Material World
+// and the Annotation that can address any of them.
 // Semantic topology ≠ evidential topology ≠ inferential topology. A concept
 // field shows what a proposition contains. An evidence mantle shows what bears
 // upon it. A reasoning lineage shows what follows — and why.
@@ -125,6 +126,58 @@ export const topologies = [
     narrow: "Responsibilities and stages become labelled sequential entries",
     invariant: "Actors, preconditions, authorisations, handoffs and return routes remain recoverable",
     route: null,
+  },
+  {
+    id: "proof-block",
+    code: "PB",
+    name: "Proof Block",
+    licence: "explanation",
+    shows: "What must hold for a construction to become real",
+    imports: "Exact RL or IF proposition IDs, premise status, evidence grounds and proposed construction",
+    exports: "Block ID, defined degree, dependencies, proposed transition, lost options, new burdens, failure, fallback and reopening tests",
+    wide: "Ruled proposition with dependency and questioning rails",
+    narrow: "Argument bands, then targeted questions and tests",
+    invariant: "Premise status, conditions, defined degree, lost options, new dependencies and fallback",
+    route: "Premise → construction → escalation → realisation → reopening test",
+  },
+  {
+    id: "situated-atlas",
+    code: "AT",
+    name: "Situated Atlas",
+    licence: "explanation",
+    shows: "What changes as someone encounters a pathway",
+    imports: "SA account and source IDs, declared scope, encounter sequence and relevant SS handoffs",
+    exports: "Scoped route, step and encounter IDs; waits, crossings, gaps, condition links, burdens, scale and return route",
+    wide: "Distinct trajectories on a quiet field; encounters and waits attached locally",
+    narrow: "Each account in its own ordered route; crossings and return relations named explicitly",
+    invariant: "Account identity, source status, sequence, gaps, waiting and distribution of work",
+    route: null,
+  },
+  {
+    id: "material-world",
+    code: "MW",
+    name: "Material World",
+    licence: "encounter",
+    shows: "What kind of inhabited world could become imaginable",
+    imports: "Proposition or image-brief ID, source references, media status and active licence",
+    exports: "Composition ID, body–field relation, recurring material vocabulary, transformations, unresolved possibility and accessible description",
+    wide: "Large silhouette within a detailed inhabited field",
+    narrow: "Readable subject and shared material vocabulary; description retains the body–field relation",
+    invariant: "Media status, central relation and whether any mark encodes data",
+    route: null,
+  },
+  {
+    id: "annotation",
+    code: "AN",
+    name: "Annotation",
+    licence: "explanation",
+    shows: "A question with an address — what could change the next reading",
+    imports: "Exact versioned target from any module, a named voice, origin and local role",
+    exports: "Annotation ID, question or objection, source links, response state, proposed revision and recorded effect at the target",
+    wide: "A questioning margin beside its exact target",
+    narrow: "The margin becomes a sequential reading after its target",
+    invariant: "Target and version, voice, role and response state",
+    route: "Target → voice → function → response → recorded revision",
   },
 ] as const;
 

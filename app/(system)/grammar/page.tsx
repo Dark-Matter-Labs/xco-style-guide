@@ -6,6 +6,10 @@ import {
   constitutionSteps,
   principles,
   performedRelation,
+  referencesIntro,
+  referenceStudies,
+  referenceGrammars,
+  referenceDepths,
   GRAMMAR_SOURCE,
 } from "@/lib/polyphonic";
 
@@ -19,11 +23,15 @@ const pages = [
   { href: "/grammar/generative", label: "Generative relations", detail: "Differentiate, reciprocate, hold open, sustain — and situated voices." },
   { href: "/grammar/operators", label: "Operators", detail: "What marks do to exact utterances." },
   { href: "/grammar/relations", label: "Relations", detail: "Eight connector jurisdictions, kept exclusive." },
-  { href: "/grammar/topologies", label: "Topologies", detail: "Nine modules, from situated accounts to the inquiry field." },
+  { href: "/grammar/page", label: "Page & margin", detail: "Field, spine, rule, mark, margin, return — and the questioning margin." },
+  { href: "/grammar/topologies", label: "Topologies", detail: "Thirteen modules, from situated accounts to annotation." },
+  { href: "/grammar/proof", label: "Proof block", detail: "A proposition with its premises, thresholds, losses and reopening tests." },
+  { href: "/grammar/atlas", label: "Situated atlas", detail: "Several accounts in motion through one field." },
   { href: "/grammar/reader", label: "Reader & power", detail: "Who speaks, who is recruited, who carries the consequence." },
   { href: "/grammar/commitment", label: "Commitment", detail: "A precise commitment; its effects kept open to inquiry." },
   { href: "/grammar/integrity", label: "Integrity", detail: "Ambiguity classes, release tests and gates, anti-patterns." },
-  { href: "/grammar/compose", label: "Compose & material", detail: "Image, texture, light and motion; the composition brief." },
+  { href: "/grammar/compose", label: "Compose & material", detail: "Material worlds, choosing a form by the question, the brief." },
+  { href: "/grammar/identity", label: "Identity & production", detail: "The local registry, reusable HTML/CSS and a portable record." },
 ];
 
 export default function GrammarPage() {
@@ -35,9 +43,13 @@ export default function GrammarPage() {
       </header>
 
       <section className="max-w-2xl space-y-4">
-        <p className={`${BODY} font-display text-[36px] leading-[40px]`}>
-          {GRAMMAR_SOURCE.question}
+        <p className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
+          {GRAMMAR_SOURCE.subtitle}
         </p>
+        <p className={`${BODY} font-display text-[36px] leading-[40px]`}>
+          {GRAMMAR_SOURCE.opening}
+        </p>
+        <p className={`${BODY} font-display italic`}>{GRAMMAR_SOURCE.question}</p>
         <p className={BODY}>
           {GRAMMAR_SOURCE.governingProposition}
         </p>
@@ -52,7 +64,59 @@ export default function GrammarPage() {
         </p>
         <p className={`${SMALL} text-xco-ink-muted`}>
           From the {GRAMMAR_SOURCE.title} {GRAMMAR_SOURCE.version}, {GRAMMAR_SOURCE.date}. It supersedes{" "}
-          {GRAMMAR_SOURCE.supersedes} and keeps its foundations whole; the visual tokens are unchanged.
+          {GRAMMAR_SOURCE.supersedes} and keeps its foundations whole; its palette is the one on the{" "}
+          <Link href="/colour" className="underline underline-offset-2">colour page</Link>.
+        </p>
+      </section>
+
+      {/* Seven references, five grammars (§00B) */}
+      <section className="space-y-8" aria-labelledby="references">
+        <div className="space-y-3 max-w-2xl">
+          <h2 id="references" className={LABEL}>Seven references, five grammars</h2>
+          <p className={`${BODY} font-display text-[36px] leading-[40px]`}>{referencesIntro.title}</p>
+          <p className={`${MONO} text-xco-ink`}>{referencesIntro.line}</p>
+          <p className={BODY}>{referencesIntro.body}</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left">
+            <thead>
+              <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
+                <th className="py-2 pr-4 font-medium">Grammar</th>
+                <th className="py-2 pr-4 font-medium">Unit</th>
+                <th className="py-2 pr-4 font-medium">What it adds</th>
+                <th className="py-2 font-medium">Worked in</th>
+              </tr>
+            </thead>
+            <tbody>
+              {referenceGrammars.map((g) => (
+                <tr key={g.grammar} className={`${SMALL} text-xco-ink align-top`} style={{ borderTop: "1px solid var(--border-subtle)" }}>
+                  <td className="py-3 pr-4">{g.grammar}</td>
+                  <td className="py-3 pr-4">{g.unit}</td>
+                  <td className="py-3 pr-4">{g.adds}</td>
+                  <td className="py-3">
+                    <Link href={g.href} className="underline underline-offset-2 hover:text-xco-dusk-ink">{g.where}</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+          {referenceStudies.map((r) => (
+            <article key={r.id} className="space-y-2 pt-3" style={{ borderTop: "1px solid var(--border-default)" }}>
+              <p className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>Reference {r.n} / {r.name}</p>
+              <p className={`${BODY} font-display`}>{r.line}</p>
+              <p className={`${SMALL} text-xco-ink`}><span className="text-xco-ink-muted">Observed — </span>{r.observed}</p>
+              <p className={`${SMALL} text-xco-ink`}><span className="text-xco-ink-muted">Transfer — </span>{r.transfer}</p>
+              <p className={`${SMALL} text-xco-ink`}><span className="text-xco-ink-muted">Design limit — </span>{r.limit}</p>
+            </article>
+          ))}
+        </div>
+        <p className={`${MONO} text-xco-ink max-w-2xl`}>[use] {referencesIntro.use}</p>
+        <p className={`${BODY} font-display max-w-2xl`}>
+          {referenceDepths.map((d) => (
+            <span key={d} className="block">{d}</span>
+          ))}
         </p>
       </section>
 
