@@ -7,6 +7,7 @@ import {
   brandCasingErrors,
   BRAND_NAME,
 } from "@/lib/design-tokens";
+import { brevityReport, LONG_SENTENCE_WORDS, type BrevityReport } from "@/lib/brevity";
 
 interface BannedMatch {
   word: string;
@@ -35,6 +36,7 @@ interface LinterResult {
   confidence: "low" | "medium" | "high";
   signals: string[];
   clean: boolean;
+  brevity: BrevityReport;
 }
 
 function findBannedWords(text: string): BannedMatch[] {
@@ -127,7 +129,7 @@ function findBrandCasing(text: string): CasingMatch[] {
   return matches.sort((a, b) => a.index - b.index);
 }
 
-function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "spellingMatches" | "casingMatches" | "clean"> {
+function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "spellingMatches" | "casingMatches" | "clean" | "brevity"> {
   const lower = text.toLowerCase();
   const signals: string[] = [];
 
@@ -289,6 +291,7 @@ export function ToneLinter() {
       register,
       confidence,
       signals,
+      brevity: brevityReport(text),
       clean:
         bannedMatches.length === 0 &&
         spellingMatches.length === 0 &&
@@ -447,8 +450,56 @@ export function ToneLinter() {
               )}
             </div>
           </div>
+
+          <RedPencil report={result.brevity} />
         </div>
       )}
+    </div>
+  );
+}
+
+// Brevity, as places to look rather than errors: a long sentence or a repeat
+// can be deliberate. Cut words, not complexity.
+function RedPencil({ report }: { report: BrevityReport }) {
+  const mono = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
+  const nothing = !report.longSentences.length && !report.repeats.length && !report.wordy.length;
+  return (
+    <div className="space-y-3 pt-2" style={{ borderTop: "1px solid var(--border-default)" }}>
+      <p className={`${mono} text-xco-ink tracking-widest uppercase pt-4`}>Red pencil — brevity</p>
+      <p className={`${mono} text-xco-ink-muted`}>
+        {report.words} words · {report.sentences} sentences · {report.meanSentence} words per sentence on average
+      </p>
+      {nothing ? (
+        <p className={`${mono} text-xco-ink`}>✓ Nothing obvious to cut. Read it once more for what only sounds like thinking.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {report.longSentences.length > 0 && (
+            <div className="space-y-1">
+              <p className={`${mono} text-xco-ink`}>Long sentences (over {LONG_SENTENCE_WORDS} words)</p>
+              {report.longSentences.map((l, i) => (
+                <p key={i} className={`${mono} text-xco-ink-muted`}>— {l.words} words: “{l.start}…”</p>
+              ))}
+            </div>
+          )}
+          {report.repeats.length > 0 && (
+            <div className="space-y-1">
+              <p className={`${mono} text-xco-ink`}>Repeated phrases — deliberate?</p>
+              {report.repeats.map((r) => (
+                <p key={r.phrase} className={`${mono} text-xco-ink-muted`}>— “{r.phrase}” ×{r.count}</p>
+              ))}
+            </div>
+          )}
+          {report.wordy.length > 0 && (
+            <div className="space-y-1">
+              <p className={`${mono} text-xco-ink`}>Shorter ways to say it</p>
+              {report.wordy.map((w) => (
+                <p key={w.phrase} className={`${mono} text-xco-ink-muted`}>— “{w.phrase}” → {w.instead}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      <p className={`${mono} text-xco-ink-muted`}>Cut words, not complexity: keep the uncertainty, the disagreement and the critical perspectives.</p>
     </div>
   );
 }
