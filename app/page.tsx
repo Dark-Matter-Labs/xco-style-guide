@@ -33,7 +33,7 @@ const systemLinks = [
   { href: "/colour",      label: "Colour",               blurb: "Warm paper, six meanings, four domains." },
   { href: "/grid",        label: "Grid",                 blurb: "Golden ratio, Fibonacci spacing, 12 and 24 columns." },
   { href: "/diagrams",    label: "Diagrammatic Grammar", blurb: "Two line weights. Three node types." },
-  { href: "/tone",        label: "Tone of Voice",        blurb: "Three registers, live linter, US English." },
+  { href: "/tone",        label: "Tone of Voice",        blurb: "Radical conjecture, held with care. Three registers, a live linter." },
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },
   { href: "/accessibility", label: "Accessibility",      blurb: "WCAG 2.2 AA, measured on every build." },
