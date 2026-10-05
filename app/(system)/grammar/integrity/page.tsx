@@ -7,9 +7,12 @@ import {
   releaseGates,
   antiPatterns,
   compositionalProportion,
+  proportionNote,
   channelJurisdictions,
 } from "@/lib/polyphonic";
 import { LABEL, BODY, MONO, SMALL, DISPLAY, ROW, RULE } from "../styles";
+
+const COUNT: Record<number, string> = { 2: "Two", 3: "Three", 4: "Four" };
 
 export default function IntegrityPage() {
   return (
@@ -37,8 +40,8 @@ export default function IntegrityPage() {
 
       {/* Release tests */}
       <section className="space-y-8">
-        <h2 className={LABEL}>Two tests every release passes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl">
+        <h2 className={LABEL}>{COUNT[releaseTests.length] ?? releaseTests.length} tests every release passes</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl">
           {releaseTests.map((t) => (
             <div key={t.n} className="space-y-2 pt-3" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
               <p className={`${SMALL} text-xco-ink-muted tracking-widest`}>{t.n}</p>
@@ -135,6 +138,7 @@ export default function IntegrityPage() {
             scarcity — this is the same discipline as the 5% dusk rule on the
             colour page, stated as a full-composition budget.
           </p>
+          <p className={`${SMALL} text-xco-ink-muted max-w-2xl`}>[note] {proportionNote}</p>
         </div>
         <div className="max-w-3xl space-y-3">
           <div className="flex h-16 overflow-hidden" style={{ border: "1px solid var(--border-default)" }}>

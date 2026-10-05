@@ -1,6 +1,6 @@
 // Reader position and power — the page produces a reader-position.
 //
-// From the xCO Polyphonic Communication Style Guide v5, §03C.
+// From the xCO Polyphonic Communication Style Guide v6.1, §04C (unchanged from v5).
 // "I", "we", "you" and "they" do not merely identify voices. They allocate
 // membership, burden, ownership and agency. A polyphonic page is a speech act
 // inside an institutional field.
@@ -50,7 +50,7 @@ export const politicalChecksum = [
   "who carries the consequence",
 ] as const;
 
-// ── Agent typing (§03C) ──────────────────────────────────────────────
+// ── Agent typing (§04C) ──────────────────────────────────────────────
 // Opacity must be typed. Unknown, contested, withheld and out of scope are
 // different epistemic conditions — and "erased" is a defect, not a type.
 
@@ -83,7 +83,7 @@ export const agentTypes = [
 
 export type AgentType = (typeof agentTypes)[number];
 
-// Direct-address hazards (§03C).
+// Direct-address hazards (§04C).
 export const addressHazards = [
   {
     name: "Direct address",

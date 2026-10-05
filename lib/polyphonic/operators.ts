@@ -1,6 +1,7 @@
 // Operator grammar — marks have affordances, operations create effects.
 //
-// From the xCO Polyphonic Communication Style Guide v5, §03A.
+// From the xCO Polyphonic Communication Style Guide v6.1, §04A. 6.1 keeps the
+// eleven operations unchanged and adds four generative ones — see generative.ts.
 // Replaces a universal punctuation dictionary with a contextual operator
 // grammar. The primary rule: operator + operand + context. A mark must be
 // interpreted as an action upon a specific utterance, never as an isolated
@@ -102,7 +103,7 @@ export const operators = [
 
 export type Operator = (typeof operators)[number];
 
-// The six-part local notation contract every composition must declare (§03A).
+// The six-part local notation contract every composition must declare (§04A).
 export const notationContract = [
   { n: "01", field: "Operation", detail: "The visible sign, type shift, spatial move or line." },
   { n: "02", field: "Exact operand", detail: "The word, claim, actor or state transformed." },
@@ -122,7 +123,7 @@ export const operatorWalkthrough = [
   { step: "Recover", form: "restore the relations", meaning: "Returns the whole without erasing the analysis" },
 ] as const;
 
-// ── Spatial operators (§03B, Reference A) ────────────────────────────
+// ── Spatial operators (§04B, Reference A) ────────────────────────────
 // Space is an operator too. Each spatial act carries a governing question.
 
 export const spatialOperators = [
@@ -159,7 +160,7 @@ export const spatialOperators = [
   },
 ] as const;
 
-// ── Attention score (§03B) ───────────────────────────────────────────
+// ── Attention score (§04B) ───────────────────────────────────────────
 // Hierarchy is an attractor field, not only a ladder.
 
 export const attentionBeats = [

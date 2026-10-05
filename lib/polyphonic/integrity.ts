@@ -1,9 +1,11 @@
 // Integrity — release conditions, ambiguity classes and anti-patterns.
 //
-// From the xCO Polyphonic Communication Style Guide v5, §07.
-// Integrity is a release condition. Difficulty is licensed only when it reveals
-// a relation easier prose would conceal. Accidental ambiguity is a defect;
-// divergent consequence is a blocker.
+// From the xCO Polyphonic Communication Style Guide v6.1, §10.
+// Integrity is a release condition: release a composition with a recoverable
+// account, an articulated expressive purpose and a testable intended benefit
+// for its readers. Difficulty is licensed only when it reveals a relation
+// easier prose would conceal. Accidental ambiguity is a defect; divergent
+// consequence is a blocker.
 
 // ── Ambiguity classes ────────────────────────────────────────────────
 // A0–A3 are licensed under the right conditions. AX is always a reject.
@@ -13,7 +15,7 @@ export const ambiguityClasses = [
     code: "A0",
     name: "Exact",
     rule: "One operational reading",
-    detail: "Required for Decision; default for formal Explanation.",
+    detail: "Required for the authorised commitment and rights. Explanation can retain clearly stated disagreement and uncertainty.",
     licensed: true,
   },
   {
@@ -34,7 +36,7 @@ export const ambiguityClasses = [
     code: "A3",
     name: "Contested",
     rule: "The issue itself remains unsettled",
-    detail: "Name the alternatives, evidence and consequence of each interpretation.",
+    detail: "Name the distinct accounts, evidence, stakes and unresolved differences. Preserve each exact source; allow the question to change.",
     licensed: true,
   },
   {
@@ -48,7 +50,8 @@ export const ambiguityClasses = [
 
 export type AmbiguityClass = (typeof ambiguityClasses)[number];
 
-// The two tests every release must pass (§07).
+// The three tests every release must pass (§10). 6.1 adds reader benefit, and
+// lets felt meaning exceed a complete verbal account.
 export const releaseTests = [
   {
     n: "01",
@@ -60,11 +63,17 @@ export const releaseTests = [
     n: "02",
     name: "Defensible semantic surplus",
     detail:
-      "The transformation adds a meaning that a reviewer can name, defend and relate to the claim. Difficulty alone does not qualify.",
+      "The composition adds a relational or affective quality that a reviewer can discuss and readers can encounter. Felt meaning may exceed a complete verbal account. Factual claims still require support; difficulty alone does not qualify.",
+  },
+  {
+    n: "03",
+    name: "Reader benefit",
+    detail:
+      "Specify what someone should be able to notice, distinguish, question, imagine or undertake. Test with intended readers, record unexpected readings and revise. Technical validity does not establish that benefit.",
   },
 ] as const;
 
-// ── The eight release gates (§07) ────────────────────────────────────
+// ── The eight release gates (§10) ────────────────────────────────────
 // No gate is "not applicable" without a written rationale.
 // Release order: licence → recovery + surplus → reader + power →
 // relations + evidence + lineage → consent → responsive + access.
@@ -95,7 +104,7 @@ export const releaseGates = [
     n: "04",
     name: "Relations + evidence + lineage",
     action: "Keep every jurisdiction inspectable",
-    detail: "Type claims, joins, warrants, mechanisms, counterconditions and authority gates.",
+    detail: "Type claims, joins, warrants, mechanisms, counterconditions and authority gates. Check hypothetical dependency rules and the independence of authority from empirical plausibility.",
     blocker: "Pertinence becomes proof, or styling bridges a logical gap.",
   },
   {
@@ -130,7 +139,7 @@ export const releaseGates = [
 
 export type ReleaseGate = (typeof releaseGates)[number];
 
-// ── Anti-pattern index (§07, Reference D) ────────────────────────────
+// ── Anti-pattern index (§10, Reference D) ────────────────────────────
 
 export const antiPatterns = [
   { name: "Universal symbol dictionary", detail: "Assigning fixed meanings to code-like marks regardless of operand and context." },
@@ -151,9 +160,10 @@ export const antiPatterns = [
 
 export type AntiPattern = (typeof antiPatterns)[number];
 
-// ── Chromatic discipline (§08) ───────────────────────────────────────
+// ── Chromatic discipline (§11) ───────────────────────────────────────
 // Compositional proportion, stated as area roles rather than colour families.
-// Signal derives force from scarcity.
+// Signal derives force from scarcity. 6.1 states the proportion outright as
+// "design defaults, not measured findings or a rule for every encounter".
 
 export const compositionalProportion = [
   { pct: 70, role: "canvas", detail: "The reading ground." },
@@ -162,7 +172,10 @@ export const compositionalProportion = [
   { pct: 2, role: "signal", detail: "The current operative event." },
 ] as const;
 
-// The one-jurisdiction-per-channel rule (§08).
+export const proportionNote =
+  "Design defaults, not measured findings or a rule for every encounter. These are area roles, not mutually exclusive colour families.";
+
+// The one-jurisdiction-per-channel rule (§11).
 export const channelJurisdictions = [
   { channel: "Hue", carries: "Domain", never: "Epistemic status or sequence" },
   { channel: "Line syntax + label", carries: "Epistemic status", never: "Domain" },

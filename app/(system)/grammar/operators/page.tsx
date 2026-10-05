@@ -44,6 +44,14 @@ export default function OperatorsPage() {
             Each operation carries a possible enactment, a political risk, and a
             recovery obligation that must be met if it is used.
           </p>
+          <p className={`${MONO} text-xco-ink max-w-2xl`}>
+            [v6.1] Four generative operations extend these — differentiate,
+            reciprocate, hold open, sustain. See{" "}
+            <Link href="/grammar/generative" className="underline underline-offset-2">
+              Generative relations
+            </Link>
+            .
+          </p>
         </div>
 
         <div className="space-y-0">
