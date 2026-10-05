@@ -1,7 +1,9 @@
 import { colors, surfaceTokens, semanticMeanings, domainColors } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
-import { bestOn, contrastRatio, formatRatio, WCAG } from "@/lib/a11y/contrast";
+import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
 import { colorIn } from "@/lib/a11y/css-tokens";
+import { onSwatch, swatchLabel } from "./swatch";
+import { IdentityScales, Proportion, Trace, Highlights, Routes } from "./IdentitySections";
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -10,22 +12,9 @@ function hexToRgb(hex: string) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-const PAPER_HEX = colors.paper.hex;
-const INK_HEX = colors.ink.hex;
-
-// Pick whichever of ink or paper actually contrasts better against the swatch
-// — measured with the system's one contrast implementation, not estimated.
-const onSwatch = (hex: string): string => bestOn(hex, PAPER_HEX, INK_HEX);
-
-// A text label on a swatch. Mid-tones like teal and tech clear 4.5:1 with
-// neither ink nor paper, so their label sits on a paper chip instead of being
-// shown too faint to read.
-function swatchLabel(hex: string): React.CSSProperties {
-  const best = onSwatch(hex);
-  return contrastRatio(best, hex) >= WCAG.text
-    ? { color: best }
-    : { color: INK_HEX, background: PAPER_HEX, padding: "0 4px", alignSelf: "flex-start" };
-}
+// The ink register, read from the shipped CSS rather than restated.
+const INVERSE_PAPER = colorIn("ink", "--xco-paper");
+const INVERSE_INK = colorIn("ink", "--xco-ink");
 
 // Ratios are measured from the shipped CSS at build time, never typed: the
 // hand-written "16.5:1 / 6.5:1 / 4.56:1" that stood here had drifted to wrong.
@@ -42,15 +31,19 @@ export default function ColourPage() {
       {/* Principle */}
       <section className="max-w-2xl space-y-4">
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-          A warm off-white paper — never pure white. Near-black ink — never pure black.
-          Six semantic meanings each carried by colour and shape together: colour is never
-          the sole carrier. The brand lives in structure and type, not colour variety.
+          Chalk paper — never pure white. Blue-black ink — never pure black. Both come
+          from Matter, one of three identity scales; Field holds the blue depth and Signal
+          the ember. Six semantic meanings are each carried by colour and shape together:
+          colour is never the sole carrier. The brand lives in structure and type, not
+          colour variety.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Colour here is syntax. Each colour signals a specific thing. When it stops
           signalling something specific, remove it.
         </p>
       </section>
+
+      <IdentityScales />
 
       {/* Surfaces */}
       <section>
@@ -67,7 +60,7 @@ export default function ColourPage() {
             <div key={name}>
               <div
                 className="h-32 flex flex-col justify-end p-4"
-                style={{ backgroundColor: token.hex, border: "1px solid rgba(32,32,30,0.14)" }}
+                style={{ backgroundColor: token.hex, border: "1px solid var(--border-default)" }}
               >
                 <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {token.hex}
@@ -127,10 +120,10 @@ export default function ColourPage() {
                 className="h-32 flex flex-col justify-end p-4"
                 style={{ backgroundColor: item.hex }}
               >
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
                   {item.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
+                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
                   {item.contrast} on paper
                 </p>
               </div>
@@ -284,44 +277,7 @@ export default function ColourPage() {
         </div>
       </section>
 
-      {/* The 5% dusk rule */}
-      <section className="max-w-3xl">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
-          The 5% Rule — Dusk
-        </h2>
-        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8">
-          Dusk is the one earned warm accent. It should never exceed ~5% of any surface.
-          When it does, it stops signalling emphasis and starts signalling anxiety.
-        </p>
-
-        <div className="mb-8">
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-3">
-            ✓ ~5% — emphasis, not decoration
-          </p>
-          <div className="relative h-16 bg-xco-paper overflow-hidden">
-            <div className="absolute left-0 top-0 h-full bg-xco-dusk" style={{ width: "5%" }} />
-            <div className="absolute left-[7%] top-1/2 -translate-y-1/2">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                5% dusk — the active axis on the Frontier dimension
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-3">
-            ✗ 40% — no longer emphasis, now just noise
-          </p>
-          <div className="relative h-16 bg-xco-paper overflow-hidden">
-            <div className="absolute left-0 top-0 h-full bg-xco-dusk" style={{ width: "40%" }} />
-            <div className="absolute left-[43%] top-1/2 -translate-y-1/2">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                too much — dusk becomes wallpaper
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Proportion />
 
       {/* Domain colours */}
       <section>
@@ -329,9 +285,9 @@ export default function ColourPage() {
           Domain Colours
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
-          Four orientational tones — for tagging domains, not signalling meanings.
-          A bio-coloured element is not in "risk" or "agency": it is bio.
-          Never use domain colours as semantic signals.
+          Four TRACE families ship as domain tokens — for tagging domains, not signalling
+          meanings. A bio-coloured element is not in "risk" or "agency": it is bio.
+          Biophysical is set a step deeper (#699287) so the mark clears 3:1 on paper.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {domainColors.map((d) => {
@@ -366,14 +322,20 @@ export default function ColourPage() {
         </div>
       </section>
 
+      <Trace />
+
+      <Highlights />
+
+      <Routes />
+
       {/* Inverse register / dark mode */}
       <section className="max-w-2xl pb-8">
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Inverse Register
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
-          The inverse register swaps paper and ink: dark ground (#20201e) with warm ink
-          (#f4f1e9). It exists as a reader preference (dark mode) and as an authored choice
+          The inverse register is the cool deep field: Field 950 ground ({INVERSE_PAPER}) with
+          chalk ink ({INVERSE_INK}). It exists as a reader preference (dark mode) and as an authored choice
           for high-contrast sections using <code className="font-mono text-[0.9375rem]">data-register="inverse"</code>.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
@@ -382,12 +344,12 @@ export default function ColourPage() {
         </p>
         <div
           className="p-6 space-y-2"
-          style={{ backgroundColor: "#20201e" }}
+          style={{ backgroundColor: INVERSE_PAPER, color: INVERSE_INK }}
         >
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-[#f4f1e9]">
-            paper: #20201e — ink: #f4f1e9
+          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]">
+            paper: {INVERSE_PAPER} — ink: {INVERSE_INK}
           </p>
-          <p className="font-body text-[24px] leading-[26px] text-[#f4f1e9]">
+          <p className="font-body text-[24px] leading-[26px]">
             Same type system. Same semantic colours. Inverted ground.
           </p>
         </div>

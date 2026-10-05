@@ -9,7 +9,7 @@ import path from "node:path";
 import { contrastRatio, minimumFor, type ContrastUse } from "./contrast";
 import { colorIn, registers, utilityColor, type Register } from "./css-tokens";
 import { pairings, TEXT_SURFACES, type Pairing } from "./pairings";
-import { colors, surfaceTokens, semanticMeanings, domainColors, paletteHex } from "@/lib/design-tokens";
+import { colors, surfaceTokens, semanticMeanings, domainColors, paletteHex, identityScales, highlightTokens, routeColors } from "@/lib/design-tokens";
 import { groupMarks, groupColors, auditPairs, MARK_CONTRAST_MIN, type GroupMark } from "@/lib/group-marks";
 import { palettes } from "@/app/(generators)/event-series/render/palettes";
 
@@ -69,6 +69,12 @@ export function checkTokenDrift(): Finding[] {
     ...Object.entries(surfaceTokens).map(([name, s]) => ({ name: `surfaceTokens.${name}`, hex: s.hex, cssVar: s.cssVar })),
     ...semanticMeanings.map((m) => ({ name: `meaning.${m.name}`, hex: m.hex, cssVar: m.cssVar })),
     ...domainColors.map((d) => ({ name: `domain.${d.name}`, hex: d.hex, cssVar: d.cssVar })),
+    // The 8.1 identity scales and their local fills: the reusable colour contract.
+    ...Object.entries(identityScales).flatMap(([scale, stops]) =>
+      Object.entries(stops).map(([stop, hex]) => ({ name: `${scale}.${stop}`, hex, cssVar: `--xco-${scale}-${stop}` })),
+    ),
+    ...highlightTokens.map((h) => ({ name: `hl.${h.id}`, hex: h.hex, cssVar: h.cssVar })),
+    ...routeColors.map((r) => ({ name: `route.${r.id}`, hex: r.hex, cssVar: r.cssVar })),
   ];
   return entries.map(({ name, hex, cssVar }) => {
     const css = colorIn("paper", cssVar).toLowerCase();
