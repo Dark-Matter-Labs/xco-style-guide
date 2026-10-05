@@ -1,6 +1,8 @@
 // Material attention and composing — how a composition is made, and learns.
 //
-// From the xCO Polyphonic Communication Style Guide v6.1, §08 and §12.
+// From the xCO Polyphonic Communication Style Guide v8.1, §08 and §12 (the
+// material-world grammar of §08B and the question-to-form guide live in
+// worlds.ts).
 // §08 gives image, texture, light and motion an explicit grammar: a
 // composition may carry a felt surplus that exceeds a verbal account, while
 // every image declares its status. §12 turns the grammar into a method —
@@ -114,13 +116,13 @@ export const compositionSteps = [
     n: "04",
     step: "Choose the relation and its form.",
     detail:
-      "Select the licence and topology the task requires. Establish a local reading for type, image, colour, space and interaction. Compose an accessible route from the outset, alongside the expressive surface.",
+      "Use the question-to-form guide to select a dominant grammar and any useful companion. Name the licence and the unit each form handles. Establish a local reading for type, image, colour, space and interaction. Compose an accessible route alongside the expressive surface, keeping shared addresses steady.",
   },
   {
     n: "05",
     step: "Make inquiry inspectable.",
     detail:
-      "Name assumptions, warrants, operating conditions, counterconditions and authority boundaries. Any interactive change follows an explicit rule and reports what it changed. A hypothetical branch must retain its hypothetical status.",
+      "Name assumptions, warrants, operating conditions, counterconditions and authority boundaries. A proof block exposes a proposed construction; an atlas locates encounters and waits; a marginal inquiry gives a question its exact target and voice. Any interactive change follows an explicit rule and reports what it changed. A hypothetical branch retains its hypothetical status.",
   },
   {
     n: "06",
@@ -151,7 +153,7 @@ export const compositionSteps = [
 export const failureIsInformative =
   "If the work produces intimidation, confusion, false confidence or pressure to participate, identify what creates that effect. Revise the composition or its premise. Fluency, aesthetic coherence and software correctness cannot establish legitimacy or reader benefit.";
 
-/** The compact composition brief — copy and adapt (§12). */
+/** The compact composition brief — copy and adapt (§12). 7.1 added form, addresses, keys, margin, proof, atlas and world. */
 export const compositionBrief = [
   { field: "Purpose", prompt: "What could someone become more capable of?" },
   { field: "People", prompt: "Who encounters this, who speaks, who is affected or absent?" },
@@ -161,6 +163,13 @@ export const compositionBrief = [
   { field: "Relations", prompt: "Semantic, evidential, inferential, material or institutional?" },
   { field: "Generative operation", prompt: "What does this composition make possible?" },
   { field: "Licence", prompt: "Encounter, Explanation, Decision — and visible transitions." },
+  { field: "Form", prompt: "Dominant grammar, companion form and the question each reveals." },
+  { field: "Addresses", prompt: "Scoped source, span, condition, route, block and annotation IDs." },
+  { field: "Local keys", prompt: "The roles of highlight, line, position, scale and image." },
+  { field: "Margin", prompt: "Exact versioned target, voice, origin, question and response state." },
+  { field: "Proof", prompt: "Premises, construction, defined degree, losses, burdens and fallback." },
+  { field: "Atlas", prompt: "Distinct routes, encounters, waits, gaps, scale and return." },
+  { field: "World", prompt: "Subject, field, shared material language and unresolved possibility." },
   { field: "Media", prompt: "Source or generated status; what the treatment contributes." },
   { field: "Inquiry", prompt: "Assumptions, warrants, dependencies and revision triggers." },
   { field: "Commitment boundary", prompt: "Authority, resources, rights and uncertain effects." },

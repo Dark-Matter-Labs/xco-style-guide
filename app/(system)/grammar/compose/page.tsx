@@ -13,9 +13,11 @@ import {
   compositionBriefText,
 } from "@/lib/polyphonic";
 import { LABEL, BODY, MONO, SMALL, DISPLAY, ROW, RULE } from "../styles";
+import { MaterialWorlds, QuestionToForm } from "./WorldSections";
 
-// v6.1 §08 and §12 — the material grammar (image, texture, light, motion)
-// and the method that closes the guide: compose, test with readers, revise.
+// v8.1 §08, §08B and §12 — the material grammar (image, texture, light,
+// motion), material worlds, and the method that closes the guide: choose a
+// form by the question, compose, test with readers, revise.
 
 export default function ComposePage() {
   return (
@@ -79,6 +81,8 @@ export default function ComposePage() {
         <p className={`${MONO} text-xco-ink whitespace-pre-line`}>{materialAttention.disposition.replace(/\. /g, ".\n")}</p>
       </section>
 
+      <MaterialWorlds />
+
       {/* §12 */}
       <section className="space-y-8">
         <div className="space-y-2">
@@ -100,6 +104,8 @@ export default function ComposePage() {
           <p className={`${SMALL} text-xco-ink`}>[machine] {composeIntro.machine}</p>
         </div>
       </section>
+
+      <QuestionToForm />
 
       <section className="space-y-6 pb-8">
         <div className="flex items-baseline justify-between gap-4 flex-wrap">

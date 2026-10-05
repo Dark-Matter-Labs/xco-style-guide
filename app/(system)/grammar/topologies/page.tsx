@@ -53,7 +53,7 @@ export default function TopologiesPage() {
               <div className="flex flex-wrap items-baseline gap-4">
                 <p className={`${MONO} text-xco-ink`}>{t.code}</p>
                 <p className={DISPLAY}>{t.name}</p>
-                <LicenceBadge licence={t.licence as "explanation" | "decision"} />
+                <LicenceBadge licence={t.licence} />
               </div>
               <p className={BODY}>{t.shows}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
