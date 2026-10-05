@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 
-// Form primitives for the generator, in the instruments' existing idiom
-// (see social-card): mono labels, hairline inputs, native radios.
+// Form primitives shared by the generators (event-series, growth), in the
+// instruments' idiom (see social-card): mono labels, hairline inputs, native radios.
 
 const label = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink";
 

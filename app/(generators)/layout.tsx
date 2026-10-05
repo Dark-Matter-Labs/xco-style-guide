@@ -5,6 +5,7 @@ const generators: NavLink[] = [
   { href: "/social-card",     label: "Social Card" },
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/event-series",    label: "Event Series" },
+  { href: "/growth",          label: "Growth" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/option-field",    label: "Option Field" },
   { href: "/align",           label: "Align" },
