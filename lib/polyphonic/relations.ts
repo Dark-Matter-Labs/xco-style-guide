@@ -1,6 +1,6 @@
 // Relation jurisdictions — eight connector types, each exclusive.
 //
-// From the xCO Polyphonic Communication Style Guide v5, §04B.
+// From the xCO Polyphonic Communication Style Guide v6.1, §05B (unchanged from v5).
 // A connector has no universal meaning. Once a composition declares its
 // relation contract, each visual jurisdiction becomes exclusive and stable
 // throughout that work.
@@ -79,7 +79,7 @@ export const relationJurisdictions = [
 export type RelationJurisdiction = (typeof relationJurisdictions)[number];
 export type RelationCode = RelationJurisdiction["code"];
 
-// ── Epistemic function vocabulary (§04B) ─────────────────────────────
+// ── Epistemic function vocabulary (§05B) ─────────────────────────────
 // Precise verbs for what an evidence object does. "Proves" is reserved for
 // deduction — most documentary and empirical relations support, constrain or
 // contest rather than prove.
@@ -96,7 +96,7 @@ export const epistemicFunctions = [
   { verb: "cannot adjudicate", detail: "Bears on the span but is insufficient to settle it." },
 ] as const;
 
-// The three logical distinctions that the mantle exists to preserve (§04B).
+// The three logical distinctions that the mantle exists to preserve (§05B).
 // These are logical statements, not an empirical model.
 export const logicalDistinctions = [
   { formula: "record_contains(u) ⇏ content_of(u) is true", gloss: "A trace is not verification." },
@@ -104,7 +104,7 @@ export const logicalDistinctions = [
   { formula: "evidence_object(e) pertains_to span(s) ⇏ e supports s", gloss: "Pertinence is not support." },
 ] as const;
 
-// ── Evidence-object contract (§04B) ──────────────────────────────────
+// ── Evidence-object contract (§05B) ──────────────────────────────────
 // Every satellite must say what it addresses, what epistemic work it performs,
 // how it was produced, where it is limited and how it may be corrected.
 
@@ -119,7 +119,7 @@ export const evidenceContract = [
   { field: "Lifecycle + correction", detail: "Observed, reviewed and expiry dates; owner and challenge route" },
 ] as const;
 
-// Additional disclosure required per evidence-object type (§04B, Reference B).
+// Additional disclosure required per evidence-object type (§05B, Reference B).
 export const evidenceTypeDisclosures = [
   {
     type: "Quantitative measure",

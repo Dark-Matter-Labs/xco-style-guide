@@ -16,11 +16,14 @@ const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
 const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.4]";
 
 const pages = [
+  { href: "/grammar/generative", label: "Generative relations", detail: "Differentiate, reciprocate, hold open, sustain — and situated voices." },
   { href: "/grammar/operators", label: "Operators", detail: "What marks do to exact utterances." },
   { href: "/grammar/relations", label: "Relations", detail: "Eight connector jurisdictions, kept exclusive." },
-  { href: "/grammar/topologies", label: "Topologies", detail: "Concept field, evidence mantle, reasoning lineage, decision surface." },
+  { href: "/grammar/topologies", label: "Topologies", detail: "Nine modules, from situated accounts to the inquiry field." },
   { href: "/grammar/reader", label: "Reader & power", detail: "Who speaks, who is recruited, who carries the consequence." },
-  { href: "/grammar/integrity", label: "Integrity", detail: "Ambiguity classes, release gates, anti-patterns." },
+  { href: "/grammar/commitment", label: "Commitment", detail: "A precise commitment; its effects kept open to inquiry." },
+  { href: "/grammar/integrity", label: "Integrity", detail: "Ambiguity classes, release tests and gates, anti-patterns." },
+  { href: "/grammar/compose", label: "Compose & material", detail: "Image, texture, light and motion; the composition brief." },
 ];
 
 export default function GrammarPage() {
@@ -32,6 +35,9 @@ export default function GrammarPage() {
       </header>
 
       <section className="max-w-2xl space-y-4">
+        <p className={`${BODY} font-display text-[36px] leading-[40px]`}>
+          {GRAMMAR_SOURCE.question}
+        </p>
         <p className={BODY}>
           {GRAMMAR_SOURCE.governingProposition}
         </p>
@@ -42,7 +48,11 @@ export default function GrammarPage() {
           not semantic laws.
         </p>
         <p className={`${MONO} text-xco-ink pt-2`}>
-          [{GRAMMAR_SOURCE.version}] {GRAMMAR_SOURCE.maxim}
+          [{GRAMMAR_SOURCE.version}] {GRAMMAR_SOURCE.constitutionalLine}
+        </p>
+        <p className={`${SMALL} text-xco-ink-muted`}>
+          From the {GRAMMAR_SOURCE.title} {GRAMMAR_SOURCE.version}, {GRAMMAR_SOURCE.date}. It supersedes{" "}
+          {GRAMMAR_SOURCE.supersedes} and keeps its foundations whole; the visual tokens are unchanged.
         </p>
       </section>
 
@@ -51,9 +61,9 @@ export default function GrammarPage() {
         <div className="space-y-2">
           <h2 className={LABEL}>The performed relation</h2>
           <p className={`${BODY} max-w-2xl`}>
-            The fundamental unit is not the mark. It is what form does to an exact
-            utterance, when the reader meets it, how it positions them, and with
-            what consequence.
+            The fundamental unit is not the mark. It is the performed relation:
+            what form does to an utterance, how voices encounter one another,
+            what the reader can now notice or do, and with what consequence.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -72,10 +82,13 @@ export default function GrammarPage() {
         <div className="space-y-2">
           <h2 className={LABEL}>Licence follows consequence</h2>
           <p className={`${BODY} max-w-2xl`}>
-            The same composition cannot be equally ambiguous when opening a
-            question, proving a claim and obtaining consent. A work may move
-            between licences, but the transition must be legible. An element
-            serving two licences inherits the stricter one.
+            The licence follows what a composition enables: encountering a
+            condition, inspecting an account or making a commitment. A work may
+            move between licences, but the transition must be legible. An
+            element serving two licences inherits the stricter one.
+          </p>
+          <p className={`${MONO} text-xco-ink max-w-2xl`}>
+            [maxim] {GRAMMAR_SOURCE.maxim}
           </p>
         </div>
 

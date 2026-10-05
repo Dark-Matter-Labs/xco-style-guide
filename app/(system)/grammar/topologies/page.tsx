@@ -8,6 +8,8 @@ import {
   lineageTests,
   transpositionInvariants,
   transpositionRecomposable,
+  inquiryConditionStates,
+  inquiryFieldRules,
 } from "@/lib/polyphonic";
 import { LABEL, BODY, MONO, SMALL, DISPLAY, ROW, RULE } from "../styles";
 
@@ -28,8 +30,8 @@ export default function TopologiesPage() {
         <p className={BODY}>
           A concept field shows what a proposition contains. An evidence mantle
           shows what bears upon it. A reasoning lineage shows what follows — and
-          why. Choosing the wrong one is not a styling error; it makes a
-          different claim.
+          why. An inquiry field shows what its assumptions leave open. Choosing
+          the wrong one is not a styling error; it makes a different claim.
         </p>
         <p className={`${MONO} text-xco-ink`}>
           [rule] Semantic topology ≠ evidential topology ≠ inferential topology.
@@ -39,7 +41,7 @@ export default function TopologiesPage() {
       {/* Modules */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className={LABEL}>Five modules, typed at the boundary</h2>
+          <h2 className={LABEL}>{topologies.length} modules, typed at the boundary</h2>
           <p className={`${BODY} max-w-2xl`}>
             Each module imports named IDs and exports named IDs. The typed
             boundary is what lets an argument be inspected rather than trusted.
@@ -64,7 +66,7 @@ export default function TopologiesPage() {
                   <p className={`${SMALL} text-xco-ink`}>{t.exports}</p>
                 </div>
               </div>
-              <p className={`${SMALL} text-xco-ink-muted`}>{t.route}</p>
+              {t.route && <p className={`${SMALL} text-xco-ink-muted`}>{t.route}</p>}
             </div>
           ))}
         </div>
@@ -147,6 +149,33 @@ export default function TopologiesPage() {
       </section>
 
       {/* Transposition */}
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <h2 className={LABEL}>Inquiry field</h2>
+          <p className={`${BODY} max-w-2xl`}>
+            Questions, commitments, hunches and assumptions enter the
+            explanatory grammar. A working control reopens what depends on a
+            condition, while the source record stays fixed.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl">
+          {inquiryConditionStates.map((c) => (
+            <div key={c.state} className="space-y-2 pt-3" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
+              <p className={`${MONO} text-xco-ink`}>[{c.state.toUpperCase()}]</p>
+              <p className={`${SMALL} text-xco-ink-muted`}>{c.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div className="space-y-0 max-w-4xl">
+          {inquiryFieldRules.map((r) => (
+            <div key={r.rule} className="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-4 py-4" style={{ borderBottom: ROW }}>
+              <p className={`${MONO} text-xco-ink`}>{r.rule}</p>
+              <p className={`${SMALL} text-xco-ink-muted`}>{r.detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="space-y-8 pb-8">
         <div className="space-y-2">
           <h2 className={LABEL}>Transposition</h2>
@@ -190,7 +219,8 @@ export default function TopologiesPage() {
               <p key={h} className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>{h}</p>
             ))}
           </div>
-          {topologies.slice(0, 4).map((t) => (
+          {/* Review has no layout of its own to transpose — it returns into the others. */}
+          {topologies.filter((t) => t.id !== "review").map((t) => (
             <div key={t.id} className="grid grid-cols-1 lg:grid-cols-[180px_1fr_1fr_1fr] gap-4 py-4" style={{ borderBottom: ROW }}>
               <p className={`${MONO} text-xco-ink`}>{t.name}</p>
               <p className={`${SMALL} text-xco-ink-muted`}>{t.wide}</p>
