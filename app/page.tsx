@@ -30,13 +30,14 @@ const templateLinks = [
 const systemLinks = [
   { href: "/logo",        label: "Logo",                 blurb: "Wordmark, lockups, clear space, export." },
   { href: "/typography",  label: "Typography",           blurb: "Display tight and negative, labels wide and positive." },
-  { href: "/colour",      label: "Colour",               blurb: "Warm paper, six meanings, four domains." },
+  { href: "/colour",      label: "Colour",               blurb: "Field, Signal, Matter. Chalk paper, one ember." },
   { href: "/grid",        label: "Grid",                 blurb: "Golden ratio, Fibonacci spacing, 12 and 24 columns." },
   { href: "/diagrams",    label: "Diagrammatic Grammar", blurb: "Two line weights. Three node types." },
-  { href: "/tone",        label: "Tone of Voice",        blurb: "Radical conjecture, held with care. Three registers, a live linter." },
+  { href: "/tone",        label: "Tone of Voice",        blurb: "Radical conjecture, held with care. Plain where it is acted on." },
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },
   { href: "/accessibility", label: "Accessibility",      blurb: "WCAG 2.2 AA, measured on every build." },
+  { href: "/changes",     label: "Changes",              blurb: "Suggested changes stay provisional, and visible, until adopted." },
 ].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
 
 const generatorLinks = [
