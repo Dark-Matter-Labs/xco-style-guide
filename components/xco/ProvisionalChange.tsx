@@ -6,13 +6,17 @@ import { identityScales } from "@/lib/design-tokens";
 // in words; the lavender fill (8.1's provisional-state highlight) supports the
 // label and never carries it alone. The previous wording stays visible as a
 // <del>, the proposal as an <ins>, each with a spoken prefix so the relation
-// survives without colour or strikethrough.
+// survives without colour or strikethrough. `compact` is the in-place form:
+// it renders nothing once the change is settled.
 
 const MONO = "font-mono font-medium text-[0.75rem] leading-[1.5]";
 const HL_TEXT = identityScales.matter[900];
 
 export function ProvisionalChange({ change, compact = false }: { change: ChangeRecord; compact?: boolean }) {
   const open = isProvisional(change.status);
+  // In place (compact), a change shows only while it is open. Once adopted,
+  // declined or superseded it lives in the record on /changes.
+  if (compact && !open) return null;
   return (
     <aside
       aria-label={`${open ? "Provisional change" : "Change record"} ${change.id}: ${change.title}`}
