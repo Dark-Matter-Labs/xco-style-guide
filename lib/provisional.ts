@@ -69,7 +69,7 @@ export const changeLog: ChangeRecord[] = [
     date: "2026-10-06",
     why: "Decision text, instructions and agent prompts must not be misread. Simplified Technical English removes the main causes of misreading.",
     proposed: "Strict STE for Decision text. STE-flavoured for Explanation. Encounter writing exempt.",
-    respond: { label: "Review the pull request", href: "https://github.com/Dark-Matter-Labs/xco-style-guide/pulls" },
+    respond: PR(36),
   },
   {
     id: "CH-06",
@@ -80,7 +80,7 @@ export const changeLog: ChangeRecord[] = [
     proposedBy: "Gurden",
     date: "2026-10-06",
     why: "Suggested changes to the guide, the wiki and the website must show their status and what they replace.",
-    respond: { label: "Review the pull request", href: "https://github.com/Dark-Matter-Labs/xco-style-guide/pulls" },
+    respond: PR(36),
   },
   {
     id: "CH-05",
