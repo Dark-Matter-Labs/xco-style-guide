@@ -47,6 +47,7 @@ const generatorLinks = [
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/event-series",    label: "Event Series" },
   { href: "/growth",          label: "Growth" },
+  { href: "/chaos",           label: "Chaos" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/align",           label: "Align" },
   { href: "/text-highlight",  label: "Text Highlight" },
