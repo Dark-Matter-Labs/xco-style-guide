@@ -83,7 +83,7 @@ export type GroupColor = keyof typeof groupColors;
 // colours. Glyphs are always palette tokens.
 
 export type Ground =
-  | { kind: "token"; token: "paper" | "ink" | "ocean" | "teal" | "sand" | "navy" }
+  | { kind: "token"; token: "paper" | "ink" | "ocean" | "teal" | "sand" | "navy" | "duskInk" }
   | { kind: "group"; color: GroupColor };
 
 export type GlyphToken = "ink" | "paper" | "dusk";
@@ -194,6 +194,16 @@ export const groupMarks: GroupMark[] = [
     x: "ink",
     aperture: 0,
     note: "The first mark to share an aperture: the parent's unrotated 0°, carried apart by ground — amber against paper at 1.94:1, with ink glyphs at 7.70:1. Of every ground and angle that holds the pair audit, this had the widest greyscale margin in the warm register.",
+  },
+  {
+    id: "voice-brand",
+    name: "xCO — Voice Brand",
+    file: "xco-voice-brand",
+    ground: { kind: "token", token: "duskInk" },
+    c: "paper",
+    x: "paper",
+    aperture: 270,
+    note: "Oxide, Signal 700 — the ember in its reading form, the warm tone that speaks. Paper glyphs on it measure 5.77:1. At 270° it shares India's aperture, carried apart by ground — 1.65:1 against green, clear of the 1.5:1 value-twin line — and by hue. Dusk itself fails the audit as a ground: it is a value twin of Madrid, India, Learning System and Capital, which together leave no aperture it clears.",
   },
 ];
 
