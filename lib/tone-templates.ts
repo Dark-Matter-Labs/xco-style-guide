@@ -5,19 +5,32 @@
 // sets its register: the rule, two example pairs and the uncertainty
 // instructions. It asks the writer for audience, signature and sources, and
 // makes the model end with the pause: questions for the writer, unanswered.
+// Each register also sets its plain-register mode (lib/ste.ts) — Method and
+// Annotation explain, so they are STE-flavoured; Hunch is exempt — and every
+// template asks for revisions to be shown as provisional (lib/provisional.ts).
+
+// The plain register for a mode, as instructions to the model.
+function plainFor(mode: SteMode): string {
+  if (mode === "exempt") return "- Plain register: exempt. This register keeps its voice. Still: no semicolons in instructions to the reader, and keep every hedge.";
+  return "- Plain register (STE-flavoured): 25 words or fewer per sentence. Active voice unless the actor is unknown. No semicolons. No phrasal verbs (start, not kick off). Verbs, not nominalizations. A list for three or more steps. Keep every hedge — never change “may” to “is”.";
+}
 
 import { voiceBrief } from "./voice-principles";
 import { pauseQuestions } from "./writing-practice";
+import type { SteMode } from "./ste";
 
 const VOICE = voiceBrief();
 
-// The writing practices (writing-practice.ts), as instructions to the model.
-const PRACTICE = `PRACTICE:
+// The writing practices (writing-practice.ts), as instructions to the model,
+// with the plain-register mode the register sets.
+const practice = (mode: SteMode) => `PRACTICE:
 - Brevity: say what we mean, and nothing more. Cut repetition unless it is deliberate. Cut words, not complexity — keep uncertainty, disagreement and critical perspectives.
 - Audience: write for the reader named in the brief. If no reader is named, ask who it is before drafting.
 - Attribution: name and link the work this draws on — Dark Matter Labs' and others'. Never invent a source; mark a gap [source needed].
 - Positionality: if the piece is signed, ask the author whether to say where they write from. Do not write it for them.
 - Ownership: this is a draft for a person to edit, not a finished text.
+${plainFor(mode)}
+- Revisions: if you change an existing text, do not overwrite it. Show each change as “~~current~~ → proposed”, marked [PROVISIONAL / proposed], with one reason. Only a named person adopts a change.
 
 END YOUR DRAFT WITH a short section headed "Before this goes out" that lists these questions for the writer — do not answer them:
 ${pauseQuestions().map((q, i) => `${i + 1}. ${q}`).join("\n")}`;
@@ -32,6 +45,7 @@ export const toneRegisters = [
   {
     id: "method" as const,
     label: "A — Method",
+    steMode: "flavoured" as SteMode,
     usage: "Technical writing, papers, policy docs, briefings",
     rule: "Specific verbs, real numbers, named places.",
     ruleDetail:
@@ -50,6 +64,7 @@ export const toneRegisters = [
   {
     id: "hunch" as const,
     label: "B — Hunch",
+    steMode: "exempt" as SteMode,
     usage: "Substack, LinkedIn, thinking-aloud posts, internal strategy notes",
     rule: "Declarative about the question, tentative about the answer.",
     ruleDetail:
@@ -68,6 +83,7 @@ export const toneRegisters = [
   {
     id: "annotation" as const,
     label: "C — Annotation",
+    steMode: "flavoured" as SteMode,
     usage: "Diagram captions, footnotes, marginalia, in-document asides",
     rule: "Show the working. Mark uncertainty inline.",
     ruleDetail:
@@ -96,7 +112,7 @@ ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
 
-${PRACTICE}
+${practice("flavoured")}
 
 RULE: Specific verbs, real numbers, named places. No abstractions or process-hedging.
 
@@ -125,7 +141,7 @@ ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
 
-${PRACTICE}
+${practice("exempt")}
 
 RULE: Declarative about the question, tentative about the answer. You know what the problem is. You don't know the solution yet.
 
@@ -155,7 +171,7 @@ ${VOICE}
 
 The voice holds across every register. This one sets it for its surface.
 
-${PRACTICE}
+${practice("flavoured")}
 
 RULE: Show the working. Mark every assumption, dependency, and uncertainty inline. Never assert more than you know.
 

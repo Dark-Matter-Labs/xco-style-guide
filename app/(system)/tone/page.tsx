@@ -3,6 +3,7 @@ import { CopyButton } from "@/components/CopyButton";
 import { ToneLinter } from "./ToneLinter";
 import { VoicePrinciples } from "./VoicePrinciples";
 import { WritingPractice } from "./WritingPractice";
+import { PlainRegister } from "./PlainRegister";
 import { toneRegisters, promptTemplates } from "@/lib/tone-templates";
 import { bannedWords, spellingCorrections, houseRules } from "@/lib/design-tokens";
 
@@ -19,6 +20,9 @@ export default function TonePage() {
 
       {/* What a writer does before a text goes out */}
       <WritingPractice />
+
+      {/* How plain a text must be, by licence */}
+      <PlainRegister />
 
       {/* How the voice is set */}
       <section className="max-w-2xl space-y-4" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
@@ -215,8 +219,9 @@ export default function TonePage() {
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
           Paste draft text. The linter flags banned words, spelling and brand
-          casing, suggests which register the writing is closest to, and takes a
-          red pencil to it — places to look, not errors.{" "}
+          casing, suggests which register the writing is closest to, takes a red
+          pencil to it, and checks the plain register for the licence you pick —
+          places to look, not errors.{" "}
           <WIP
             variant="inference"
             label="[inference] register detection is heuristic, not NLP — treat suggestions as prompts, not verdicts"

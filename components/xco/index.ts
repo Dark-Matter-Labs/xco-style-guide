@@ -17,3 +17,4 @@ export { RelationEdge } from "./RelationEdge";
 export { AgentTag } from "./AgentTag";
 export { EvidenceCapsule } from "./EvidenceCapsule";
 export { AmbiguityTag } from "./AmbiguityTag";
+export { ProvisionalChange } from "./ProvisionalChange";

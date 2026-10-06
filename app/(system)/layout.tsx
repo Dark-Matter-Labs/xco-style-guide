@@ -10,6 +10,7 @@ const sections: NavLink[] = [
   { href: "/components", label: "Components" },
   { href: "/grammar", label: "Grammar" },
   { href: "/accessibility", label: "Access" },
+  { href: "/changes", label: "Changes" },
 ];
 
 export default function SystemLayout({

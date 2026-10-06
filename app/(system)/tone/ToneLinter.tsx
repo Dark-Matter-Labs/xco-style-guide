@@ -8,6 +8,7 @@ import {
   BRAND_NAME,
 } from "@/lib/design-tokens";
 import { brevityReport, LONG_SENTENCE_WORDS, type BrevityReport } from "@/lib/brevity";
+import { SteCheck } from "./SteCheck";
 
 interface BannedMatch {
   word: string;
@@ -452,6 +453,7 @@ export function ToneLinter() {
           </div>
 
           <RedPencil report={result.brevity} />
+          <SteCheck text={text} />
         </div>
       )}
     </div>

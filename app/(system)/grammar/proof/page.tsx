@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { WIP } from "@/components/WIP";
+import { ProvisionalChange } from "@/components/xco";
+import { changeLog } from "@/lib/provisional";
 import {
   proofIntro,
   proofSpecimen,
@@ -115,6 +117,9 @@ export default function ProofPage() {
           </aside>
         </article>
         <p className={`${SMALL} text-xco-ink-muted max-w-3xl`}>[status] {s.status}</p>
+        <div className="max-w-3xl">
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-05")!} compact />
+        </div>
         <ul className="flex flex-wrap gap-3" aria-label="Local highlight key for PB-1">
           {highlightTokens.map((h) => (
             <li key={h.id} className={SMALL}>
