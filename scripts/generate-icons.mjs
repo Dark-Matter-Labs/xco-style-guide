@@ -57,7 +57,7 @@ const scale = (BOX - PAD * 2) / glyphW;
 const tx = BOX / 2 - (g.xLeft + glyphW / 2) * scale;
 const ty = BOX / 2 - ((g.capTop + g.baseline) / 2) * scale;
 
-const [xa, xb] = logo.xPaths();
+const xd = logo.xPath();
 
 const stroke = (d, fg) =>
   `<path d="${d}" fill="none" stroke="${fg}" stroke-width="${g.stroke}" stroke-linecap="butt"/>`;
@@ -65,7 +65,7 @@ const stroke = (d, fg) =>
 // fg drives the C; the x always takes dusk, per the accent variant.
 const mark = (fg) =>
   `<g transform="translate(${round(tx)} ${round(ty)}) scale(${round(scale)})">` +
-  `${stroke(xa, DUSK)}${stroke(xb, DUSK)}${stroke(cPath(), fg)}</g>`;
+  `<path d="${xd}" fill="${DUSK}"/>${stroke(cPath(), fg)}</g>`;
 
 function round(n) {
   return Math.round(n * 1000) / 1000;

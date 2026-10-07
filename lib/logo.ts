@@ -11,6 +11,14 @@
 // optionality argument stated in the letterforms. The lowercase x is the
 // expansion operator acting on them, and its reduced height encodes the
 // naming rule (lowercase x, uppercase CO) as a visual fact.
+//
+// THE x SITS ON THE OPERATOR'S AXIS. An operator is set on the centre line of
+// what it acts on — a maths × sits on the axis, not the baseline — so the x is
+// centred on the C's centre, MID_Y. On the baseline it competed with the tall
+// rounds and read as dropped; its square-cut stroke ends also hung 4 units
+// below the line the C and O rest on. The x is now one filled outline with
+// flat-cut ends (as a typeface draws it), its ink exactly X_WIDTH wide and
+// X_HEIGHT tall.
 
 // ── Construction grid ────────────────────────────────────────────────
 // All values derive from cap height. Change CAP and the mark scales exactly.
@@ -30,23 +38,30 @@ const X_WIDTH = 56;                 // lowercase x advance
 // mouth pours a large pocket of white into that gap; the bounding boxes must
 // overlap before the pair holds as much space as x → C. At the previous +4 the
 // pair measured 1.61× the optical space of x → C and the O read as detached —
-// the kerning feedback. At −10 the ratio is 1.01×. Re-measure before changing:
-// scripts/measure-logo-spacing.mjs.
-const GAP_XC = 14;                  // x → C  (flat diagonal to round)
+// the kerning feedback. At −10 the ratio was 1.01×.
+//
+// x → C opened from 14 to 17 when the x moved onto the C's centre line: the x
+// now faces the C's widest point rather than its lower curve, so at 14 the
+// pair read up to 19% tighter than C → O. At 17 the pairs are within 7% at
+// every depth (0.99× at the middle one). Re-measure before changing:
+// npm run logo:spacing.
+const GAP_XC = 17;                  // x → C  (flat diagonal to round)
 const GAP_CO = -10;                 // C → O  (round to open round: boxes overlap)
 
 const R = CAP / 2 - STROKE / 2;     // 44 — centreline radius of C and O
 const CAP_TOP = PAD;                // 30
 const BASELINE = PAD + CAP;         // 130
 const MID_Y = CAP_TOP + CAP / 2;    // 80 — vertical centre of C and O
+const X_TOP = MID_Y - X_HEIGHT / 2; // 49 — the x is centred on MID_Y
+const X_BOTTOM = X_TOP + X_HEIGHT;  // 111
 
 // Aperture of the C, in degrees. The opening faces right.
 const C_APERTURE = 100;
 
 // Glyph origins along the baseline
 const X_LEFT = PAD;                                 // 30
-const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
-const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
+const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 153
+const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 243
 
 export const logoGeometry = {
   cap: CAP,
@@ -60,31 +75,27 @@ export const logoGeometry = {
   baseline: BASELINE,
   capTop: CAP_TOP,
   midY: MID_Y,
+  xTop: X_TOP,
+  xBottom: X_BOTTOM,
   xLeft: X_LEFT,
   xWidth: X_WIDTH,
   cCx: C_CX,
   oCx: O_CX,
-  width: O_CX + CAP / 2 + PAD,   // 320
+  width: O_CX + CAP / 2 + PAD,   // 323
   height: BASELINE + PAD,        // 160
 } as const;
 
 // ── Ink bounds ───────────────────────────────────────────────────────
 // The actual extent of the ink, without the built-in clear space — for inline
-// use (nav, masthead) where the surrounding layout supplies the spacing.
-//
-// The x's diagonals end in butt caps cut perpendicular to the stroke, so their
-// corners overhang the path endpoints: 4.45 sideways and 4.02 vertically. That
-// overhang is why the x's feet sit below the baseline the C and O rest on.
-
-const X_DIAGONAL = Math.hypot(X_WIDTH, X_HEIGHT);
-const X_CAP_DX = (STROKE / 2) * (X_HEIGHT / X_DIAGONAL);   // 4.45
-const X_CAP_DY = (STROKE / 2) * (X_WIDTH / X_DIAGONAL);    // 4.02
+// use (nav, masthead) where the surrounding layout supplies the spacing. The
+// x is a filled outline with flat ends, so nothing overhangs: its ink sits
+// inside the cap band, and the C and O set the top and bottom.
 
 export const inkBounds = {
-  left: X_LEFT - X_CAP_DX,
+  left: X_LEFT,
   right: O_CX + CAP / 2,
-  top: Math.min(CAP_TOP, BASELINE - X_HEIGHT - X_CAP_DY),
-  bottom: BASELINE + X_CAP_DY,
+  top: CAP_TOP,
+  bottom: BASELINE,
 } as const;
 
 // ── Path construction ────────────────────────────────────────────────
@@ -125,14 +136,38 @@ export function oPath(): string {
   return `${top} ${bottom}`;
 }
 
-/** The lowercase x: two crossing strokes, x-height tall. */
-export function xPaths(): [string, string] {
-  const top = BASELINE - X_HEIGHT;
-  const right = X_LEFT + X_WIDTH;
+/**
+ * Horizontal half-thickness of an x diagonal at its flat-cut ends. A stroke of
+ * weight STROKE crossing the band at an angle is wider measured horizontally,
+ * and the centreline span depends on that width (the ink must stay X_WIDTH
+ * wide), so solve the two together. Converges in a few steps.
+ */
+function xHalfWidth(): number {
+  let half = STROKE / 2;
+  for (let i = 0; i < 20; i++) {
+    const dx = X_WIDTH - 2 * half;
+    half = (STROKE / 2) * Math.hypot(dx, X_HEIGHT) / X_HEIGHT;
+  }
+  return half;
+}
+
+/**
+ * The lowercase x, as one filled outline: two diagonals of weight STROKE with
+ * flat-cut ends, centred on the C's centre line. Fill it; do not stroke it.
+ */
+export function xPath(): string {
+  const h = xHalfWidth();
+  const l = X_LEFT;
+  const r = X_LEFT + X_WIDTH;
+  const t = X_TOP;
+  const b = X_BOTTOM;
+  const quad = (p: [number, number][]) => `M ${p.map(([x, y]) => `${round(x)} ${round(y)}`).join(" L ")} Z`;
+  // Top-left → bottom-right, then top-right → bottom-left. Both subpaths wind
+  // the same way, so the crossing fills under the nonzero rule.
   return [
-    `M ${X_LEFT} ${top} L ${right} ${BASELINE}`,
-    `M ${right} ${top} L ${X_LEFT} ${BASELINE}`,
-  ];
+    quad([[l, t], [l + 2 * h, t], [r, b], [r - 2 * h, b]]),
+    quad([[r - 2 * h, t], [r, t], [l + 2 * h, b], [l, b]]),
+  ].join(" ");
 }
 
 // ── Variants ─────────────────────────────────────────────────────────
@@ -234,8 +269,6 @@ export function buildLogoSvg({
   const d = descriptorMetrics;
   const totalHeight = height + (withDescriptor ? d.space : 0);
 
-  const [x1, x2] = xPaths();
-
   const bg =
     withBackground && v.bg
       ? `\n  <rect width="${width}" height="${totalHeight}" fill="${v.bg}"/>`
@@ -248,9 +281,8 @@ export function buildLogoSvg({
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="xCO — Expanding Civilizational Optionality">
   <title>xCO</title>${bg}
+  <path d="${xPath()}" fill="${v.xFg}"/>
   <g fill="none" stroke-width="${stroke}" stroke-linecap="butt">
-    <path d="${x1}" stroke="${v.xFg}"/>
-    <path d="${x2}" stroke="${v.xFg}"/>
     <path d="${cPath()}" stroke="${v.fg}"/>
     <path d="${oPath()}" stroke="${v.fg}"/>
   </g>${descriptorEl}
