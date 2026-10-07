@@ -53,7 +53,7 @@ const tx = BOX / 2 - (g.xLeft + glyphW / 2) * scale;
 const ty = BOX / 2 - ((g.capTop + g.baseline) / 2) * scale;
 
 const r = (n) => Math.round(n * 1000) / 1000;
-const [xa, xb] = logo.xPaths();
+const xd = logo.xPath();
 
 function svgFor(m) {
   const bg = groundHex(m);
@@ -76,7 +76,7 @@ function svgFor(m) {
     `<svg xmlns="http://www.w3.org/2000/svg" width="${BOX}" height="${BOX}" viewBox="0 0 ${BOX} ${BOX}">` +
     `<rect width="${BOX}" height="${BOX}" fill="${bg}"/>${ring}` +
     `<g transform="translate(${r(tx)} ${r(ty)}) scale(${r(scale)})">` +
-    `${stroke(xa, xCol)}${stroke(xb, xCol)}${c}</g></svg>`
+    `<path d="${xd}" fill="${xCol}"/>${c}</g></svg>`
   );
 }
 

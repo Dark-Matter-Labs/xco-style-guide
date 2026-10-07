@@ -1,4 +1,4 @@
-import { cPath, oPath, xPaths, inkBounds, logoGeometry as g } from "@/lib/logo";
+import { cPath, oPath, xPath, inkBounds, logoGeometry as g } from "@/lib/logo";
 import { medullaMark as m } from "@/lib/event-series/medulla-mark";
 import { paletteHex } from "@/lib/design-tokens";
 
@@ -17,11 +17,11 @@ const X_SIZE = 0.3;          // the cross, in cap heights
 const MEDULLA_GAP = 0.34;    // × → disc
 const MEDULLA_SCALE = 0.92;  // disc diameter, in cap heights
 
-let paths: { x: Path2D[]; c: Path2D; o: Path2D; medulla: Path2D[] } | null = null;
+let paths: { x: Path2D; c: Path2D; o: Path2D; medulla: Path2D[] } | null = null;
 function getPaths() {
   if (!paths) {
     paths = {
-      x: xPaths().map((d) => new Path2D(d)),
+      x: new Path2D(xPath()),
       c: new Path2D(cPath()),
       o: new Path2D(oPath()),
       medulla: m.glyph.map((d) => new Path2D(d)),
@@ -52,21 +52,22 @@ export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: 
   const p = getPaths();
   const s = cap / g.cap;
 
-  // xCO — stroked geometry, cropped to its ink.
+  // xCO — the x is a filled outline, the C and O stroked; cropped to the ink.
   ctx.save();
   ctx.translate(left - inkBounds.left * s, top - inkBounds.top * s);
   ctx.scale(s, s);
   ctx.lineWidth = g.stroke;
   ctx.lineCap = "butt";
-  ctx.strokeStyle = o.xColor ?? o.color;
-  p.x.forEach((path) => ctx.stroke(path));
+  ctx.fillStyle = o.xColor ?? o.color;
+  ctx.fill(p.x);
   ctx.strokeStyle = o.color;
   ctx.stroke(p.c);
   ctx.stroke(p.o);
   ctx.restore();
 
-  // × — centred on the x-height band, the same weight as the logotype at half.
-  const midY = top + cap - (g.xHeight * s) / 2;
+  // × — on the operator's axis, the C's centre line, where the x also sits;
+  // the same weight as the logotype at half.
+  const midY = top + cap / 2;
   const crossX = left + logoWidth * s + cap * X_GAP;
   const half = (cap * X_SIZE) / 2;
   ctx.save();

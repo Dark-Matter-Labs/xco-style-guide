@@ -62,6 +62,11 @@ export default function LogoPage() {
             The lowercase x is the operator acting on them. Its reduced height is not a
             stylistic choice: it encodes the naming rule as a visual fact.
           </p>
+          <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+            Because it is an operator, the x sits on the C&apos;s centre line — the way a
+            maths × sits on the axis of what it multiplies, not on the baseline. Its ends
+            are cut flat, so nothing hangs below the line the C and O rest on.
+          </p>
         </div>
       </section>
 
@@ -85,7 +90,7 @@ export default function LogoPage() {
           {[
             { k: "Cap height", v: `${g.cap}`, n: "the base unit" },
             { k: "Stroke", v: `${g.stroke}`, n: "single weight, all glyphs" },
-            { k: "x-height", v: `${g.xHeight}`, n: "cap ÷ φ" },
+            { k: "x-height", v: `${g.xHeight}`, n: `cap ÷ φ, centred on ${g.midY}` },
             { k: "Radius", v: `${g.radius}`, n: "shared by C and O" },
             { k: "Aperture", v: `${g.aperture}°`, n: "the C's opening" },
             { k: "Gaps", v: `${g.gapXC} / ${String(g.gapCO).replace("-", "\u2212")}`, n: "x→C / C→O, measured" },

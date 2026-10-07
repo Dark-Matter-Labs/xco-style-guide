@@ -4,5 +4,5 @@
     @media (prefers-color-scheme: dark) { svg { --bg: #101F24; --fg: #F6F1E5; } }
   </style>
   <rect width="120" height="120" fill="var(--bg)"/>
-  <g transform="translate(-7.647 12.941) scale(0.588)"><path d="M 30 68 L 86 130" fill="none" stroke="#F47743" stroke-width="12" stroke-linecap="butt"/><path d="M 86 68 L 30 130" fill="none" stroke="#F47743" stroke-width="12" stroke-linecap="butt"/><path d="M 178.28 46.29 A 44 44 0 1 0 178.28 113.71" fill="none" stroke="var(--fg)" stroke-width="12" stroke-linecap="butt"/></g>
+  <g transform="translate(-7.341 13.757) scale(0.578)"><path d="M 30 49 L 44.45 49 L 86 111 L 71.55 111 Z M 71.55 49 L 86 49 L 44.45 111 L 30 111 Z" fill="#F47743"/><path d="M 181.28 46.29 A 44 44 0 1 0 181.28 113.71" fill="none" stroke="var(--fg)" stroke-width="12" stroke-linecap="butt"/></g>
 </svg>
