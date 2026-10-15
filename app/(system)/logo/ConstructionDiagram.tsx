@@ -1,4 +1,4 @@
-import { logoGeometry, cPath, oPath, xPaths } from "@/lib/logo";
+import { logoGeometry, cPath, oPath, xPath } from "@/lib/logo";
 
 const TEXTURE = 0.75;    // texture weight — guides, per the two-weight system
 const STRUCTURAL = 1.5;  // structural weight — measured extents
@@ -10,9 +10,7 @@ const STRUCTURAL = 1.5;  // structural weight — measured extents
  */
 export function ConstructionDiagram() {
   const g = logoGeometry;
-  const [x1, x2] = xPaths();
   const guide = "var(--xco-ocean)";
-  const [xTop] = [g.baseline - g.xHeight];
 
   return (
     <svg
@@ -21,10 +19,12 @@ export function ConstructionDiagram() {
       role="img"
       aria-label="Construction grid for the xCO logotype, showing shared circle radius, cap height, x-height and aperture angle"
     >
-      {/* Horizontal rules: cap top, x-height, baseline, midline */}
+      {/* Horizontal rules: cap top, the x's band, baseline, and the centre
+          line the x is set on — the operator's axis */}
       <g stroke={guide} strokeWidth={TEXTURE} opacity={0.55}>
         <line x1={0} y1={g.capTop} x2={g.width} y2={g.capTop} />
-        <line x1={0} y1={xTop} x2={g.width} y2={xTop} strokeDasharray="3 3" />
+        <line x1={0} y1={g.xTop} x2={g.width} y2={g.xTop} strokeDasharray="3 3" />
+        <line x1={0} y1={g.xBottom} x2={g.width} y2={g.xBottom} strokeDasharray="3 3" />
         <line x1={0} y1={g.baseline} x2={g.width} y2={g.baseline} />
         <line x1={0} y1={g.midY} x2={g.width} y2={g.midY} strokeDasharray="1 4" />
       </g>
@@ -38,9 +38,8 @@ export function ConstructionDiagram() {
       </g>
 
       {/* The mark itself */}
+      <path d={xPath()} fill="var(--xco-ink)" />
       <g fill="none" strokeWidth={g.stroke} stroke="var(--xco-ink)" strokeLinecap="butt">
-        <path d={x1} />
-        <path d={x2} />
         <path d={cPath()} />
         <path d={oPath()} />
       </g>
@@ -60,7 +59,7 @@ export function ConstructionDiagram() {
       >
         {/* Labels sit in the margins and counters — never over a stroke. */}
         <text x={20} y={g.capTop - 4}>cap {g.cap}</text>
-        <text x={20} y={xTop - 4}>x-height {g.xHeight}</text>
+        <text x={20} y={g.xTop - 4}>x-height {g.xHeight}</text>
         <text x={g.cCx + 6} y={g.midY - 6}>r {g.radius}</text>
         <text x={g.oCx + 6} y={g.midY - 6}>r {g.radius}</text>
         <text x={20} y={g.baseline + 12}>
