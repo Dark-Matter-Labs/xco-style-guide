@@ -205,6 +205,16 @@ export const groupMarks: GroupMark[] = [
     aperture: 270,
     note: "Oxide, Signal 700 — the ember in its reading form, the warm tone that speaks. Paper glyphs on it measure 5.77:1. At 270° it shares India's aperture, carried apart by ground — 1.65:1 against green, clear of the 1.5:1 value-twin line — and by hue. Dusk itself fails the audit as a ground: it is a value twin of Madrid, India, Learning System and Capital, which together leave no aperture it clears.",
   },
+  {
+    id: "core",
+    name: "xCO — Core Group",
+    file: "xco-core",
+    ground: { kind: "token", token: "ink" },
+    c: "paper",
+    x: "paper",
+    aperture: 180,
+    note: "Ink, the deepest documented tone — the core. Paper glyphs on it measure 14.98:1. The aperture turns to 180°, facing back at the x: the logotype's own opening reversed, inward. It shares that angle with Oceans Continuity Studio, carried apart by value (2.39:1). It shares its ground with Berlin/Medulla and a value twin with Positions & Options Stewards, and is 90° and 135° from them.",
+  },
 ];
 
 // ── Contrast maths ───────────────────────────────────────────────────
