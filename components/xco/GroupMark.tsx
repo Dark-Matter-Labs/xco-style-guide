@@ -1,4 +1,4 @@
-import { logoGeometry as g, cPath, xPaths } from "@/lib/logo";
+import { logoGeometry as g, cPath, xPath } from "@/lib/logo";
 import { paletteHex } from "@/lib/design-tokens";
 import { groupColors, type GroupMark as Mark } from "@/lib/group-marks";
 
@@ -40,7 +40,6 @@ export function GroupMark({
   const bg = groundHex(mark);
   const c = paletteHex[mark.c];
   const x = paletteHex[mark.x];
-  const [xa, xb] = xPaths();
 
   const stroke = (d: string, fg: string, key: string) => (
     <path
@@ -84,8 +83,7 @@ export function GroupMark({
           strokeOpacity={0.32}
         />
         <g transform={`translate(${tx} ${ty}) scale(${scale})`}>
-          {stroke(xa, x, "xa")}
-          {stroke(xb, x, "xb")}
+          <path d={xPath()} fill={x} />
           {/* Only the C rotates — the x stays put so the lockup keeps reading
               left to right. */}
           <g transform={`rotate(${-mark.aperture} ${g.cCx} ${g.midY})`}>
