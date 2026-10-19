@@ -4,7 +4,7 @@ import type { EventContent } from "@/lib/event-series/programme";
 export type TemplateId = "window" | "corner" | "globe";
 export type PaletteId = "dusk" | "paper" | "ink";
 export type TitleFace = "xco" | "medulla";
-export type ImageryId = "globe" | "ascii-globe" | "storm" | "collapse" | "lattice";
+export type ImageryId = "globe" | "ascii-globe" | "storm" | "collapse" | "lattice" | "line" | "ripples" | "ridges";
 
 export interface CardSpec {
   template: TemplateId;

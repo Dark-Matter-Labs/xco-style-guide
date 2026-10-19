@@ -64,10 +64,9 @@ export default function ComposePage() {
         <div className="space-y-2">
           <h2 className={LABEL}>Working with imagery</h2>
           <p className={`${BODY} max-w-2xl`}>
-            Every image declares its status. The system&apos;s own generators
-            do: each event-series card carries [ IMAGE / PHOTOGRAPH,
-            TRANSFORMED ] for the globes and [ IMAGE / GENERATED ] for the
-            ASCII fields.
+            Every image declares its status. Where an image could be read as a
+            record, say so in words on the page. Event-series posters leave
+            the label off the artwork and carry the status in their alt text.
           </p>
         </div>
         <div className="space-y-0 max-w-4xl">

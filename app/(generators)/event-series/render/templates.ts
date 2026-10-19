@@ -1,7 +1,7 @@
 import { drawField } from "./field";
-import { drawImagery, imageStatusLabel, statusOf } from "./imagery";
+import { drawImagery } from "./imagery";
 import { lockupWidth } from "./lockup";
-import { drawCoLockup, drawDetails, drawHeadline, drawImageStatus, scrim, type Ink } from "./blocks";
+import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
 import type { Assets, CardSpec, TemplateId } from "./types";
 
@@ -86,8 +86,6 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
   const lockTop = H - m - cap - safeBottom;
   drawCoLockup(ctx, ox + m, lockTop, cap, ink);
   drawDetails(ctx, spec, assets, ox + m, lockTop - 30 * u, pw - 2 * m, ink, u);
-  // Image status, on the lockup's baseline at the panel's right edge.
-  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, lockTop + cap, ink, u, assets.fonts);
 };
 
 // ── Corner ───────────────────────────────────────────────────────────
@@ -142,9 +140,6 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
     align: "right",
   });
 
-  // Image status, on the ground just above the band.
-  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, by - 18 * u, ground, u, assets.fonts);
-
   // In the band: the lockup, then the details.
   const band: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: clear, onLight: p.panelIsLight, plate: p.panel };
   const cap = Math.min(40 * u, b * 0.3);
@@ -198,7 +193,6 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
   const lockTop = H - m - cap - safeBottom;
   drawCoLockup(ctx, m, lockTop, cap, ink);
   drawDetails(ctx, spec, assets, m, lockTop - 30 * u, (W - 2 * m) * (landscape ? 0.6 : 1), ink, u);
-  drawImageStatus(ctx, imageStatusLabel[statusOf(spec.imagery)], W - m, lockTop + cap, ink, u, assets.fonts);
 };
 
 export const templates: Record<TemplateId, Template> = {
