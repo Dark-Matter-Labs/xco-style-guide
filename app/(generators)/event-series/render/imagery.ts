@@ -23,17 +23,11 @@ export interface ImageSlot {
   u: number;
 }
 
-// Every image declares its status (Polyphonic Communication Style Guide v6.1,
-// §08): readers must be able to tell a record from a construction. The globe
-// starts from a photograph of the Earth and is transformed — halftoned, its
-// seam animated; the ASCII fields are generated outright. The status is drawn
-// on every card, not offered as an option.
+// Every image still has a status (Polyphonic Communication Style Guide v6.1,
+// §08): the globe starts from a photograph of the Earth and is transformed —
+// halftoned, its seam animated; the ASCII fields are generated outright. Cards
+// no longer draw it on the poster; it stays in the alt text.
 export type ImageStatus = "transformed" | "generated";
-
-export const imageStatusLabel: Record<ImageStatus, string> = {
-  transformed: "[ IMAGE / PHOTOGRAPH, TRANSFORMED ]",
-  generated: "[ IMAGE / GENERATED ]",
-};
 
 /** The same status in words, for accessible names and alt text. */
 export const imageStatusText: Record<ImageStatus, string> = {
@@ -47,6 +41,9 @@ export const imageryList: { id: ImageryId; label: string; hint: string; status: 
   { id: "storm",       label: "Storm",       hint: "Rain-bands turning round a calm eye — from the optionality site", status: "generated" },
   { id: "collapse",    label: "Collapse",    hint: "Turbulent glyph noise, three dusk beacons of hope", status: "generated" },
   { id: "lattice",     label: "Lattice",     hint: "The arrival: an ordered, twinkling lattice", status: "generated" },
+  { id: "line",        label: "Line",        hint: "Listening: one trace — jagged, then a ridge, then a slow swell", status: "generated" },
+  { id: "ripples",     label: "Ripples",     hint: "Listening: rings of sound leaving the centre", status: "generated" },
+  { id: "ridges",      label: "Ridges",      hint: "Listening: receding mountain ridgelines, drifting", status: "generated" },
 ];
 
 export function statusOf(imagery: ImageryId): ImageStatus {

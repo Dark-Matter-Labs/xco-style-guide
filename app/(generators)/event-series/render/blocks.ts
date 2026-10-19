@@ -183,40 +183,6 @@ export function drawDetails(
   return height;
 }
 
-/**
- * The image-status label: mono, uppercase, tracked, in the surface's text
- * colour on a plate of the surface colour. The plate is what guarantees it is
- * legible — a halo alone breaks up over the brightest halftone squares — and
- * it makes the label's contrast exactly the surface-text pairing the
- * accessibility gate measures for every palette. `y` is the label's baseline.
- */
-export function drawImageStatus(
-  ctx: Ctx,
-  text: string,
-  x: number,
-  y: number,
-  ink: Ink,
-  u: number,
-  fonts: Assets["fonts"],
-  align: CanvasTextAlign = "right",
-): void {
-  const size = 16 * u;
-  ctx.save();
-  ctx.font = font(size, fonts.mono, 500);
-  setTracking(ctx, size * 0.08);
-  ctx.textAlign = align;
-  ctx.textBaseline = "alphabetic";
-  const w = ctx.measureText(text).width;
-  const padX = 10 * u;
-  const padY = 7 * u;
-  const left = align === "right" ? x - w : align === "center" ? x - w / 2 : x;
-  ctx.fillStyle = ink.plate;
-  ctx.fillRect(left - padX, y - size * 0.82 - padY, w + padX * 2, size * 1.05 + padY * 2);
-  ctx.fillStyle = ink.text;
-  ctx.fillText(text, x, y);
-  ctx.restore();
-}
-
 export function drawCoLockup(
   ctx: Ctx,
   x: number,

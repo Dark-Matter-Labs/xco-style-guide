@@ -12,12 +12,20 @@ type Ctx = CanvasRenderingContext2D;
 //   storm      logarithmic rain-bands turning around a calm eye
 //   lattice    the arrival — an ordered, twinkling lattice over a residual swirl
 //
+// Three more are for a listening evening, where the image is sound rather than
+// weather (after Slow Listening, whose one line runs from threat to mountains
+// to sea):
+//
+//   line       one trace across the card: jagged, then a ridge, then a slow swell
+//   ripples    rings spreading from the centre, one wavelength per loop
+//   ridges     receding mountain ridgelines, drifting against each other
+//
 // The site's field runs on wall-clock time; a card has to loop. So time only
 // enters as whole turns of the loop phase: noise is sampled while its domain
 // travels round a closed circle, the spiral turns a whole number of times,
 // and every pulse has an integer frequency. The last frame meets the first.
 
-export type AsciiMode = "collapse" | "storm" | "lattice";
+export type AsciiMode = "collapse" | "storm" | "lattice" | "line" | "ripples" | "ridges";
 
 /** Light → dense. No solid block: the densest glyph is @, so bands read as texture. */
 export const RAMP = " .·,:;irsxnvuoχ#%@";
@@ -72,6 +80,9 @@ interface FieldContext {
   /** Cell position across the area, 0–1. */
   x: number;
   y: number;
+  /** Cell row down the area, 0–1, and the height of one row in that unit. */
+  ny: number;
+  row: number;
   phase: number;
   /** Seeded noise offset, so each evening has its own weather. */
   z: number;
@@ -110,7 +121,56 @@ function residualSwirl(c: FieldContext): number {
   return spiral * (1 - smoothstep(0.6, 1.8, r)) * 0.35;
 }
 
+/** The one line of a listening card: jagged threat, a ridge, a slow swell. */
+function line(c: FieldContext): number {
+  const a = TAU * c.phase;
+  const profile = (amp: number, lag: number) => {
+    const t = c.x;
+    const n = fbm(t * 14 + Math.cos(a) * 0.8, lag * 5 + Math.sin(a) * 0.8, c.z);
+    const jagged = (Math.abs(((t * 34 + n * 3) % 2) - 1) * 2 - 1) * 0.2;
+    const ridge = (1 - Math.abs(fbm(t * 5, lag * 3 + Math.sin(a) * 0.3, c.z + 9) * 2 - 1)) * 0.2 - 0.1;
+    const swell = Math.sin(TAU * (t * 3 - c.phase + lag * 0.1)) * 0.07;
+    const toRidge = smoothstep(0.26, 0.4, t);
+    const toSwell = smoothstep(0.62, 0.76, t);
+    return amp * lerp(lerp(jagged, ridge, toRidge), swell, toSwell);
+  };
+  // The trace, and two fainter echoes of it, each a little behind.
+  let v = 0;
+  [[1, 0, 1], [0.7, 1, 0.42], [0.45, 2, 0.22]].forEach(([amp, lag, w]) => {
+    const d = (c.ny - (0.5 + profile(amp, lag))) / (c.row * 1.9);
+    v = Math.max(v, clamp01(Math.exp(-d * d) * 1.3) * w);
+  });
+  return v;
+}
+
+/** Sound spreading out: rings leave the centre, one wavelength per loop. */
+function ripples(c: FieldContext): number {
+  const r = Math.hypot(c.dx, c.dy);
+  const n = loopNoise(c, 3, 0.4);
+  const ring = Math.pow(0.5 + 0.5 * Math.sin(TAU * (r * 3.2 - c.phase)), 3);
+  const reach = smoothstep(0.08, 0.3, r) * (1 - smoothstep(0.5, 2.4, r));
+  return clamp01(ring * reach * (0.55 + 0.7 * n));
+}
+
+/** Mountains: five ridgelines, the near ones darker, drifting a little each loop. */
+function ridges(c: FieldContext): number {
+  const a = TAU * c.phase;
+  let v = 0;
+  for (let k = 0; k < 5; k++) {
+    const sky = 0.36 + 0.12 * k - 0.7 * (fbm(c.x * (2 + k * 0.7) + Math.cos(a) * 0.25, k * 3.1 + Math.sin(a) * 0.25, c.z + k * 7) - 0.3);
+    const edge = Math.exp(-Math.pow((c.ny - sky) / (c.row * 1.1), 2));
+    // Below a ridge the layer fills: faint at the back, denser at the front.
+    v = c.ny > sky ? 0.07 + 0.03 * k : v;
+    v = Math.max(v, edge * (0.7 + 0.08 * k));
+  }
+  return v;
+}
+
 // ── Drawing ──────────────────────────────────────────────────────────
+
+const FIELDS: Record<AsciiMode, (c: FieldContext) => number> = {
+  collapse, storm, lattice: residualSwirl, line, ripples, ridges,
+};
 
 interface AsciiOptions {
   mode: AsciiMode;
@@ -139,7 +199,7 @@ export function drawAscii(ctx: Ctx, area: Rect, o: AsciiOptions): void {
   const rows = Math.ceil(area.h / o.cell);
   const strength = o.strength ?? 1;
   const z = (o.seed % 997) * 0.37;
-  const f = o.mode === "collapse" ? collapse : o.mode === "storm" ? storm : residualSwirl;
+  const f = FIELDS[o.mode];
 
   ctx.save();
   ctx.font = `${o.cell}px ${o.font}`;
@@ -155,6 +215,8 @@ export function drawAscii(ctx: Ctx, area: Rect, o: AsciiOptions): void {
         dy: (py + o.cell / 2 - o.cy) / o.radius,
         x: i / cols,
         y: (j / rows) * (area.h / area.w),
+        ny: j / rows,
+        row: 1 / rows,
         phase: o.phase,
         z,
       });
