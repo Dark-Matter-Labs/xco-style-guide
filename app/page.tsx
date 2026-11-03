@@ -37,6 +37,7 @@ const systemLinks = [
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },
   { href: "/accessibility", label: "Accessibility",      blurb: "WCAG 2.2 AA, measured on every build." },
+  { href: "/craft",       label: "Designing with AI",    blurb: "The tells of generated design, and what xCO does instead." },
   { href: "/changes",     label: "Changes",              blurb: "Suggested changes stay provisional, and visible, until adopted." },
 ].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
 

@@ -10,6 +10,7 @@ const sections: NavLink[] = [
   { href: "/components", label: "Components" },
   { href: "/grammar", label: "Grammar" },
   { href: "/accessibility", label: "Access" },
+  { href: "/craft", label: "AI" },
   { href: "/changes", label: "Changes" },
 ];
 
