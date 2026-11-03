@@ -3,7 +3,7 @@ import {
   logoVariants,
   cPath,
   oPath,
-  xPaths,
+  xPath,
   descriptor,
   descriptorMetrics,
   inkBounds,
@@ -45,7 +45,6 @@ export function Logo({
 
   const d = descriptorMetrics;
   const totalHeight = gh + (withDescriptor ? d.space : 0);
-  const [x1, x2] = xPaths();
   const fg = color ?? v.fg;
   const xFg = color ?? v.xFg;
 
@@ -69,9 +68,8 @@ export function Logo({
       aria-label={label}
       className={className}
     >
+      <path d={xPath()} fill={xFg} />
       <g fill="none" strokeWidth={stroke} strokeLinecap="butt">
-        <path d={x1} stroke={xFg} />
-        <path d={x2} stroke={xFg} />
         <path d={cPath()} stroke={fg} />
         <path d={oPath()} stroke={fg} />
       </g>

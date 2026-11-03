@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
 import { paletteHex } from "@/lib/design-tokens";
-import { logoGeometry, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
+import { logoGeometry, inkBounds, cPath, oPath, xPath } from "@/lib/logo";
 
 const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK, sand: SAND, teal: TEAL, navy: NAVY , inkMuted: MUTED } = paletteHex;
 
@@ -18,7 +18,6 @@ const HEADER_MARK_W = (inkBounds.right - inkBounds.left) * HEADER_SCALE;
 const HEADER_GAP = 8;                                    // mark → descriptor
 
 function HeaderMark({ x, fill }: { x: number; fill: string }) {
-  const [xa, xb] = xPaths();
   const tx = x - inkBounds.left * HEADER_SCALE;
   const ty = HEADER_BASELINE - logoGeometry.baseline * HEADER_SCALE;
   return (
@@ -31,8 +30,7 @@ function HeaderMark({ x, fill }: { x: number; fill: string }) {
       aria-label="xCO"
       role="img"
     >
-      <path d={xa} />
-      <path d={xb} />
+      <path d={xPath()} fill={fill} stroke="none" />
       <path d={cPath()} />
       <path d={oPath()} />
     </g>

@@ -12,8 +12,8 @@
 //   4. The mean white per row is the pair's optical gap.
 //
 // Two pairs are well spaced when their optical gaps match. The zone is the
-// x-height band, the only band all three glyphs share and the line the eye
-// reads a word along. The result is checked at three depths so a conclusion
+// x's band — centred on the C's centre line — the only band all three glyphs
+// share and the line the eye reads the word along. The result is checked at three depths so a conclusion
 // cannot hinge on one choice of clamp.
 //
 // Exits non-zero if the pairs drift more than TOLERANCE apart at any depth.
@@ -70,9 +70,8 @@ function profile(ink, side) {
   return rows;
 }
 
-const [xa, xb] = logo.xPaths();
 const glyphs = {
-  x: await inkOf(stroke(xa) + stroke(xb)),
+  x: await inkOf(`<path d="${logo.xPath()}" fill="#000"/>`),
   C: await inkOf(stroke(logo.cPath())),
   O: await inkOf(stroke(logo.oPath())),
 };
@@ -96,10 +95,10 @@ function opticalGap(left, right, zone, depth) {
   return sum / r.length;
 }
 
-const zone = [g.baseline - g.xHeight, g.baseline];
+const zone = [g.xTop, g.xBottom];
 
 console.log(`gaps (metric):  x→C ${g.gapXC}   C→O ${g.gapCO}`);
-console.log(`zone: x-height band ${zone[0]}–${zone[1]} · depths ${DEPTHS.join(", ")}\n`);
+console.log(`zone: the x's band ${zone[0]}–${zone[1]} · depths ${DEPTHS.join(", ")}\n`);
 console.log("  depth    x→C     C→O    ratio");
 
 let worst = 0;
