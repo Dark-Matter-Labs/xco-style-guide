@@ -38,7 +38,7 @@ All design decisions live in two files that must be kept in sync:
 
 Six colour tokens: `xco-paper`, `xco-ink`, `xco-ink-muted`, `xco-ember`, `xco-cool`, `xco-flag`. If you think you need a seventh, you probably need an opacity stop.
 
-Four typefaces: Crimson Pro (display + body), Inter (UI), DM Mono (mono/annotation). Two weights per face maximum. Crimson Pro is a placeholder — the system is built for a one-variable swap when the commissioned face is ready.
+Two licensed typefaces from Klim: Untitled Serif (display) and Untitled Sans (body, interface, labels and annotations). Crimson Pro and the system sans are fallbacks only. Since 3 November 2026 there are no monospace labels: DM Mono is kept for code, and for the PNG export, which cannot yet load Untitled Sans.
 
 ### Diagram primitives (`lib/diagram-primitives/`)
 
@@ -50,8 +50,8 @@ RiskNode          — ember fill, paper text
 OptionNode        — paper fill, ink stroke (default)
 FieldNode         — paper fill, cool stroke, dashed border
 MultiSolveTicks   — stacked taper ticks (1–6)
-ScaleRule         — faint rule + DM Mono margin label
-Annotation        — DM Mono italic marginalia, word-wrapped
+ScaleRule         — faint rule + Untitled Sans margin label
+Annotation        — Untitled Sans italic marginalia, word-wrapped
 ```
 
 Jitter uses a seeded LCG so server and client render identically. Default amplitude: 1.8. Adjustable on `/diagrams`.
@@ -78,7 +78,7 @@ Banned words enforced in linter and documented in `lib/design-tokens.ts`:
 
 ### WIP marker (`components/WIP.tsx`)
 
-`<WIP variant="v0.1" />` / `"draft"` / `"inference"` / `"unverified"` / `"speculation"`. Mustard background, DM Mono text. Used throughout the system — first-class visual treatment, not an embarrassment.
+`<WIP variant="v0.1" />` / `"draft"` / `"inference"` / `"unverified"` / `"speculation"`. Mustard background, Untitled Sans text. Used throughout the system — first-class visual treatment, not an embarrassment.
 
 ---
 

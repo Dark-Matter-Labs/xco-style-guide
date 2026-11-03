@@ -6,7 +6,7 @@ import { seedShapes, type SeedShape, type SeedSpec } from "@/lib/growth/seeds";
 import { aperturePositions } from "@/lib/group-marks";
 import { download, recordCanvas, videoSupport } from "@/lib/media/record-video";
 import { Button, labelClass, RadioList, Section } from "@/components/generator-controls";
-import { boundsOf, drawGrowth, growthPalettes, growthSvg, ringsFrom, type GrowthFrame, type GrowthLook, type GrowthPaletteId, type GrowthStyle } from "./render";
+import { boundsOf, captionSize, captionText, drawGrowth, growthPalettes, growthSvg, ringsFrom, type GrowthFrame, type GrowthLook, type GrowthPaletteId, type GrowthStyle } from "./render";
 import { useGrowth } from "./useGrowth";
 
 const FORMATS = [
@@ -36,9 +36,16 @@ const VIDEO_FPS = 30;
 const VIDEO_FRAMES = 8 * VIDEO_FPS;   // the growth, replayed over eight seconds
 const VIDEO_HOLD = VIDEO_FPS;         // then one second on the finished form
 
-function monoFamily(): string {
-  const v = getComputedStyle(document.documentElement).getPropertyValue("--font-dm-mono").trim();
-  return v ? `${v}, monospace` : "monospace";
+// Captions are labels, set in Untitled Sans since 3 November 2026 (no monospace labels).
+const LABEL_FAMILY = '"Untitled Sans", Arial, sans-serif';
+
+// The SVG caption plate is sized from the same measurement the canvas makes, since
+// a proportional face has no fixed advance to multiply.
+function captionWidth(W: number, H: number, seed: number): number | undefined {
+  const ctx = document.createElement("canvas").getContext("2d");
+  if (!ctx) return undefined;
+  ctx.font = `400 ${captionSize(W, H)}px ${LABEL_FAMILY}`;
+  return ctx.measureText(captionText(seed)).width;
 }
 
 export function GrowthGenerator() {
@@ -90,7 +97,7 @@ export function GrowthGenerator() {
     // Growing in front of the reader is motion; under reduced motion, show the
     // seed and then the finished form only.
     if (reduce && !run.done && run.steps > 0) return;
-    drawGrowth(ctx, format.w, format.h, frame, look, seed, monoFamily());
+    drawGrowth(ctx, format.w, format.h, frame, look, seed, LABEL_FAMILY);
   }, [frame, run, look, format, seed, reduce]);
 
   const name = `xco-growth-${shape}${shape === "aperture" ? rotation : ""}-${seed}-${style}-${palette}-${format.id}`;
@@ -110,7 +117,7 @@ export function GrowthGenerator() {
   const exportSvg = () =>
     job("svg", async () => {
       if (!frame) return;
-      const svg = growthSvg(format.w, format.h, frame, look, seed, description);
+      const svg = growthSvg(format.w, format.h, frame, look, seed, description, captionWidth(format.w, format.h, seed));
       download(new Blob([svg], { type: "image/svg+xml" }), `${name}.svg`);
     });
 
@@ -132,7 +139,7 @@ export function GrowthGenerator() {
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas is not available.");
       const h = run.history;
-      const mono = monoFamily();
+      const mono = LABEL_FAMILY;
       const bounds = boundsOf(h[h.length - 1]); // the finished form fixes the frame
       const { blob, ext } = await recordCanvas(canvas, {
         frames: VIDEO_FRAMES + VIDEO_HOLD,

@@ -72,8 +72,8 @@ export function DiagramsDemo() {
           <>
             <line x1={20} y1={50} x2={380} y2={50} stroke={colors.ink.hex} strokeWidth={1.5} />
             <line x1={20} y1={90} x2={380} y2={90} stroke={colors.ink.hex} strokeWidth={0.75} strokeDasharray="4 4" />
-            <text x={20} y={38} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>structural (1.5px)</text>
-            <text x={20} y={110} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>texture (0.75px, dashed)</text>
+            <text x={20} y={38} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>structural (1.5px)</text>
+            <text x={20} y={110} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>texture (0.75px, dashed)</text>
           </>
         }
         viewBox="0 0 400 130"
@@ -86,7 +86,7 @@ export function DiagramsDemo() {
         preview={
           <>
             <RiskNode cx={200} cy={80} label="Arctic destabilisation" amplitude={amplitude} seed={10} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>ember fill / paper text / ink stroke</text>
+            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>ember fill / paper text / ink stroke</text>
           </>
         }
         viewBox="0 0 400 160"
@@ -100,7 +100,7 @@ export function DiagramsDemo() {
           <>
             <OptionNode cx={120} cy={80} label="Frontier" amplitude={amplitude} seed={20} />
             <OptionNode cx={280} cy={80} label="Fortress" amplitude={amplitude} seed={30} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>paper fill / ink stroke</text>
+            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>paper fill / ink stroke</text>
           </>
         }
         viewBox="0 0 400 160"
@@ -122,7 +122,7 @@ export function DiagramsDemo() {
               amplitude={amplitude}
               seed={40}
             />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>cool stroke / dashed / paper fill</text>
+            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>cool stroke / dashed / paper fill</text>
           </>
         }
         viewBox="0 0 400 160"
@@ -138,7 +138,7 @@ export function DiagramsDemo() {
             <MultiSolveTicks cx={120} y={102} count={3} />
             <OptionNode cx={280} cy={70} label={"Mistifier\nnetwork"} amplitude={amplitude} seed={60} />
             <MultiSolveTicks cx={280} y={102} count={1} />
-            <text x={20} y={148} fontSize={9} fontFamily="DM Mono, monospace" fill={colors.ink.hex}>3 contributions (cools / recharges / feeds) vs 1</text>
+            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>3 contributions (cools / recharges / feeds) vs 1</text>
           </>
         }
         viewBox="0 0 400 160"
@@ -146,7 +146,7 @@ export function DiagramsDemo() {
 
       <PrimitiveCard
         title="ScaleRule"
-        description="Scale boundary marker. When a diagram crosses scales — macro, bioregional, urban, neighbourhood — draw this rule. The scale label lives in the left margin in DM Mono italic."
+        description="Scale boundary marker. When a diagram crosses scales — macro, bioregional, urban, neighbourhood — draw this rule. The scale label lives in the left margin in Untitled Sans italic."
         source={ScaleRuleSource}
         preview={
           <>
@@ -160,7 +160,7 @@ export function DiagramsDemo() {
 
       <PrimitiveCard
         title="Annotation"
-        description="Marginalia in DM Mono italic. Every diagram should permit and visibly invite these. This is what differentiates xCO diagrams from McKinsey diagrams — the working is visible."
+        description="Marginalia in Untitled Sans italic. Every diagram should permit and visibly invite these. This is what differentiates xCO diagrams from McKinsey diagrams — the working is visible."
         source={AnnotationSource}
         preview={
           <>

@@ -28,12 +28,11 @@ export default function TypographyPage() {
       <section className="max-w-2xl">
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
           <span className="text-xco-dusk-ink">[note]</span> Untitled Serif and Untitled Sans are
-          licensed typefaces from Klim Type Foundry. Drop{" "}
-          <span className="text-xco-dusk-ink">UntitledSerifRegular.woff2</span> and{" "}
-          <span className="text-xco-dusk-ink">UntitledSansRegular.woff2</span> into{" "}
-          <span className="text-xco-dusk-ink">public/fonts/</span> to activate. Until then the system
-          falls back to Crimson Pro (serif) and Inter (sans), both loaded via Google Fonts. DM Mono is also loaded via
-          Google Fonts.
+          licensed typefaces from Klim Type Foundry, served from{" "}
+          <span className="text-xco-dusk-ink">public/fonts/</span>. If they fail to load, the serif falls back to
+          Crimson Pro and the sans to the system face. Since 3 November 2026 labels and annotations are set in
+          Untitled Sans too: no monospace labels. DM Mono stays for code, and for the PNG export, which cannot
+          yet load Untitled Sans.
         </p>
       </section>
 
@@ -118,7 +117,7 @@ export default function TypographyPage() {
           </div>
           <div className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              DM Mono<br />400i
+              Untitled Sans<br />400i
             </p>
             <p className="font-mono italic text-[0.9375rem] leading-[1.6] text-xco-ink">
               // [unverified] governance assumes legionella testing regime — depends on
@@ -135,7 +134,7 @@ export default function TypographyPage() {
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Four scales: Logo (Untitled Serif 100px), Heading (Untitled Serif 60px), Heading 2
-          (Untitled Sans 36px), Body (Untitled Sans 24px). Labels and annotations use DM Mono
+          (Untitled Sans 36px), Body (Untitled Sans 24px). Labels and annotations use Untitled Sans
           at 0.9375rem. Italic appears in diagram annotations and quoted pull-text only. No bold.
           No light. Restraint is the rule, not a constraint.
         </p>

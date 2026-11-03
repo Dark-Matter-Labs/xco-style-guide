@@ -24,10 +24,8 @@ const VIDEO_FPS = 30;
 const VIDEO_FRAMES = 8 * VIDEO_FPS;
 const VIDEO_HOLD = VIDEO_FPS;
 
-function monoFamily(): string {
-  const v = getComputedStyle(document.documentElement).getPropertyValue("--font-dm-mono").trim();
-  return v ? `${v}, monospace` : "monospace";
-}
+// Captions are labels, set in Untitled Sans since 3 November 2026 (no monospace labels).
+const LABEL_FAMILY = '"Untitled Sans", Arial, sans-serif';
 
 const nextSeed = (s: number) => ((s * 1103515245 + 12345) >>> 0) % 100000 || 1;
 
@@ -62,7 +60,7 @@ export function ChaosGenerator() {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) return;
-    drawChaos(ctx, format.w, format.h, result, look, params.seed, monoFamily());
+    drawChaos(ctx, format.w, format.h, result, look, params.seed, LABEL_FAMILY);
   }, [result, look, format, params.seed]);
 
   const name = `xco-chaos-${params.system}-${params.seed}-c${Math.round(params.chaos * 100)}-${palette}-${format.id}`;
@@ -102,7 +100,7 @@ export function ChaosGenerator() {
       canvas.height = format.h;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas is not available.");
-      const mono = monoFamily();
+      const mono = LABEL_FAMILY;
       // The attractor accumulates: one raster, advanced frame by frame.
       const raster = result.kind === "points" ? attractorRaster(format.w, format.h, result.xy, look) : undefined;
       const { blob, ext } = await recordCanvas(canvas, {

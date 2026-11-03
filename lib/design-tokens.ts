@@ -243,19 +243,28 @@ export const typography = {
       usage: "Alias for body. Navigation, labels, structural scaffolding.",
     },
     mono: {
-      family: "DM Mono",
+      // The label role. Kept under its old name so every use moves together. Untitled Sans
+      // since 3 November 2026: no monospace labels.
+      family: "Untitled Sans",
       cssVar: "--font-mono",
       twClass: "font-mono",
-      weights: ["500 (medium)"],
+      weights: ["400 (regular)", "400i (italic, annotations)"],
       usage:
-        "Small text. Numbers, code, annotations — showing the working. Always medium weight.",
+        "Small text. Numbers, labels, annotations — showing the working. Untitled Sans, never a monospace.",
+    },
+    code: {
+      family: "DM Mono",
+      cssVar: "--font-code",
+      twClass: "font-code",
+      weights: ["400 (regular)"],
+      usage: "Code only, where characters must line up. Also the PNG export's only face, until it can load Untitled Sans.",
     },
   },
 
   // Type scale — four levels + small label.
   // Serif face (Untitled Serif) for logo + heading.
   // Sans face (Untitled Sans) for heading2 + body.
-  // Mono face (DM Mono) for labels, annotations, code.
+  // Untitled Sans for labels and annotations too; DM Mono for code only.
   scale: [
     {
       name: "logo",

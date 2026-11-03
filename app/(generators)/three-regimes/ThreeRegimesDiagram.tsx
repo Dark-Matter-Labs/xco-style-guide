@@ -63,7 +63,7 @@ const LAYOUTS = {
 
 type LayoutData = (typeof LAYOUTS)[DiagramFormat];
 
-const FONT_SANS = `"Untitled Sans", "Inter", Arial, sans-serif`;
+const FONT_SANS = `"Untitled Sans", system-ui, Arial, sans-serif`;
 
 const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;

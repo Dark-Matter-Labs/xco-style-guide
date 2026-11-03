@@ -127,7 +127,7 @@ function drawCaption(ctx: CanvasRenderingContext2D, w: number, h: number, p: Cha
   const unit = Math.min(w, h) / 1080;
   const size = Math.round(18 * unit);
   const text = `[ IMAGE / GENERATED · STOCHASTIC · SEED ${seed} ] expressive — no measured values`;
-  ctx.font = `500 ${size}px ${mono}`;
+  ctx.font = `400 ${size}px ${mono}`;
   const pad = 10 * unit;
   const tw = ctx.measureText(text).width;
   const x = 32 * unit;

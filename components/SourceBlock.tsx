@@ -15,7 +15,7 @@ export function SourceBlock({ code, label }: SourceBlockProps) {
       <pre
         tabIndex={0}
         aria-label={label ? `${label} source` : "Source code"}
-        className="font-mono text-xs text-xco-ink bg-xco-ink/[0.04] border border-xco-ink/[0.12] p-4 overflow-x-auto leading-relaxed"
+        className="font-code text-xs text-xco-ink bg-xco-ink/[0.04] border border-xco-ink/[0.12] p-4 overflow-x-auto leading-relaxed"
       >
         <code>{code}</code>
       </pre>

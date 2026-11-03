@@ -89,6 +89,9 @@ function layout(W: number, H: number, zoom: number, b: Bounds) {
   return { S, ox: W / 2 - cx * S, oy: H / 2 - cy * S, u: Math.min(W, H) / 1000 };
 }
 
+/** The caption's size in card pixels; the canvas and the SVG share it. */
+export const captionSize = (W: number, H: number) => 16 * (Math.min(W, H) / 1000);
+
 /** Stroke in card pixels, so the line weight holds whatever the form's size. */
 function strokeWidth(u: number, style: GrowthStyle) {
   return Math.max(1, u * (style === "rings" ? 1.1 : 1.8));
@@ -117,7 +120,7 @@ export function drawGrowth(
   frame: GrowthFrame,
   look: GrowthLook,
   seed: number,
-  monoFamily: string,
+  labelFamily: string,
 ): void {
   const p = paletteOf(look.palette);
   const { S, ox, oy, u } = layout(W, H, look.zoom, frame.bounds);
@@ -149,7 +152,7 @@ export function drawGrowth(
 
   if (look.caption) {
     const size = 16 * u;
-    ctx.font = `500 ${size}px ${monoFamily}`;
+    ctx.font = `400 ${size}px ${labelFamily}`;
     const text = captionText(seed);
     const w = ctx.measureText(text).width;
     const m = 48 * u, pad = 8 * u;
@@ -182,6 +185,7 @@ export function growthSvg(
   look: GrowthLook,
   seed: number,
   description: string,
+  captionWidth?: number,
 ): string {
   const p = paletteOf(look.palette);
   const { S, ox, oy, u } = layout(W, H, look.zoom, frame.bounds);
@@ -199,13 +203,13 @@ export function growthSvg(
     ? `<path d="${pathData(frame.line, frame.closed, S, ox, oy)}" fill="${p.line}" stroke="none"/>`
     : `<path d="${pathData(frame.line, frame.closed, S, ox, oy)}" stroke-width="${strokeWidth(u, "line").toFixed(2)}"/>`;
   const size = 16 * u, m = 48 * u, pad = 8 * u;
-  // DM Mono advances 0.6em per glyph, so the plate can be sized without
-  // measuring — the same plate the canvas draws.
+  // The caller measures the caption as the canvas does. Without a measurement,
+  // shortcut: a rough 0.55em per glyph for Untitled Sans; pass captionWidth for an exact plate.
   const text = captionText(seed);
-  const textW = text.length * 0.6 * size;
+  const textW = captionWidth ?? text.length * 0.55 * size;
   const caption = look.caption
     ? `\n  <rect x="${(m - pad).toFixed(2)}" y="${(H - m - size - pad).toFixed(2)}" width="${(textW + pad * 2).toFixed(2)}" height="${(size + pad * 2).toFixed(2)}" fill="${p.plate}"/>` +
-      `\n  <text x="${m.toFixed(2)}" y="${(H - m - size * 0.18).toFixed(2)}" font-family="DM Mono, monospace" font-weight="500" font-size="${size.toFixed(2)}" fill="${p.line}">${esc(text)}</text>`
+      `\n  <text x="${m.toFixed(2)}" y="${(H - m - size * 0.18).toFixed(2)}" font-family="Untitled Sans, Arial, sans-serif" font-weight="400" font-size="${size.toFixed(2)}" fill="${p.line}">${esc(text)}</text>`
     : "";
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(description)}">
