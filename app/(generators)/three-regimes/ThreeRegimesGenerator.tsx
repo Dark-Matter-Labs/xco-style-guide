@@ -295,7 +295,7 @@ export function ThreeRegimesGenerator() {
               label="Relationship statement"
               value={statement}
               onChange={setStatement}
-              hint="DM Mono italic, below the diagram"
+              hint="Untitled Sans italic, below the diagram"
             />
             <TextArea
               label="Caption"

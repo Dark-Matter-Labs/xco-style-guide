@@ -8,7 +8,7 @@ const SMALL = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
 // "Instead" and `inXco` are this guide's reading. `inXco` says where xCO chooses a pattern on purpose.
 const TELLS: { tell: string; instead: string; inXco?: string }[] = [
   { tell: "Too much spacing", instead: "Space that groups things. Fibonacci steps, never empty bands." },
-  { tell: "Generic fonts", instead: "The system's faces, set to its scale.", inXco: "Inter is xCO's interface face on purpose. It never sets a headline." },
+  { tell: "Generic fonts", instead: "The system's faces, set to its scale.", inXco: "xCO sets everything in Untitled Sans and Untitled Serif, licensed from Klim. Inter is gone, even as a fallback." },
   { tell: "Walls of text", instead: "One idea per paragraph. Show the shape the content has: a diagram from the grammar." },
   { tell: "Bland hero", instead: "Open with the most telling thing from the subject: a field, a regime, an option." },
   { tell: "Gradients everywhere", instead: "Flat Field, Signal and Matter. Texture from the subject, never a wash." },
@@ -16,7 +16,7 @@ const TELLS: { tell: string; instead: string; inXco?: string }[] = [
   { tell: "Barely any pictures", instead: "Real photographs, treated with the image generators, and real diagrams." },
   { tell: "Purple and blue accents", instead: "One ember, as a declared hinge. Field blues as structure, never as decoration." },
   { tell: "Italic serif headlines", instead: "One display voice, used straight.", inXco: "The serif display face is xCO's. It is used straight, never as one italic word." },
-  { tell: "Monospace labels", instead: "Labels only where they annotate.", inXco: "DM Mono is xCO's annotation face. It never labels a diagram, and never sits above every heading." },
+  { tell: "Monospace labels", instead: "Labels only where they annotate.", inXco: "Labels and annotations are set in Untitled Sans. A monospace appears only for code, and in the PNG export until it can load Untitled Sans." },
   { tell: "Vague filler copy", instead: "Plain, specific words and real figures with their sources. See Tone of Voice." },
   { tell: "Massive footers", instead: "The few links people use." },
   { tell: "Random decorative symbols", instead: "A mark only where the grammar gives it a meaning." },

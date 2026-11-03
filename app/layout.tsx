@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Crimson_Pro, DM_Mono, Inter } from "next/font/google";
+import { Crimson_Pro, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SkipLink } from "@/components/doc/SkipLink";
@@ -20,13 +20,6 @@ const crimsonPro = Crimson_Pro({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "xCO — Expanding Civilizational Optionality",
   description:
@@ -44,7 +37,6 @@ export default function RootLayout({
       className={cn(
         dmMono.variable,
         crimsonPro.variable,
-        inter.variable,
       )}
     >
       {/* FOUC prevention — reads localStorage before first paint */}

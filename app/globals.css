@@ -69,15 +69,20 @@
   /* Heading:  Untitled Serif (serif)   60px / 60px                   */
   /* Heading2: Untitled Sans (sans)     36px / 40px                   */
   /* Body:     Untitled Sans (sans)     24px / 26px                   */
-  /* Small:    DM Mono Medium           0.9375rem / 1.6               */
+  /* Small:    Untitled Sans            0.9375rem / 1.6               */
 
+  /* Since 3 November 2026 labels and annotations are set in Untitled Sans, not a
+     monospace (Gurden). The utility keeps its old name, font-mono, so the 60-odd
+     places that use it move together; it is the label role now. A true monospace,
+     --font-code, is kept for code only, where characters must line up. */
   --font-display: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
-  --font-body:    "Untitled Sans", var(--font-inter), Arial, sans-serif;
-  --font-ui:      "Untitled Sans", var(--font-inter), Arial, sans-serif;
-  --font-mono:    var(--font-dm-mono), "Courier New", monospace;
+  --font-body:    "Untitled Sans", system-ui, Arial, sans-serif;
+  --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
+  --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
+  --font-code:    var(--font-dm-mono), "Courier New", monospace;
 
   /* shadcn semantic aliases */
-  --font-sans:    "Untitled Sans", var(--font-inter), Arial, sans-serif;
+  --font-sans:    "Untitled Sans", system-ui, Arial, sans-serif;
   --font-heading: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
 
   /* ── Spacing ────────────────────────────────────────────────────── */
@@ -416,6 +421,8 @@
     transform: translateY(-200%);
   }
   .skip-link:focus-visible { transform: none; }
+  /* Untitled Sans ships one weight. Medium labels stay regular, never a smeared synthetic bold. */
+  html { font-synthesis-weight: none; }
   body {
     @apply text-xco-ink font-body text-[24px] leading-[26px];
     /* Atmospheric wash. Both tints sit at 5% — the dusk budget documented on
@@ -524,7 +531,7 @@
     color: var(--xco-ink-muted);
   }
 
-  /* Labels and metadata — the mono role. Wide and positive. */
+  /* Labels and metadata — the label role, in Untitled Sans. Wide and positive. */
   .doc-label {
     font-family: var(--font-mono);
     font-weight: 500;
@@ -536,7 +543,7 @@
   }
 
   .doc-code {
-    font-family: var(--font-mono);
+    font-family: var(--font-code);
     font-weight: 500;
     font-size: 13px;
     line-height: 1.7;

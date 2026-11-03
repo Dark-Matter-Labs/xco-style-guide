@@ -25,7 +25,7 @@ export default function DiagramsPage() {
           <li>— Rectangle is the atomic unit — solid, hatched, or dashed border</li>
           <li>— Hatching density encodes character: sparse (open) → dense (constrained)</li>
           <li>— Three node types: Risk, Option, Field</li>
-          <li>— One annotation style: DM Mono italic, marked uncertainty</li>
+          <li>— One annotation style: Untitled Sans italic, marked uncertainty</li>
           <li>— One multi-solve signature: stacked ticks</li>
           <li>— One scale marker: faint rule, left-margin label</li>
         </ul>

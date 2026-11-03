@@ -23,7 +23,8 @@ export interface CardSpec {
 export interface Fonts {
   serif: string;
   sans: string;
-  mono: string;
+  /** Labels and metadata: Untitled Sans since 3 November 2026, no longer a monospace. */
+  label: string;
   instrument: string;
 }
 

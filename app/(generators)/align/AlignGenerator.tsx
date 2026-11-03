@@ -64,7 +64,7 @@ process — all photographic hue removed, replaced with the three palette stops 
 
 TYPOGRAPHY (if text appears in the image)
   Display / headlines    Untitled Sans — geometric sans-serif, weight 400–500
-  Data / labels          DM Mono — monospaced, regular
+  Data / labels          Untitled Sans — regular, never a monospace
   Body / longer text     Untitled Serif — serif, regular or italic
   No decorative typefaces. Text is sparse, precise, left-aligned.
 

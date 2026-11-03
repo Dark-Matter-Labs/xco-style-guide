@@ -5,9 +5,9 @@ import type { Assets, CardSpec, Rect } from "./types";
 type Ctx = CanvasRenderingContext2D;
 
 // The text blocks every template shares. Type roles follow the xCO system:
-// the title in the display serif, metadata in DM Mono, uppercase and tracked.
+// the title in the display serif, metadata in Untitled Sans, uppercase and tracked.
 // Medulla's posters set everything in one condensed serif; the title face can
-// switch to theirs (Instrument Serif), but the metadata stays xCO's mono.
+// switch to theirs (Instrument Serif), but the metadata stays xCO's label face.
 
 export interface Ink {
   text: string;
@@ -77,7 +77,7 @@ export function drawHeadline(
 
   if (content.kicker.trim()) {
     const size = 22 * u;
-    ctx.font = font(size, assets.fonts.mono, 500);
+    ctx.font = font(size, assets.fonts.label, 400);
     setTracking(ctx, size * 0.08);
     ctx.fillStyle = ink.accent;
     ctx.textAlign = align;
@@ -122,7 +122,7 @@ export function drawHeadline(
   return y;
 }
 
-/** Date / time on one line, place on the next — in mono. Returns the block height. */
+/** Date / time on one line, place on the next, in the label face. Returns the block height. */
 /**
  * Alt text for a posted card: everything the card says, in reading order,
  * ending with what the image is. Text inside an image is not readable by a
@@ -162,12 +162,12 @@ export function drawDetails(
 ): number {
   const lines = detailLines(spec);
   let size = 24 * u;
-  ctx.font = font(size, assets.fonts.mono, 500);
+  ctx.font = font(size, assets.fonts.label, 400);
   setTracking(ctx, size * 0.06);
   const widest = Math.max(0, ...lines.map((l) => ctx.measureText(l).width));
   if (widest > maxWidth) {
     size *= maxWidth / widest;
-    ctx.font = font(size, assets.fonts.mono, 500);
+    ctx.font = font(size, assets.fonts.label, 400);
     setTracking(ctx, size * 0.06);
   }
   const lh = size * 1.45;

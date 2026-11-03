@@ -125,7 +125,7 @@ ${meaningLines}
 Then load fonts:
 - Untitled Serif (licensed) — display + body; fallback: Crimson Pro (Google Fonts)
 - Untitled Sans (licensed) — UI; fallback: Inter (Google Fonts)
-- DM Mono — mono (Google Fonts)
+- Untitled Sans — labels and annotations too. A monospace (DM Mono, Google Fonts) only for code.
 `;
 }
 
@@ -174,8 +174,9 @@ ${colorEntries}
   /* Typography — Untitled fonts (licensed); system fallbacks shown */
   --font-display: "Untitled Serif", "Crimson Pro", Georgia, serif;
   --font-body:    "Untitled Serif", "Crimson Pro", Georgia, serif;
-  --font-ui:      "Untitled Sans", "Inter", Arial, sans-serif;
-  --font-mono:    var(--font-dm-mono), monospace;
+  --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
+  --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
+  --font-code:    var(--font-dm-mono), monospace;
 
   /* Spacing */
   --xco-gutter: ${spacing.gutter};
@@ -209,8 +210,9 @@ ${colorEntries}
       fontFamily: {
         display: ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
         body:    ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
-        ui:      ["Untitled Sans", "Inter", "Arial", "sans-serif"],
-        mono:    ["DM Mono", "monospace"],
+        ui:      ["Untitled Sans", "system-ui", "Arial", "sans-serif"],
+        mono:    ["Untitled Sans", "system-ui", "Arial", "sans-serif"],
+        code:    ["DM Mono", "monospace"],
       },
       borderRadius: {
         DEFAULT: "0.125rem",

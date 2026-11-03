@@ -11,7 +11,7 @@ const VW    = PHI * BASE; // ~485.4
 const VH    = BASE;
 const FIB   = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233];
 const MAX_DEPTH = 8;
-const FONT  = `"Untitled Sans", "Inter", Arial, sans-serif`;
+const FONT  = `"Untitled Sans", system-ui, Arial, sans-serif`;
 
 interface Sq { x: number; y: number; s: number; i: number }
 
