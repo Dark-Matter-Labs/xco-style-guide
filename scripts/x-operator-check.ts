@@ -20,7 +20,7 @@ import {
   type Vec,
 } from "@/lib/x-operator";
 
-const eq = assert.equal;
+const eq: typeof assert.equal = assert.equal;
 const near = (a: number, b: number, msg: string) => assert.ok(Math.abs(a - b) < 0.01, `${msg}: ${a} vs ${b}`);
 
 /** Every M/L coordinate pair in a path string, in order. */
