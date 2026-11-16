@@ -21,7 +21,7 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url);
 }
 
-type Lockup = "mark" | "descriptor" | "org";
+type Lockup = "mark" | "descriptor" | "endorsed";
 
 const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
   { id: "mark", label: "Mark only", note: "The logotype alone. Default.", suffix: "" },
@@ -32,10 +32,10 @@ const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
     suffix: "-lockup",
   },
   {
-    id: "org",
-    label: "Dark Matter Labs lockup",
-    note: "Descriptor plus Dark Matter Labs, for surfaces that must name the parent organisation.",
-    suffix: "-dml-lockup",
+    id: "endorsed",
+    label: "Endorsed by Dark Matter Labs",
+    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, for surfaces that must name the parent organisation.",
+    suffix: "-dml-endorsed",
   },
 ];
 
@@ -47,13 +47,13 @@ export function LogoDownloads() {
   const [variant, setVariant] = useState<LogoVariant>("ink");
   const [lockup, setLockup] = useState<Lockup>("mark");
   const withDescriptor = lockup !== "mark";
-  const withOrg = lockup === "org";
+  const withEndorsement = lockup === "endorsed";
   const [withBackground, setWithBackground] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const svg = buildLogoSvg({ variant, withDescriptor, withOrg, withBackground });
+  const svg = buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
   const active = logoVariants.find((v) => v.id === variant)!;
 
   const downloadSvg = () => {
@@ -68,7 +68,7 @@ export function LogoDownloads() {
     setError(null);
     setBusy(`png-${size}`);
     try {
-      const ratio = logoGeometry.width / lockupHeight(withDescriptor, withOrg);
+      const ratio = logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
       const res = await fetch("/api/export/png", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,8 +110,8 @@ export function LogoDownloads() {
         <Logo
           variant={variant}
           withDescriptor={withDescriptor}
-          withOrg={withOrg}
-          height={withOrg ? 150 : withDescriptor ? 130 : 96}
+          withEndorsement={withEndorsement}
+          height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
         />
       </div>
 

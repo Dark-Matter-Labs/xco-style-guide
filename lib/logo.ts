@@ -12,6 +12,8 @@
 // expansion operator acting on them, and its reduced height encodes the
 // naming rule (lowercase x, uppercase CO) as a visual fact.
 
+import { dmInkLeft, dmStampHeight, dmStampPath, dmWordmarkPath } from "./dm-logo";
+
 // ── Construction grid ────────────────────────────────────────────────
 // All values derive from cap height. Change CAP and the mark scales exactly.
 
@@ -145,6 +147,8 @@ export const logoVariants: {
   fg: string;
   xFg: string;
   bg: string | null;
+  /** Dark Matter Labs' mark: DM allows only black on light, white on dark. */
+  dmFg: string;
   usage: string;
 }[] = [
   {
@@ -153,6 +157,7 @@ export const logoVariants: {
     fg: "#101F24",
     xFg: "#101F24",
     bg: "#F6F1E5",
+    dmFg: "#000000",
     usage: "Default. Use everywhere unless there is a reason not to.",
   },
   {
@@ -161,6 +166,7 @@ export const logoVariants: {
     fg: "#F6F1E5",
     xFg: "#F6F1E5",
     bg: "#101F24",
+    dmFg: "#FFFFFF",
     usage: "Inverse register — dark grounds, covers, closing slides.",
   },
   {
@@ -169,6 +175,7 @@ export const logoVariants: {
     fg: "#101F24",
     xFg: "#F47743",
     bg: "#F6F1E5",
+    dmFg: "#000000",
     usage: "The x carries dusk. Sparing use — one instance per surface.",
   },
 ];
@@ -224,36 +231,44 @@ export const descriptorMetrics = {
   space: DESC_SPACE,
 } as const;
 
-// ── Organisation lockup ──────────────────────────────────────────────
-// The descriptor lockup plus the parent organisation's name on a third line.
-// Same face and the same ink-flush rule as the descriptor, so the lockup
-// stays one system and the PNG exporter (DM Mono only) renders it exactly.
-// At 26 the name spans the mark's ink with near-default tracking (~1.3).
-// Bottom clear space matches the top (PAD).
+// ── Endorsement lockup ───────────────────────────────────────────────
+// The descriptor lockup plus "AN INITIATIVE OF" and Dark Matter Labs' own V1
+// lockup, small. The words state the relationship, so xCO reads as the logo
+// and DM as its parent. DM's mark is DM's master artwork (lib/dm-logo.ts),
+// never retyped: DM sets its wordmark only in Saans.
+//
+// DM requires clear space of one stamp height around its mark. The stamp is
+// 25 units tall, so it sits 25 below the label's baseline, the left edge of
+// the file is 25.55 from it, and the bottom PAD (30) clears it.
 
-export const organisation = "Dark Matter Labs";
+export const endorsementLabel = "AN INITIATIVE OF";
 
-const ORG_SIZE = 26;
-const ORG_BASELINE_GAP = 38;       // below the descriptor baseline
+const LABEL_SIZE = 10;              // the descriptor's size: one caption register
+const LABEL_TRACKING = 1.4;        // matches the descriptor's derived tracking
+const LABEL_BASELINE_GAP = 26;     // below the descriptor baseline
+const LABEL_A_BEARING = 0.028;     // DM Mono "A" at 500, measured like the others
+const DM_STAMP = 25;               // stamp height: a quarter of cap height
+const DM_SCALE = DM_STAMP / dmStampHeight;
+const DM_TOP = BASELINE + DESC_BASELINE_GAP + LABEL_BASELINE_GAP + DM_STAMP;
 
-const ORG_LINE = flushLine(organisation, ORG_SIZE, { first: 0.066, last: 0.095 }); // D, s at 400
-
-export const organisationMetrics = {
-  size: ORG_SIZE,
-  x: ORG_LINE.x,
-  tracking: ORG_LINE.tracking,
-  baselineGap: ORG_BASELINE_GAP,
+export const endorsementMetrics = {
+  labelSize: LABEL_SIZE,
+  labelTracking: LABEL_TRACKING,
+  labelX: round(inkBounds.left - LABEL_A_BEARING * LABEL_SIZE),
+  labelBaselineGap: LABEL_BASELINE_GAP,
+  /** Transform placing DM's lockup with its stamp ink flush to the mark's ink. */
+  dmTransform: `translate(${round(inkBounds.left - dmInkLeft * DM_SCALE)} ${round(DM_TOP - 0.26 * DM_SCALE)}) scale(${round(DM_SCALE * 10000) / 10000})`,
   // extra viewBox height on top of the descriptor lockup
-  space: BASELINE + DESC_BASELINE_GAP + ORG_BASELINE_GAP + PAD - (BASELINE + PAD + DESC_SPACE),
+  space: DM_TOP + DM_STAMP + PAD - (BASELINE + PAD + DESC_SPACE),
 } as const;
 
 /** ViewBox height of the mark with whichever lockup lines are present. */
-export function lockupHeight(withDescriptor: boolean, withOrg = false): number {
-  const desc = withDescriptor || withOrg;
+export function lockupHeight(withDescriptor: boolean, withEndorsement = false): number {
+  const desc = withDescriptor || withEndorsement;
   return (
     logoGeometry.height +
     (desc ? descriptorMetrics.space : 0) +
-    (withOrg ? organisationMetrics.space : 0)
+    (withEndorsement ? endorsementMetrics.space : 0)
   );
 }
 
@@ -263,8 +278,8 @@ interface BuildOptions {
   variant?: LogoVariant;
   /** Include the descriptor line set in DM Mono. Text stays live, not outlined. */
   withDescriptor?: boolean;
-  /** Add "Dark Matter Labs" under the descriptor. Implies the descriptor. */
-  withOrg?: boolean;
+  /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
+  withEndorsement?: boolean;
   /** Paint the background rectangle. Off by default — logos ship transparent. */
   withBackground?: boolean;
 }
@@ -277,18 +292,18 @@ interface BuildOptions {
 export function buildLogoSvg({
   variant = "ink",
   withDescriptor = false,
-  withOrg = false,
+  withEndorsement = false,
   withBackground = false,
 }: BuildOptions = {}): string {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
   const { width, stroke, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
-  const o = organisationMetrics;
-  const showDesc = withDescriptor || withOrg;
-  const totalHeight = lockupHeight(showDesc, withOrg);
-  const label = withOrg
-    ? "xCO — Expanding Civilizational Optionality, Dark Matter Labs"
+  const e = endorsementMetrics;
+  const showDesc = withDescriptor || withEndorsement;
+  const totalHeight = lockupHeight(showDesc, withEndorsement);
+  const label = withEndorsement
+    ? "xCO — Expanding Civilizational Optionality, an initiative of Dark Matter Labs"
     : "xCO — Expanding Civilizational Optionality";
 
   const [x1, x2] = xPaths();
@@ -302,8 +317,12 @@ export function buildLogoSvg({
     ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
     : "";
 
-  const orgEl = withOrg
-    ? `\n  <text x="${o.x}" y="${baseline + d.baselineGap + o.baselineGap}" font-family="DM Mono, monospace" font-size="${o.size}" font-weight="400" letter-spacing="${o.tracking}" fill="${v.fg}">${organisation}</text>`
+  const endorsementEl = withEndorsement
+    ? `\n  <text x="${e.labelX}" y="${baseline + d.baselineGap + e.labelBaselineGap}" font-family="DM Mono, monospace" font-size="${e.labelSize}" font-weight="500" letter-spacing="${e.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
+  <g transform="${e.dmTransform}" fill="${v.dmFg}">
+    <path d="${dmWordmarkPath}"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>
+  </g>`
     : "";
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -314,7 +333,7 @@ export function buildLogoSvg({
     <path d="${x2}" stroke="${v.xFg}"/>
     <path d="${cPath()}" stroke="${v.fg}"/>
     <path d="${oPath()}" stroke="${v.fg}"/>
-  </g>${descriptorEl}${orgEl}
+  </g>${descriptorEl}${endorsementEl}
 </svg>
 `;
 }

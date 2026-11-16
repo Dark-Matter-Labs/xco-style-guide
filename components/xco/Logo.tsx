@@ -6,18 +6,19 @@ import {
   xPaths,
   descriptor,
   descriptorMetrics,
-  organisation,
-  organisationMetrics,
+  endorsementLabel,
+  endorsementMetrics,
   lockupHeight,
   inkBounds,
   type LogoVariant,
 } from "@/lib/logo";
+import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
 
 interface LogoProps {
   variant?: LogoVariant;
   withDescriptor?: boolean;
-  /** Add "Dark Matter Labs" under the descriptor. Implies the descriptor. */
-  withOrg?: boolean;
+  /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
+  withEndorsement?: boolean;
   /** Rendered height in px. Width follows the mark's ratio. */
   height?: number;
   /**
@@ -39,7 +40,7 @@ interface LogoProps {
 export function Logo({
   variant = "ink",
   withDescriptor = false,
-  withOrg = false,
+  withEndorsement = false,
   height = 64,
   inline = false,
   color,
@@ -50,9 +51,9 @@ export function Logo({
   const { width, stroke, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
-  const o = organisationMetrics;
-  const showDesc = withDescriptor || withOrg;
-  const totalHeight = lockupHeight(showDesc, withOrg);
+  const e = endorsementMetrics;
+  const showDesc = withDescriptor || withEndorsement;
+  const totalHeight = lockupHeight(showDesc, withEndorsement);
   const [x1, x2] = xPaths();
   const fg = color ?? v.fg;
   const xFg = color ?? v.xFg;
@@ -96,18 +97,25 @@ export function Logo({
           {descriptor}
         </text>
       )}
-      {withOrg && !inline && (
-        <text
-          x={o.x}
-          y={baseline + d.baselineGap + o.baselineGap}
-          fontFamily="var(--font-dm-mono), DM Mono, monospace"
-          fontSize={o.size}
-          fontWeight={400}
-          letterSpacing={o.tracking}
-          fill={fg}
-        >
-          {organisation}
-        </text>
+      {withEndorsement && !inline && (
+        <>
+          <text
+            x={e.labelX}
+            y={baseline + d.baselineGap + e.labelBaselineGap}
+            fontFamily="var(--font-dm-mono), DM Mono, monospace"
+            fontSize={e.labelSize}
+            fontWeight={500}
+            letterSpacing={e.labelTracking}
+            fill={fg}
+          >
+            {endorsementLabel}
+          </text>
+          {/* DM's mark is never recoloured, so it ignores the color override. */}
+          <g transform={e.dmTransform} fill={v.dmFg}>
+            <path d={dmWordmarkPath} />
+            <path fillRule="evenodd" clipRule="evenodd" d={dmStampPath} />
+          </g>
+        </>
       )}
     </svg>
   );
