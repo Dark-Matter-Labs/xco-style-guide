@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { WIP } from "@/components/WIP";
 import { Logo } from "@/components/xco/Logo";
+import { changeLog } from "@/lib/provisional";
 import { logoGeometry } from "@/lib/logo";
 import { BRAND_NAME } from "@/lib/design-tokens";
-import { GroupMark, groundHex } from "@/components/xco";
+import { GroupMark, groundHex, ProvisionalChange } from "@/components/xco";
 import {
   groupMarks,
   groupColors,
@@ -60,7 +62,10 @@ export default function LogoPage() {
           </p>
           <p className="font-body text-[24px] text-xco-ink leading-[26px]">
             The lowercase x is the operator acting on them. Its reduced height is not a
-            stylistic choice: it encodes the naming rule as a visual fact.
+            stylistic choice: it encodes the naming rule as a visual fact.{" "}
+            <Link href="/logo/x" className="underline underline-offset-4 hover:text-xco-dusk-ink">
+              See the x as operator →
+            </Link>
           </p>
         </div>
       </section>
@@ -432,6 +437,10 @@ export default function LogoPage() {
             </li>
           ))}
         </ul>
+
+        <div className="max-w-3xl">
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-08")!} compact />
+        </div>
       </section>
     </div>
   );

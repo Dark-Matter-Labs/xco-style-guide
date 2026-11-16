@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-08",
+    title: "The x may leave the mark",
+    target: "Logo / Misuse",
+    href: "/logo/x",
+    status: "proposed",
+    proposedBy: "Gurden",
+    date: "2026-11-16",
+    why: "The x is the operator in the logotype. On the website it can act on the page — keep the reader's place, frame, walk and expand — under fixed rules.",
+    previous: "Don't reflow it. Never re-space, stack, or reorder the glyphs.",
+    proposed: "The x may leave the mark as operator, under the rules on /logo/x. At rest it is always the logo's x, in place.",
+    decision: "Waiting for a named adopter.",
+  },
+  {
     id: "CH-07",
     title: "The plain register — STE by licence",
     target: "Tone of voice / the plain register",
