@@ -6,6 +6,9 @@ import {
   xPaths,
   descriptor,
   descriptorMetrics,
+  organisation,
+  organisationMetrics,
+  lockupHeight,
   inkBounds,
   type LogoVariant,
 } from "@/lib/logo";
@@ -13,6 +16,8 @@ import {
 interface LogoProps {
   variant?: LogoVariant;
   withDescriptor?: boolean;
+  /** Add "Dark Matter Labs" under the descriptor. Implies the descriptor. */
+  withOrg?: boolean;
   /** Rendered height in px. Width follows the mark's ratio. */
   height?: number;
   /**
@@ -34,6 +39,7 @@ interface LogoProps {
 export function Logo({
   variant = "ink",
   withDescriptor = false,
+  withOrg = false,
   height = 64,
   inline = false,
   color,
@@ -41,10 +47,12 @@ export function Logo({
   className = "",
 }: LogoProps) {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, height: gh, stroke, pad, baseline } = logoGeometry;
+  const { width, stroke, pad, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
-  const totalHeight = gh + (withDescriptor ? d.space : 0);
+  const o = organisationMetrics;
+  const showDesc = withDescriptor || withOrg;
+  const totalHeight = lockupHeight(showDesc, withOrg);
   const [x1, x2] = xPaths();
   const fg = color ?? v.fg;
   const xFg = color ?? v.xFg;
@@ -75,7 +83,7 @@ export function Logo({
         <path d={cPath()} stroke={fg} />
         <path d={oPath()} stroke={fg} />
       </g>
-      {withDescriptor && !inline && (
+      {showDesc && !inline && (
         <text
           x={pad}
           y={baseline + d.baselineGap}
@@ -86,6 +94,19 @@ export function Logo({
           fill={fg}
         >
           {descriptor}
+        </text>
+      )}
+      {withOrg && !inline && (
+        <text
+          x={pad}
+          y={baseline + d.baselineGap + o.baselineGap}
+          fontFamily="var(--font-dm-mono), DM Mono, monospace"
+          fontSize={o.size}
+          fontWeight={400}
+          letterSpacing={o.tracking}
+          fill={fg}
+        >
+          {organisation}
         </text>
       )}
     </svg>

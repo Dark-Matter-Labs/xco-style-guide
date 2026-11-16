@@ -194,19 +194,49 @@ const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 260
  * Clamped so an unusually long descriptor degrades to cramped-but-legible
  * rather than negative tracking.
  */
-function descriptorTracking(): number {
-  const perChar = MARK_SPAN / descriptor.length;
-  const tracking = perChar - MONO_ADVANCE * DESC_SIZE;
+function spanTracking(text: string, size: number): number {
+  const perChar = MARK_SPAN / text.length;
+  const tracking = perChar - MONO_ADVANCE * size;
   return Math.max(0.4, Math.round(tracking * 100) / 100);
 }
 
 export const descriptorMetrics = {
   size: DESC_SIZE,
-  tracking: descriptorTracking(),
+  tracking: spanTracking(descriptor, DESC_SIZE),
   baselineGap: DESC_BASELINE_GAP,
   space: DESC_SPACE,
   markSpan: MARK_SPAN,
 } as const;
+
+// ── Organisation lockup ──────────────────────────────────────────────
+// The descriptor lockup plus the parent organisation's name on a third line.
+// Same face and the same flush-span rule as the descriptor, so the lockup
+// stays one system and the PNG exporter (DM Mono only) renders it exactly.
+// Sized by the span, not chosen: at 26 the name fills the mark's width with
+// near-default tracking. Bottom clear space matches the top (PAD).
+
+export const organisation = "Dark Matter Labs";
+
+const ORG_SIZE = 26;
+const ORG_BASELINE_GAP = 38;       // below the descriptor baseline
+
+export const organisationMetrics = {
+  size: ORG_SIZE,
+  tracking: spanTracking(organisation, ORG_SIZE),
+  baselineGap: ORG_BASELINE_GAP,
+  // extra viewBox height on top of the descriptor lockup
+  space: BASELINE + DESC_BASELINE_GAP + ORG_BASELINE_GAP + PAD - (BASELINE + PAD + DESC_SPACE),
+} as const;
+
+/** ViewBox height of the mark with whichever lockup lines are present. */
+export function lockupHeight(withDescriptor: boolean, withOrg = false): number {
+  const desc = withDescriptor || withOrg;
+  return (
+    logoGeometry.height +
+    (desc ? descriptorMetrics.space : 0) +
+    (withOrg ? organisationMetrics.space : 0)
+  );
+}
 
 // ── Standalone SVG builder ───────────────────────────────────────────
 
@@ -214,6 +244,8 @@ interface BuildOptions {
   variant?: LogoVariant;
   /** Include the descriptor line set in DM Mono. Text stays live, not outlined. */
   withDescriptor?: boolean;
+  /** Add "Dark Matter Labs" under the descriptor. Implies the descriptor. */
+  withOrg?: boolean;
   /** Paint the background rectangle. Off by default — logos ship transparent. */
   withBackground?: boolean;
 }
@@ -226,13 +258,19 @@ interface BuildOptions {
 export function buildLogoSvg({
   variant = "ink",
   withDescriptor = false,
+  withOrg = false,
   withBackground = false,
 }: BuildOptions = {}): string {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, height, stroke, pad, baseline } = logoGeometry;
+  const { width, stroke, pad, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
-  const totalHeight = height + (withDescriptor ? d.space : 0);
+  const o = organisationMetrics;
+  const showDesc = withDescriptor || withOrg;
+  const totalHeight = lockupHeight(showDesc, withOrg);
+  const label = withOrg
+    ? "xCO — Expanding Civilizational Optionality, Dark Matter Labs"
+    : "xCO — Expanding Civilizational Optionality";
 
   const [x1, x2] = xPaths();
 
@@ -241,19 +279,23 @@ export function buildLogoSvg({
       ? `\n  <rect width="${width}" height="${totalHeight}" fill="${v.bg}"/>`
       : "";
 
-  const descriptorEl = withDescriptor
+  const descriptorEl = showDesc
     ? `\n  <text x="${pad}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
     : "";
 
+  const orgEl = withOrg
+    ? `\n  <text x="${pad}" y="${baseline + d.baselineGap + o.baselineGap}" font-family="DM Mono, monospace" font-size="${o.size}" font-weight="400" letter-spacing="${o.tracking}" fill="${v.fg}">${organisation}</text>`
+    : "";
+
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="xCO — Expanding Civilizational Optionality">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="${label}">
   <title>xCO</title>${bg}
   <g fill="none" stroke-width="${stroke}" stroke-linecap="butt">
     <path d="${x1}" stroke="${v.xFg}"/>
     <path d="${x2}" stroke="${v.xFg}"/>
     <path d="${cPath()}" stroke="${v.fg}"/>
     <path d="${oPath()}" stroke="${v.fg}"/>
-  </g>${descriptorEl}
+  </g>${descriptorEl}${orgEl}
 </svg>
 `;
 }

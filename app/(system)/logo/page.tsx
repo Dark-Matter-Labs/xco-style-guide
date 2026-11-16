@@ -182,9 +182,10 @@ export default function LogoPage() {
 
         <div className="max-w-2xl space-y-3 pt-2">
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [note] The descriptor lockup is the one part that is live text, set in DM Mono.
+            [note] The lockup lines — the descriptor and Dark Matter Labs — are the one part
+            that is live text, set in DM Mono and tracked to span the mark flush on both edges.
             It rasterises correctly to PNG because the exporter loads that face, but an SVG
-            lockup opened on a machine without DM Mono will substitute the descriptor line.
+            lockup opened on a machine without DM Mono will substitute those lines.
             The glyphs themselves are unaffected. For third parties, send the PNG lockup or
             the plain SVG.
           </p>
