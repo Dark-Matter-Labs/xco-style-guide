@@ -65,6 +65,49 @@ export default function LogoPage() {
         </div>
       </section>
 
+      {/* Proposal: serif x */}
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+            Proposed — serif x
+          </h2>
+          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
+            The x drawn from Untitled Serif, our heading face, beside the constructed C
+            and O. The operator speaks in the system&apos;s editorial voice while the
+            circles stay geometry.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {(["mono", "serif"] as const).map((s) => (
+            <div key={s} className="space-y-3">
+              <div
+                className="flex items-end justify-center gap-8 py-12"
+                style={{ background: "var(--xco-paper-quiet)" }}
+              >
+                <Logo height={110} xStyle={s} />
+                <Logo height={32} xStyle={s} />
+              </div>
+              <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                {s === "mono" ? "Current — constructed, monoline" : "Proposed — Untitled Serif x"}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-12 py-10" style={{ background: "var(--xco-paper-quiet)" }}>
+          <Logo height={110} xStyle="serif" variant="accent" />
+          <Logo height={200} xStyle="serif" withEndorsement />
+        </div>
+
+        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink max-w-2xl">
+          [proposal] Not adopted. Before it can be: the x→C gap needs re-measuring
+          (<code className="font-mono">npm run logo:spacing</code> still checks the monoline
+          x), the lockup lines are still aligned to the monoline x&apos;s ink, and Klim&apos;s
+          licence must cover outlining a glyph into a logo. Downloads stay monoline.
+        </p>
+      </section>
+
       {/* Construction */}
       <section className="space-y-8">
         <div className="space-y-2">
