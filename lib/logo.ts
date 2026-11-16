@@ -180,49 +180,68 @@ export const descriptor = "EXPANDING CIVILIZATIONAL OPTIONALITY";
 // two elements align flush on both edges. Tracking is derived, not guessed:
 // hardcoding it would clip the line the moment the descriptor text changed
 // (an earlier fixed value overflowed the canvas and truncated "OPTIONALITY").
+//
+// Flush means INK to INK. Aligning the text's advance boxes to PAD left the
+// letters visibly inset: every glyph sits inside its mono cell with a side
+// bearing, and the x's cut feet reach 4.45 past PAD. So each line is placed
+// and tracked so its first glyph's ink starts at inkBounds.left and its last
+// glyph's ink ends at inkBounds.right.
 
 const DESC_SIZE = 10;
 const DESC_BASELINE_GAP = 38;      // below the logotype baseline
 const DESC_SPACE = 44;             // extra viewBox height when present
 const MONO_ADVANCE = 0.6;          // DM Mono advance width, in em
 
-/** Horizontal span of the glyphs, PAD to PAD. */
-const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 260
+/**
+ * Side bearings of the end glyphs, in em, measured from DM Mono with canvas
+ * measureText (actualBoundingBox). Re-measure if the text or weight changes.
+ */
+interface Bearings {
+  first: number;   // left side bearing of the first glyph
+  last: number;    // right side bearing of the last glyph
+}
 
 /**
- * Letter-spacing that makes `descriptor` fill MARK_SPAN at DESC_SIZE.
- * Clamped so an unusually long descriptor degrades to cramped-but-legible
- * rather than negative tracking.
+ * Start x and letter-spacing that put `text`'s ink exactly across the mark's
+ * ink. SVG letter-spacing follows every glyph, the last included, but that
+ * trailing space carries no ink, so only the n−1 gaps count.
  */
-function spanTracking(text: string, size: number): number {
-  const perChar = MARK_SPAN / text.length;
-  const tracking = perChar - MONO_ADVANCE * size;
-  return Math.max(0.4, Math.round(tracking * 100) / 100);
+function flushLine(text: string, size: number, b: Bearings) {
+  const x = inkBounds.left - b.first * size;
+  const lastInkRight = (MONO_ADVANCE - b.last) * size;
+  const pitch = (inkBounds.right - x - lastInkRight) / (text.length - 1);
+  const tracking = pitch - MONO_ADVANCE * size;
+  return { x: round(x), tracking: round(tracking) };
 }
+
+const DESC_LINE = flushLine(descriptor, DESC_SIZE, { first: 0.08, last: 0.016 }); // E, Y at 500
 
 export const descriptorMetrics = {
   size: DESC_SIZE,
-  tracking: spanTracking(descriptor, DESC_SIZE),
+  x: DESC_LINE.x,
+  tracking: DESC_LINE.tracking,
   baselineGap: DESC_BASELINE_GAP,
   space: DESC_SPACE,
-  markSpan: MARK_SPAN,
 } as const;
 
 // ── Organisation lockup ──────────────────────────────────────────────
 // The descriptor lockup plus the parent organisation's name on a third line.
-// Same face and the same flush-span rule as the descriptor, so the lockup
+// Same face and the same ink-flush rule as the descriptor, so the lockup
 // stays one system and the PNG exporter (DM Mono only) renders it exactly.
-// Sized by the span, not chosen: at 26 the name fills the mark's width with
-// near-default tracking. Bottom clear space matches the top (PAD).
+// At 26 the name spans the mark's ink with near-default tracking (~1.3).
+// Bottom clear space matches the top (PAD).
 
 export const organisation = "Dark Matter Labs";
 
 const ORG_SIZE = 26;
 const ORG_BASELINE_GAP = 38;       // below the descriptor baseline
 
+const ORG_LINE = flushLine(organisation, ORG_SIZE, { first: 0.066, last: 0.095 }); // D, s at 400
+
 export const organisationMetrics = {
   size: ORG_SIZE,
-  tracking: spanTracking(organisation, ORG_SIZE),
+  x: ORG_LINE.x,
+  tracking: ORG_LINE.tracking,
   baselineGap: ORG_BASELINE_GAP,
   // extra viewBox height on top of the descriptor lockup
   space: BASELINE + DESC_BASELINE_GAP + ORG_BASELINE_GAP + PAD - (BASELINE + PAD + DESC_SPACE),
@@ -262,7 +281,7 @@ export function buildLogoSvg({
   withBackground = false,
 }: BuildOptions = {}): string {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, stroke, pad, baseline } = logoGeometry;
+  const { width, stroke, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
   const o = organisationMetrics;
@@ -280,11 +299,11 @@ export function buildLogoSvg({
       : "";
 
   const descriptorEl = showDesc
-    ? `\n  <text x="${pad}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
+    ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
     : "";
 
   const orgEl = withOrg
-    ? `\n  <text x="${pad}" y="${baseline + d.baselineGap + o.baselineGap}" font-family="DM Mono, monospace" font-size="${o.size}" font-weight="400" letter-spacing="${o.tracking}" fill="${v.fg}">${organisation}</text>`
+    ? `\n  <text x="${o.x}" y="${baseline + d.baselineGap + o.baselineGap}" font-family="DM Mono, monospace" font-size="${o.size}" font-weight="400" letter-spacing="${o.tracking}" fill="${v.fg}">${organisation}</text>`
     : "";
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

@@ -47,7 +47,7 @@ export function Logo({
   className = "",
 }: LogoProps) {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, stroke, pad, baseline } = logoGeometry;
+  const { width, stroke, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
   const o = organisationMetrics;
@@ -85,7 +85,7 @@ export function Logo({
       </g>
       {showDesc && !inline && (
         <text
-          x={pad}
+          x={d.x}
           y={baseline + d.baselineGap}
           fontFamily="var(--font-dm-mono), DM Mono, monospace"
           fontSize={d.size}
@@ -98,7 +98,7 @@ export function Logo({
       )}
       {withOrg && !inline && (
         <text
-          x={pad}
+          x={o.x}
           y={baseline + d.baselineGap + o.baselineGap}
           fontFamily="var(--font-dm-mono), DM Mono, monospace"
           fontSize={o.size}
