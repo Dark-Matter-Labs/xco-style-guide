@@ -5,7 +5,7 @@
 
 import Link from "next/link";
 import { useRef, useState, type RefObject } from "react";
-import { logoGeometry as g, inkBounds, cPath, oPath } from "@/lib/logo";
+import { logoGeometry as g, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
 import { INK_W, INK_H } from "@/lib/x-operator";
 import { XOperator, useReducedMotion } from "@/components/xco/XOperator";
 
@@ -31,14 +31,16 @@ const ROLES = [
   { how: "Let it walk", name: "Crawler", op: "connect" },
 ];
 
-function COLogo({ logoRef }: { logoRef: RefObject<SVGSVGElement> }) {
+function XCOLogo({ logoRef }: { logoRef: RefObject<SVGSVGElement> }) {
   const H = 40;
-  // C and O only. The x is drawn by XOperator, docked exactly here.
+  // The full mark, so it reads xCO before scripts run. XOperator hides the
+  // data-logo-x strokes once its own x is docked exactly over them.
   return (
     <svg ref={logoRef} viewBox={`${inkBounds.left} ${inkBounds.top} ${INK_W} ${INK_H}`} height={H} width={(INK_W / INK_H) * H} role="img" aria-label="xCO">
-      <g fill="none" strokeWidth={g.stroke} strokeLinecap="butt" style={{ stroke: "var(--xco-ink)" }}>
-        <path d={cPath()} />
-        <path d={oPath()} />
+      <g fill="none" strokeWidth={g.stroke} strokeLinecap="butt">
+        {xPaths().map((d) => <path key={d} d={d} data-logo-x="" style={{ stroke: "var(--xco-dusk)" }} />)}
+        <path d={cPath()} style={{ stroke: "var(--xco-ink)" }} />
+        <path d={oPath()} style={{ stroke: "var(--xco-ink)" }} />
       </g>
     </svg>
   );
@@ -49,7 +51,7 @@ function Site({ logoRef }: { logoRef: RefObject<SVGSVGElement> }) {
     <>
       <header className="sticky top-0 z-30" style={{ background: "var(--xco-paper)", borderBottom: "1px solid var(--border-default)" }}>
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-8">
-          <a href="#main" aria-label="xCO, top of page"><COLogo logoRef={logoRef} /></a>
+          <a href="#main" aria-label="xCO, top of page"><XCOLogo logoRef={logoRef} /></a>
           <nav aria-label="Demo site" className="hidden gap-6 sm:flex">
             {["Field", "Propositions", "Capital", "Notes", "People"].map((l) => (
               <a key={l} href="#main" className="text-[15px] text-xco-ink-muted hover:text-xco-ink">{l}</a>
@@ -64,7 +66,7 @@ function Site({ logoRef }: { logoRef: RefObject<SVGSVGElement> }) {
             <p className={`${MONO} uppercase text-xco-ink-muted`}>Working papers · v0.2</p>
             <h1 data-keep className="doc-display text-xco-ink">
               Expanding Civilizational{" "}
-              <span data-expand data-frame className="underline decoration-1 underline-offset-[6px]" style={{ textDecorationColor: "var(--xco-dusk)" }}>
+              <span data-expand data-frame className="underline decoration-1 underline-offset-[6px]">
                 Optionality
               </span>
             </h1>

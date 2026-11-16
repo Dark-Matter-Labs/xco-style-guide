@@ -52,7 +52,7 @@ Gurden picked A. C's write-up is included in A (the style-guide page).
 
 ### The one x
 
-`<XOperator logoRef={…} />`, mounted once per page. It draws in a fixed full-viewport SVG overlay above content, in page coordinates translated by scroll. The page's logo draws only C and O; the docked x is the overlay's x, placed with `readDock()` (from the sketch) so it is pixel-exact. When the x is away, the logo reads "CO" — the operator is out working. That is intended.
+`<XOperator logoRef={…} />`, mounted once per page. It draws in a fixed full-viewport SVG overlay above content, in page coordinates translated by scroll. The page's logo draws the full mark, with the x's two strokes marked `data-logo-x`, so it reads "xCO" before scripts run or without them. Once the overlay x is docked pixel-exact over it, `XOperator` hides those strokes, and restores them on unmount. When the x is away, the logo reads "CO" — the operator is out working. That is intended. *(Amended after review: the first version drew C and O only, so the logo read "CO" until hydration.)*
 
 ### Roles
 
@@ -82,6 +82,7 @@ Pages opt in with data attributes only:
 - `data-frame` — something worth isolating (status tags, version tags, key terms, figures).
 - `data-expand` — the hero word that triggers Multiply. `data-expand-stage` — the figure space it expands into.
 - `id="main"` with left padding — the Keeper's gutter is derived from it.
+- `data-logo-x` on the logo's two x strokes — hidden while the overlay x is docked over them.
 
 ### Narrow screens
 

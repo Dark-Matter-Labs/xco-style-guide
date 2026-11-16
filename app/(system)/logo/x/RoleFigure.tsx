@@ -3,13 +3,13 @@
 // drift from the behaviour it documents.
 
 import { logoGeometry as g } from "@/lib/logo";
-import { ARMS, cropMarksPath, multiplyFillK, multiplyScales, tip, xPath, type Vec } from "@/lib/x-operator";
+import { ARMS, CRAWL_K, INK_H, cropMarksPath, multiplyFillK, multiplyScales, tip, xPath, type Vec } from "@/lib/x-operator";
 
 export type FigureRole = "keeper" | "framer" | "crawler" | "multiply";
 
 const W = 240;
 const H = 160;
-const K = 0.385; // the docked x on a 40 px logo
+const K = 40 / INK_H; // the docked x on a 40 px logo
 const STROKE = g.stroke * K;
 const BAR = "var(--xco-paper-structural)";
 
@@ -42,19 +42,21 @@ function Framer() {
 
 function Crawler() {
   const body = { x: 150, y: 78 };
-  // Mid-stride, walking right: the trailing pair (TL, BL) lags behind its rest,
-  // the leading pair reaches ahead, and BL is lifted, so it draws shorter.
-  const feet: Vec[] = ARMS.map((_, i) => {
-    const t = tip(i, 0.62);
-    const lag = i === 0 || i === 3 ? -14 : 7;
-    return { x: body.x + t.x + lag, y: body.y + t.y };
-  });
-  const lifted = { x: body.x + (feet[3].x - body.x) * 0.7, y: body.y + (feet[3].y - body.y) * 0.7 };
-  const legs = [feet[0], feet[1], feet[2], lifted].map((p) => `M${body.x} ${body.y}L${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join("");
+  // Mid-stride, walking right, one diagonal pair at a time: TL and BR are
+  // planted where the body left them; TR and BL are lifted mid-step, so they
+  // draw shorter (as XOperator draws a lifted foot) and already reach forward.
+  const LIFTED = new Set([1, 3]);
+  const legs = ARMS.map((_, i) => {
+    const t = tip(i, CRAWL_K);
+    const foot = LIFTED.has(i)
+      ? { x: body.x + (t.x + 5) * 0.6, y: body.y + t.y * 0.6 }
+      : { x: body.x + t.x - 5, y: body.y + t.y };
+    return `M${body.x} ${body.y}L${foot.x.toFixed(2)} ${foot.y.toFixed(2)}`;
+  }).join("");
   return (
     <>
       <path d="M24 132 C 60 128, 90 104, 150 78" strokeWidth={1.5} strokeOpacity={0.55} strokeDasharray="2 5" />
-      <path d={legs} strokeWidth={g.stroke * 0.62} />
+      <path d={legs} strokeWidth={g.stroke * CRAWL_K} />
     </>
   );
 }

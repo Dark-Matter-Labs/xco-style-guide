@@ -3,8 +3,9 @@
 // The x as operator: one x per page, four roles (Keeper, Framer, Crawler,
 // Multiply). Spec: docs/superpowers/specs/2026-11-16-x-operator-design.md.
 //
-// The page draws its logo with C and O only; this component draws the x in a
-// fixed, aria-hidden overlay, docked exactly where the logo's x belongs. One
+// The page draws its full logo, marking the x's two strokes data-logo-x. This
+// component hides them once it draws its own x in a fixed, aria-hidden overlay,
+// docked exactly where the logo's x belongs. One
 // rAF loop resolves a role each frame (lib/x-operator.ts) and moves the x.
 // Before it takes a new role the x always returns to a plain x: Framer folds,
 // Multiply recombines, the Crawler's feet settle.
@@ -104,7 +105,7 @@ export function useReducedMotion() {
 }
 
 interface XOperatorProps {
-  /** The page's logo SVG, drawn with C and O only and cropped to inkBounds. */
+  /** The page's logo SVG, cropped to inkBounds, with the x's two strokes marked data-logo-x. */
   logoRef: RefObject<SVGSVGElement>;
   /** The Crawler only walks while invited. */
   crawlerInvited: boolean;
@@ -119,7 +120,12 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
   // The loop reads these each frame, so prop changes never restart it.
   const invitedRef = useRef(crawlerInvited);
   const reduceRef = useRef(reduce);
-  useEffect(() => { invitedRef.current = crawlerInvited; }, [crawlerInvited]);
+  const activityRef = useRef(-Infinity); // last pointer move, tap, keyboard focus or invitation
+  useEffect(() => {
+    invitedRef.current = crawlerInvited;
+    // An invitation is activity, so a keyboard reader pressing "Let it walk" sees it start.
+    if (crawlerInvited) activityRef.current = performance.now();
+  }, [crawlerInvited]);
   useEffect(() => { reduceRef.current = reduce; }, [reduce]);
 
   useEffect(() => {
@@ -140,32 +146,39 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
     const ptr = { x: 0, y: 0, inside: false };
     let lastInput: "pointer" | "focus" = "pointer";
     let focusEl: Element | null = null;
-    let lastActivity = -Infinity;
 
     const onOver = (e: Event) => {
       const el = e.target as Element | null;
-      const fr = el?.closest?.("[data-frame]") ?? null;
+      const ex = el?.closest?.("[data-expand]") ?? null;
+      // An element that expands is Multiply's alone: never also a frame target, even while its linger runs out.
+      const fr = ex && stage ? null : el?.closest?.("[data-frame]") ?? null;
       if (fr) { clearTimeout(frameLeave); frameEl = fr; }
       else if (frameEl) { clearTimeout(frameLeave); frameLeave = window.setTimeout(() => { frameEl = null; }, FRAME_LINGER_MS); }
-      const ex = el?.closest?.("[data-expand]") ?? null;
       if (ex) { clearTimeout(expandLeave); expandOn = true; }
       else if (expandOn) { clearTimeout(expandLeave); expandLeave = window.setTimeout(() => { expandOn = false; }, EXPAND_LINGER_MS); }
     };
     const onFocus = (e: FocusEvent) => {
+      // Only keyboard focus counts. A click or tap also focuses (often main#main, tabIndex -1),
+      // and treating that as focus would read as leaving whatever the pointer is on.
+      const el = e.target as Element | null;
+      if (!el?.matches?.(":focus-visible")) return;
       onOver(e);
-      focusEl = e.target as Element | null;
+      focusEl = el;
       lastInput = "focus";
-      lastActivity = performance.now();
+      activityRef.current = performance.now();
     };
-    const onMove = (e: PointerEvent) => {
+    const onPointer = (e: PointerEvent) => {
+      // pointermove for mice; pointerdown so a tap sets the position too.
       Object.assign(ptr, { x: e.clientX + scrollX, y: e.clientY + scrollY, inside: true });
       lastInput = "pointer";
-      lastActivity = performance.now();
+      activityRef.current = performance.now();
     };
-    const onLeave = () => { ptr.inside = false; };
+    // A finger lifting fires pointerleave on <html>; only a mouse leaving the window means "gone".
+    const onLeave = (e: PointerEvent) => { if (e.pointerType === "mouse") ptr.inside = false; };
     document.addEventListener("pointerover", onOver);
     document.addEventListener("focusin", onFocus);
-    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointermove", onPointer);
+    document.addEventListener("pointerdown", onPointer);
     document.documentElement.addEventListener("pointerleave", onLeave);
 
     // ── The one x ──
@@ -184,8 +197,12 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
     let kSince = 0;
     const feet: Foot[] = ARMS.map(() => ({ x: 0, y: 0, fx: 0, fy: 0, tx: 0, ty: 0, t: -1 }));
     const trail: (Vec & { at: number })[] = [];
+    // The page's logo draws its own x (marked data-logo-x) so it reads xCO before this runs, or without JS.
+    // It is hidden only once the overlay x is drawn over it, and shown again on unmount.
+    const logoX = Array.from(logoRef.current?.querySelectorAll<SVGElement>("[data-logo-x]") ?? []);
+    let logoXHidden = false;
 
-    const rest = (i: number): Vec => { const t = tip(i, k); return { x: body.x + t.x, y: body.y + t.y }; };
+    const rest =(i: number): Vec => { const t = tip(i, k); return { x: body.x + t.x, y: body.y + t.y }; };
     const plantFeet = () => feet.forEach((ft, i) => Object.assign(ft, rest(i), { t: -1 }));
     const feetPlain = () => feet.every((ft, i) => ft.t < 0 && dist(ft, rest(i)) < 0.3);
 
@@ -236,7 +253,7 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
         if (role === "keeper") locked = false;
       }
 
-      const crawlerIdle = now - lastActivity > CRAWL_IDLE_MS || (lastInput === "pointer" && !ptr.inside);
+      const crawlerIdle = now - activityRef.current > CRAWL_IDLE_MS || (lastInput === "pointer" && !ptr.inside);
       const want = resolveRole({
         scrollY,
         viewportWidth: innerWidth,
@@ -299,7 +316,9 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
       } else if (role === "crawler") {
         const vel = { x: 0, y: 0 };
         if (!folding) {
-          const goal = lastInput === "focus" && focusEl ? centre(pageRect(focusEl)) : ptr;
+          // A focused element: aim near its top-left, so a large one (a whole section) does not send the x off-screen.
+          const fr = lastInput === "focus" && focusEl ? pageRect(focusEl) : null;
+          const goal = fr ? { x: fr.x + Math.min(fr.w / 2, 48), y: fr.y + Math.min(fr.h / 2, 24) } : ptr;
           const dx = goal.x - body.x;
           const dy = goal.y - body.y;
           const d = Math.hypot(dx, dy);
@@ -365,15 +384,21 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
       });
       trailRef.current?.setAttribute("d", trail.map((p, i) => `${i ? "L" : "M"}${f(p.x)} ${f(p.y)}`).join(""));
       gRef.current?.setAttribute("transform", `translate(${-scrollX} ${-scrollY})`);
+      if (!logoXHidden) {
+        logoX.forEach((p) => { p.style.visibility = "hidden"; });
+        logoXHidden = true;
+      }
     });
 
     return () => {
       stop();
+      logoX.forEach((p) => { p.style.visibility = ""; });
       clearTimeout(frameLeave);
       clearTimeout(expandLeave);
       document.removeEventListener("pointerover", onOver);
       document.removeEventListener("focusin", onFocus);
-      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointermove", onPointer);
+      document.removeEventListener("pointerdown", onPointer);
       document.documentElement.removeEventListener("pointerleave", onLeave);
     };
   }, [logoRef]);

@@ -116,7 +116,7 @@ export default function XOperatorPage() {
             <li key={r.role} className="space-y-4">
               <RoleFigure role={r.role} />
               <div className="space-y-2">
-                <p className="doc-h2 text-xco-ink">{r.name}</p>
+                <h3 className="doc-h2 text-xco-ink">{r.name}</h3>
                 <p className={`${SMALL} uppercase tracking-widest`} style={{ color: "var(--xco-dusk-ink)" }}>
                   Operator: {r.op}
                 </p>
@@ -132,7 +132,9 @@ export default function XOperatorPage() {
           <code className="font-code text-[0.875rem]">data-keep</code>,{" "}
           <code className="font-code text-[0.875rem]">data-frame</code>,{" "}
           <code className="font-code text-[0.875rem]">data-expand</code> and{" "}
-          <code className="font-code text-[0.875rem]">data-expand-stage</code>.
+          <code className="font-code text-[0.875rem]">data-expand-stage</code>, and mark the
+          logo&apos;s own x strokes <code className="font-code text-[0.875rem]">data-logo-x</code> so
+          the logo reads xCO before the script runs.
         </p>
       </section>
     </div>
