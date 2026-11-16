@@ -31,6 +31,7 @@ import {
   MAX_LEAN,
   PAIRS,
   READING_LINE,
+  STAGE_VISIBLE,
   STEP_MS,
   TIP,
   TRAIL_MS,
@@ -39,6 +40,7 @@ import {
   dist,
   dockFromRect,
   ease,
+  keeperSpot,
   lerp,
   multiplyFillK,
   multiplyScales,
@@ -137,6 +139,12 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
     const main = document.getElementById("main");
     const stage = document.querySelector("[data-expand-stage]");
     const blocks = Array.from(document.querySelectorAll<HTMLElement>("[data-keep]"));
+    // Multiply only plays where it can be seen: a stage below the fold (as on a phone) does not count.
+    const stageVisible = () => {
+      if (!stage) return false;
+      const r = stage.getBoundingClientRect();
+      return r.height > 0 && (Math.min(r.bottom, innerHeight) - Math.max(r.top, 0)) / r.height >= STAGE_VISIBLE;
+    };
 
     // ── What the reader is doing (listeners only record) ──
     let frameEl: Element | null = null;
@@ -151,7 +159,8 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
       const el = e.target as Element | null;
       const ex = el?.closest?.("[data-expand]") ?? null;
       // An element that expands is Multiply's alone: never also a frame target, even while its linger runs out.
-      const fr = ex && stage ? null : el?.closest?.("[data-frame]") ?? null;
+      // If its stage is off screen, Multiply cannot play, so the element is framed instead.
+      const fr = ex && stageVisible() ? null : el?.closest?.("[data-frame]") ?? null;
       if (fr) { clearTimeout(frameLeave); frameEl = fr; }
       else if (frameEl) { clearTimeout(frameLeave); frameLeave = window.setTimeout(() => { frameEl = null; }, FRAME_LINGER_MS); }
       if (ex) { clearTimeout(expandLeave); expandOn = true; }
@@ -206,15 +215,13 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
     const plantFeet = () => feet.forEach((ft, i) => Object.assign(ft, rest(i), { t: -1 }));
     const feetPlain = () => feet.every((ft, i) => ft.t < 0 && dist(ft, rest(i)) < 0.3);
 
-    const gutter = () => {
-      if (!main) return 18;
-      const left = main.getBoundingClientRect().left + scrollX + parseFloat(getComputedStyle(main).paddingLeft);
-      return Math.max(left - 44, 18);
-    };
-    const keeperAnchor = (el: HTMLElement): Vec => {
+    /** How far in from the window's left edge the text starts: the Keeper's margin. */
+    const contentLeft = () => (main ? main.getBoundingClientRect().left + parseFloat(getComputedStyle(main).paddingLeft) : 16);
+    const keeperAnchor = (el: HTMLElement, dockK: number): Dock => {
       const r = pageRect(el);
       const lh = parseFloat(getComputedStyle(el).lineHeight) || 28;
-      return { x: gutter(), y: r.y + Math.min(lh, r.h) / 2 };
+      const spot = keeperSpot(contentLeft(), dockK);
+      return { x: spot.x + scrollX, y: r.y + Math.min(lh, r.h) / 2, k: spot.k };
     };
 
     /** Advance stepping feet; when all are planted, the diagonal pair furthest from home steps next. */
@@ -256,10 +263,9 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
       const crawlerIdle = now - activityRef.current > CRAWL_IDLE_MS || (lastInput === "pointer" && !ptr.inside);
       const want = resolveRole({
         scrollY,
-        viewportWidth: innerWidth,
         reduceMotion,
         hasKeepBlocks: blocks.length > 0,
-        hasExpandStage: !!stage,
+        hasExpandStage: stageVisible(),
         overExpand: expandOn,
         overFrame: !!frameEl,
         crawlerInvited: invitedRef.current,
@@ -283,7 +289,11 @@ export function XOperator({ logoRef, crawlerInvited }: XOperatorProps) {
       let wantGrowth = 0;
       if (!folding) {
         if (role === "home") { target = dock; wantK = dock.k; }
-        if (role === "keeper") { target = kBlock >= 0 ? keeperAnchor(blocks[kBlock]) : dock; wantK = dock.k; }
+        if (role === "keeper") {
+          const spot = kBlock >= 0 ? keeperAnchor(blocks[kBlock], dock.k) : dock;
+          target = spot;
+          wantK = spot.k;
+        }
         if (role === "framer" && frameEl) {
           wantK = dock.k;
           // A new target: fold first, then fly there as a plain x.

@@ -26,8 +26,8 @@ const NOTES = [
 ];
 const ROLES = [
   { how: "Scroll", name: "Keeper", op: "index" },
-  { how: "Point at a tag or the figure", name: "Framer", op: "isolate" },
-  { how: "Point at Optionality", name: "Multiply", op: "scale" },
+  { how: "Point at or tap a tag or the figure", name: "Framer", op: "isolate" },
+  { how: "Point at or tap Optionality", name: "Multiply", op: "scale" },
   { how: "Let it walk", name: "Crawler", op: "connect" },
 ];
 
@@ -75,7 +75,8 @@ function Site({ logoRef }: { logoRef: RefObject<SVGSVGElement> }) {
               structures, institutional pathways and governance that can change course.
             </p>
           </div>
-          <figure data-expand-stage className="relative aspect-square w-full max-w-[280px]" style={{ background: "var(--xco-paper-quiet)" }}>
+          {/* On a phone the figure comes first, so Multiply plays above the fold, not under the bar. */}
+          <figure data-expand-stage className="relative order-first aspect-square w-full max-w-[240px] sm:order-none sm:max-w-[280px]" style={{ background: "var(--xco-paper-quiet)" }}>
             <figcaption className={`${MONO} absolute bottom-3 left-3 right-3 text-xco-ink-muted`}>
               fig. 0 — reserved for the operator
             </figcaption>
@@ -156,7 +157,7 @@ export function XDemo() {
       <XOperator logoRef={logoRef} crawlerInvited={walking && !reduce} />
 
       <div className="fixed inset-x-0 bottom-0 z-50" style={{ background: "var(--xco-paper-raised)", borderTop: "1px solid var(--border-default)" }}>
-        <div className="mx-auto max-w-5xl space-y-2 px-4 py-3 sm:px-8">
+        <div className="mx-auto max-w-5xl space-y-2 px-4 py-2 sm:px-8 sm:py-3">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link href="/logo/x" className={`${MONO} uppercase text-xco-ink-muted underline-offset-2 hover:underline`}>
               ← The x as operator
@@ -176,7 +177,10 @@ export function XDemo() {
               Let it walk
             </button>
           </div>
-          <p className={`${MONO} text-xco-ink`}>
+          <p className={`${MONO} text-xco-ink sm:hidden`}>
+            Scroll, tap a tag or Optionality, or let it walk.
+          </p>
+          <p className={`${MONO} hidden text-xco-ink sm:block`}>
             {ROLES.map((r, i) => (
               <span key={r.name}>
                 {i > 0 && " · "}

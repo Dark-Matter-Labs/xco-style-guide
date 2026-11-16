@@ -86,7 +86,7 @@ Pages opt in with data attributes only:
 
 ### Narrow screens
 
-Under 640 px wide there is no margin: the Keeper stays docked. Framer and Multiply work on tap. The Crawler walks to tapped points.
+On a phone the margin is only 16 px, so the Keeper shrinks to fit it (about 12 px wide, centred in the margin, clear of the text) instead of staying docked. Multiply plays only when at least 60% of its stage is on screen; otherwise the hero word is framed instead, so a tap always shows something. Framer and Multiply work on tap. The Crawler walks to tapped points. *(Amended after mobile testing: the first version docked the Keeper under 640 px, and Multiply could play below the fold.)*
 
 ### Where things live
 

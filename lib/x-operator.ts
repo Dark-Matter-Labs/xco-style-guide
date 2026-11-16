@@ -15,7 +15,6 @@ export type Role = "home" | "keeper" | "framer" | "crawler" | "multiply";
 
 export interface RoleInputs {
   scrollY: number;
-  viewportWidth: number;
   reduceMotion: boolean;
   hasKeepBlocks: boolean;
   hasExpandStage: boolean;
@@ -36,7 +35,8 @@ export const INK_H = inkBounds.bottom - inkBounds.top;
 
 // ── Behaviour constants (tuned against a 40 px logo) ────────────────
 export const KEEPER_SCROLL = 80;
-export const NARROW_PX = 640;
+export const KEEPER_OFFSET = 44;   // the Keeper's centre sits this far left of the text, when there is room
+export const STAGE_VISIBLE = 0.6;  // Multiply plays only when this much of its stage is on screen
 export const READING_LINE = 0.38;
 export const KEEPER_SETTLE_MS = 320;
 export const MAX_LEAN = 35;
@@ -120,11 +120,21 @@ export function multiplyFillK(stage: { w: number; h: number }): number {
   return Math.min(stage.w, stage.h - CAPTION_CLEAR) / (2 * 1.875 * TIP.y * 1.1);
 }
 
+/**
+ * Where the Keeper sits, given how far in from the window's left edge the text starts.
+ * With room, it is full size, KEEPER_OFFSET left of the text. In a phone's narrow
+ * margin it shrinks to fit, centred, with 2 px clear on each side.
+ */
+export function keeperSpot(contentLeft: number, dockK: number): { x: number; k: number } {
+  if (contentLeft >= 2 * KEEPER_OFFSET) return { x: contentLeft - KEEPER_OFFSET, k: dockK };
+  return { x: contentLeft / 2, k: Math.min(dockK, (contentLeft - 4) / (2 * TIP.x)) };
+}
+
 /** Which role the one x takes. Priority: Multiply → Framer → Crawler → Keeper → Home. */
 export function resolveRole(i: RoleInputs): Role {
   if (i.overExpand && i.hasExpandStage) return "multiply";
   if (i.overFrame) return "framer";
   if (i.crawlerInvited && !i.reduceMotion && !i.crawlerIdle) return "crawler";
-  if (i.scrollY > KEEPER_SCROLL && i.hasKeepBlocks && i.viewportWidth >= NARROW_PX) return "keeper";
+  if (i.scrollY > KEEPER_SCROLL && i.hasKeepBlocks) return "keeper";
   return "home";
 }

@@ -12,6 +12,7 @@ import {
   CAPTION_CLEAR,
   cropMarksPath,
   dockFromRect,
+  keeperSpot,
   multiplyFillK,
   multiplyScales,
   resolveRole,
@@ -31,7 +32,6 @@ function points(d: string): Vec[] {
 // ── Role priority ────────────────────────────────────────────────────
 const B: RoleInputs = {
   scrollY: 0,
-  viewportWidth: 1280,
   reduceMotion: false,
   hasKeepBlocks: true,
   hasExpandStage: true,
@@ -44,7 +44,6 @@ const B: RoleInputs = {
 eq(resolveRole(B), "home");
 eq(resolveRole({ ...B, scrollY: 81 }), "keeper");
 eq(resolveRole({ ...B, scrollY: 80 }), "home", "threshold is past 80");
-eq(resolveRole({ ...B, scrollY: 500, viewportWidth: 639 }), "home", "narrow: Keeper stays docked");
 eq(resolveRole({ ...B, scrollY: 500, hasKeepBlocks: false }), "home");
 eq(resolveRole({ ...B, overFrame: true }), "framer");
 eq(resolveRole({ ...B, overExpand: true, overFrame: true }), "multiply", "hero word marked for both: Multiply wins");
@@ -54,6 +53,16 @@ eq(resolveRole({ ...B, crawlerInvited: true }), "crawler");
 eq(resolveRole({ ...B, crawlerInvited: true, overFrame: true }), "framer");
 eq(resolveRole({ ...B, crawlerInvited: true, reduceMotion: true }), "home");
 eq(resolveRole({ ...B, crawlerInvited: true, crawlerIdle: true, scrollY: 500 }), "keeper");
+
+// ── The Keeper's spot in whatever margin there is ───────────────────
+// Desktop (text starts 224 px in) and a 900 px window (96 px): full size, 44 px left of the text.
+assert.deepEqual(keeperSpot(224, 0.385), { x: 180, k: 0.385 });
+assert.deepEqual(keeperSpot(96, 0.385), { x: 52, k: 0.385 });
+// A phone (16 px margin): smaller, centred in the margin, and clear of the text.
+const phone = keeperSpot(16, 0.385);
+near(phone.x, 8, "phone Keeper centred in the margin");
+assert.ok(phone.x + TIP.x * phone.k <= 16 - 2, "phone Keeper clears the text");
+assert.ok(phone.k > 0.15, "phone Keeper is still visible");
 
 // ── At rest, the overlay x is exactly the logo's x ──────────────────
 // A 40 px-tall logo at (24, 16), page scrolled by (0, 500).
