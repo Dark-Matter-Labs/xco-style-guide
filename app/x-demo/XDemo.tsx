@@ -156,7 +156,7 @@ export function XDemo() {
       <Site logoRef={logoRef} />
       <XOperator logoRef={logoRef} crawlerInvited={walking && !reduce} />
 
-      <div className="fixed inset-x-0 bottom-0 z-50" style={{ background: "var(--xco-paper-raised)", borderTop: "1px solid var(--border-default)" }}>
+      <aside aria-label="Demo controls" className="fixed inset-x-0 bottom-0 z-50" style={{ background: "var(--xco-paper-raised)", borderTop: "1px solid var(--border-default)" }}>
         <div className="mx-auto max-w-5xl space-y-2 px-4 py-2 sm:px-8 sm:py-3">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link href="/logo/x" className={`${MONO} uppercase text-xco-ink-muted underline-offset-2 hover:underline`}>
@@ -194,7 +194,7 @@ export function XDemo() {
             </p>
           )}
         </div>
-      </div>
+      </aside>
     </>
   );
 }
