@@ -5,7 +5,7 @@ import {
   buildLogoSvg,
   logoGeometry,
   logoVariants,
-  descriptorMetrics,
+  lockupHeight,
   type LogoVariant,
 } from "@/lib/logo";
 import { Logo } from "@/components/xco/Logo";
@@ -21,26 +21,46 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url);
 }
 
-function fileStem(variant: LogoVariant, withDescriptor: boolean) {
-  return `xco-logo-${variant}${withDescriptor ? "-lockup" : ""}`;
+type Lockup = "mark" | "descriptor" | "endorsed";
+
+const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
+  { id: "mark", label: "Mark only", note: "The logotype alone. Default.", suffix: "" },
+  {
+    id: "descriptor",
+    label: "Descriptor lockup",
+    note: "Adds the full name in DM Mono. Live text, not outlines — see the note below.",
+    suffix: "-lockup",
+  },
+  {
+    id: "endorsed",
+    label: "Endorsed by Dark Matter Labs",
+    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, for surfaces that must name the parent organisation.",
+    suffix: "-dml-endorsed",
+  },
+];
+
+function fileStem(variant: LogoVariant, lockup: Lockup) {
+  return `xco-logo-${variant}${LOCKUPS.find((l) => l.id === lockup)!.suffix}`;
 }
 
 export function LogoDownloads() {
   const [variant, setVariant] = useState<LogoVariant>("ink");
-  const [withDescriptor, setWithDescriptor] = useState(false);
+  const [lockup, setLockup] = useState<Lockup>("mark");
+  const withDescriptor = lockup !== "mark";
+  const withEndorsement = lockup === "endorsed";
   const [withBackground, setWithBackground] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const svg = buildLogoSvg({ variant, withDescriptor, withBackground });
+  const svg = buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
   const active = logoVariants.find((v) => v.id === variant)!;
 
   const downloadSvg = () => {
     setError(null);
     downloadBlob(
       new Blob([svg], { type: "image/svg+xml;charset=utf-8" }),
-      `${fileStem(variant, withDescriptor)}.svg`,
+      `${fileStem(variant, lockup)}.svg`,
     );
   };
 
@@ -48,16 +68,14 @@ export function LogoDownloads() {
     setError(null);
     setBusy(`png-${size}`);
     try {
-      const ratio =
-        logoGeometry.width /
-        (logoGeometry.height + (withDescriptor ? descriptorMetrics.space : 0));
+      const ratio = logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
       const res = await fetch("/api/export/png", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ svg, width: size, height: Math.round(size / ratio) }),
       });
       if (!res.ok) throw new Error(`Export failed (${res.status})`);
-      downloadBlob(await res.blob(), `${fileStem(variant, withDescriptor)}-${size}.png`);
+      downloadBlob(await res.blob(), `${fileStem(variant, lockup)}-${size}.png`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "PNG export failed. Try the SVG instead.");
     } finally {
@@ -89,7 +107,12 @@ export function LogoDownloads() {
           border: "1px solid var(--border-default)",
         }}
       >
-        <Logo variant={variant} withDescriptor={withDescriptor} height={withDescriptor ? 130 : 96} />
+        <Logo
+          variant={variant}
+          withDescriptor={withDescriptor}
+          withEndorsement={withEndorsement}
+          height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
+        />
       </div>
 
       {/* Controls */}
@@ -123,22 +146,25 @@ export function LogoDownloads() {
           <legend className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
             Options
           </legend>
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={withDescriptor}
-              onChange={(e) => setWithDescriptor(e.target.checked)}
-              className="mt-1.5 accent-xco-ink"
-            />
-            <span className="space-y-0.5">
-              <span className="block font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                Descriptor lockup
+          {LOCKUPS.map((l) => (
+            <label key={l.id} className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="logo-lockup"
+                checked={lockup === l.id}
+                onChange={() => setLockup(l.id)}
+                className="mt-1.5 accent-xco-ink"
+              />
+              <span className="space-y-0.5">
+                <span className="block font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  {l.label}
+                </span>
+                <span className="block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                  {l.note}
+                </span>
               </span>
-              <span className="block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                Adds the full name in DM Mono. This line is live text, not outlines — see the note below.
-              </span>
-            </span>
-          </label>
+            </label>
+          ))}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"

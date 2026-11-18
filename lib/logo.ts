@@ -12,6 +12,8 @@
 // expansion operator acting on them, and its reduced height encodes the
 // naming rule (lowercase x, uppercase CO) as a visual fact.
 
+import { dmInkLeft, dmStampHeight, dmStampPath, dmWordmarkPath } from "./dm-logo";
+
 // ── Construction grid ────────────────────────────────────────────────
 // All values derive from cap height. Change CAP and the mark scales exactly.
 
@@ -145,6 +147,8 @@ export const logoVariants: {
   fg: string;
   xFg: string;
   bg: string | null;
+  /** Dark Matter Labs' mark: DM allows only black on light, white on dark. */
+  dmFg: string;
   usage: string;
 }[] = [
   {
@@ -153,6 +157,7 @@ export const logoVariants: {
     fg: "#101F24",
     xFg: "#101F24",
     bg: "#F6F1E5",
+    dmFg: "#000000",
     usage: "Default. Use everywhere unless there is a reason not to.",
   },
   {
@@ -161,6 +166,7 @@ export const logoVariants: {
     fg: "#F6F1E5",
     xFg: "#F6F1E5",
     bg: "#101F24",
+    dmFg: "#FFFFFF",
     usage: "Inverse register — dark grounds, covers, closing slides.",
   },
   {
@@ -169,6 +175,7 @@ export const logoVariants: {
     fg: "#101F24",
     xFg: "#F47743",
     bg: "#F6F1E5",
+    dmFg: "#000000",
     usage: "The x carries dusk. Sparing use — one instance per surface.",
   },
 ];
@@ -180,33 +187,90 @@ export const descriptor = "EXPANDING CIVILIZATIONAL OPTIONALITY";
 // two elements align flush on both edges. Tracking is derived, not guessed:
 // hardcoding it would clip the line the moment the descriptor text changed
 // (an earlier fixed value overflowed the canvas and truncated "OPTIONALITY").
+//
+// Flush means INK to INK. Aligning the text's advance boxes to PAD left the
+// letters visibly inset: every glyph sits inside its mono cell with a side
+// bearing, and the x's cut feet reach 4.45 past PAD. So each line is placed
+// and tracked so its first glyph's ink starts at inkBounds.left and its last
+// glyph's ink ends at inkBounds.right.
 
 const DESC_SIZE = 10;
 const DESC_BASELINE_GAP = 38;      // below the logotype baseline
 const DESC_SPACE = 44;             // extra viewBox height when present
 const MONO_ADVANCE = 0.6;          // DM Mono advance width, in em
 
-/** Horizontal span of the glyphs, PAD to PAD. */
-const MARK_SPAN = O_CX + CAP / 2 - PAD;   // 260
+/**
+ * Side bearings of the end glyphs, in em, measured from DM Mono with canvas
+ * measureText (actualBoundingBox). Re-measure if the text or weight changes.
+ */
+interface Bearings {
+  first: number;   // left side bearing of the first glyph
+  last: number;    // right side bearing of the last glyph
+}
 
 /**
- * Letter-spacing that makes `descriptor` fill MARK_SPAN at DESC_SIZE.
- * Clamped so an unusually long descriptor degrades to cramped-but-legible
- * rather than negative tracking.
+ * Start x and letter-spacing that put `text`'s ink exactly across the mark's
+ * ink. SVG letter-spacing follows every glyph, the last included, but that
+ * trailing space carries no ink, so only the n−1 gaps count.
  */
-function descriptorTracking(): number {
-  const perChar = MARK_SPAN / descriptor.length;
-  const tracking = perChar - MONO_ADVANCE * DESC_SIZE;
-  return Math.max(0.4, Math.round(tracking * 100) / 100);
+function flushLine(text: string, size: number, b: Bearings) {
+  const x = inkBounds.left - b.first * size;
+  const lastInkRight = (MONO_ADVANCE - b.last) * size;
+  const pitch = (inkBounds.right - x - lastInkRight) / (text.length - 1);
+  const tracking = pitch - MONO_ADVANCE * size;
+  return { x: round(x), tracking: round(tracking) };
 }
+
+const DESC_LINE = flushLine(descriptor, DESC_SIZE, { first: 0.08, last: 0.016 }); // E, Y at 500
 
 export const descriptorMetrics = {
   size: DESC_SIZE,
-  tracking: descriptorTracking(),
+  x: DESC_LINE.x,
+  tracking: DESC_LINE.tracking,
   baselineGap: DESC_BASELINE_GAP,
   space: DESC_SPACE,
-  markSpan: MARK_SPAN,
 } as const;
+
+// ── Endorsement lockup ───────────────────────────────────────────────
+// The descriptor lockup plus "AN INITIATIVE OF" and Dark Matter Labs' own V1
+// lockup, small. The words state the relationship, so xCO reads as the logo
+// and DM as its parent. DM's mark is DM's master artwork (lib/dm-logo.ts),
+// never retyped: DM sets its wordmark only in Saans.
+//
+// DM requires clear space of one stamp height around its mark. The stamp is
+// 25 units tall, so it sits 25 below the label's baseline, the left edge of
+// the file is 25.55 from it, and the bottom PAD (30) clears it.
+
+export const endorsementLabel = "AN INITIATIVE OF";
+
+const LABEL_SIZE = 10;              // the descriptor's size: one caption register
+const LABEL_TRACKING = 1.4;        // matches the descriptor's derived tracking
+const LABEL_BASELINE_GAP = 26;     // below the descriptor baseline
+const LABEL_A_BEARING = 0.028;     // DM Mono "A" at 500, measured like the others
+const DM_STAMP = 25;               // stamp height: a quarter of cap height
+const DM_SCALE = DM_STAMP / dmStampHeight;
+const DM_TOP = BASELINE + DESC_BASELINE_GAP + LABEL_BASELINE_GAP + DM_STAMP;
+
+export const endorsementMetrics = {
+  labelSize: LABEL_SIZE,
+  labelTracking: LABEL_TRACKING,
+  labelX: round(inkBounds.left - LABEL_A_BEARING * LABEL_SIZE),
+  labelBaselineGap: LABEL_BASELINE_GAP,
+  /** Transform placing DM's lockup with its stamp ink flush to the mark's ink. */
+  dmTransform: `translate(${round(inkBounds.left - dmInkLeft * DM_SCALE)} ${round(DM_TOP - 0.26 * DM_SCALE)}) scale(${round(DM_SCALE * 10000) / 10000})`,
+  // extra viewBox height on top of the descriptor lockup
+  space: DM_TOP + DM_STAMP + PAD - (BASELINE + PAD + DESC_SPACE),
+} as const;
+
+/** ViewBox height of the mark with whichever lockup lines are present. */
+export function lockupHeight(withDescriptor: boolean, withEndorsement = false): number {
+  const desc = withDescriptor || withEndorsement;
+  return (
+    logoGeometry.height +
+    (desc ? descriptorMetrics.space : 0) +
+    (withEndorsement ? endorsementMetrics.space : 0)
+  );
+}
 
 // ── Standalone SVG builder ───────────────────────────────────────────
 
@@ -214,6 +278,8 @@ interface BuildOptions {
   variant?: LogoVariant;
   /** Include the descriptor line set in DM Mono. Text stays live, not outlined. */
   withDescriptor?: boolean;
+  /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
+  withEndorsement?: boolean;
   /** Paint the background rectangle. Off by default — logos ship transparent. */
   withBackground?: boolean;
 }
@@ -226,13 +292,19 @@ interface BuildOptions {
 export function buildLogoSvg({
   variant = "ink",
   withDescriptor = false,
+  withEndorsement = false,
   withBackground = false,
 }: BuildOptions = {}): string {
   const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, height, stroke, pad, baseline } = logoGeometry;
+  const { width, stroke, baseline } = logoGeometry;
 
   const d = descriptorMetrics;
-  const totalHeight = height + (withDescriptor ? d.space : 0);
+  const e = endorsementMetrics;
+  const showDesc = withDescriptor || withEndorsement;
+  const totalHeight = lockupHeight(showDesc, withEndorsement);
+  const label = withEndorsement
+    ? "xCO — Expanding Civilizational Optionality, an initiative of Dark Matter Labs"
+    : "xCO — Expanding Civilizational Optionality";
 
   const [x1, x2] = xPaths();
 
@@ -241,19 +313,27 @@ export function buildLogoSvg({
       ? `\n  <rect width="${width}" height="${totalHeight}" fill="${v.bg}"/>`
       : "";
 
-  const descriptorEl = withDescriptor
-    ? `\n  <text x="${pad}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
+  const descriptorEl = showDesc
+    ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
+    : "";
+
+  const endorsementEl = withEndorsement
+    ? `\n  <text x="${e.labelX}" y="${baseline + d.baselineGap + e.labelBaselineGap}" font-family="DM Mono, monospace" font-size="${e.labelSize}" font-weight="500" letter-spacing="${e.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
+  <g transform="${e.dmTransform}" fill="${v.dmFg}">
+    <path d="${dmWordmarkPath}"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>
+  </g>`
     : "";
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="xCO — Expanding Civilizational Optionality">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="${label}">
   <title>xCO</title>${bg}
   <g fill="none" stroke-width="${stroke}" stroke-linecap="butt">
     <path d="${x1}" stroke="${v.xFg}"/>
     <path d="${x2}" stroke="${v.xFg}"/>
     <path d="${cPath()}" stroke="${v.fg}"/>
     <path d="${oPath()}" stroke="${v.fg}"/>
-  </g>${descriptorEl}
+  </g>${descriptorEl}${endorsementEl}
 </svg>
 `;
 }
