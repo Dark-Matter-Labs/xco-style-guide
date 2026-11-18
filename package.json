@@ -13,6 +13,7 @@
     "logo:spacing": "node scripts/measure-logo-spacing.mjs",
     "globe": "node scripts/build-globe-field.mjs",
     "a11y": "tsx scripts/a11y-check.ts",
+    "x:check": "tsx scripts/x-operator-check.ts",
     "a11y:audit": "tsx scripts/a11y-audit.ts"
   },
   "dependencies": {

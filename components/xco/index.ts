@@ -10,6 +10,7 @@ export { Stat, StatGrid } from "./Stat";
 export { Kicker } from "./Kicker";
 export { Logo } from "./Logo";
 export { GroupMark, groundHex } from "./GroupMark";
+export { XOperator, useReducedMotion } from "./XOperator";
 
 // ── Polyphonic grammar primitives ────────────────────────────────────
 export { LicenceBadge } from "./LicenceBadge";
