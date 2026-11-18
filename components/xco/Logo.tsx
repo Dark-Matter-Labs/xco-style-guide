@@ -13,6 +13,7 @@ import {
   type LogoVariant,
 } from "@/lib/logo";
 import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
+import { serifXPath } from "@/lib/serif-x";
 
 interface LogoProps {
   variant?: LogoVariant;
@@ -32,6 +33,8 @@ interface LogoProps {
    * Paper/Ink register. Without it, the variant's fixed colours are used.
    */
   color?: string;
+  /** PROPOSAL: "serif" draws the x from Untitled Serif. See lib/serif-x.ts. */
+  xStyle?: "mono" | "serif";
   /** Accessible name. Shorten it where the full name is already spelled out beside the mark. */
   label?: string;
   className?: string;
@@ -44,6 +47,7 @@ export function Logo({
   height = 64,
   inline = false,
   color,
+  xStyle = "mono",
   label = "xCO — Expanding Civilizational Optionality",
   className = "",
 }: LogoProps) {
@@ -79,11 +83,12 @@ export function Logo({
       className={className}
     >
       <g fill="none" strokeWidth={stroke} strokeLinecap="butt">
-        <path d={x1} stroke={xFg} />
-        <path d={x2} stroke={xFg} />
+        {xStyle === "mono" && <path d={x1} stroke={xFg} />}
+        {xStyle === "mono" && <path d={x2} stroke={xFg} />}
         <path d={cPath()} stroke={fg} />
         <path d={oPath()} stroke={fg} />
       </g>
+      {xStyle === "serif" && <path d={serifXPath} fill={xFg} />}
       {showDesc && !inline && (
         <text
           x={d.x}
