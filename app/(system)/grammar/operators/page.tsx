@@ -34,6 +34,13 @@ export default function OperatorsPage() {
           [rule] Operator + operand + context. A mark is an action upon a specific
           utterance — never an isolated token.
         </p>
+        <p className={`${MONO} text-xco-ink`}>
+          [see] The logo&apos;s x performs four of these on a page — index, isolate,
+          connect, scale.{" "}
+          <Link href="/logo/x" className="underline underline-offset-2 hover:text-xco-dusk-ink">
+            → The x as operator
+          </Link>
+        </p>
       </section>
 
       {/* Operator table */}
