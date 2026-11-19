@@ -50,6 +50,7 @@ const generatorLinks = [
   { href: "/event-series",    label: "Event Series" },
   { href: "/growth",          label: "Growth" },
   { href: "/chaos",           label: "Chaos" },
+  { href: "/notion",          label: "Notion" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/align",           label: "Align" },
   { href: "/text-highlight",  label: "Text Highlight" },
