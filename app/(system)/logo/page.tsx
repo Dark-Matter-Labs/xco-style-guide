@@ -242,6 +242,27 @@ export default function LogoPage() {
         </div>
       </section>
 
+      {/* Watermark (CH-09) */}
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+            Watermark
+          </h2>
+          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
+            A fourth, quiet use: the full logo at about 7%, behind a footer, cropped by its
+            bottom-right corner. It is felt, not read, so it is never the only place the name
+            appears, never sits under a control, and is hidden from screen readers. Text over it
+            keeps its contrast. Adopted with CH-09 for d.INO products.
+          </p>
+        </div>
+        <div className="relative overflow-hidden max-w-2xl h-[140px] p-6" style={{ border: "1px solid var(--border-default)" }}>
+          <p className="relative font-body text-[16px] text-xco-ink-muted">d.INO is made by xCO, at Dark Matter Labs.</p>
+          <div className="absolute pointer-events-none" style={{ right: -40, bottom: -30, opacity: 0.07 }} aria-hidden="true">
+            <Logo height={170} />
+          </div>
+        </div>
+      </section>
+
       {/* Misuse */}
 
       {/* ── Aperture system ─────────────────────────────────────────────
