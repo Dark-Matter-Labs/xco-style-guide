@@ -6,6 +6,8 @@
 
 import { strict as assert } from "node:assert";
 import { inkBounds, xPaths } from "@/lib/logo";
+import { changeLog } from "@/lib/provisional";
+import { dinoFigure } from "@/lib/dino";
 import {
   INK_H,
   TIP,
@@ -100,5 +102,25 @@ for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
 assert.deepEqual(multiplyScales(0), [1, 0, 0, 0]);
 assert.deepEqual(multiplyScales(3), [1, 0.5, 0.25, 0.125]);
 near(multiplyFillK({ w: 280, h: 280 }), (280 - CAPTION_CLEAR) / (2 * 1.875 * TIP.y * 1.1), "Multiply fills the stage, caption clear");
+
+// ── Dino: the x at rest in d.INO (CH-09) ─────────────────────────────
+const ch09 = changeLog.find((c) => c.id === "CH-09");
+assert.ok(ch09, "CH-09 is in the change log");
+eq(ch09!.status, "adopted");
+eq(ch09!.proposedBy, "Gurden");
+const ch08 = changeLog.find((c) => c.id === "CH-08")!;
+eq(ch08.status, "proposed", "CH-08 stands as written");
+eq(ch08.proposed, "The x may leave the mark as operator, under the rules on /logo/x. At rest it is always the logo's x, in place.");
+eq(ch09!.previous, ch08.proposed, "CH-09 amends CH-08");
+{
+  const fig = dinoFigure();
+  near(fig.heartHalf.x, 6, "heart half width: the logo x scaled 12/56");
+  near(fig.heartHalf.y, 6.643, "heart half height: the logo x scaled 12/56");
+  const [a] = xPaths().map(points);
+  near((a[1].x - a[0].x) / 2 * (12 / 56), fig.heartHalf.x, "heart width from xPaths()");
+  near((a[1].y - a[0].y) / 2 * (12 / 56), fig.heartHalf.y, "heart height from xPaths()");
+  near(fig.arms.neck[1].x, 126.4, "neck: 2.3 x the x's half-arm");
+  near(fig.arms.front[1].y, 145.85, "legs: 1.35 x the x's half-arm");
+}
 
 console.log("x-operator: all checks passed");

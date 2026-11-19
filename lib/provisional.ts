@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-09",
+    title: "The x may rest as Dino in d.INO; the logo may sit faint as a watermark",
+    target: "Logo / x as operator",
+    href: "/logo/x#dino",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-19",
+    why: "d.INO was made by xCO and needs its own identity in the same family. Dino, d.INO's guide, is redrawn from the x, so a person who knows one knows the other.",
+    previous: "The x may leave the mark as operator, under the rules on /logo/x. At rest it is always the logo's x, in place.",
+    proposed: "Inside d.INO products the x may rest as Dino: its arms grow into legs, tail and neck, and a small x at the crossing, the heart, is the logo's x at rest. The full logo may also appear at about 7% as a decorative footer watermark, cropped by a corner, never at a size where it must be read.",
+    decision: "Adopted by Gurden, 19 Nov 2026.",
+  },
+  {
     id: "CH-08",
     title: "The x may leave the mark",
     target: "Logo / Misuse",
