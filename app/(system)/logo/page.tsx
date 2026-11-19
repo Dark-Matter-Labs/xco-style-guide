@@ -23,7 +23,7 @@ import { ConstructionDiagram } from "./ConstructionDiagram";
 
 const MISUSE = [
   { label: "Don't retype it", note: "The mark is drawn geometry, not set type. Never rebuild it in a font." },
-  { label: "Don't recolour freely", note: "Three variants exist. The x may carry dusk; nothing else may carry colour." },
+  { label: "Don't recolour freely", note: "Three variants exist. The x may carry dusk; nothing else may carry colour. One exception: a faint footer watermark at about 7%, cropped by a corner (CH-09)." },
   { label: "Don't stretch it", note: "Scale proportionally. The stroke weight is tied to the cap height." },
   { label: "Don't add effects", note: "No shadows, gradients, outlines, or rounded caps. Terminals are cut flat." },
   { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs." },

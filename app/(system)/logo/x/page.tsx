@@ -4,6 +4,7 @@ import { WIP } from "@/components/WIP";
 import { ProvisionalChange } from "@/components/xco";
 import { changeLog } from "@/lib/provisional";
 import { RoleFigure, type FigureRole } from "./RoleFigure";
+import { DINO_ARMS, DINO_BOX, dinoFigure } from "@/lib/dino";
 
 export const metadata: Metadata = { title: "The x as operator — xCO" };
 
@@ -137,6 +138,40 @@ export default function XOperatorPage() {
           the logo reads xCO before the script runs.
         </p>
       </section>
+
+      <section id="dino" className="space-y-8">
+        <h2 className={LABEL}>Dino: the x at rest in d.INO</h2>
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 items-center">
+          <DinoFigure />
+          <div className="space-y-4 max-w-md">
+            <p className="font-body text-[20px] leading-[26px] text-xco-ink">
+              Inside d.INO products the x may rest as Dino, d.INO&apos;s guide. The legs are the x&apos;s lower
+              arms at {DINO_ARMS.front} times their length, the tail its upper-left arm at {DINO_ARMS.tail}, and
+              the upper-right arm grows to {DINO_ARMS.neck} times into the neck and a flat head.
+            </p>
+            <p className="font-body text-[20px] leading-[26px] text-xco-ink">
+              The small dusk x at the crossing, the heart, is the logo&apos;s x at rest. It is the only dusk on
+              Dino. No face, ever. Dino unfolds from the x only in answer to the person, in under a second.
+            </p>
+            <p className={`${SMALL} text-xco-ink-muted`}>Adopted as CH-09, 19 Nov 2026.</p>
+          </div>
+        </div>
+      </section>
     </div>
+  );
+}
+
+function DinoFigure() {
+  const { arms, heartHalf: h } = dinoFigure();
+  const line = (pts: { x: number; y: number }[]) => pts.map((p, i) => `${i ? "L" : "M"}${p.x} ${p.y}`).join(" ");
+  const c = arms.neck[0];
+  return (
+    <svg viewBox={`0 0 ${DINO_BOX.width} ${DINO_BOX.height}`} className="w-full max-w-sm" role="img" aria-label="Dino, built from the logo's x">
+      <g fill="none" strokeWidth={12} strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit={10} stroke="var(--xco-ink)">
+        {Object.values(arms).map((pts, i) => <path key={i} d={line(pts)} />)}
+      </g>
+      <path d={`M${c.x - h.x} ${c.y - h.y} L${c.x + h.x} ${c.y + h.y} M${c.x + h.x} ${c.y - h.y} L${c.x - h.x} ${c.y + h.y}`}
+        fill="none" strokeWidth={5} strokeLinecap="butt" stroke="var(--xco-dusk)" />
+    </svg>
   );
 }
