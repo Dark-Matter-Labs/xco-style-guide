@@ -52,7 +52,7 @@ export function HolidayCards() {
             value={list}
             onChange={(e) => setList(e.target.value)}
             rows={8}
-            className="w-full border border-[var(--border-default)] bg-white p-3 font-code text-[14px] text-xco-ink"
+            className="w-full border border-[var(--border-default)] bg-[var(--xco-paper-raised)] p-3 font-code text-[14px] text-xco-ink"
           />
         </div>
         <label htmlFor="hc-qr" className="flex min-h-[44px] items-center gap-3 text-[16px] text-xco-ink">
@@ -66,7 +66,7 @@ export function HolidayCards() {
               id="hc-url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="w-full border border-[var(--border-default)] bg-white p-3 font-code text-[14px] text-xco-ink"
+              className="w-full border border-[var(--border-default)] bg-[var(--xco-paper-raised)] p-3 font-code text-[14px] text-xco-ink"
             />
           </div>
         )}
