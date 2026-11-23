@@ -54,7 +54,7 @@ export function ConstructionDiagram() {
 
       <g
         fill="var(--xco-ink-muted)"
-        fontFamily="var(--font-dm-mono), monospace"
+        fontFamily="DM Mono, monospace"
         fontSize={7}
         fontWeight={500}
       >

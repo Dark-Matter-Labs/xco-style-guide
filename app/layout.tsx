@@ -1,24 +1,9 @@
 import type { Metadata } from "next";
-import { Crimson_Pro, DM_Mono } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import { SkipLink } from "@/components/doc/SkipLink";
 
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-dm-mono",
-  display: "swap",
-});
-
-const crimsonPro = Crimson_Pro({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-crimson-pro",
-  display: "swap",
-});
+// Fonts are self-hosted with @font-face in globals.css (Untitled, DM Mono,
+// Crimson Pro), not next/font: see the note there on why.
 
 export const metadata: Metadata = {
   title: "xCO — Expanding Civilizational Optionality",
@@ -32,13 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        dmMono.variable,
-        crimsonPro.variable,
-      )}
-    >
+    // suppressHydrationWarning: the theme script below adds .dark before React hydrates.
+    <html lang="en" suppressHydrationWarning>
       {/* FOUC prevention — reads localStorage before first paint */}
       <head>
         <script
