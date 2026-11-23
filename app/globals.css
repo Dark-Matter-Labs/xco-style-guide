@@ -74,16 +74,21 @@
   /* Since 3 November 2026 labels and annotations are set in Untitled Sans, not a
      monospace (Gurden). The utility keeps its old name, font-mono, so the 60-odd
      places that use it move together; it is the label role now. A true monospace,
-     --font-code, is kept for code only, where characters must line up. */
-  --font-display: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
+     --font-code, is kept for code only, where characters must line up.
+
+     Every var() from next/font carries its own fallback. Without one, a page
+     whose next/font class does not attach (as on production, 23 November 2026:
+     the HTML's class hashes did not match the CSS) leaves the whole token
+     empty, and Untitled Serif silently becomes Untitled Sans site-wide. */
+  --font-display: "Untitled Serif", var(--font-crimson-pro, "Crimson Pro"), Georgia, serif;
   --font-body:    "Untitled Sans", system-ui, Arial, sans-serif;
   --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
   --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-code:    var(--font-dm-mono), "Courier New", monospace;
+  --font-code:    var(--font-dm-mono, "DM Mono"), "Courier New", monospace;
 
   /* shadcn semantic aliases */
   --font-sans:    "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-heading: "Untitled Serif", var(--font-crimson-pro), Georgia, serif;
+  --font-heading: "Untitled Serif", var(--font-crimson-pro, "Crimson Pro"), Georgia, serif;
 
   /* ── Spacing ────────────────────────────────────────────────────── */
 
