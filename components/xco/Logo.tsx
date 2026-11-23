@@ -93,7 +93,7 @@ export function Logo({
         <text
           x={d.x}
           y={baseline + d.baselineGap}
-          fontFamily={'var(--font-dm-mono, "DM Mono"), DM Mono, monospace'}
+          fontFamily="DM Mono, monospace"
           fontSize={d.size}
           fontWeight={500}
           letterSpacing={d.tracking}
@@ -107,7 +107,7 @@ export function Logo({
           <text
             x={e.labelX}
             y={baseline + d.baselineGap + e.labelBaselineGap}
-            fontFamily={'var(--font-dm-mono, "DM Mono"), DM Mono, monospace'}
+            fontFamily="DM Mono, monospace"
             fontSize={e.labelSize}
             fontWeight={500}
             letterSpacing={e.labelTracking}

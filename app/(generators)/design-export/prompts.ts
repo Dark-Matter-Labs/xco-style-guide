@@ -176,7 +176,7 @@ ${colorEntries}
   --font-body:    "Untitled Serif", "Crimson Pro", Georgia, serif;
   --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
   --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-code:    var(--font-dm-mono), monospace;
+  --font-code:    "DM Mono", "Courier New", monospace;
 
   /* Spacing */
   --xco-gutter: ${spacing.gutter};
