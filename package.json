@@ -14,6 +14,7 @@
     "globe": "node scripts/build-globe-field.mjs",
     "a11y": "tsx scripts/a11y-check.ts",
     "x:check": "tsx scripts/x-operator-check.ts",
+    "card:check": "tsx scripts/holiday-card-check.ts",
     "a11y:audit": "tsx scripts/a11y-audit.ts"
   },
   "dependencies": {
