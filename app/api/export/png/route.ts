@@ -1,3 +1,5 @@
+import { readFile } from "fs/promises";
+import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
 
@@ -7,11 +9,18 @@ const GOOGLE_FONTS_URL =
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;
 
-// Fetch WASM from /resvg.wasm (public/ dir) so the binary is a static asset,
-// not a filesystem read — avoids ENOENT in Vercel lambda bundles.
-function ensureWasm(origin: string): Promise<void> {
+// Read the wasm from the function bundle, never over HTTP: preview deployments
+// answer a self-fetch with Vercel's sign-in page. next.config traces the file in.
+const WASM_PATH = path.join(process.cwd(), "node_modules/@resvg/resvg-wasm/index_bg.wasm");
+
+function ensureWasm(): Promise<void> {
   if (wasmReady) return wasmReady;
-  wasmReady = initWasm(fetch(`${origin}/resvg.wasm`));
+  wasmReady = readFile(WASM_PATH)
+    .then((bytes) => initWasm(bytes))
+    .catch((err) => {
+      wasmReady = null; // let the next request retry instead of caching the failure
+      throw err;
+    });
   return wasmReady;
 }
 
@@ -56,8 +65,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "svg, width, height required" }, { status: 400 });
     }
 
-    const origin = new URL(req.url).origin;
-    await ensureWasm(origin);
+    await ensureWasm();
     const fonts = await loadFonts();
 
     // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers
