@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 /* ── Local fonts ──────────────────────────────────────────────────── */
 /* Untitled Serif + Sans — licensed from Klim Type Foundry.           */
@@ -141,9 +138,8 @@
   --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
   --font-code:    "DM Mono", "Courier New", monospace;
 
-  /* shadcn semantic aliases */
+  /* Tailwind's preflight reads --font-sans as the page's default face. */
   --font-sans:    "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-heading: "Untitled Serif", "Crimson Pro", Georgia, serif;
 
   /* ── Spacing ────────────────────────────────────────────────────── */
 
@@ -155,10 +151,6 @@
   --phi:       1.618;
   --phi-major: 61.8;   /* percent — use with calc(var(--phi-major) * 1%) */
   --phi-minor: 38.2;
-
-  /* ── Radius — minimal, this is not a round-corner brand ─────────── */
-
-  --radius: 0.125rem;
 }
 
 /* ── xCO dynamic tokens — paper ↔ ink swap on .dark ─────────────── */
@@ -174,7 +166,7 @@
   --color-xco-teal-ink:  var(--xco-teal-ink);
 }
 
-/* ── shadcn semantic tokens — remapped to xCO palette ────────────── */
+/* ── Runtime tokens — paper register ─────────────────────────────── */
 
 :root {
   /* ── Diagram palette aliases ──────────────────────────────────────
@@ -330,26 +322,6 @@
   --border-subtle:  rgba(16, 31, 36, 0.08);
   --border-default: rgba(16, 31, 36, 0.14);
   --border-strong:  rgba(16, 31, 36, 0.28);
-
-  /* shadcn tokens — mapped to xCO palette */
-  --background:           #F6F1E5;
-  --foreground:           #101F24;
-  --card:                 #FCFAF5;
-  --card-foreground:      #101F24;
-  --popover:              #FCFAF5;
-  --popover-foreground:   #101F24;
-  --primary:              #101F24;
-  --primary-foreground:   #F6F1E5;
-  --secondary:            #F6F1E5;
-  --secondary-foreground: #101F24;
-  --muted:                #F6F1E5;
-  --muted-foreground:     #374E4A;
-  --accent:               #F47743;
-  --accent-foreground:    #101F24;  /* ink on the ember */
-  --destructive:          #F47743;
-  --border:               transparent;
-  --input:                #101F24;
-  --ring:                 #101F24;
 }
 
 /* ── Inverse register — paper ↔ ink swap ─────────────────────────── */
@@ -404,59 +376,11 @@
   --border-subtle:  rgba(246, 241, 229, 0.08);
   --border-default: rgba(246, 241, 229, 0.14);
   --border-strong:  rgba(246, 241, 229, 0.28);
-
-  /* shadcn tokens */
-  --background:           #101F2D;
-  --foreground:           #F6F1E5;
-  --card:                 #152939;
-  --card-foreground:      #F6F1E5;
-  --popover:              #152939;
-  --popover-foreground:   #F6F1E5;
-  --primary:              #F6F1E5;
-  --primary-foreground:   #101F2D;
-  --secondary:            #101F2D;
-  --secondary-foreground: #F6F1E5;
-  --muted:                #101F2D;
-  --muted-foreground:     #B4C0B9;
-  --accent:               #F47743;
-  --accent-foreground:    #101F24;  /* ink on the ember */
-  --destructive:          #F47743;
-  --border:               transparent;
-  --input:                #F6F1E5;
-  --ring:                 #F6F1E5;
-}
-
-@theme inline {
-  --color-background:           var(--background);
-  --color-foreground:           var(--foreground);
-  --color-card:                 var(--card);
-  --color-card-foreground:      var(--card-foreground);
-  --color-popover:              var(--popover);
-  --color-popover-foreground:   var(--popover-foreground);
-  --color-primary:              var(--primary);
-  --color-primary-foreground:   var(--primary-foreground);
-  --color-secondary:            var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted:                var(--muted);
-  --color-muted-foreground:     var(--muted-foreground);
-  --color-accent:               var(--accent);
-  --color-accent-foreground:    var(--accent-foreground);
-  --color-destructive:          var(--destructive);
-  --color-border:               var(--border);
-  --color-input:                var(--input);
-  --color-ring:                 var(--ring);
-  --radius-sm:  calc(var(--radius) * 0.75);
-  --radius-md:  var(--radius);
-  --radius-lg:  calc(var(--radius) * 1.5);
 }
 
 /* ── Base layer ───────────────────────────────────────────────────── */
 
 @layer base {
-  * {
-    @apply outline-ring/50;
-  }
-
   /* One visible focus ring, everywhere, for keyboard users. Components do not
      remove it: npm run a11y fails on outline-none without a focus-visible
      replacement in the same class list. */

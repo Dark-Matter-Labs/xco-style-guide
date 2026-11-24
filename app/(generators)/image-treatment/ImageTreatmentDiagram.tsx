@@ -1,26 +1,10 @@
-"use client";
-
-import { forwardRef, useMemo } from "react";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
-import { paletteHex } from "@/lib/design-tokens";
-
-const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK } = paletteHex;
-
 
 export type ColorMode       = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";
 export type TreatmentMode   = "raster" | "sharp";
 export type SourceDiagram   = "three-regimes" | "option-field";
 export type DiagramVariant  = "mark" | "territories" | "signal";
-
-export interface ImageTreatmentProps {
-  mode:            TreatmentMode;
-  resolution:      number;
-  colorMode:       ColorMode;
-  format:          TreatmentFormat;
-  sourceDiagram:   SourceDiagram;
-  diagramVariant?: DiagramVariant;
-}
 
 export const DIMS = {
   card:   { vw: 1200, vh: 630  },
@@ -103,81 +87,3 @@ export function computeOptionFieldDots(vw: number, vh: number, dotSpacing: numbe
   }
   return dots;
 }
-
-// ── Sharp mark (SVG component — used only for export ref) ─────────────
-function SharpMark({ vw, vh, fg }: { vw: number; vh: number; fg: string }) {
-  const padX = vw * 0.10, padY = vh * 0.10;
-  const S = Math.min((vw - 2 * padX) / 400, (vh - 2 * padY) / 200);
-  const offX = (vw - 400 * S) / 2, offY = (vh - 200 * S) / 2;
-  const t = (x: number, y: number): [number, number] => [offX + x * S, offY + y * S];
-  const [frX, frY] = t(40, 39.5);
-  const [foX, foY] = t(240, 39.5);
-  const [fiX, fiY] = t(50, 134);
-  const [mx, my]   = t(200, 116);
-  return (
-    <g>
-      {MARK_LINES.map(([x1, y1, x2, y2], i) => {
-        const [px1, py1] = t(x1, y1);
-        const [px2, py2] = t(x2, y2);
-        return <line key={i} x1={px1} y1={py1} x2={px2} y2={py2}
-          stroke={DUSK} strokeWidth={1.5} strokeLinecap="round" />;
-      })}
-      <circle cx={mx} cy={my} r={3 * S} fill={DUSK} />
-      <rect x={frX} y={frY} width={120 * S} height={45 * S} fill={PAPER} stroke={fg} strokeWidth={1.2} />
-      <rect x={foX} y={foY} width={120 * S} height={45 * S} fill={PAPER} stroke={fg} strokeWidth={1.2} />
-      <rect x={fiX} y={fiY} width={300 * S} height={46 * S} fill={PAPER} stroke={OCEAN} strokeWidth={1.2}
-        strokeDasharray="6 4" />
-    </g>
-  );
-}
-
-function OptionFieldSharp({ vw, vh, fg, dotSpacing }: { vw: number; vh: number; fg: string; dotSpacing: number }) {
-  const spacing = Math.max(3, dotSpacing);
-  const segW = Math.max(4, Math.round(spacing * 0.85));
-  const pad = Math.round(vw * 0.04);
-  const maxW = spacing * 1.5;
-  const usableW = vw - pad * 2;
-  const segs: { x: number; y: number; sh: number }[] = [];
-  for (let y = spacing / 2; y < vh; y += spacing) {
-    const yRel = y / vh;
-    for (let x = pad; x < vw - pad; x += segW) {
-      const sh = spatialWeight((x - pad) / usableW, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
-      segs.push({ x, y, sh });
-    }
-  }
-  return (
-    <>
-      {segs.map((s, i) => (
-        <rect key={i} x={s.x} y={s.y - s.sh / 2} width={segW} height={s.sh} fill={fg} />
-      ))}
-    </>
-  );
-}
-
-// ── Main SVG component — only used for export refs ───────────────────
-export const ImageTreatmentDiagram = forwardRef<SVGSVGElement, ImageTreatmentProps>(
-  function ImageTreatmentDiagram({ mode, resolution, colorMode, format, sourceDiagram }, ref) {
-    const { vw, vh } = DIMS[format];
-    const bg = colorMode === "inverted" ? INK : PAPER;
-    const fg = colorMode === "inverted" ? PAPER : colorMode === "ember" ? DUSK : INK;
-    const dotSpacing = spacingFromResolution(resolution);
-    const isField = sourceDiagram === "option-field";
-
-    const dots = useMemo(() => computeDots(vw, vh, dotSpacing), [vw, vh, dotSpacing]);
-    const fieldDots = useMemo(() => computeOptionFieldDots(vw, vh, dotSpacing), [vw, vh, dotSpacing]);
-
-    return (
-      <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
-        <rect width={vw} height={vh} fill={bg} />
-        {mode === "raster" && !isField && dots.map((d, i) =>
-          <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
-        )}
-        {mode === "raster" && isField && fieldDots.map((d, i) =>
-          <rect key={i} x={d.cx - d.r} y={d.cy - d.r} width={d.r * 2} height={d.r * 2} fill={fg} />
-        )}
-        {mode === "sharp" && !isField && <SharpMark vw={vw} vh={vh} fg={fg} />}
-        {mode === "sharp" &&  isField && <OptionFieldSharp vw={vw} vh={vh} fg={fg} dotSpacing={dotSpacing} />}
-      </svg>
-    );
-  }
-);

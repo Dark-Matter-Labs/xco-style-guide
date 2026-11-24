@@ -196,17 +196,12 @@ export default function TonePage() {
         </p>
         <div className="space-y-8">
           {toneRegisters.map((reg) => (
-            <div key={reg.id} className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-body text-[24px] text-xco-ink leading-[26px]">{reg.label}</h3>
-                <CopyButton
-                  text={promptTemplates[reg.id]}
-                  label="Copy template"
-                />
-              </div>
-              <pre className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink p-5 overflow-x-auto whitespace-pre-wrap">
-                {promptTemplates[reg.id]}
-              </pre>
+            <div key={reg.id} className="flex items-center justify-between">
+              <h3 className="font-body text-[24px] text-xco-ink leading-[26px]">{reg.label}</h3>
+              <CopyButton
+                text={promptTemplates[reg.id]}
+                label="Copy template"
+              />
             </div>
           ))}
         </div>
