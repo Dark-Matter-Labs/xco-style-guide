@@ -251,7 +251,7 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   absent("three regimes mark", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
   absent("three regimes off", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "hero" })));
 
-  const { OptionFieldDiagram } = await import("@/app/(generators)/option-field/OptionFieldDiagram");
+  const { OptionFieldDiagram } = await import("@/app/(generators)/three-regimes/OptionFieldDiagram");
   const ofProps = { fieldStr: 0.6, frontierStr: 0.5, fortressStr: 0.4, volatility: 0.5, resolution: 50 };
   for (const format of ["hero", "square"] as const) {
     for (const colorMode of ["ink", "spectrum", "inverted", "blueprint", "warmth"] as const) {
@@ -347,9 +347,19 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   for (const f of [
     "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
     "app/(generators)/three-regimes/ThreeRegimesDiagram.tsx",
-    "app/(generators)/option-field/OptionFieldDiagram.tsx",
+    "app/(generators)/three-regimes/OptionFieldDiagram.tsx", "app/(generators)/three-regimes/StructureView.tsx",
+    "app/(generators)/three-regimes/FieldView.tsx", "app/(generators)/three-regimes/TerritoryView.tsx",
   ])
     assert.ok(!readFileSync(f, "utf8").includes("useMinute"), `${f} takes its minute from the generator`);
+
+  // One Three Regimes instrument: one minute for every view, and none on the Territory view.
+  {
+    const shell = readFileSync("app/(generators)/three-regimes/ThreeRegimesGenerator.tsx", "utf8");
+    eq((shell.match(/useMinute\(\)/g) || []).length, 1, "the Three Regimes instrument reads the minute once, for every view");
+    assert.ok(/words !== null \? \{ minute, words \}/.test(shell), "a view without words gets no time print");
+    const territory = readFileSync("app/(generators)/three-regimes/TerritoryView.tsx", "utf8");
+    assert.ok(territory.includes("words: null") && !territory.includes("timePrint={"), "the Territory view carries no time print");
+  }
 
   console.log("time-print: all checks passed");
 })().catch((e) => {
