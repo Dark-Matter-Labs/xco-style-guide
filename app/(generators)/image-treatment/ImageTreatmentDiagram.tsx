@@ -6,6 +6,7 @@ export type TreatmentFormat = "card" | "square";
 export type TreatmentMode   = "raster" | "sharp";
 export type SourceDiagram   = "three-regimes" | "option-field";
 export type DiagramVariant  = "mark" | "territories" | "signal";
+export type CellShape       = "square" | "hbars" | "vbars";
 
 export const DIMS = {
   card:   { vw: 1200, vh: 630  },

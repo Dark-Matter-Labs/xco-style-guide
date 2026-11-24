@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, forwardRef } from "react";
 import {
   spacingFromResolution, computeDots, computeOptionFieldDots,
   DIMS, MARK_LINES,
 } from "./ImageTreatmentDiagram";
-import type { ColorMode, TreatmentFormat, TreatmentMode, SourceDiagram, DiagramVariant } from "./ImageTreatmentDiagram";
+import type { CellShape, ColorMode, TreatmentFormat, TreatmentMode, DiagramVariant } from "./ImageTreatmentDiagram";
+import { addGrain, clamp, fillRectPixel, getImageData, getPhotoDims, sampleLum } from "./pixels";
+import { buildStylePrompt, drawTritone, TRITONE_PRESETS, tritoneSVG, type TritoneOptions, type TritonePreset } from "./tritone";
+import { useSettled } from "@/components/xco/TimePrint";
 import { embedWeight } from "@/lib/regimes/weight";
 import { paletteHex } from "@/lib/design-tokens";
 import {
@@ -16,71 +19,11 @@ import { canvasPNG, download, exportPNG, exportSVG } from "@/lib/media/export";
 const { ink: INK, paper: PAPER, dusk: DUSK, ocean: OCEAN } = paletteHex;
 
 
-type SourceMode   = "three-regimes" | "option-field" | "photo";
+type SourceMode   = "three-regimes" | "option-field" | "photo" | "tritone";
 type PhotoPalette = "mono" | "inverted" | "dusk" | "ocean" | "multi";
-type CellShape    = "square" | "hbars" | "vbars";
 
-// ── Debounce ──────────────────────────────────────────────────────────────
-function useDebounce<T>(value: T, ms: number): T {
-  const [d, setD] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setD(value), ms);
-    return () => clearTimeout(t);
-  }, [value, ms]);
-  return d;
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────
-function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
-
-// Pixel-perfect fillRect — snaps every edge to the nearest integer pixel so
-// Canvas 2D never anti-aliases the rectangle boundary.  All halftone drawing
-// must go through this rather than ctx.fillRect() directly.
-function fillRectPixel(
-  ctx: CanvasRenderingContext2D,
-  x: number, y: number, w: number, h: number,
-) {
-  const x0 = Math.round(x);
-  const y0 = Math.round(y);
-  const x1 = Math.round(x + w);
-  const y1 = Math.round(y + h);
-  if (x1 > x0 && y1 > y0) ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
-}
-
-function getPhotoDims(img: HTMLImageElement): { vw: number; vh: number } {
-  const iw = img.naturalWidth;
-  const ih = img.naturalHeight;
-  if (iw <= 1200) return { vw: iw, vh: ih };
-  return { vw: 1200, vh: Math.round(ih * (1200 / iw)) };
-}
-
-function sampleLum(data: Uint8ClampedArray, cx: number, cy: number, vw: number, vh: number): number {
-  const px = clamp(Math.floor(cx), 0, vw - 1);
-  const py = clamp(Math.floor(cy), 0, vh - 1);
-  const i  = (py * vw + px) * 4;
-  return (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114) / 255;
-}
-
-function getImageData(img: HTMLImageElement, vw: number, vh: number): ImageData {
-  const off = document.createElement("canvas");
-  off.width = vw; off.height = vh;
-  const ctx = off.getContext("2d")!;
-  ctx.drawImage(img, 0, 0, vw, vh);
-  return ctx.getImageData(0, 0, vw, vh);
-}
-
-// ── Film grain ────────────────────────────────────────────────────────────
-function addGrain(ctx: CanvasRenderingContext2D, vw: number, vh: number, intensity = 30) {
-  const imgData = ctx.getImageData(0, 0, vw, vh);
-  const { data } = imgData;
-  for (let i = 0; i < data.length; i += 4) {
-    const n = (Math.random() - 0.5) * intensity;
-    data[i]     = clamp(data[i]     + n, 0, 255);
-    data[i + 1] = clamp(data[i + 1] + n, 0, 255);
-    data[i + 2] = clamp(data[i + 2] + n, 0, 255);
-  }
-  ctx.putImageData(imgData, 0, 0);
-}
+/** The sources that work from uploaded images rather than a diagram. */
+const fromPhotos = (s: SourceMode) => s === "photo" || s === "tritone";
 
 // ── Diagram raster (rectangles only) ─────────────────────────────────────
 function drawDiagramRaster(
@@ -295,16 +238,18 @@ interface PreviewProps {
   resolution: number; colorMode: ColorMode; photoPalette: PhotoPalette;
   uploadedImg: HTMLImageElement | null; grain: boolean;
   format: TreatmentFormat; cellShape: CellShape; showPhoto: boolean;
+  /** The tritone settings; null unless the source is tritone. */
+  tritone: TritoneOptions | null;
 }
 
 const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
-  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto }, forwardedRef) {
+  function PreviewCanvas({ source, mode, variant, resolution, colorMode, photoPalette, uploadedImg, grain, format, cellShape, showPhoto, tritone }, forwardedRef) {
     // Internal ref for drawing — always a RefObject regardless of what the parent passes.
     // Callback refs (e.g. `ref={(el) => { arr[i] = el; }}`) are NOT RefObjects, so we
     // cannot read `.current` from the forwarded ref. Use localRef for all canvas access.
     const localRef = useRef<HTMLCanvasElement>(null);
 
-    const { vw, vh } = source === "photo" && uploadedImg
+    const { vw, vh } = fromPhotos(source) && uploadedImg
       ? getPhotoDims(uploadedImg)
       : DIMS[format];
     const bg = source === "photo"
@@ -321,6 +266,11 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
 
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, vw, vh);
+
+      if (source === "tritone") {
+        if (uploadedImg && tritone) drawTritone(ctx, uploadedImg, vw, vh, tritone);
+        return;
+      }
 
       if (source === "photo") {
         if (!uploadedImg) return;
@@ -344,7 +294,7 @@ const PreviewCanvas = forwardRef<HTMLCanvasElement, PreviewProps>(
       // mark
       if (mode === "raster") drawDiagramRaster(ctx, vw, vh, dotSpacing, fg, "three-regimes", cellShape);
       else                   drawMarkVariant(ctx, vw, vh, fg);
-    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, cellShape, showPhoto]);
+    }, [source, mode, variant, dotSpacing, bg, fg, photoPalette, uploadedImg, grain, vw, vh, cellShape, showPhoto, tritone]);
 
     return (
       <canvas
@@ -371,7 +321,12 @@ function buildSVGString(
   vw: number, vh: number,
   cellShape: CellShape,
   showPhoto: boolean,
+  tritone: TritoneOptions | null,
 ): string {
+  if (source === "tritone") {
+    if (!uploadedImg || !tritone) throw new Error("Upload an image first.");
+    return tritoneSVG(uploadedImg, vw, vh, tritone);
+  }
   const bg = source === "photo"
     ? (photoPalette === "inverted" ? INK : PAPER)
     : (colorMode === "inverted" ? INK : PAPER);
@@ -542,7 +497,11 @@ const SOURCES: { id: SourceMode; label: string }[] = [
   { id: "three-regimes", label: "Three Regimes" },
   { id: "option-field",  label: "Option Field" },
   { id: "photo",         label: "Photo ↑" },
+  { id: "tritone",       label: "Tritone ↑" },
 ];
+
+const TRITONES = (Object.entries(TRITONE_PRESETS) as [TritonePreset, (typeof TRITONE_PRESETS)[TritonePreset]][])
+  .map(([id, p]) => ({ id, label: p.label, hint: p.hint }));
 
 const VARIANTS: { id: DiagramVariant; label: string; hint: string }[] = [
   { id: "mark",        label: "Mark",        hint: "Original geometric mark — sources converging to field" },
@@ -597,13 +556,41 @@ export function ImageTreatmentGenerator() {
   const [activeIdx,    setActiveIdx]    = useState(0);
   const [animating,    setAnimating]    = useState(false);
   const [animSpeed,    setAnimSpeed]    = useState(2000);
+  const [tritonePreset, setTritonePreset] = useState<TritonePreset>("blueprint");
+  const [midpoint,     setMidpoint]     = useState(0.35);
+  const [highlightRaster, setHighlightRaster] = useState(false);
 
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
-  const debouncedResolution = useDebounce(resolution, 120);
+  const debouncedResolution = useSettled(resolution, 120);
   const activeFormat = FORMATS.find((f) => f.id === format)!;
   const dotSpacing = spacingFromResolution(debouncedResolution);
 
-  const activeImg = source === "photo" ? (uploadedImgs[activeIdx] ?? null) : null;
+  const activeImg = fromPhotos(source) ? (uploadedImgs[activeIdx] ?? null) : null;
+  const debouncedMidpoint = useSettled(midpoint, 80);
+  const tritone = useMemo<TritoneOptions | null>(
+    () => (source === "tritone"
+      ? { preset: tritonePreset, midpoint: debouncedMidpoint, raster: highlightRaster ? dotSpacing : null, cellShape, grain }
+      : null),
+    [source, tritonePreset, debouncedMidpoint, highlightRaster, dotSpacing, cellShape, grain],
+  );
+
+  // An old /align link arrives as ?source=tritone.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("source") === "tritone") setSource("tritone");
+  }, []);
+
+  const prompt = useExport();
+  const [copied, setCopied] = useState(false);
+  const copyPrompt = () =>
+    prompt.run("prompt", async () => {
+      try {
+        await navigator.clipboard.writeText(buildStylePrompt(tritonePreset, debouncedMidpoint));
+      } catch {
+        throw new Error("The browser blocked the clipboard. Try again, or allow clipboard access.");
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
 
   const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
@@ -630,38 +617,43 @@ export function ImageTreatmentGenerator() {
   }, [animating, uploadedImgs.length, animSpeed]);
 
   // True when resolution slider / grain should be shown
-  const showResolution = source === "photo" ||
+  const showResolution = source === "photo" || (source === "tritone" && highlightRaster) ||
     (source === "three-regimes" && (variant === "signal" || mode === "raster")) ||
     (source === "option-field");
 
-  const showMode = source !== "photo" && !(source === "three-regimes" && variant !== "mark");
+  const showMode = !fromPhotos(source) && !(source === "three-regimes" && variant !== "mark");
 
-  const slug = `xco-treatment-${format}-${source === "photo" ? `photo-${photoPalette}` : `${source === "three-regimes" ? variant : source}-${mode === "raster" ? `r${debouncedResolution}` : "sharp"}`}`;
+  const slug = source === "tritone"
+    ? `xco-treatment-tritone-${tritonePreset}`
+    : `xco-treatment-${format}-${source === "photo" ? `photo-${photoPalette}` : `${source === "three-regimes" ? variant : source}-${mode === "raster" ? `r${debouncedResolution}` : "sharp"}`}`;
+
+  const activeDims = activeImg ? getPhotoDims(activeImg) : null;
+  const sizeLabel = activeDims ? `${activeDims.vw} × ${activeDims.vh}` : activeFormat.label;
 
   const { busy: exporting, error, run } = useExport();
   const handle = (type: string) =>
     run(type, async () => {
-      const photoDims = source === "photo" && activeImg ? getPhotoDims(activeImg) : null;
+      const photoDims = fromPhotos(source) && activeImg ? getPhotoDims(activeImg) : null;
       const { w, h } = photoDims
         ? { w: photoDims.vw, h: photoDims.vh }
         : { w: activeFormat.w, h: activeFormat.h };
 
-      // Photo PNG: use canvas directly
-      if (source === "photo" && type === "png") {
+      // Photo and tritone PNG: use canvas directly
+      if (fromPhotos(source) && type === "png") {
         const canvas = canvasRefs.current[activeIdx];
         if (!canvas) throw new Error("The preview has not drawn yet. Wait a moment and try again.");
         download(await canvasPNG(canvas), `${slug}.png`);
         return;
       }
 
-      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, activeImg, w, h, cellShape, showPhoto);
+      const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, activeImg, w, h, cellShape, showPhoto, tritone);
       if (type === "svg") exportSVG(svgStr, `${slug}.svg`);
       else await exportPNG(svgStr, w, h, `${slug}.png`);
     });
 
   const previewProps: PreviewProps = {
     source, mode, variant, resolution: debouncedResolution,
-    colorMode, photoPalette, uploadedImg: activeImg, grain, format, cellShape, showPhoto,
+    colorMode, photoPalette, uploadedImg: activeImg, grain, format, cellShape, showPhoto, tritone,
   };
 
   return (
@@ -669,11 +661,11 @@ export function ImageTreatmentGenerator() {
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
         <Section title="Source">
-          <Segmented value={source} options={SOURCES} onChange={setSource} />
+          <Segmented value={source} options={SOURCES} onChange={setSource} columns={2} />
         </Section>
 
-        {/* Photo upload — multi-image (max 4) */}
-        {source === "photo" && (
+        {/* Photo upload — multi-image (max 4), for the halftone and tritone sources */}
+        {fromPhotos(source) && (
           <Section title={`Images — ${uploadedImgs.length}/4`}>
             {uploadedImgs.map((img, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -701,10 +693,29 @@ export function ImageTreatmentGenerator() {
                 </span>
               </label>
             )}
-            {uploadedImgs.length > 0 && (
+            {source === "photo" && uploadedImgs.length > 0 && (
               <Checkbox label="Show source photo" checked={showPhoto} onChange={setShowPhoto} />
             )}
+            {source === "tritone" && (
+              <p className={`${labelClass} text-xco-ink-muted`}>AI outputs, outside diagrams, moodboards: mapped onto three palette stops.</p>
+            )}
           </Section>
+        )}
+
+        {/* Tritone — the old Align instrument */}
+        {source === "tritone" && (
+          <>
+            <Section title="Tritone palette">
+              <RadioList name="tritone" value={tritonePreset} options={TRITONES} onChange={setTritonePreset} />
+            </Section>
+            <Section title="Contrast">
+              <Slider label="Midpoint" min={0.1} max={0.7} step={0.01} value={midpoint} onChange={setMidpoint}
+                display={midpoint < 0.3 ? "dark images" : midpoint < 0.5 ? "balanced" : "bright images"} ends={["dark", "bright"]}
+                hint="Where shadow turns to midtone. Lower keeps more shadow." />
+              <Checkbox label="Highlight raster" hint="Cells in the highlight colour, sized by brightness — textures the structure." checked={highlightRaster} onChange={setHighlightRaster} />
+              <Checkbox label="Film grain" hint="Organic noise — softens digital harshness" checked={grain} onChange={setGrain} />
+            </Section>
+          </>
         )}
 
         {/* Diagram variant (three-regimes only) */}
@@ -727,12 +738,12 @@ export function ImageTreatmentGenerator() {
           <Section title="Resolution">
             <Slider label="Grid" min={0} max={100} step={1} value={resolution} onChange={setResolution}
               display={`${dotSpacing}px grid`} ends={["coarse", "fine"]}
-              hint={source === "photo" ? undefined : resolutionHint(resolution)} />
+              hint={fromPhotos(source) ? undefined : resolutionHint(resolution)} />
           </Section>
         )}
 
         {/* Cell shape — photo and diagram raster (not territories/signal which have fixed geometry) */}
-        {(source === "photo" || (mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
+        {(source === "photo" || (source === "tritone" ? highlightRaster : mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
           <Section title="Cell shape">
             <Segmented value={cellShape} options={CELL_SHAPES.map(({ id, label }) => ({ id, label }))} onChange={setCellShape} />
             <p className={`${labelClass} text-xco-ink-muted`}>{CELL_SHAPES.find((c) => c.id === cellShape)!.hint}</p>
@@ -740,7 +751,7 @@ export function ImageTreatmentGenerator() {
         )}
 
         {/* Colour — diagram */}
-        {source !== "photo" && (
+        {!fromPhotos(source) && (
           <Section title="Colour">
             <RadioList name="color" value={colorMode} options={COLOR_MODES} onChange={setColorMode} />
           </Section>
@@ -755,7 +766,7 @@ export function ImageTreatmentGenerator() {
         )}
 
         {/* Animation — crossfade when multiple photos loaded */}
-        {source === "photo" && uploadedImgs.length > 1 && (
+        {fromPhotos(source) && uploadedImgs.length > 1 && (
           <Section title="Animation">
             <Button onClick={() => setAnimating((a) => !a)} pressed={animating}>
               {animating ? "❚❚ Pause" : "▶ Play"}
@@ -765,21 +776,33 @@ export function ImageTreatmentGenerator() {
           </Section>
         )}
 
-        {/* Format — not applicable in photo mode (dims come from the image) */}
-        {source !== "photo" && (
+        {/* Format — not applicable to photos (dims come from the image) */}
+        {!fromPhotos(source) && (
           <Section title="Format">
             <RadioList name="format" value={format} options={FORMATS} onChange={setFormat} />
           </Section>
         )}
 
+        {source === "tritone" && (
+          <Section title="Style prompt">
+            <p className={`${labelClass} text-xco-ink-muted`}>
+              Paste into ChatGPT, Midjourney, Firefly or any image generator to ask for this palette and the xCO look.
+            </p>
+            <Button onClick={copyPrompt} pressed={copied}>
+              {copied ? "✓ Copied to clipboard" : `Copy the ${TRITONE_PRESETS[tritonePreset].label} prompt`}
+            </Button>
+            <ExportError error={prompt.error} />
+          </Section>
+        )}
+
         <Section title="Export">
-          <Button onClick={() => handle("svg")} disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}>
-            {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
+          <Button onClick={() => handle("svg")} disabled={exporting !== null || (fromPhotos(source) && uploadedImgs.length === 0)}>
+            {exporting === "svg" ? "exporting…" : `↓ SVG — ${sizeLabel}`}
           </Button>
-          <Button onClick={() => handle("png")} disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}>
-            {exporting === "png" ? "exporting…" : `↓ PNG — ${source === "photo" && uploadedImgs.length > 1 ? `frame ${activeIdx + 1}/${uploadedImgs.length}` : activeFormat.label}`}
+          <Button onClick={() => handle("png")} disabled={exporting !== null || (fromPhotos(source) && uploadedImgs.length === 0)}>
+            {exporting === "png" ? "exporting…" : `↓ PNG — ${fromPhotos(source) && uploadedImgs.length > 1 ? `frame ${activeIdx + 1}/${uploadedImgs.length}` : sizeLabel}`}
           </Button>
-          {source === "photo" && uploadedImgs.length === 0 && (
+          {fromPhotos(source) && uploadedImgs.length === 0 && (
             <p className={labelClass}>Upload a photo to enable export</p>
           )}
           <ExportError error={error} />
@@ -788,12 +811,12 @@ export function ImageTreatmentGenerator() {
 
       {/* Preview */}
       <div className="flex-1 min-w-0 space-y-4">
-        {source === "photo" && uploadedImgs.length === 0 ? (
+        {fromPhotos(source) && uploadedImgs.length === 0 ? (
           <div className="border border-xco-ink flex items-center justify-center"
             style={{ aspectRatio: format === "card" ? "1200/630" : "1" }}>
             <span className={labelClass}>Upload a photo to preview</span>
           </div>
-        ) : source === "photo" ? (
+        ) : fromPhotos(source) ? (
           <div className="relative border border-xco-ink overflow-hidden"
             style={{ background: photoPalette === "inverted" ? INK : PAPER }}>
             {uploadedImgs.map((img, i) => (
@@ -825,7 +848,7 @@ export function ImageTreatmentGenerator() {
         )}
 
         {/* Frame picker — shown when multiple images loaded */}
-        {source === "photo" && uploadedImgs.length > 1 && (
+        {fromPhotos(source) && uploadedImgs.length > 1 && (
           <div className="max-w-xs" role="group" aria-label="Frame">
             <Segmented
               value={String(activeIdx)}
@@ -836,7 +859,9 @@ export function ImageTreatmentGenerator() {
         )}
 
         <p className={labelClass}>
-          {source === "photo"
+          {source === "tritone"
+            ? `${TRITONE_PRESETS[tritonePreset].label} tritone · midpoint ${Math.round(midpoint * 100)}%${activeImg ? ` · ${getPhotoDims(activeImg).vw}×${getPhotoDims(activeImg).vh}` : ""}`
+            : source === "photo"
             ? uploadedImgs.length > 0
               ? (() => {
                   const img = uploadedImgs[activeIdx];

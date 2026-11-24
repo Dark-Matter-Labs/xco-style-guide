@@ -179,6 +179,13 @@ const fake = (respond: () => Response | Promise<Response>, calls: Call[] = []) =
       assert.ok(!src.includes(copy), `${f} keeps no copy of ${copy}`);
   }
 
+  // ── Image treatment's photo helpers exist once (align kept its own copies of seven) ──
+  const sources = files("app/(generators)").filter((f) => /\.tsx?$/.test(f)).map((f) => readFileSync(f, "utf8")).join("\n");
+  for (const helper of ["function clamp(", "function getPhotoDims(", "function sampleLum(", "function getImageData(", "function addGrain(", "function spacingFromRes", "function useDebounce("]) {
+    const n = sources.split(helper).length - 1;
+    assert.ok(n <= 1, `${helper} is defined once across the generators (found ${n})`);
+  }
+
   // ── The error is said aloud ────────────────────────────────────────
   // tsx compiles JSX with the classic transform, so React must be global before the module loads.
   (globalThis as unknown as { React: typeof React }).React = React;

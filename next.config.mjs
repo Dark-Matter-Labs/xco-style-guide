@@ -7,6 +7,12 @@ const nextConfig = {
       "/api/export/png": ["./node_modules/@resvg/resvg-wasm/index_bg.wasm"],
     },
   },
+  // Instruments folded into others keep their old links working.
+  async redirects() {
+    return [
+      { source: "/align", destination: "/image-treatment?source=tritone", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
