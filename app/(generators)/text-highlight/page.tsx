@@ -11,7 +11,7 @@ export default function TextHighlightPage() {
         <div>
           <h1 className="font-display text-[60px] leading-[60px]">Text Highlight</h1>
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
-            Importance as colour temperature or scale — sidenotes aligned to term height
+            Exact-span highlights in the five named roles — numbered sidenotes beside each term, exported as SVG or PNG
           </p>
         </div>
       </header>
