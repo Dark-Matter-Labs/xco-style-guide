@@ -15,8 +15,10 @@ export default function ThreeRegimesPage() {
       <section className="max-w-2xl">
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Frontier / Fortress / Field — where Field is not a peer but the
-          precondition. Adjust labels, relationship statement, and caption.
-          Export SVG for exact typography; PNG for quick sharing.
+          precondition. Three views of the one idea: Structure draws the
+          diagram, Field the option field&apos;s weighted scanlines, Territory a
+          treemap of concepts by weight. Export SVG for exact typography; PNG
+          for quick sharing.
         </p>
       </section>
 

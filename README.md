@@ -27,9 +27,7 @@ The list the nav and the home page share is `lib/instruments.ts`.
 
 | Instrument | Path |
 |------------|------|
-| Three Regimes | `/three-regimes` |
-| Option Field | `/option-field` |
-| Territory | `/territory` |
+| Three Regimes | `/three-regimes` (Structure, Field and Territory views) |
 | Paper Cover | `/paper-cover` |
 | Event Series | `/event-series` (Medulla event cards and xCO notes) |
 | Growth | `/growth` |
@@ -40,7 +38,7 @@ The list the nav and the home page share is `lib/instruments.ts`.
 | Text Highlight | `/text-highlight` |
 | Token Export | `/design-export` |
 
-Align folded into Image Treatment as its Tritone source, and Social Card into Event Series as the xCO note templates; `/align` and `/social-card` redirect there (`next.config.mjs`).
+Align folded into Image Treatment as its Tritone source, Social Card into Event Series as the xCO note templates, and Option Field and Territory into Three Regimes as its Field and Territory views. The old routes redirect (`next.config.mjs`).
 
 ### Token system
 

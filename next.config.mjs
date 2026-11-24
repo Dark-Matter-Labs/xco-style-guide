@@ -12,6 +12,8 @@ const nextConfig = {
     return [
       { source: "/align", destination: "/image-treatment?source=tritone", permanent: true },
       { source: "/social-card", destination: "/event-series?template=note-typographic", permanent: true },
+      { source: "/option-field", destination: "/three-regimes?view=field", permanent: true },
+      { source: "/territory", destination: "/three-regimes?view=territory", permanent: true },
     ];
   },
 };
