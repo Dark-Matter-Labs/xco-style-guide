@@ -180,6 +180,55 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   const Probe = () => (useMinute() === null ? "none" : "some");
   eq(renderToStaticMarkup(h(Probe)), "none", "no minute on the server, so static pages hydrate cleanly");
 
+  // ── Task 3: social card and paper cover ─────────────────────────────
+  const prop = { minute: M, words: "Optionality is a public good" };
+  const groundAt = (html: string, w: number, hgt: number) => {
+    const g = new RegExp(`<rect width="${w}" height="${hgt}" fill="[^"]*"(?:/>|></rect>)`).exec(html);
+    assert.ok(g, `ground rect ${w}×${hgt} found`);
+    return g!.index + g![0].length;
+  };
+  const lastText = (html: string) => html.slice(html.lastIndexOf("<text"));
+  function checkArtwork(what: string, html: string, w: number, hgt: number, margin: number, ink: string, gradient: boolean) {
+    eq(html.indexOf('<g opacity="0.06"'), groundAt(html, w, hgt), `${what}: the print sits right after the ground`);
+    const slug = lastText(html);
+    assert.ok(slug.includes("time print ·") && html.endsWith("</text></svg>"), `${what}: the slug is the last thing drawn`);
+    assert.ok(slugX(slug) > w - margin && slugX(slug) < w, `${what}: the slug sits in the right margin (${slugX(slug).toFixed(1)})`);
+    assert.ok(slug.includes(`fill="${ink}"`), `${what}: the slug takes the artwork's text colour`);
+    // The marks inside the group (the group itself carries fill="none" as a default).
+    const open = html.indexOf(">", html.indexOf('<g opacity="0.06"')) + 1;
+    const layer = html.slice(open, html.indexOf("</g>", open));
+    eq(layer.includes('fill="none"'), gradient, `${what}: knock-outs ${gradient ? "unfilled on a gradient" : "filled with the ground"}`);
+    return slugX(slug);
+  }
+  const absent = (what: string, html: string) =>
+    assert.ok(!html.includes('opacity="0.06"') && !html.includes("time print ·"), `${what}: no print when it is off`);
+
+  const { SocialCardDiagram } = await import("@/app/(generators)/social-card/SocialCardDiagram");
+  for (const format of ["card", "square"] as const) {
+    const [w, hgt, pad] = format === "card" ? [1200, 630, 80] : [1080, 1080, 90];
+    for (const layout of ["abstract", "diagram", "typographic"] as const) {
+      for (const diagramType of layout === "diagram" ? (["option-field", "territory", "three-regimes"] as const) : (["option-field"] as const)) {
+        const what = `social card ${format} ${layout} ${diagramType}`;
+        const props = { headline: "A field of options", tag: "Note", byline: "xCO", layout, format, diagramType };
+        const x = checkArtwork(what, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop })), w, hgt, pad, layout === "abstract" ? PAPER : INK, layout === "abstract");
+        if (format === "card" && layout === "diagram") assert.ok(x > 1120, `${what}: the slug clears the embed`);
+        absent(what, renderToStaticMarkup(h(SocialCardDiagram, props)));
+        absent(`${what} (null)`, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: null })));
+      }
+    }
+  }
+
+  const { PaperCoverDiagram } = await import("@/app/(generators)/paper-cover/PaperCoverDiagram");
+  for (const visual of ["none", "abstract", "mark", "option-field", "territory"] as const) {
+    const props = { paperNumber: "Paper 01", title: "Optionality", subtitle: "A field guide", authors: "Gurden", date: "May 2026", visual };
+    checkArtwork(`paper cover ${visual}`, renderToStaticMarkup(h(PaperCoverDiagram, { ...props, timePrint: prop })), 794, 1123, 56, INK, false);
+    absent(`paper cover ${visual}`, renderToStaticMarkup(h(PaperCoverDiagram, props)));
+  }
+
+  // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
+  for (const f of ["app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx"])
+    assert.ok(!readFileSync(f, "utf8").includes("useMinute"), `${f} takes its minute from the generator`);
+
   console.log("time-print: all checks passed");
 })().catch((e) => {
   console.error(e);

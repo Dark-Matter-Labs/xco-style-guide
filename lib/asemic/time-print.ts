@@ -9,6 +9,9 @@ import { SOURCES } from "./sources";
 
 export const TIME_PRINT_OPACITY = 0.06;
 
+/** The checkbox hint every instrument shows, word for word. */
+export const TIME_PRINT_HINT = "A faint asemic print of this minute at the back, with the time along one edge. Decorative; it proves nothing.";
+
 export interface Minute {
   /** `2026-11-24T15:52+01:00`, what writeSheet is seeded with. */
   seed: string;

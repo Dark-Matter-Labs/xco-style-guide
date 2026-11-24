@@ -1,6 +1,8 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
+import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
+import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
 import { paletteHex } from "@/lib/design-tokens";
@@ -56,6 +58,8 @@ export interface PaperCoverProps {
   date:        string;
   visual:      CoverVisual;
   className?:  string;
+  /** The time print's minute and words, from the generator; null or absent when it is off. */
+  timePrint?:  TimePrintProp | null;
 }
 
 function wrap(text: string, maxChars: number): string[] {
@@ -200,10 +204,14 @@ function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h
 
 export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
   function PaperCoverDiagram(
-    { paperNumber, title, subtitle, authors, date, visual, className },
+    { paperNumber, title, subtitle, authors, date, visual, className, timePrint },
     ref,
   ) {
     const PAD = 56;
+    const print = useMemo(
+      () => (timePrint ? makeTimePrint({ ...timePrint, width: COVER_W, height: COVER_H, ink: INK, ground: PAPER }) : null),
+      [timePrint],
+    );
     const titleLines = wrap(title, 28);
     const subtitleLines = subtitle ? wrap(subtitle, 34) : [];
 
@@ -235,6 +243,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Background */}
         <rect width={COVER_W} height={COVER_H} fill={PAPER} />
+        {print && <TimePrintMarks print={print} />}
 
         {/* Abstract gradient visual */}
         {visual === "abstract" && (
@@ -332,6 +341,8 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
           letterSpacing="1">
           Dark Matter Labs
         </text>
+
+        {print && <TimePrintSlug print={print} width={COVER_W} height={COVER_H} margin={PAD} bottom={PAD} size={slugSize(9, PAD)} />}
       </svg>
     );
   },
