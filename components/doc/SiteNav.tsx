@@ -41,7 +41,7 @@ export function SiteNav({ links, register }: SiteNavProps) {
                 href={href}
                 data-active={active}
                 aria-current={active ? "page" : undefined}
-                className="doc-navlink font-mono font-medium text-[11px] leading-none uppercase text-xco-ink-muted hover:text-xco-ink"
+                className="doc-navlink font-mono text-[11px] leading-none uppercase text-xco-ink-muted hover:text-xco-ink"
                 style={{ letterSpacing: "0.08em" }}
               >
                 {label}

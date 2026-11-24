@@ -9,7 +9,7 @@ import { identityScales } from "@/lib/design-tokens";
 // survives without colour or strikethrough. `compact` is the in-place form:
 // it renders nothing once the change is settled.
 
-const MONO = "font-mono font-medium text-[0.75rem] leading-[1.5]";
+const MONO = "font-mono text-[0.75rem] leading-[1.5]";
 const HL_TEXT = identityScales.matter[900];
 
 export function ProvisionalChange({ change, compact = false }: { change: ChangeRecord; compact?: boolean }) {

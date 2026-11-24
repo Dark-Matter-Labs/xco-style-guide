@@ -3,7 +3,7 @@ import { diagram } from "@/lib/design-tokens";
 import { DiagramsDemo } from "./DiagramsDemo";
 
 const { structural, texture } = diagram.lineWeights;
-const LINE_WEIGHTS = `Two line weights: ${structural}px structural · ${texture}px texture`;
+const LINE_WEIGHTS =`Two line weights: ${structural}px structural · ${texture}px texture`;
 
 const DIAGRAM_TYPES = [
   {
@@ -47,7 +47,7 @@ const DIAGRAM_RULES = [
   "Label only what can be read — if the space is too small, omit or use Annotation",
 ];
 
-const LABEL = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink";
 
 export default function DiagramsPage() {
   return (
@@ -113,7 +113,7 @@ export default function DiagramsPage() {
         <ul className="space-y-3 max-w-2xl">
           {DIAGRAM_RULES.map((rule, i) => (
             <li key={i} className="flex items-baseline gap-4">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink shrink-0">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink shrink-0">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="font-body text-[24px] text-xco-ink leading-[26px]">{rule}</span>

@@ -7,10 +7,10 @@ import { PAPER_HEX, swatchLabel } from "./swatch";
 // route identities. Each keeps its own labelled key — 8.1 is explicit that
 // route colours, highlight roles and domains are separate mappings.
 
-const LABEL = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.4]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.75rem] leading-[1.4]";
 
 const HIGHLIGHT_TEXT = identityScales.matter[900];
 

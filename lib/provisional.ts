@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-13",
+    title: "One weight: Untitled at 400",
+    target: "Typography / weights",
+    href: "/typography",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-24",
+    why: "Only Untitled Sans 400 ships, but the tokens listed a 500 and every label asked for it. The browser could not show it, so the system described a weight it did not have.",
+    previous: "Untitled Sans 400 and 500 (medium); labels set in medium.",
+    proposed: "Untitled at 400 only. Hierarchy comes from size, case and tracking, never weight.",
+    decision: "Adopted by Gurden, 24 Nov 2026 (D18).",
+  },
+  {
     id: "CH-12",
     title: "PNG exports set in Untitled, not DM Mono",
     target: "Typography / the PNG export",

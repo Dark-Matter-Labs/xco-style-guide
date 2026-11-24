@@ -47,7 +47,7 @@ export default function ColourPage() {
 
       {/* Surfaces */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Surfaces
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -62,18 +62,18 @@ export default function ColourPage() {
                 className="h-32 flex flex-col justify-end p-4"
                 style={{ backgroundColor: token.hex, border: "1px solid var(--border-default)" }}
               >
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
+                <p className="font-mono text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {token.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
+                <p className="font-mono text-[0.9375rem] leading-[1.6]" style={{ color: labelColor }}>
                   {hexToRgb(token.hex)}
                 </p>
               </div>
               <div className="pt-3 space-y-1">
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   paper-{name}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {token.cssVar}
                 </p>
                 <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -88,7 +88,7 @@ export default function ColourPage() {
 
       {/* Ink */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Ink
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
@@ -120,18 +120,18 @@ export default function ColourPage() {
                 className="h-32 flex flex-col justify-end p-4"
                 style={{ backgroundColor: item.hex }}
               >
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
+                <p className="font-mono text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
                   {item.hex}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
+                <p className="font-mono text-[0.9375rem] leading-[1.6]" style={swatchLabel(item.hex)}>
                   {item.contrast} on paper
                 </p>
               </div>
               <div className="pt-3 space-y-1">
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {item.name}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {item.cssVar}
                 </p>
                 <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -145,7 +145,7 @@ export default function ColourPage() {
 
       {/* Semantic meanings */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Semantic Meanings
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
@@ -177,13 +177,13 @@ export default function ColourPage() {
                   </span>
                   <div>
                     <p
-                      className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
+                      className="font-mono text-[0.9375rem] leading-[1.6]"
                       style={swatchLabel(m.hex)}
                     >
                       {m.hex}
                     </p>
                     <p
-                      className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
+                      className="font-mono text-[0.9375rem] leading-[1.6]"
                       style={swatchLabel(m.hex)}
                     >
                       {m.shapeLabel} · {m.stop}
@@ -191,10 +191,10 @@ export default function ColourPage() {
                   </div>
                 </div>
                 <div className="pt-4 space-y-1">
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink capitalize">
+                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink capitalize">
                     {m.name}
                   </p>
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                     {m.cssVar}
                   </p>
                   <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -207,7 +207,7 @@ export default function ColourPage() {
         </div>
 
         <div className="mt-8 max-w-2xl">
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             [rule] Always pair colour with its shape. A legend should list both the colour
             swatch and the shape symbol. Never ask the viewer to distinguish meanings by
             colour alone.
@@ -217,7 +217,7 @@ export default function ColourPage() {
 
       {/* Diagram palette */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Diagram Palette
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
@@ -226,7 +226,7 @@ export default function ColourPage() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           <div>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
               Cool — Blueprint
             </p>
             <div className="grid grid-cols-3 gap-4">
@@ -237,16 +237,16 @@ export default function ColourPage() {
                     style={{ backgroundColor: colors[key].hex }}
                   >
                     <p
-                      className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                      className="font-mono text-[0.75rem] leading-[1.4]"
                       style={swatchLabel(colors[key].hex)}
                     >
                       {colors[key].hex}
                     </p>
                   </div>
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
+                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
                     {key}
                   </p>
-                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                  <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                     {colors[key].cssVar}
                   </p>
                 </div>
@@ -254,7 +254,7 @@ export default function ColourPage() {
             </div>
           </div>
           <div>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
               Warm — Signal
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -265,16 +265,16 @@ export default function ColourPage() {
                     style={{ backgroundColor: colors[key].hex }}
                   >
                     <p
-                      className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                      className="font-mono text-[0.75rem] leading-[1.4]"
                       style={swatchLabel(colors[key].hex)}
                     >
                       {colors[key].hex}
                     </p>
                   </div>
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
+                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
                     {key}
                   </p>
-                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                  <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                     {colors[key].cssVar}
                   </p>
                 </div>
@@ -294,7 +294,7 @@ export default function ColourPage() {
 
       {/* Inverse register / dark mode */}
       <section className="max-w-2xl pb-8">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Inverse Register
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
@@ -312,7 +312,7 @@ export default function ColourPage() {
           className="p-6 space-y-2"
           style={{ backgroundColor: INVERSE_PAPER, color: INVERSE_INK }}
         >
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6]">
+          <p className="font-mono text-[0.9375rem] leading-[1.6]">
             paper: {INVERSE_PAPER} — ink: {INVERSE_INK}
           </p>
           <p className="font-body text-[24px] leading-[26px]">

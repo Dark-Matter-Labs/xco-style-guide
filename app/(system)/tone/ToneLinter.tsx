@@ -324,15 +324,15 @@ export function ToneLinter() {
           <button
             onClick={analyse}
             disabled={!text.trim()}
-            className="font-mono font-medium text-[0.9375rem] leading-[1.6] border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="font-mono text-[0.9375rem] leading-[1.6] border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Analyse ↵
           </button>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">or ⌘↵ / Ctrl↵</p>
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">or ⌘↵ / Ctrl↵</p>
           {text && (
             <button
               onClick={() => { setText(""); setResult(null); }}
-              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors ml-auto"
+              className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors ml-auto"
             >
               clear
             </button>
@@ -346,7 +346,7 @@ export function ToneLinter() {
             result.spellingMatches.length > 0 ||
             result.casingMatches.length > 0) && (
             <div className="space-y-3">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Text with flags
               </p>
               <div className="font-body text-[24px] text-xco-ink leading-[26px] p-4 whitespace-pre-wrap">
@@ -362,19 +362,19 @@ export function ToneLinter() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="space-y-3">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Banned words
               </p>
               {result.bannedMatches.length === 0 ? (
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ No banned words found
                 </p>
               ) : (
                 <ul className="space-y-1">
                   {result.bannedMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-3">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">✗</span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{m.word}</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">✗</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{m.word}</span>
                     </li>
                   ))}
                 </ul>
@@ -382,20 +382,20 @@ export function ToneLinter() {
             </div>
 
             <div className="space-y-3">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Spelling
               </p>
               {result.spellingMatches.length === 0 ? (
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ US English throughout
                 </p>
               ) : (
                 <ul className="space-y-1">
                   {result.spellingMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-2 flex-wrap">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean-ink">✗ {m.british}</span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">✓ {m.american}</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ocean-ink">✗ {m.british}</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">✓ {m.american}</span>
                     </li>
                   ))}
                 </ul>
@@ -403,22 +403,22 @@ export function ToneLinter() {
             </div>
 
             <div className="space-y-3">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Brand casing
               </p>
               {result.casingMatches.length === 0 ? (
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ {BRAND_NAME} cased correctly
                 </p>
               ) : (
                 <ul className="space-y-1">
                   {result.casingMatches.map((m, i) => (
                     <li key={i} className="flex items-baseline gap-2 flex-wrap">
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-teal-ink">
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-teal-ink">
                         ✗ {m.found}
                       </span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
-                      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">→</span>
+                      <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                         ✓ {BRAND_NAME}
                       </span>
                     </li>
@@ -428,19 +428,19 @@ export function ToneLinter() {
             </div>
 
             <div className="space-y-3">
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Register detected
               </p>
               {result.register ? (
                 <div className="space-y-2">
-                  <p className={`font-mono font-medium text-[0.9375rem] leading-[1.6] ${confidenceColour[result.confidence]}`}>
+                  <p className={`font-mono text-[0.9375rem] leading-[1.6] ${confidenceColour[result.confidence]}`}>
                     {result.register}{" "}
                     <span className="opacity-80">({result.confidence} confidence)</span>
                   </p>
                   {result.signals.length > 0 && (
                     <ul className="space-y-0.5">
                       {result.signals.map((s, i) => (
-                        <li key={i} className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                        <li key={i} className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                           — {s}
                         </li>
                       ))}
@@ -448,7 +448,7 @@ export function ToneLinter() {
                   )}
                 </div>
               ) : (
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   — register unclear. Pick A, B, or C deliberately.
                 </p>
               )}
@@ -466,7 +466,7 @@ export function ToneLinter() {
 // Brevity, as places to look rather than errors: a long sentence or a repeat
 // can be deliberate. Cut words, not complexity.
 function RedPencil({ report }: { report: BrevityReport }) {
-  const mono = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
+  const mono = "font-mono text-[0.9375rem] leading-[1.6]";
   const nothing = !report.repeats.length && !report.wordy.length;
   return (
     <div className="space-y-3 pt-2" style={{ borderTop: "1px solid var(--border-default)" }}>

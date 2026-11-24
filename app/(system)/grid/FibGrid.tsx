@@ -125,24 +125,24 @@ export function FibGrid() {
         <button
           onClick={() => setDepth((d) => Math.min(d + 1, MAX_DEPTH))}
           disabled={depth >= MAX_DEPTH || auto}
-          className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors disabled:opacity-30"
+          className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors disabled:opacity-30"
         >
           Subdivide →
         </button>
         <button
           onClick={() => { setDepth(1); setAuto(false); }}
-          className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors"
+          className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors"
         >
           Reset
         </button>
         <button
           onClick={() => setAuto((a) => !a)}
           disabled={depth >= MAX_DEPTH}
-          className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors disabled:opacity-30"
+          className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors disabled:opacity-30"
         >
           {auto ? "Pause" : "Auto"}
         </button>
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
           {depth} / {MAX_DEPTH}
         </span>
       </div>

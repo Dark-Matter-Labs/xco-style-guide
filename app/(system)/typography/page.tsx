@@ -27,7 +27,7 @@ export default function TypographyPage() {
 
       {/* Caveat */}
       <section className="max-w-2xl">
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
           <span className="text-xco-dusk-ink">[note]</span> Untitled Serif and Untitled Sans are
           licensed typefaces from Klim Type Foundry, served from{" "}
           <span className="text-xco-dusk-ink">public/fonts/</span>. If they fail to load, the serif falls back to
@@ -40,7 +40,7 @@ export default function TypographyPage() {
 
       {/* Four scales */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Scale
         </h2>
         <div className="space-y-0">
@@ -49,7 +49,7 @@ export default function TypographyPage() {
               key={step.name}
               className="grid grid-cols-[160px_1fr] gap-8 items-start py-8"
             >
-              <div className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink space-y-0.5 pt-1 shrink-0">
+              <div className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink space-y-0.5 pt-1 shrink-0">
                 <p className="text-xco-dusk-ink">{step.label}</p>
                 <p>{step.size}</p>
                 <p>/{step.lineHeight} lh</p>
@@ -79,13 +79,13 @@ export default function TypographyPage() {
 
       {/* Faces */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Typefaces
         </h2>
         <div className="space-y-8">
           {Object.entries(typography.faces).map(([key, face]) => (
             <div key={key} className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
-              <div className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+              <div className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                 <p>{key}</p>
                 <p className="text-xco-dusk-ink">{(face.weights as readonly string[]).join(" / ")}</p>
               </div>
@@ -93,7 +93,7 @@ export default function TypographyPage() {
                 <p className={`${faceClass[key]} text-[24px] leading-[26px] text-xco-ink`}>
                   {face.family}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {face.usage}
                 </p>
               </div>
@@ -104,12 +104,12 @@ export default function TypographyPage() {
 
       {/* Italic specimens */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Italic — Quoted Pull-Text Only
         </h2>
         <div className="space-y-8">
           <div className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
               Untitled Serif<br />400i
             </p>
             <p className="font-display italic text-[60px] leading-[60px] text-xco-ink">
@@ -122,7 +122,7 @@ export default function TypographyPage() {
 
       {/* Weight rule */}
       <section className="max-w-2xl pb-8">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Weight Rule
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">

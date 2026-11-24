@@ -1,8 +1,8 @@
 import { WIP } from "@/components/WIP";
 
-const H2 = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8";
+const H2 = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const SMALL = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.9375rem] leading-[1.6]";
 
 // The tells, from "The vibecoded slop checklist" (credited to @theadnaankhan), shared by Gurden on 3 November 2026.
 // "Instead" and `inXco` are this guide's reading. `inXco` says where xCO chooses a pattern on purpose.

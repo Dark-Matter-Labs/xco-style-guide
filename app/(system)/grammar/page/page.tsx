@@ -126,10 +126,10 @@ export default function PageGrammarPage() {
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Layer</th>
-                <th className="py-2 pr-4 font-medium">Starting treatment</th>
-                <th className="py-2 pr-4 font-medium">Purpose</th>
-                <th className="py-2 font-medium">Constraint</th>
+                <th className="py-2 pr-4">Layer</th>
+                <th className="py-2 pr-4">Starting treatment</th>
+                <th className="py-2 pr-4">Purpose</th>
+                <th className="py-2">Constraint</th>
               </tr>
             </thead>
             <tbody>

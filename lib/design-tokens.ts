@@ -255,7 +255,7 @@ export const typography = {
       stack: '"Untitled Sans", system-ui, Arial, sans-serif',
       cssVar: "--font-ui",
       twClass: "font-ui",
-      weights: ["400 (regular)", "500 (medium)"],
+      weights: ["400 (regular)"],
       usage: "Alias for body. Navigation, labels, structural scaffolding.",
     },
     mono: {
@@ -327,7 +327,7 @@ export const typography = {
       lineHeight: "1.6",
       measure: "70ch",
       face: "mono" as const,
-      tailwind: "font-mono font-medium text-[0.9375rem] leading-[1.6]",
+      tailwind: "font-mono text-[0.9375rem] leading-[1.6]",
     },
   ],
 } as const;

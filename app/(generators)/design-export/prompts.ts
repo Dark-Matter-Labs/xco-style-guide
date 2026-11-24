@@ -77,7 +77,7 @@ Body measure (max-width): 68ch for body text. Reduce for captions and labels.
 - **Borders**: always ink at 0.12 opacity, 1px. Never decorative; always structural.
 - **Never** use pure black (\`#000\`) or pure white (\`#FFF\`) — use \`ink\` (${colors.ink.hex}) and \`paper\` (${colors.paper.hex}) tokens.
 - **Diagrams** use exactly two line weights: \`${diagram.lineWeights.structural}px\` structural, \`${diagram.lineWeights.texture}px\` texture.
-- **No bold** on UI / Untitled Sans face. Use weight 400 or 500 only.
+- **One weight.** Untitled Sans and Untitled Serif ship at 400 only: no medium, no bold. Set hierarchy with size, case and tracking.
 - Dark mode is a paper ↔ ink swap — all other colours remain fixed.
 
 ## House rules (non-negotiable)

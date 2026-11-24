@@ -18,7 +18,7 @@ export function LicenceBadge({ licence, className = "" }: LicenceBadgeProps) {
   const s = STYLES[licence];
   return (
     <span
-      className={`inline-block px-2 py-0.5 font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-widest ${className}`}
+      className={`inline-block px-2 py-0.5 font-mono text-[0.75rem] leading-[1.4] uppercase tracking-widest ${className}`}
       style={{
         border: `${s.border} var(--xco-ink)`,
         background: s.filled ? "var(--xco-ink)" : "transparent",

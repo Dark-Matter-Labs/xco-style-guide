@@ -26,7 +26,7 @@ export default function TonePage() {
 
       {/* How the voice is set */}
       <section className="max-w-2xl space-y-4" style={{ borderTop: "1.5px solid var(--xco-ink)" }}>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase pt-6">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase pt-6">
           Setting the voice
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -46,7 +46,7 @@ export default function TonePage() {
 
       {/* House rules — non-negotiable, hold across every register */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           House Rules
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
@@ -67,15 +67,15 @@ export default function TonePage() {
               <p className="font-body text-[24px] text-xco-ink leading-[26px]">{r.rule}</p>
 
               <div className="space-y-1">
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   ✓ {r.correct}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
                   ✗ {r.incorrect}
                 </p>
               </div>
 
-              <p className="font-mono font-medium text-[0.75rem] leading-[1.5] text-xco-ink-muted">
+              <p className="font-mono text-[0.75rem] leading-[1.5] text-xco-ink-muted">
                 {r.why}
               </p>
             </div>
@@ -85,18 +85,18 @@ export default function TonePage() {
 
       {/* Three registers */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Three Registers
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {toneRegisters.map((reg) => (
             <div key={reg.id} className="space-y-6">
               <div>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-1">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-1">
                   {reg.id}
                 </p>
                 <h3 className="doc-h2 text-xco-ink">{reg.label}</h3>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {reg.usage}
                 </p>
               </div>
@@ -105,7 +105,7 @@ export default function TonePage() {
                 <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                   {reg.rule}
                 </p>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
                   {reg.ruleDetail}
                 </p>
               </div>
@@ -114,13 +114,13 @@ export default function TonePage() {
                 {reg.examples.map((ex, i) => (
                   <div key={i} className="space-y-2">
                     <div className="space-y-1">
-                      <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">✓ this</p>
+                      <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">✓ this</p>
                       <p className="font-body text-[24px] text-xco-ink leading-[26px]">
                         {ex.good}
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+                      <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                         ✗ not that
                       </p>
                       <p className="font-body text-[24px] text-xco-ink-muted line-through leading-[26px]">
@@ -137,20 +137,20 @@ export default function TonePage() {
 
       {/* Banned words */}
       <section className="max-w-3xl">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
           Banned Words — All Registers
         </h2>
         <div className="flex flex-wrap gap-2 mb-4">
           {[...bannedWords].map((w) => (
             <span
               key={w}
-              className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink px-2 py-1"
+              className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink px-2 py-1"
             >
               {w.trim()}
             </span>
           ))}
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
           These words signal either vagueness (transformative, unprecedented),
           category error (ecosystem as metaphor, regenerative as adjective),
           or corporate register (unlock, leverage, empower). None of them
@@ -160,7 +160,7 @@ export default function TonePage() {
 
       {/* Spelling — US English */}
       <section className="max-w-3xl">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
           Spelling — US English for Outward Copy
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8">
@@ -174,10 +174,10 @@ export default function TonePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-2">
           {[...spellingCorrections].map(({ british, american }) => (
             <div key={british} className="flex items-baseline gap-2">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ocean-ink line-through">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ocean-ink line-through">
                 {british}
               </span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                 → {american}
               </span>
             </div>
@@ -187,7 +187,7 @@ export default function TonePage() {
 
       {/* Prompt templates */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
           Prompt Templates
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">
@@ -212,7 +212,7 @@ export default function TonePage() {
 
       {/* Linter */}
       <section className="pb-12">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
           Linter
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-xl">

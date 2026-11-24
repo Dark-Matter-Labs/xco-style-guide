@@ -95,7 +95,7 @@ export function LogoDownloads() {
   };
 
   const btn =
-    "font-mono font-medium text-[0.9375rem] leading-[1.6] border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed";
+    "font-mono text-[0.9375rem] leading-[1.6] border border-xco-ink px-4 py-2 text-xco-ink hover:bg-xco-ink hover:text-xco-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed";
 
   return (
     <div className="space-y-8">
@@ -118,7 +118,7 @@ export function LogoDownloads() {
       {/* Controls */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <fieldset className="space-y-3">
-          <legend className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
+          <legend className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
             Variant
           </legend>
           {logoVariants.map((v) => (
@@ -131,10 +131,10 @@ export function LogoDownloads() {
                 className="mt-1.5 accent-xco-ink"
               />
               <span className="space-y-0.5">
-                <span className="block font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <span className="block font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {v.label}
                 </span>
-                <span className="block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                <span className="block font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                   {v.usage}
                 </span>
               </span>
@@ -143,7 +143,7 @@ export function LogoDownloads() {
         </fieldset>
 
         <fieldset className="space-y-3">
-          <legend className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
+          <legend className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
             Options
           </legend>
           {LOCKUPS.map((l) => (
@@ -156,10 +156,10 @@ export function LogoDownloads() {
                 className="mt-1.5 accent-xco-ink"
               />
               <span className="space-y-0.5">
-                <span className="block font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <span className="block font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {l.label}
                 </span>
-                <span className="block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                <span className="block font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                   {l.note}
                 </span>
               </span>
@@ -173,10 +173,10 @@ export function LogoDownloads() {
               className="mt-1.5 accent-xco-ink"
             />
             <span className="space-y-0.5">
-              <span className="block font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+              <span className="block font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                 Painted background
               </span>
-              <span className="block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <span className="block font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 Off by default — logo files should ship transparent.
               </span>
             </span>
@@ -186,7 +186,7 @@ export function LogoDownloads() {
 
       {/* Downloads */}
       <div className="space-y-4 pt-2">
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
+        <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
           Download
         </p>
         <div className="flex flex-wrap gap-3">
@@ -208,11 +208,11 @@ export function LogoDownloads() {
           </button>
         </div>
         {error && (
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
             {error}
           </p>
         )}
-        <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted max-w-2xl">
+        <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted max-w-2xl">
           SVG is the master. The letterforms are geometry, so the file renders identically
           with no fonts installed. PNG is rasterised server-side at the size you pick — use
           it only where SVG is not accepted.
@@ -221,7 +221,7 @@ export function LogoDownloads() {
 
       {/* Source */}
       <details className="pt-2">
-        <summary className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink cursor-pointer hover:text-xco-dusk-ink transition-colors">
+        <summary className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink cursor-pointer hover:text-xco-dusk-ink transition-colors">
           View SVG source
         </summary>
         <pre

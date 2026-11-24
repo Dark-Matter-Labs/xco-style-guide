@@ -28,7 +28,7 @@ export function EvidenceCapsule({
         background: "var(--xco-paper-raised)",
       }}
     >
-      <p className="font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-widest text-xco-ink-muted">
+      <p className="font-mono text-[0.75rem] leading-[1.4] uppercase tracking-widest text-xco-ink-muted">
         {id} / {fn} / {span}
       </p>
 
@@ -47,7 +47,7 @@ export function EvidenceCapsule({
         {disclosure.map((d) => (
           <span
             key={d}
-            className="font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-wider text-xco-ink-muted"
+            className="font-mono text-[0.75rem] leading-[1.4] uppercase tracking-wider text-xco-ink-muted"
           >
             {d}
           </span>

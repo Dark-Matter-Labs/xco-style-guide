@@ -1,8 +1,8 @@
 import { formatRatio } from "@/lib/a11y/contrast";
 import { measurePairings, type PairingResult } from "@/lib/a11y/gate";
 
-const CELL = "font-mono font-medium text-[0.75rem] leading-[1.4] py-2 pr-4 align-top";
-const HEAD = `${CELL} text-xco-ink-muted uppercase tracking-widest text-left font-medium`;
+const CELL = "font-mono text-[0.75rem] leading-[1.4] py-2 pr-4 align-top";
+const HEAD =`${CELL} text-xco-ink-muted uppercase tracking-widest text-left`;
 
 function Ratio({ r }: { r?: PairingResult }) {
   if (!r) return <span className="text-xco-ink-muted">—</span>;
@@ -39,7 +39,7 @@ export function PairingTable() {
             const p = (paper ?? ink)!.pairing;
             return (
               <tr key={id} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-                <th scope="row" className={`${CELL} text-xco-ink text-left font-medium`}>{id}</th>
+                <th scope="row" className={`${CELL} text-xco-ink text-left`}>{id}</th>
                 <td className={`${CELL} text-xco-ink-muted`}>{p.where}</td>
                 <td className={`${CELL} text-xco-ink-muted whitespace-nowrap`}>
                   {p.use} · {(paper ?? ink)!.min}:1

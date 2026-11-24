@@ -16,7 +16,7 @@ export function Stat({ value, label, domain, className = "" }: StatProps) {
       >
         {value}
       </p>
-      <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+      <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
         {label}
       </p>
     </div>

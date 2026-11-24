@@ -14,10 +14,10 @@ import {
 } from "@/lib/polyphonic";
 
 const LABEL =
-  "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+  "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.4]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.75rem] leading-[1.4]";
 
 const pages = [
   { href: "/grammar/generative", label: "Generative relations", detail: "Differentiate, reciprocate, hold open, sustain — and situated voices." },
@@ -81,10 +81,10 @@ export default function GrammarPage() {
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Grammar</th>
-                <th className="py-2 pr-4 font-medium">Unit</th>
-                <th className="py-2 pr-4 font-medium">What it adds</th>
-                <th className="py-2 font-medium">Worked in</th>
+                <th className="py-2 pr-4">Grammar</th>
+                <th className="py-2 pr-4">Unit</th>
+                <th className="py-2 pr-4">What it adds</th>
+                <th className="py-2">Worked in</th>
               </tr>
             </thead>
             <tbody>
