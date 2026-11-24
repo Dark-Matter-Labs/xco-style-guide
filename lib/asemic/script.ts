@@ -51,8 +51,10 @@ export const DENSITY = {
 } as const;
 
 // Built with the constructor: this repo's TypeScript target does not allow the u flag in literals.
-const TOKEN = new RegExp("[\\p{L}’'\\-]+|[.,:;]", "gu");
-const LETTER = new RegExp("\\p{L}", "u");
+// Letters keep their combining marks (Gurmukhi, Devanagari, a decomposed ë); digits count as letters,
+// and a version keeps its point (v0.2).
+const TOKEN = new RegExp("[\\p{L}\\p{M}\\p{N}’'\\-]+(?:\\.\\p{N}+)*|[.,:;]", "gu");
+const LETTER = new RegExp("\\p{L}|\\p{N}", "u");
 const letters = (t: string) => Array.from(t).filter((c) => LETTER.test(c)).length;
 
 function rng(seed: number) {
@@ -134,18 +136,20 @@ export function writeSheet(text: string, o: SheetOptions): Sheet {
       }
     };
 
-    // Beads first: an x opens the thread, so the thread is drawn around it.
+    // Beads are placed first (an x opens the thread, so the thread is drawn around it)
+    // but painted last, so the thread and hatching never cross an O, C or box.
     const gaps: [number, number][] = [];
+    const beadMarks: Mark[] = [];
     const beads = 1 + Math.floor(r() * 3);
     for (let b = 0; b < beads; b++) {
       const bx = Math.min(x0 + width - U * 1.4, Math.max(x0 + U * 1.4, x0 + (0.15 + r() * 0.7) * width));
       const kind = r();
-      if (kind < 0.3) marks.push({ kind: "box", x: bx, y, w: U * 2.4, h: U * 1.4, ...base });
-      else if (kind < 0.58) marks.push({ kind: "ring", x: bx, y, r: U * 0.8, open: false, ...base });
-      else if (kind < 0.84) marks.push({ kind: "ring", x: bx, y, r: U * 0.8, open: true, ...base });
-      else if (kind < 0.93) marks.push({ kind: "square", x: bx, y, size: U * 1.4, ...base });
+      if (kind < 0.3) beadMarks.push({ kind: "box", x: bx, y, w: U * 2.4, h: U * 1.4, ...base });
+      else if (kind < 0.58) beadMarks.push({ kind: "ring", x: bx, y, r: U * 0.8, open: false, ...base });
+      else if (kind < 0.84) beadMarks.push({ kind: "ring", x: bx, y, r: U * 0.8, open: true, ...base });
+      else if (kind < 0.93) beadMarks.push({ kind: "square", x: bx, y, size: U * 1.4, ...base });
       else {
-        marks.push({ kind: "x", x: bx, y, k: U * 0.7, ...base });
+        beadMarks.push({ kind: "x", x: bx, y, k: U * 0.7, ...base });
         gaps.push([bx - U * 0.8, bx + U * 0.8]);
       }
     }
@@ -172,6 +176,7 @@ export function writeSheet(text: string, o: SheetOptions): Sheet {
         else for (const s of [-1, 1]) marks.push({ kind: "dash", x: cx - U * 0.8, y: y + s * k * S, w: U * 1.6, ...base });
       }
     }
+    marks.push(...beadMarks);
     return width;
   };
 

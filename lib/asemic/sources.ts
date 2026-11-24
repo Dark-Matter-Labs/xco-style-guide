@@ -19,7 +19,7 @@ export const SOURCES = [
       "Optionality can be measured as the number of viable pathways a place keeps open, not the value of any single one.",
       "Long-horizon capital behaves differently when the governance around it can be revised.",
       "Institutions can hold an option without committing to exercise it, and without being blamed for not doing so.",
-      "Optionality can be priced like any other asset. Withdrawn: the pilots showed its value depends on who holds the right to change course.",
+      "Optionality can be priced like any other asset. Withdrawn in v0.2: the pilots showed its value depends on who holds the right to change course.",
     ].join("\n"),
   },
   {

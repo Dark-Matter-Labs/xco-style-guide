@@ -59,7 +59,7 @@ export function AsemicGenerator() {
     }),
     [text, format, rows, seed, density],
   );
-  const description = `Asemic writing grown from ${sourceLabel}, seed ${seed}, ${rows} rows. Generated and expressive; it encodes no data.`;
+  const description = `Asemic writing grown from ${sourceLabel}, seed ${seed}, ${rows} rows. It has no readable text. Generated and expressive; it encodes no data.`;
   const svg = useMemo(() => toSvg(sheet, register, description, format.physical), [sheet, register, description, format]);
   const name = `xco-asemic-${source}-${seed}-${formatId}-${register}`;
 
@@ -119,12 +119,15 @@ export function AsemicGenerator() {
             <span className={`${labelClass} uppercase tracking-wider`}>Rows — {rows}</span>
             <input type="range" min={8} max={30} step={1} value={rows} onChange={(e) => setRows(Number(e.target.value))} className="w-full accent-xco-dusk" />
           </label>
-          <RadioList
-            name="density"
-            value={density}
-            options={[{ id: "sparse", label: "Sparse" }, { id: "normal", label: "Normal" }, { id: "dense", label: "Dense" }]}
-            onChange={setDensity}
-          />
+          <fieldset className="pt-2 space-y-1">
+            <legend className={`${labelClass} uppercase tracking-wider`}>Density</legend>
+            <RadioList
+              name="density"
+              value={density}
+              options={[{ id: "sparse", label: "Sparse" }, { id: "normal", label: "Normal" }, { id: "dense", label: "Dense" }]}
+              onChange={setDensity}
+            />
+          </fieldset>
         </Section>
 
         <Section title="Look">
@@ -149,7 +152,8 @@ export function AsemicGenerator() {
             <Button onClick={exportSvg} disabled={!hasWords || busy}>↓ SVG — for print and pen plotters</Button>
             <Button onClick={exportPng} disabled={!hasWords || busy}>{busy ? "exporting…" : `↓ PNG — ${format.w} × ${format.h}`}</Button>
             <p role="status" aria-live="polite" className={`${labelClass} ${message ? "text-xco-dusk-ink" : "text-xco-ink-muted"}`}>
-              {message ?? ""}
+              {/* The one live region: export errors, or why the exports are off. */}
+              {message ?? (hasWords ? "" : "Add some text to write.")}
             </p>
           </div>
         </Section>

@@ -16,7 +16,14 @@ const T = SOURCES[0].text;
 // ── Tokens ───────────────────────────────────────────────────────────
 assert.deepEqual(tokenize("We, the field.\nNext"), ["We", ",", "the", "field", ".", "¶", "Next", "¶"]);
 assert.deepEqual(tokenize("Søren and Zoë"), ["Søren", "and", "Zoë", "¶"], "accented names are words");
+// Names with combining marks stay whole (Gurmukhi, Devanagari, a decomposed Zoë).
+assert.deepEqual(tokenize("ਗੁਰਦੇਨ"), ["ਗੁਰਦੇਨ", "¶"], "Gurmukhi name is one word");
+assert.deepEqual(tokenize("हिन्दी"), ["हिन्दी", "¶"], "Devanagari word is one word");
+assert.deepEqual(tokenize("Zoe\u0308"), ["Zoe\u0308", "¶"], "a decomposed diaeresis stays on its letter");
+// Digits are part of words, and a version keeps its point.
+assert.deepEqual(tokenize("CH-10, v0.2 in 2026."), ["CH-10", ",", "v0.2", "in", "2026", ".", "¶"], "numbers and versions survive");
 eq(SOURCES.length, 3);
+assert.ok(SOURCES.find((s) => s.id === "propositions")!.text.includes("Withdrawn in v0.2: the pilots showed its value depends on who holds the right to change course."), "the withdrawn claim matches /x-demo");
 
 // ── The same input always writes the same sheet ─────────────────────
 eq(toSvg(writeSheet(T, O), "paper", "x"), toSvg(writeSheet(T, O), "paper", "x"));
@@ -63,7 +70,7 @@ for (const src of SOURCES) allInside(writeSheet(src.text, O), src.id);
   const text = "We, the field.\nNext";
   const toks = tokenize(text), s = writeSheet(text, O);
   const tokOf = (m: Mark) => toks[m.token % toks.length];
-  const L = new RegExp("\\p{L}", "u"); // constructor: the repo's TS target rejects the u flag in literals
+  const L = new RegExp("\\p{L}|\\p{N}", "u"); // constructor: the repo's TS target rejects the u flag in literals
   const letters = (t: string) => Array.from(t).filter((c) => L.test(c)).length;
   for (const m of s.marks) if (m.kind === "thread" && !m.dotted) assert.ok(letters(tokOf(m)) > 3, `a solid thread belongs to a long word, not "${tokOf(m)}"`);
   assert.ok(s.marks.some((m) => m.kind === "thread" && !m.dotted && tokOf(m) === "field"), "a word over 3 letters becomes a cluster");
@@ -79,6 +86,22 @@ for (const src of SOURCES) allInside(writeSheet(src.text, O), src.id);
     const through = s.marks.some((m) => m.kind === "thread" && !m.dotted && m.row === x.row && m.x1 < x.x && x.x < m.x2);
     assert.ok(!through, "no solid thread runs under an x");
   }
+}
+
+// ── Beads sit on top: drawn after their cluster's thread and dashes, so the O, C and box stay clean ──
+{
+  const s = writeSheet(T, O);
+  const byToken = new Map<number, number[]>();
+  s.marks.forEach((m, i) => byToken.set(m.token, [...(byToken.get(m.token) ?? []), i]));
+  let beadsSeen = 0;
+  for (const idx of Array.from(byToken.values())) {
+    const lines = idx.filter((i) => s.marks[i].kind === "thread" || s.marks[i].kind === "dash");
+    const beads = idx.filter((i) => ["box", "ring", "x"].includes(s.marks[i].kind));
+    if (!lines.length || !beads.length) continue;
+    beadsSeen += beads.length;
+    assert.ok(Math.min(...beads) > Math.max(...lines), "every bead is drawn after its cluster's thread and dashes");
+  }
+  assert.ok(beadsSeen > 20, "the sheet has beads to check");
 }
 
 // ── Only the x carries dusk; the ink register paints its own ground ──
