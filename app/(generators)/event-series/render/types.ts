@@ -1,3 +1,4 @@
+import type { TimePrintProp } from "@/lib/asemic/time-print";
 import type { CardFormat } from "@/lib/event-series/formats";
 import type { EventContent } from "@/lib/event-series/programme";
 
@@ -17,6 +18,8 @@ export interface CardSpec {
   uppercase: boolean;
   /** Varies the generative field, so each evening can have its own. */
   seed: number;
+  /** The time print's minute and words, from the generator; null or absent when it is off. */
+  timePrint?: TimePrintProp | null;
 }
 
 /** Resolved CSS font-family strings, ready for ctx.font. */

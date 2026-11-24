@@ -270,6 +270,59 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   }
   absent("option field mark", renderToStaticMarkup(h(OptionFieldDiagram, { ...ofProps, format: "mark", colorMode: "ink", timePrint: prop })));
 
+  // ── Task 5: event series (canvas) ───────────────────────────────────
+  {
+    const { SLUG, SLUG_EM, fitSize, slugPlacement } = await import("@/app/(generators)/event-series/render/time-print");
+    // Like drawDetails, the slug shrinks to fit its run rather than overrun it.
+    eq(fitSize(20, 500, 600), 20, "a slug that fits keeps its size");
+    eq(fitSize(20, 600, 500), 20 * (500 / 600), "a slug that doesn't fit shrinks to its run");
+    const { palettes } = await import("@/app/(generators)/event-series/render/palettes");
+    const { cardFormats } = await import("@/lib/event-series/formats");
+    const longest = "time print · identity note · 2026-11-24 15:52 +05:30";
+    for (const f of cardFormats) {
+      const { w: W, h: H } = f;
+      const S = Math.min(W, H), u = S / 1000, m = 64 * u, tall = H > W * 1.4;
+      const safeTop = tall ? H * 0.09 : 0, safeBottom = tall ? H * 0.11 : 0;
+      const size = slugSize(22 * u, m);
+      for (const template of ["window", "corner", "globe"] as const) {
+        const what = `event series ${template} ${f.id}`;
+        const nominal = longest.length * size * SLUG_EM;
+        const pl = slugPlacement(template, W, H, m, safeTop, safeBottom, size, nominal);
+        const fitted = fitSize(size, nominal, pl.room);
+        assert.ok(fitted >= size * 0.85, `${what}: the longest stamp needs at most a 15% shrink (${nominal.toFixed(0)} into ${pl.room.toFixed(0)} px)`);
+        const length = nominal * (fitted / size);
+        eq(pl.side, SLUG[template].side, `${what}: on the side the template leaves clear`);
+        if (pl.side === "left") assert.ok(pl.x < m, `${what}: in the left margin`);
+        else assert.ok(pl.x > W - m && pl.x < W, `${what}: in the right margin`);
+        // The run, wherever it is anchored, stays inside the story safe bands.
+        const [a, b] = pl.from === "bottom" ? [pl.y - length, pl.y] : [pl.y, pl.y + length];
+        assert.ok(a >= safeTop && b <= H - safeBottom, `${what}: inside the safe bands (${a.toFixed(0)}–${b.toFixed(0)})`);
+        if (pl.from === "bottom" && !tall) eq(pl.y, H - m, `${what}: starts at the bottom padding`);
+      }
+    }
+    eq(SLUG.corner.from, "top", "the corner's band crosses the right edge low down, so its slug hangs from the top");
+    eq(palettes.dusk.onGround, INK, "on dusk the print is ink, as the palette's own text");
+    eq(palettes.paper.onGround, INK);
+    eq(palettes.ink.onGround, PAPER);
+
+    // One minute, from the generator; the exporters only read the spec (Review Focus 1).
+    const gen = readFileSync("app/(generators)/event-series/EventSeriesGenerator.tsx", "utf8");
+    eq((gen.match(/useMinute\(\)/g) || []).length, 1, "the generator reads the minute once");
+    assert.ok(/timePrint/.test(gen), "the generator puts the time print in the spec");
+    const exp = readFileSync("app/(generators)/event-series/render/export.ts", "utf8");
+    assert.ok(!exp.includes("useMinute") && !exp.includes("minuteOf"), "PNG and video take the minute the spec holds");
+
+    // The canvas label says so.
+    const { CardPreview } = await import("@/app/(generators)/event-series/CardPreview");
+    const { programme } = await import("@/lib/event-series/programme");
+    const spec = { template: "window" as const, palette: "dusk" as const, imagery: "globe" as const, format: cardFormats[0], content: programme[0].content, titleFace: "xco" as const, uppercase: false, seed: 1 };
+    const assets = { fonts: { serif: "serif", sans: "sans", label: "sans", instrument: "serif" }, photo: null };
+    const on = renderToStaticMarkup(h(CardPreview, { spec: { ...spec, timePrint: prop }, assets, playing: false, stillPhase: 0 }));
+    assert.ok(on.includes("Time print, 2026-11-24 15:52 +01:00."), "the canvas label ends with the time print");
+    const off = renderToStaticMarkup(h(CardPreview, { spec: { ...spec, timePrint: null }, assets, playing: false, stillPhase: 0 }));
+    assert.ok(!off.includes("Time print"), "no time print, no sentence");
+  }
+
   // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
   for (const f of [
     "app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx",

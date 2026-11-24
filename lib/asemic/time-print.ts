@@ -57,6 +57,9 @@ export function minuteOf(d: Date, offsetMinutes: number = -d.getTimezoneOffset()
 
 export const msToNextMinute = (nowMs: number) => 60000 - (nowMs % 60000);
 
+/** The sentence an artwork's accessible label ends with. */
+export const labelOf = (minute: Minute) => `Time print, ${minute.stamp}.`;
+
 // Constructor: this repo's TypeScript target does not allow the u flag in literals.
 const LETTER = new RegExp("\\p{L}", "u");
 const IDENTITY = SOURCES.find((s) => s.id === "identity")!.text;
@@ -75,7 +78,7 @@ export function makeTimePrint(i: TimePrintInput): TimePrint {
     sheet,
     body: marksBody(sheet, i.ink, i.ground),
     stamp: `time print · ${own ? "" : "identity note · "}${i.minute.stamp}`,
-    label: `Time print, ${i.minute.stamp}.`,
+    label: labelOf(i.minute),
     source: own ? "artwork" : "identity",
     ink: i.ink,
     ground: i.ground,

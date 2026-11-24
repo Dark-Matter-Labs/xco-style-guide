@@ -13,6 +13,8 @@ import { altText } from "./render/blocks";
 import { CopyButton } from "@/components/CopyButton";
 import type { CardSpec, ImageryId, PaletteId, TemplateId, TitleFace } from "./render/types";
 import { useCardAssets } from "./useCardAssets";
+import { useMinute } from "@/components/xco/TimePrint";
+import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 
 // Each template opens in the palette it was designed in; any can be switched.
 const DEFAULT_PALETTE: Record<TemplateId, PaletteId> = { window: "dusk", corner: "paper", globe: "ink" };
@@ -53,9 +55,15 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
   }, []);
 
   const format = formatById(formatId);
+  const [timePrintOn, setTimePrintOn] = useState(true);
+  // One minute for the preview and every export; PNG and video take the spec as it was when clicked,
+  // so a recording keeps the minute it started with.
+  const minute = useMinute();
+  const words = [content.kicker, content.title, content.subtitle, content.location].join(" ");
+  const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
   const spec: CardSpec = useMemo(
-    () => ({ template, palette, imagery, format, content, titleFace, uppercase, seed }),
-    [template, palette, imagery, format, content, titleFace, uppercase, seed],
+    () => ({ template, palette, imagery, format, content, titleFace, uppercase, seed, timePrint }),
+    [template, palette, imagery, format, content, titleFace, uppercase, seed, timePrint],
   );
   // Read after mount: the server cannot know what this browser can record.
   const [video, setVideo] = useState<ReturnType<typeof videoSupport>>(null);
@@ -183,6 +191,13 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
         </Section>
 
         <Section title="Export">
+          <label className="flex items-start gap-2 cursor-pointer pb-1">
+            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
+            <span>
+              <span className={`${labelClass} block`}>Time print</span>
+              <span className={`${labelClass} block text-xco-ink-muted`}>{TIME_PRINT_HINT}</span>
+            </span>
+          </label>
           <div className="space-y-2">
             <Button onClick={exportPNG} disabled={!assets || busy !== null}>
               {busy === "png" ? "exporting…" : `↓ PNG — ${format.w} × ${format.h}`}

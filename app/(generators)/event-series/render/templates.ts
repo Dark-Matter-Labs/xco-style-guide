@@ -3,6 +3,7 @@ import { drawImagery } from "./imagery";
 import { lockupWidth } from "./lockup";
 import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
+import { drawTimePrint, drawTimePrintSlug } from "./time-print";
 import type { Assets, CardSpec, TemplateId } from "./types";
 
 type Ctx = CanvasRenderingContext2D;
@@ -44,6 +45,7 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
 
   ctx.fillStyle = p.ground;
   ctx.fillRect(0, 0, W, H);
+  drawTimePrint(ctx, spec);
   drawField(ctx, { x: 0, y: 0, w: W, h: H }, {
     pitch: 11 * u, color: p.field, alpha: p.fieldAlpha, seed: spec.seed, phase,
   });
@@ -99,6 +101,7 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
 
   ctx.fillStyle = p.ground;
   ctx.fillRect(0, 0, W, H);
+  drawTimePrint(ctx, spec);
   drawField(ctx, { x: 0, y: 0, w: W, h: H }, {
     pitch: 11 * u, color: p.field, alpha: p.fieldAlpha * 0.7, seed: spec.seed, phase, intensity: 0.85,
   });
@@ -160,6 +163,7 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
 
   ctx.fillStyle = p.ground;
   ctx.fillRect(0, 0, W, H);
+  drawTimePrint(ctx, spec);
   drawField(ctx, { x: 0, y: 0, w: W, h: H }, {
     pitch: 11 * u, color: p.field, alpha: p.fieldAlpha * 0.35, seed: spec.seed, phase, intensity: 0.7,
   });
@@ -212,5 +216,6 @@ export function drawCard(ctx: Ctx, spec: CardSpec, phase: number, assets: Assets
   ctx.save();
   ctx.clearRect(0, 0, spec.format.w, spec.format.h);
   templates[spec.template](ctx, spec, phase, assets);
+  drawTimePrintSlug(ctx, spec, assets.fonts, metrics(spec));
   ctx.restore();
 }
