@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-10",
+    title: "The logotype's parts may be used as marks in the asemic script",
+    target: "Logo / Misuse",
+    href: "/asemic",
+    status: "proposed",
+    proposedBy: "Gurden",
+    date: "2026-11-24",
+    why: "The asemic script gives xCO's language personality and character. Its beads are the logotype's O and C, and the x in dusk opens the thread.",
+    previous: "Don't reflow it. Never re-space, stack, or reorder the glyphs.",
+    proposed: "The O, the C with its 100° aperture, and the x may appear as marks in the asemic script on /asemic. The logotype itself does not change.",
+    decision: "Waiting for a named adopter.",
+  },
+  {
     id: "CH-09",
     title: "The x may rest as Dino in d.INO; the logo may sit faint as a watermark",
     target: "Logo / x as operator",

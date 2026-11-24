@@ -505,8 +505,9 @@ export default function LogoPage() {
           ))}
         </ul>
 
-        <div className="max-w-3xl">
+        <div className="max-w-3xl space-y-4">
           <ProvisionalChange change={changeLog.find((c) => c.id === "CH-08")!} compact />
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-10")!} compact />
         </div>
       </section>
     </div>

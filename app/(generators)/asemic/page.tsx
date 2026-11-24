@@ -1,4 +1,6 @@
 import { WIP } from "@/components/WIP";
+import { ProvisionalChange } from "@/components/xco";
+import { changeLog } from "@/lib/provisional";
 import { AsemicGenerator } from "./AsemicGenerator";
 
 export default function AsemicPage() {
@@ -17,6 +19,9 @@ export default function AsemicPage() {
         </div>
         <WIP variant="version" />
       </header>
+      <div className="max-w-3xl">
+        <ProvisionalChange change={changeLog.find((c) => c.id === "CH-10")!} />
+      </div>
       <AsemicGenerator />
     </div>
   );
