@@ -409,11 +409,6 @@ export const motionTokens = {
   ease: { value: "cubic-bezier(0.25,0,0.1,1)", cssVar: "--ease", usage: "Default easing — weighted deceleration." },
 } as const;
 
-// ── Tone registers ───────────────────────────────────────────────────
-
-export const toneRegisters = ["method", "hunch", "annotation"] as const;
-export type ToneRegister = (typeof toneRegisters)[number];
-
 // ── Banned words (linter) ────────────────────────────────────────────
 
 export const bannedWords = [
@@ -553,7 +548,6 @@ export const tokens = {
   spacingScale,
   motionTokens,
   diagram,
-  toneRegisters,
   bannedWords,
   spellingCorrections,
   houseRules,

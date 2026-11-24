@@ -90,15 +90,6 @@ export const pairings: Pairing[] = [
   { id: "field-border", fg: "--xco-ink", bg: "--xco-paper", use: "non-text", where: "Input and select borders (1.4.11)" },
   { id: "focus-ring", fg: "--focus-ring", bg: "--xco-paper", use: "non-text", where: "The focus outline on every surface (2.4.7, 2.4.11)" },
   { id: "focus-ring/raised", fg: "--focus-ring", bg: "--xco-paper-raised", use: "non-text", where: "Focus on cards" },
-
-  // shadcn primitives, remapped to the palette
-  { id: "shadcn-foreground", fg: "--foreground", bg: "--background", use: "text", where: "shadcn body" },
-  { id: "shadcn-card", fg: "--card-foreground", bg: "--card", use: "text", where: "shadcn card" },
-  { id: "shadcn-popover", fg: "--popover-foreground", bg: "--popover", use: "text", where: "shadcn popover" },
-  { id: "shadcn-primary", fg: "--primary-foreground", bg: "--primary", use: "text", where: "shadcn primary button" },
-  { id: "shadcn-secondary", fg: "--secondary-foreground", bg: "--secondary", use: "text", where: "shadcn secondary button" },
-  { id: "shadcn-muted", fg: "--muted-foreground", bg: "--muted", use: "text", where: "shadcn muted text" },
-  { id: "shadcn-accent", fg: "--accent-foreground", bg: "--accent", use: "text", where: "shadcn accent" },
 ];
 
 /**

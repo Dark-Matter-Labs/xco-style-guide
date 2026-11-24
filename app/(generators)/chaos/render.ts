@@ -1,5 +1,4 @@
 import { identityScales } from "@/lib/design-tokens";
-import { contrastRatio } from "@/lib/a11y/contrast";
 import type { ChaosResult } from "@/lib/chaos/systems";
 
 // Drawing a chaos field — to canvas for preview, PNG and video, and to SVG
@@ -32,13 +31,6 @@ export const chaosPalettes: ChaosPalette[] = [
 ];
 
 export const paletteOf = (id: ChaosPaletteId) => chaosPalettes.find((p) => p.id === id) ?? chaosPalettes[0];
-
-/** Every palette's ink and trace must clear 3:1 on its ground. */
-export const paletteContrast = chaosPalettes.map((p) => ({
-  id: p.id,
-  ink: contrastRatio(p.ink, p.ground),
-  signal: contrastRatio(p.signal, p.ground),
-}));
 
 export interface ChaosLook {
   palette: ChaosPaletteId;

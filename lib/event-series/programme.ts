@@ -11,7 +11,6 @@
 // public page, and the optional low-fidelity formats, which are not yet
 // events.
 
-export const SERIES_NAME = "xCO at Medulla";
 export const VENUE = "Medulla, Dresdener Str. 113B, Berlin";
 
 export interface EventContent {

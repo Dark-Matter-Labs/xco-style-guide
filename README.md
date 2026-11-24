@@ -26,7 +26,6 @@ Live: **https://xco-style-guide.vercel.app**
 | Generator | Path | Status |
 |-----------|------|--------|
 | Three Regimes | `/three-regimes` | ✓ live |
-| Portfolio Diagram | `/portfolio-diagram` | [phase 2] |
 | Social Card | `/social-card` | [phase 2] |
 
 ### Token system
@@ -92,7 +91,7 @@ These are unresolved. They need team input, not unilateral decisions.
 
 **3. Relationship to `dm-civ` and `eco` repos.** The style guide is a standalone app at a separate Vercel URL. The team's working repos are elsewhere. Decision needed: does this become the canonical design system that those repos import from (npm package or submodule), or do they stay disconnected and the team manually syncs tokens?
 
-**4. Decisions log visibility.** The `/decisions` route is stubbed for Phase 2. But the question is whether it's public-facing (reading-as-method, brand-as-learning) or team-only. Affects whether it needs auth and what it can say.
+**4. Decisions log visibility.** Decisions are recorded as change records on `/changes`. The question is whether it's public-facing (reading-as-method, brand-as-learning) or team-only. Affects whether it needs auth and what it can say.
 
 **5. The WIP threshold.** At what point does a page or token graduate out of `[v0.1]`? Without a defined threshold, everything stays marked provisional forever and the marker loses meaning. Proposed: a page ships without WIP when it has been used to produce one real asset that the team has published.
 
@@ -106,9 +105,6 @@ These are unresolved. They need team input, not unilateral decisions.
 
 After the team has used Phase 1 for at least one real publication (Robyn's substack), Phase 2 should address:
 
-**Portfolio diagram generator** (`/portfolio-diagram`)
-The scale-shift diagram — macro → bioregional → urban → neighbourhood. Madrid as the worked example. Requires `ScaleRule` and multi-node layouts already in the primitive library. The generator needs a way to add/remove nodes and connect them with labelled edges.
-
 **Image treatment generator** (`/image-treatment`)
 Martin's evolving-resolution primitive: an image that resolves from low-resolution dot-matrix toward a sharp icon. Used as substack hero placeholders and post covers. Implements "evolutionary style" — the asset evolves into clarity. Not started; no dependencies yet identified.
 
@@ -117,9 +113,6 @@ Cover images for xCO papers and briefings. Needs: paper number, title, date, opt
 
 **Social card generator** (`/social-card`)
 Stubbed. LinkedIn and Substack thumbnail format. Likely re-uses the Three Regimes layout with a different template.
-
-**Decisions log** (`/decisions`)
-Supabase-backed. Records: what changed, when, who decided, why. Considers: singular accountability → one field for the decision-holder per entry, visible to the team. Visibility question still open (see above).
 
 **Claude-mediated text draft generation** (`/api/generate`)
 An API route that takes a brief and a register (A/B/C), sends it to Claude with the appropriate prompt template from `lib/tone-templates.ts`, and returns a draft. Requires Anthropic API key in Vercel env. No hallucinated facts — the caller must supply the factual grounding.
@@ -131,7 +124,6 @@ An API route that takes a brief and a register (A/B/C), sends it to Claude with 
 ```
 Next.js 14          App Router, TypeScript
 Tailwind v4         CSS-native @theme, no tailwind.config
-shadcn/ui           Base UI variant
 Vercel              Deployment target (gurdens-projects/xco-style-guide)
 ```
 

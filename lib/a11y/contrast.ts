@@ -65,10 +65,6 @@ export function composite(fg: RGBA, backdrop: RGBA): RGBA {
   };
 }
 
-export function toHex({ r, g, b }: RGBA): string {
-  return `#${[r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")}`;
-}
-
 // ── Luminance and ratio ──────────────────────────────────────────────
 
 function channel(v: number): number {
@@ -98,10 +94,6 @@ export function contrastRatio(fg: string, bg: string, backdrop = "#ffffff"): num
 /** "4.56:1" — rounded down, so a displayed ratio never overstates a pass. */
 export function formatRatio(ratio: number): string {
   return `${(Math.floor(ratio * 100) / 100).toFixed(2)}:1`;
-}
-
-export function passes(ratio: number, use: ContrastUse): boolean {
-  return ratio >= minimumFor[use];
 }
 
 /** Of two candidates, the one that reads better on `bg` — for labels on swatches. */

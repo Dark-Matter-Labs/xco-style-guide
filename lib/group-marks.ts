@@ -32,7 +32,6 @@ import { contrastRatio } from "./a11y/contrast";
 // 45° steps. Half-steps are deliberately not used: at the ~48px an avatar is
 // listed at, a 22.5° difference is not readable.
 
-export const APERTURE_STEP = 45;
 export const aperturePositions = [0, 45, 90, 135, 180, 225, 270, 315] as const;
 export type Aperture = (typeof aperturePositions)[number];
 
@@ -223,7 +222,7 @@ export const groupMarks: GroupMark[] = [
 export { relLuminance, contrastRatio } from "./a11y/contrast";
 
 /** Shortest angle between two apertures, 0–180. */
-export function apertureDistance(a: number, b: number): number {
+function apertureDistance(a: number, b: number): number {
   const d = Math.abs(a - b) % 360;
   return d > 180 ? 360 - d : d;
 }
