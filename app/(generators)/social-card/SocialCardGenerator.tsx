@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
+import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { SocialCardDiagram } from "./SocialCardDiagram";
 import type { CardFormat, CardLayout, DiagramType } from "./SocialCardDiagram";
 
@@ -71,6 +73,12 @@ export function SocialCardGenerator() {
   const [diagramType, setDiagramType] = useState<DiagramType>("three-regimes");
   const [format, setFormat]         = useState<CardFormat>("card");
   const [exporting, setExporting]   = useState<string | null>(null);
+  const [timePrintOn, setTimePrintOn] = useState(true);
+  // One minute for the preview and both hidden export copies, so the export matches what's shown.
+  const minute = useMinute();
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([tag, headline, byline].join(" "));
+  const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
   const cardRef   = useRef<SVGSVGElement>(null);
   const squareRef = useRef<SVGSVGElement>(null);
@@ -78,7 +86,7 @@ export function SocialCardGenerator() {
   const activeRef = format === "card" ? cardRef : squareRef;
   const activeFormat = FORMATS.find((f) => f.id === format)!;
 
-  const props = { headline, tag, byline, layout, diagramType };
+  const props = { headline, tag, byline, layout, diagramType, timePrint };
 
   const handle = async (type: string) => {
     setExporting(type);
@@ -159,6 +167,13 @@ export function SocialCardGenerator() {
 
         <div className="space-y-2 pt-4">
           <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
+          <label className="flex items-start gap-2 cursor-pointer pb-2">
+            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
+            <span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
+            </span>
+          </label>
           {[
             { id: "svg", label: `SVG — ${activeFormat.size}` },
             { id: "png", label: `PNG — ${activeFormat.size}` },

@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
+import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { PaperCoverDiagram, COVER_W, COVER_H } from "./PaperCoverDiagram";
 import type { CoverVisual } from "./PaperCoverDiagram";
 
@@ -66,10 +68,16 @@ export function PaperCoverGenerator() {
   const [date,        setDate]        = useState("May 2026");
   const [visual,      setVisual]      = useState<CoverVisual>("abstract");
   const [exporting,   setExporting]   = useState<string | null>(null);
+  const [timePrintOn, setTimePrintOn] = useState(true);
+  // One minute for the preview and the hidden export copy, so the export matches what's shown.
+  const minute = useMinute();
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([paperNumber, title, subtitle, authors].join(" "));
+  const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
   const coverRef = useRef<SVGSVGElement>(null);
 
-  const props = { paperNumber, title, subtitle, authors, date, visual };
+  const props = { paperNumber, title, subtitle, authors, date, visual, timePrint };
 
   const handle = async (type: string) => {
     setExporting(type);
@@ -123,6 +131,13 @@ export function PaperCoverGenerator() {
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-2">
             A4 portrait — {COVER_W}×{COVER_H} (SVG) · {COVER_W*2}×{COVER_H*2} (PNG 2×)
           </p>
+          <label className="flex items-start gap-2 cursor-pointer pb-2">
+            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
+            <span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
+            </span>
+          </label>
           {[
             { id: "svg", label: `SVG — A4 ${COVER_W}×${COVER_H}` },
             { id: "png", label: `PNG — 2× print ${COVER_W*2}×${COVER_H*2}` },

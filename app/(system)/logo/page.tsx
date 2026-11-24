@@ -242,8 +242,8 @@ export default function LogoPage() {
         </div>
       </section>
 
-      {/* Watermark (CH-09) */}
-      <section className="space-y-8">
+      {/* Watermark (CH-09; the time print is CH-11) */}
+      <section id="watermark" className="space-y-8">
         <div className="space-y-2">
           <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Watermark
@@ -260,6 +260,9 @@ export default function LogoPage() {
           <div className="absolute pointer-events-none" style={{ right: -40, bottom: -30, opacity: 0.07 }} aria-hidden="true">
             <Logo height={170} />
           </div>
+        </div>
+        <div className="max-w-3xl">
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-11")!} compact />
         </div>
       </section>
 

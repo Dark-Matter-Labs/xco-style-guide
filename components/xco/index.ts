@@ -11,6 +11,7 @@ export { Kicker } from "./Kicker";
 export { Logo } from "./Logo";
 export { GroupMark, groundHex } from "./GroupMark";
 export { XOperator, useReducedMotion } from "./XOperator";
+export { TimePrintMarks, TimePrintSlug, useMinute } from "./TimePrint";
 
 // ── Polyphonic grammar primitives ────────────────────────────────────
 export { LicenceBadge } from "./LicenceBadge";

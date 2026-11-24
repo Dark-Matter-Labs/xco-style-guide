@@ -231,6 +231,13 @@ const f = (n: number) => +n.toFixed(2);
 export function toSvg(sheet: Sheet, register: Register, label: string, physical?: { w: string; h: string }): string {
   const fg = register === "ink" ? PAPER : INK;
   const bg = register === "ink" ? INK : PAPER;
+  const body = marksBody(sheet, fg, bg);
+  const w = sheet.width, h = sheet.height, l = esc(label);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${physical?.w ?? w}" height="${physical?.h ?? h}" role="img" aria-label="${l}"><title>${l}</title><rect width="${w}" height="${h}" fill="${bg}"/><g fill="none" stroke-linecap="butt">${body}</g></svg>`;
+}
+
+/** The marks alone, in fg; beads knock out the thread with bg. */
+function marksBody(sheet: Sheet, fg: string, bg: string): string {
   const U = sheet.unit;
   let body = "";
   for (const m of sheet.marks) {
@@ -262,6 +269,5 @@ export function toSvg(sheet: Sheet, register: Register, label: string, physical?
       }
     }
   }
-  const w = sheet.width, h = sheet.height, l = esc(label);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${physical?.w ?? w}" height="${physical?.h ?? h}" role="img" aria-label="${l}"><title>${l}</title><rect width="${w}" height="${h}" fill="${bg}"/><g fill="none" stroke-linecap="butt">${body}</g></svg>`;
+  return body;
 }

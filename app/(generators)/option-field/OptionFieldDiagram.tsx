@@ -1,6 +1,8 @@
 "use client";
 
 import { forwardRef, useMemo } from "react";
+import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
+import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
 import { paletteHex } from "@/lib/design-tokens";
 
 const { paper: PAPER, ink: INK, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK } = paletteHex;
@@ -16,7 +18,12 @@ export interface OptionFieldProps {
   fortressStr: number;   // 0–1  concentrated / constrained zone
   volatility:  number;   // 0–1  spatial variation
   resolution:  number;   // 0–100 → scanline spacing
+  /** The time print's minute, from the generator; null or absent when it is off. Never on the mark. */
+  timePrint?:  TimePrintProp | null;
 }
+
+// The clear strip right of the scanlines: they stop at x ≈ 1136 of 1200.
+const SLUG_MARGIN = 64;
 
 const DIMS: Record<FieldFormat, { vw: number; vh: number }> = {
   hero:   { vw: 1200, vh: 630  },
@@ -123,6 +130,12 @@ export const OptionFieldDiagram = forwardRef<SVGSVGElement, OptionFieldProps>(
     const { format, colorMode } = props;
     const { vw, vh } = DIMS[format];
     const bg = colorMode === "inverted" ? INK : colorMode === "blueprint" ? NAVY : PAPER;
+    const tp = format === "mark" ? null : props.timePrint;
+    // The field has no words of its own, so the print always grows from the identity note.
+    const print = useMemo(
+      () => (tp ? makeTimePrint({ minute: tp.minute, words: "", width: vw, height: vh, ink: bg === PAPER ? INK : PAPER, ground: bg }) : null),
+      [tp, vw, vh, bg],
+    );
 
     const segs = useMemo(
       () => compute(props),
@@ -134,6 +147,7 @@ export const OptionFieldDiagram = forwardRef<SVGSVGElement, OptionFieldProps>(
     return (
       <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
         <rect width={vw} height={vh} fill={bg} />
+        {print && <TimePrintMarks print={print} />}
         {segs.map((s, i) => (
           <rect
             key={i}
@@ -144,6 +158,7 @@ export const OptionFieldDiagram = forwardRef<SVGSVGElement, OptionFieldProps>(
             fill={s.color}
           />
         ))}
+        {print && <TimePrintSlug print={print} width={vw} height={vh} margin={SLUG_MARGIN} bottom={SLUG_MARGIN} size={slugSize(13, SLUG_MARGIN)} />}
       </svg>
     );
   },

@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
+import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme, StructuralVariant } from "./ThreeRegimesDiagram";
 import { AbstractThreeRegimesDiagram } from "./AbstractThreeRegimesDiagram";
 import type { DiagramLabels } from "./ThreeRegimesDiagram";
@@ -125,6 +127,12 @@ export function ThreeRegimesGenerator() {
   const [colorScheme, setColorScheme] = useState<DiagramColorScheme>("standard");
   const [structuralVariant, setStructuralVariant] = useState<StructuralVariant>("classic");
   const [exporting, setExporting] = useState<string | null>(null);
+  const [timePrintOn, setTimePrintOn] = useState(true);
+  // One minute for the preview and all six hidden export copies, so the export matches what's shown.
+  const minute = useMinute();
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([labels.frontier, labels.fortress, labels.field, labels.fieldSublabel, statement, caption].join(" "));
+  const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
   // Structural mode refs
   const heroRef   = useRef<SVGSVGElement>(null);
@@ -148,6 +156,7 @@ export function ThreeRegimesGenerator() {
     amplitude: 0,
     colorScheme,
     structuralVariant,
+    timePrint,
   };
 
   const handleExport = async (type: string) => {
@@ -349,6 +358,18 @@ export function ThreeRegimesGenerator() {
           <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">
             Export
           </h2>
+          <label className="flex items-start gap-3 cursor-pointer pb-2">
+            <input
+              type="checkbox"
+              checked={timePrintOn}
+              onChange={(e) => setTimePrintOn(e.target.checked)}
+              className="accent-xco-dusk w-4 h-4 mt-1 shrink-0"
+            />
+            <span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
+            </span>
+          </label>
           {[
             { id: "svg-hero",   label: "SVG  — 1200×630 hero" },
             { id: "png-hero",   label: "PNG  — 1200×630 hero" },

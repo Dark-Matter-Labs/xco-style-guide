@@ -1,7 +1,9 @@
 "use client";
 
-import { forwardRef } from "react";
-import type { ThreeRegimesDiagramProps } from "./ThreeRegimesDiagram";
+import { forwardRef, useMemo } from "react";
+import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
+import { hungSlugSize, makeTimePrint, slugSize } from "@/lib/asemic/time-print";
+import { slugMargin, type ThreeRegimesDiagramProps } from "./ThreeRegimesDiagram";
 import { paletteHex } from "@/lib/design-tokens";
 
 const DIMS = {
@@ -14,8 +16,16 @@ const DIMS = {
 export const AbstractThreeRegimesDiagram = forwardRef<
   SVGSVGElement,
   ThreeRegimesDiagramProps
->(function AbstractThreeRegimesDiagram({ format }, ref) {
+>(function AbstractThreeRegimesDiagram({ format, timePrint }, ref) {
   const { vw, vh } = DIMS[format];
+  const minute = format === "mark" ? null : timePrint?.minute;
+  // The sweep has no words of its own, so the print always grows from the identity note,
+  // and it regrows only when the minute turns, not as the labels are typed.
+  const print = useMemo(
+    () => (minute ? makeTimePrint({ minute, words: "", width: vw, height: vh, ink: paletteHex.paper, ground: null }) : null),
+    [minute, vw, vh],
+  );
+  const margin = slugMargin("classic", format);
 
   return (
     <svg ref={ref} viewBox={`0 0 ${vw} ${vh}`} xmlns="http://www.w3.org/2000/svg">
@@ -30,6 +40,9 @@ export const AbstractThreeRegimesDiagram = forwardRef<
         </linearGradient>
       </defs>
       <rect width={vw} height={vh} fill="url(#abs-sweep)" />
+      {print && <TimePrintMarks print={print} />}
+      {/* The sweep is navy at the top and dusk at the bottom: the slug hangs from the top and ends before the teal (55% down). */}
+      {print && <TimePrintSlug print={print} width={vw} height={vh} margin={margin} bottom={margin} top={margin / 2} size={hungSlugSize(slugSize(13, margin), print.stamp, margin / 2, vh * 0.55)} />}
     </svg>
   );
 });
