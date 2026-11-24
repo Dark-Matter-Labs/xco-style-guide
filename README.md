@@ -23,10 +23,25 @@ Live: **https://xco-style-guide.vercel.app**
 
 ### Asset generators (`/generators`)
 
-| Generator | Path | Status |
-|-----------|------|--------|
-| Three Regimes | `/three-regimes` | ✓ live |
-| Social Card | `/social-card` | [phase 2] |
+The list the nav and the home page share is `lib/instruments.ts`.
+
+| Instrument | Path |
+|------------|------|
+| Three Regimes | `/three-regimes` |
+| Option Field | `/option-field` |
+| Territory | `/territory` |
+| Social Card | `/social-card` |
+| Paper Cover | `/paper-cover` |
+| Event Series | `/event-series` |
+| Growth | `/growth` |
+| Chaos | `/chaos` |
+| Asemic | `/asemic` |
+| Notion | `/notion` |
+| Image Treatment | `/image-treatment` (halftone and tritone sources) |
+| Text Highlight | `/text-highlight` |
+| Token Export | `/design-export` |
+
+Align folded into Image Treatment as its Tritone source; `/align` redirects there (`next.config.mjs`).
 
 ### Token system
 
@@ -104,9 +119,6 @@ These are unresolved. They need team input, not unilateral decisions.
 ## Phase 2 — what comes next
 
 After the team has used Phase 1 for at least one real publication (Robyn's substack), Phase 2 should address:
-
-**Image treatment generator** (`/image-treatment`)
-Martin's evolving-resolution primitive: an image that resolves from low-resolution dot-matrix toward a sharp icon. Used as substack hero placeholders and post covers. Implements "evolutionary style" — the asset evolves into clarity. Not started; no dependencies yet identified.
 
 **Paper cover generator** (`/paper-cover`)
 Cover images for xCO papers and briefings. Needs: paper number, title, date, optional subtitle. Output: A4 portrait PDF-ready SVG + web-optimised PNG.

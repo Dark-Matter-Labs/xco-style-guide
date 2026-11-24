@@ -13,7 +13,6 @@ export const instruments = [
   { href: "/asemic",          label: "Asemic" },
   { href: "/notion",          label: "Notion" },
   { href: "/image-treatment", label: "Image Treatment" },
-  { href: "/align",           label: "Align" },
   { href: "/text-highlight",  label: "Text Highlight" },
   { href: "/design-export",   label: "Token Export" },
 ] as const;

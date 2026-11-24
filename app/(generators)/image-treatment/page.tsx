@@ -8,7 +8,7 @@ export default function ImageTreatmentPage() {
         <div>
           <h1 className="font-display text-[60px] leading-[60px]">Image Treatment</h1>
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
-            Dot-matrix → sharp · evolutionary resolution · Substack placeholders
+            Dot-matrix → sharp · evolutionary resolution · Substack placeholders · tritone for outside images
           </p>
         </div>
         <WIP variant="version" />
