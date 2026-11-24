@@ -71,6 +71,7 @@ export const changeLog: ChangeRecord[] = [
     previous: "Don't reflow it. Never re-space, stack, or reorder the glyphs.",
     proposed: "The O, the C with its 100° aperture, and the x may appear as marks in the asemic script on /asemic. The logotype itself does not change.",
     decision: "Waiting for a named adopter.",
+    respond: PR(54),
   },
   {
     id: "CH-09",
