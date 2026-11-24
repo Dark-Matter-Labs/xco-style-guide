@@ -2,9 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
-
-const GOOGLE_FONTS_URL =
-  "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap";
+import { woff2ToSfnt } from "./woff2";
 
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;
@@ -24,32 +22,14 @@ function ensureWasm(): Promise<void> {
   return wasmReady;
 }
 
+// The licensed Untitled faces, read from the site's own web fonts and decoded
+// to TrueType once: resvg reads TTF, not WOFF2. next.config traces the files in.
+const FONT_FILES = ["UntitledSansRegular", "UntitledSansItalic", "UntitledSerifRegular", "UntitledSerifItalic"];
+
 async function loadFonts(): Promise<Uint8Array[]> {
   if (cachedFonts) return cachedFonts;
-
-  // Old Android 2.2 UA → Google Fonts returns TTF (magic 00010000).
-  const cssRes = await fetch(GOOGLE_FONTS_URL, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-    },
-  });
-  if (!cssRes.ok) throw new Error(`Google Fonts CSS fetch failed: ${cssRes.status}`);
-  const css = await cssRes.text();
-
-  const urls = Array.from(
-    css.matchAll(/url\((https?:\/\/fonts\.gstatic\.com\/[^)]+)\)/g),
-  ).map((m) => m[1]);
-
-  const results = await Promise.all(
-    urls.map(async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      return new Uint8Array(await res.arrayBuffer());
-    }),
-  );
-
-  cachedFonts = results.filter(Boolean) as Uint8Array[];
+  const files = await Promise.all(FONT_FILES.map((f) => readFile(path.join(process.cwd(), "public/fonts", `${f}.woff2`))));
+  cachedFonts = files.map((b) => woff2ToSfnt(new Uint8Array(b)));
   return cachedFonts;
 }
 
@@ -84,7 +64,9 @@ export async function POST(req: NextRequest) {
     const resvg = new Resvg(svgWithSize, {
       font: {
         fontBuffers: fonts,
-        defaultFontFamily: "DM Mono",
+        defaultFontFamily: "Untitled Sans",
+        // Only the faces above: a missing glyph shows as missing, not in a stand-in face.
+        loadSystemFonts: false,
       },
       fitTo: { mode: "width", value: width },
     });

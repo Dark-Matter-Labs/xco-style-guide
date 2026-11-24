@@ -222,9 +222,8 @@ export default function LogoPage() {
             to span the mark flush on both edges. Dark Matter Labs&apos; logo is DM&apos;s own
             master artwork, drawn as paths: never retype it, and keep its clear space of one
             stamp height. An SVG lockup opened on a machine without Untitled Sans will
-            substitute those lines; the glyphs themselves are unaffected. Until the PNG exporter
-            can load Untitled Sans, PNG lockups still set these two lines in DM Mono, the one
-            face it has. For third parties, send the plain SVG, or the PNG once that is fixed.
+            substitute those lines; the glyphs themselves are unaffected. PNG lockups carry
+            Untitled Sans in the image itself, so for third parties without the font, send the PNG.
           </p>
         </div>
       </section>

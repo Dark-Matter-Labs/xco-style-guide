@@ -49,7 +49,7 @@ All design decisions live in two files that must be kept in sync:
 
 Six colour tokens: `xco-paper`, `xco-ink`, `xco-ink-muted`, `xco-ember`, `xco-cool`, `xco-flag`. If you think you need a seventh, you probably need an opacity stop.
 
-Two licensed typefaces from Klim: Untitled Serif (display) and Untitled Sans (body, interface, labels and annotations). Crimson Pro and the system sans are fallbacks only. Since 3 November 2026 there are no monospace labels: DM Mono is kept for code, and for the PNG export, which cannot yet load Untitled Sans.
+Two licensed typefaces from Klim: Untitled Serif (display) and Untitled Sans (body, interface, labels and annotations). Crimson Pro and the system sans are fallbacks only. Since 3 November 2026 there are no monospace labels: DM Mono is kept for code only. The PNG export (`app/api/export/png`) renders in Untitled too, decoding `public/fonts/Untitled*.woff2` to TrueType for resvg.
 
 ### Diagram primitives (`lib/diagram-primitives/`)
 

@@ -164,7 +164,7 @@ export const DESC = 0.32;  // and its bottom below
 export { NOTE_X };
 export const LIFT = 0.38;
 
-/** The same drawing on a canvas, for the PNG: the browser's own Untitled faces, not the PNG route's DM Mono. */
+/** The same drawing on a canvas, for the PNG, in the browser's own Untitled faces. */
 export function paint(ctx: CanvasRenderingContext2D, L: Layout, scale = 1): void {
   ctx.save();
   ctx.scale(scale, scale);
