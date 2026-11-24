@@ -481,6 +481,8 @@
     transform: translateY(-200%);
   }
   .skip-link:focus-visible { transform: none; }
+  /* Print ignores the off-screen transform on a fixed element, and paper has no keyboard. */
+  @media print { .skip-link { display: none; } }
   /* Untitled Sans ships one weight. Medium labels stay regular, never a smeared synthetic bold. */
   html { font-synthesis-weight: none; }
   body {
