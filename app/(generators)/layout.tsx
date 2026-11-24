@@ -7,6 +7,7 @@ const generators: NavLink[] = [
   { href: "/event-series",    label: "Event Series" },
   { href: "/growth",          label: "Growth" },
   { href: "/chaos",           label: "Chaos" },
+  { href: "/asemic",          label: "Asemic" },
   { href: "/notion",          label: "Notion" },
   { href: "/image-treatment", label: "Image Treatment" },
   { href: "/option-field",    label: "Option Field" },
