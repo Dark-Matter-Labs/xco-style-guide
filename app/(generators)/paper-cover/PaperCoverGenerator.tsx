@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useMinute } from "@/components/xco/TimePrint";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { PaperCoverDiagram, COVER_W, COVER_H } from "./PaperCoverDiagram";
 import type { CoverVisual } from "./PaperCoverDiagram";
@@ -71,7 +71,8 @@ export function PaperCoverGenerator() {
   const [timePrintOn, setTimePrintOn] = useState(true);
   // One minute for the preview and the hidden export copy, so the export matches what's shown.
   const minute = useMinute();
-  const words = [paperNumber, title, subtitle, authors].join(" ");
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([paperNumber, title, subtitle, authors].join(" "));
   const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
   const coverRef = useRef<SVGSVGElement>(null);

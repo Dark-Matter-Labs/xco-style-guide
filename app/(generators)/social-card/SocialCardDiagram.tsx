@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react";
 import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
-import { makeTimePrint, slugSize, type TimePrint, type TimePrintProp } from "@/lib/asemic/time-print";
+import { hungSlugSize, makeTimePrint, slugSize, type TimePrint, type TimePrintProp } from "@/lib/asemic/time-print";
 import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
 import { squarify } from "@/lib/squarify";
 import { paletteHex } from "@/lib/design-tokens";
@@ -297,7 +297,10 @@ export const SocialCardDiagram = forwardRef<SVGSVGElement, SocialCardProps>(
         <defs><style>{FONT_IMPORT}</style></defs>
         {props.format === "card"   && <CardInner   {...props} print={print} />}
         {props.format === "square" && <SquareInner {...props} print={print} />}
-        {print && <TimePrintSlug print={print} width={vw} height={vh} margin={pad} bottom={pad} size={slugSize(10, pad)} top={abstract ? pad : undefined} />}
+        {/* On the navy-to-dusk gradient the slug hangs from the top and ends before the teal (55% down). */}
+        {print && (abstract
+          ? <TimePrintSlug print={print} width={vw} height={vh} margin={pad} bottom={pad} top={pad / 2} size={hungSlugSize(slugSize(10, pad), print.stamp, pad / 2, vh * 0.55)} />
+          : <TimePrintSlug print={print} width={vw} height={vh} margin={pad} bottom={pad} size={slugSize(10, pad)} />)}
       </svg>
     );
   }

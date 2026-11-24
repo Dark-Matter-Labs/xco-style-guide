@@ -13,7 +13,7 @@ import { altText } from "./render/blocks";
 import { CopyButton } from "@/components/CopyButton";
 import type { CardSpec, ImageryId, PaletteId, TemplateId, TitleFace } from "./render/types";
 import { useCardAssets } from "./useCardAssets";
-import { useMinute } from "@/components/xco/TimePrint";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 
 // Each template opens in the palette it was designed in; any can be switched.
@@ -59,7 +59,8 @@ export function EventSeriesGenerator({ instrumentFamily }: { instrumentFamily: s
   // One minute for the preview and every export; PNG and video take the spec as it was when clicked,
   // so a recording keeps the minute it started with.
   const minute = useMinute();
-  const words = [content.kicker, content.title, content.subtitle, content.location].join(" ");
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([content.kicker, content.title, content.subtitle, content.location].join(" "));
   const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
   const spec: CardSpec = useMemo(
     () => ({ template, palette, imagery, format, content, titleFace, uppercase, seed, timePrint }),

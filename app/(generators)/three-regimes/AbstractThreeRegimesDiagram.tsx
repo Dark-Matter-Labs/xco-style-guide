@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react";
 import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
-import { makeTimePrint, slugSize } from "@/lib/asemic/time-print";
+import { hungSlugSize, makeTimePrint, slugSize } from "@/lib/asemic/time-print";
 import { slugMargin, type ThreeRegimesDiagramProps } from "./ThreeRegimesDiagram";
 import { paletteHex } from "@/lib/design-tokens";
 
@@ -18,11 +18,12 @@ export const AbstractThreeRegimesDiagram = forwardRef<
   ThreeRegimesDiagramProps
 >(function AbstractThreeRegimesDiagram({ format, timePrint }, ref) {
   const { vw, vh } = DIMS[format];
-  const tp = format === "mark" ? null : timePrint;
-  // The sweep has no words of its own, so the print always grows from the identity note.
+  const minute = format === "mark" ? null : timePrint?.minute;
+  // The sweep has no words of its own, so the print always grows from the identity note,
+  // and it regrows only when the minute turns, not as the labels are typed.
   const print = useMemo(
-    () => (tp ? makeTimePrint({ minute: tp.minute, words: "", width: vw, height: vh, ink: paletteHex.paper, ground: null }) : null),
-    [tp, vw, vh],
+    () => (minute ? makeTimePrint({ minute, words: "", width: vw, height: vh, ink: paletteHex.paper, ground: null }) : null),
+    [minute, vw, vh],
   );
   const margin = slugMargin("classic", format);
 
@@ -40,8 +41,8 @@ export const AbstractThreeRegimesDiagram = forwardRef<
       </defs>
       <rect width={vw} height={vh} fill="url(#abs-sweep)" />
       {print && <TimePrintMarks print={print} />}
-      {/* The sweep is navy at the top and dusk at the bottom: the slug hangs from the top, where paper type reads. */}
-      {print && <TimePrintSlug print={print} width={vw} height={vh} margin={margin} bottom={margin} size={slugSize(13, margin)} top={margin} />}
+      {/* The sweep is navy at the top and dusk at the bottom: the slug hangs from the top and ends before the teal (55% down). */}
+      {print && <TimePrintSlug print={print} width={vw} height={vh} margin={margin} bottom={margin} top={margin / 2} size={hungSlugSize(slugSize(13, margin), print.stamp, margin / 2, vh * 0.55)} />}
     </svg>
   );
 });

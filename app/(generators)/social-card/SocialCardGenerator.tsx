@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useMinute } from "@/components/xco/TimePrint";
+import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { SocialCardDiagram } from "./SocialCardDiagram";
 import type { CardFormat, CardLayout, DiagramType } from "./SocialCardDiagram";
@@ -76,7 +76,8 @@ export function SocialCardGenerator() {
   const [timePrintOn, setTimePrintOn] = useState(true);
   // One minute for the preview and both hidden export copies, so the export matches what's shown.
   const minute = useMinute();
-  const words = [tag, headline, byline].join(" ");
+  // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
+  const words = useSettled([tag, headline, byline].join(" "));
   const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
   const cardRef   = useRef<SVGSVGElement>(null);

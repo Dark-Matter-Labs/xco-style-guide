@@ -75,15 +75,21 @@ eq(makeTimePrint({ ...base, width: 1080, height: 1920 }).sheet.rows, 30);
 const attrs = (body: string, name: string) => (body.match(new RegExp(`${name}="([^"]+)"`, "g")) || []).map((a) => a.slice(name.length + 2, -1));
 {
   const tp = makeTimePrint(base);
+  // A handful of compound paths, not one element per mark: thousands of nodes per copy made typing lag.
+  const elements = (tp.body.match(/</g) || []).length;
+  assert.ok(elements <= 8, `the print is a handful of elements (${elements})`);
   for (const v of attrs(tp.body, "stroke").concat(attrs(tp.body, "fill"))) assert.ok([INK, PAPER, DUSK].includes(v), `colour ${v} is ink, the ground or dusk`);
-  const xs = tp.sheet.marks.filter((m) => m.kind === "x").length;
-  assert.ok(xs > 0, "the print has an x");
-  eq((tp.body.match(new RegExp(DUSK, "g")) || []).length, xs, "dusk only on the x");
+  const count = (s: { sheet: Sheet }, ...k: Mark["kind"][]) => s.sheet.marks.filter((m) => k.includes(m.kind)).length;
+  const xs = count(tp, "x"), beads = count(tp, "box", "ring");
+  assert.ok(xs > 0 && beads > 0, "the print has an x and beads");
+  eq((tp.body.match(new RegExp(DUSK, "g")) || []).length, 1, "dusk on one path: the x's");
+  // Every mark is drawn: one subpath per line and square, two per x, and each bead twice (knock-out, outline).
+  const subpaths = (b: string) => (b.match(/M/g) || []).length;
+  eq(subpaths(tp.body), count(tp, "thread", "dash", "square") + 2 * xs + 2 * beads, "every mark is drawn");
+  eq(attrs(tp.body, "fill").filter((v) => v === PAPER).length, 1, "the knock-outs are one path in the ground colour");
 
   const g = makeTimePrint({ ...base, ground: null });
-  const beads = g.sheet.marks.filter((m) => m.kind === "box" || m.kind === "ring").length;
-  assert.ok(beads > 0, "the print has beads");
-  eq(attrs(g.body, "fill").filter((v) => v === "none").length, beads, "on a gradient, knock-outs are unfilled");
+  eq(subpaths(g.body), count(g, "thread", "dash", "square") + 2 * count(g, "x") + count(g, "box", "ring"), "on a gradient, beads are outlined but not knocked out");
   assert.ok(!g.body.includes(PAPER), "on a gradient, no ground colour is painted");
 }
 eq(TIME_PRINT_OPACITY, 0.06);
@@ -196,12 +202,22 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
     assert.ok(slug.includes("time print ·") && html.endsWith("</text></svg>"), `${what}: the slug is the last thing drawn`);
     assert.ok(slugX(slug) > w - margin && slugX(slug) < w, `${what}: the slug sits in the right margin (${slugX(slug).toFixed(1)})`);
     assert.ok(slug.includes(`fill="${ink}"`), `${what}: the slug takes the artwork's text colour`);
-    // The marks inside the group (the group itself carries fill="none" as a default).
+    // The filled paths inside the group: squares, plus the knock-outs on a single-colour ground.
     const open = html.indexOf(">", html.indexOf('<g opacity="0.06"')) + 1;
     const layer = html.slice(open, html.indexOf("</g>", open));
-    eq(layer.includes('fill="none"'), gradient, `${what}: knock-outs ${gradient ? "unfilled on a gradient" : "filled with the ground"}`);
+    eq((layer.match(/<path fill=/g) || []).length, gradient ? 1 : 2, `${what}: knock-outs ${gradient ? "skipped on a gradient" : "filled with the ground"}`);
     return slugX(slug);
   }
+  // On the navy-to-dusk gradients the slug hangs from the top and must end before the teal stop
+  // (55% down), measured in DM Mono, the wider face the PNG route renders it in (0.6 em a character).
+  const endsInTheDark = (what: string, html: string, hgt: number) => {
+    const slug = lastText(html);
+    const top = Number(/translate\([\d.]+ ([\d.]+)\)/.exec(slug)![1]);
+    const size = Number(/font-size="([\d.]+)"/.exec(slug)![1]);
+    const text = />([^<]*)<\/text>/.exec(slug)![1].replace(/&#x27;/g, "'");
+    const end = top + 0.6 * size * Array.from(text).length;
+    assert.ok(end <= 0.55 * hgt + 0.01, `${what}: the slug ends in the dark part of the gradient (${end.toFixed(0)} of ${(0.55 * hgt).toFixed(0)})`);
+  };
   const absent = (what: string, html: string) =>
     assert.ok(!html.includes('opacity="0.06"') && !html.includes("time print ·"), `${what}: no print when it is off`);
 
@@ -214,7 +230,12 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
         const props = { headline: "A field of options", tag: "Note", byline: "xCO", layout, format, diagramType };
         const x = checkArtwork(what, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop })), w, hgt, pad, layout === "abstract" ? PAPER : INK, layout === "abstract");
         if (format === "card" && layout === "diagram") assert.ok(x > 1120, `${what}: the slug clears the embed`);
-        if (layout === "abstract") assert.ok(lastText(renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop }))).includes('text-anchor="end"'), `${what}: on the navy-to-dusk gradient the slug hangs from the top, where paper type reads`);
+        if (layout === "abstract") {
+          assert.ok(lastText(renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop }))).includes('text-anchor="end"'), `${what}: on the navy-to-dusk gradient the slug hangs from the top, where paper type reads`);
+          // With every field cleared the stamp is at its longest ("identity note").
+          const cleared = { ...props, headline: "", tag: "", byline: "", timePrint: { ...prop, words: "" } };
+          endsInTheDark(`${what}, fields cleared`, renderToStaticMarkup(h(SocialCardDiagram, cleared)), hgt);
+        }
         absent(what, renderToStaticMarkup(h(SocialCardDiagram, props)));
         absent(`${what} (null)`, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: null })));
       }
@@ -252,6 +273,7 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
     checkArtwork(`three regimes abstract ${format}`, abs, 1200, hgt, format === "hero" ? 80 : 100, PAPER, true);
     assert.ok(lastText(abs).includes("identity note"), `three regimes abstract ${format}: no words of its own, so the identity note`);
     assert.ok(lastText(abs).includes('text-anchor="end"'), `three regimes abstract ${format}: on the gradient the slug hangs from the top, where paper type reads`);
+    endsInTheDark(`three regimes abstract ${format}`, abs, hgt);
   }
   absent("three regimes mark", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
   absent("three regimes abstract mark", renderToStaticMarkup(h(AbstractThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));

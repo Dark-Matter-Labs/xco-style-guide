@@ -14,15 +14,41 @@ import { TIME_PRINT_OPACITY, minuteOf, msToNextMinute, type Minute, type TimePri
 export function useMinute(): Minute | null {
   const [minute, setMinute] = useState<Minute | null>(null);
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const tick = () => {
-      setMinute(minuteOf(new Date()));
+      clearTimeout(timer);
+      const next = minuteOf(new Date());
+      // Same minute, same object: a focus within the minute regrows nothing.
+      setMinute((prev) => (prev?.stamp === next.stamp ? prev : next));
       timer = setTimeout(tick, msToNextMinute(Date.now()));
     };
     tick();
-    return () => clearTimeout(timer);
+    // Timers stop while a laptop sleeps and slow down in hidden tabs, so re-read the clock when the page comes back.
+    const wake = () => { if (document.visibilityState !== "hidden") tick(); };
+    document.addEventListener("visibilitychange", wake);
+    window.addEventListener("focus", wake);
+    window.addEventListener("pageshow", wake);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("visibilitychange", wake);
+      window.removeEventListener("focus", wake);
+      window.removeEventListener("pageshow", wake);
+    };
   }, []);
   return minute;
+}
+
+/**
+ * The value once it has stopped changing for `ms`. The words feed the print through this, so
+ * typing never waits on a regrowth: each one rewrites thousands of marks in every hidden copy.
+ */
+export function useSettled<T>(value: T, ms = 300): T {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setSettled(value), ms);
+    return () => clearTimeout(t);
+  }, [value, ms]);
+  return settled;
 }
 
 /** The marks, at the back of the artwork: right after its ground. */
