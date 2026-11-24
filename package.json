@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "cp node_modules/@resvg/resvg-wasm/index_bg.wasm public/resvg.wasm && tsx scripts/a11y-check.ts",
+    "prebuild": "tsx scripts/a11y-check.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
