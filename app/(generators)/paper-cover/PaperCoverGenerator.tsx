@@ -3,32 +3,15 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, Checkbox, ExportError, labelClass, RadioList, Section, TextField, useExport,
+} from "@/components/generator-controls";
 import { exportPNG, exportSVG } from "@/lib/media/export";
 import { PaperCoverDiagram, COVER_W, COVER_H } from "./PaperCoverDiagram";
 import type { CoverVisual } from "./PaperCoverDiagram";
 
-function Field({ label, value, onChange, hint, mono, rows }: {
-  label: string; value: string; onChange: (v: string) => void;
-  hint?: string; mono?: boolean; rows?: number;
-}) {
-  const cls = `w-full bg-transparent border-b border-xco-ink text-[24px] text-xco-ink py-1 focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`;
-  return (
-    <label className="block space-y-1">
-      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>
-      {rows ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={rows}
-          className={`${cls} border resize-none px-2 py-2`} />
-      ) : (
-        <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className={cls} />
-      )}
-      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
-    </label>
-  );
-}
-
 const VISUALS: { id: CoverVisual; label: string; hint: string }[] = [
-  { id: "none",         label: "None",         hint: "White space and typography only" },
+  { id: "none",         label: "None",         hint: "Open paper and typography only" },
   { id: "abstract",     label: "Abstract",     hint: "Muted gradient field — atmospheric" },
   { id: "mark",         label: "Mark",         hint: "Three Regimes geometric mark" },
   { id: "option-field", label: "Option Field", hint: "Variable-weight scanline field" },
@@ -67,60 +50,33 @@ export function PaperCoverGenerator() {
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
+        <Section title="Visual">
+          <RadioList name="visual" value={visual} options={VISUALS} onChange={setVisual} />
+        </Section>
 
-        <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Visual</h2>
-          <div className="space-y-1">
-            {VISUALS.map(({ id, label, hint }) => (
-              <label key={id} className="flex items-start gap-2 cursor-pointer">
-                <input type="radio" name="visual" value={id} checked={visual === id}
-                  onChange={() => setVisual(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
-                <span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <Section title="Content">
+          <TextField label="Paper number" value={paperNumber} onChange={setPaperNumber} hint='Shown as "No. 01"' />
+          <TextField label="Title" value={title} onChange={setTitle} multiline rows={3} hint="Keep under 50 chars for clean line breaks" />
+          <TextField label="Subtitle" value={subtitle} onChange={setSubtitle} multiline hint="Optional — Untitled Serif italic below title" />
+          <TextField label="Authors" value={authors} onChange={setAuthors} hint="Comma-separated" />
+          <TextField label="Date" value={date} onChange={setDate} hint="e.g. May 2026" />
+        </Section>
 
-        <div className="space-y-4 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Content</h2>
-          <Field label="Paper number" value={paperNumber} onChange={setPaperNumber}
-            hint='Shown as "No. 01"' mono />
-          <Field label="Title" value={title} onChange={setTitle} rows={3}
-            hint="Keep under 50 chars for clean line breaks" />
-          <Field label="Subtitle" value={subtitle} onChange={setSubtitle} rows={2}
-            hint="Optional — Untitled Serif italic below title" />
-          <Field label="Authors" value={authors} onChange={setAuthors}
-            hint="Comma-separated" />
-          <Field label="Date" value={date} onChange={setDate}
-            hint="e.g. May 2026" mono />
-        </div>
-
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-2">
+        <Section title="Export">
+          <p className={labelClass}>
             A4 portrait — {COVER_W}×{COVER_H} (SVG) · {COVER_W*2}×{COVER_H*2} (PNG 2×)
           </p>
-          <label className="flex items-start gap-2 cursor-pointer pb-2">
-            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
-            <span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
-            </span>
-          </label>
+          <Checkbox label="Time print" hint={TIME_PRINT_HINT} checked={timePrintOn} onChange={setTimePrintOn} />
           {[
             { id: "svg", label: `SVG — A4 ${COVER_W}×${COVER_H}` },
             { id: "png", label: `PNG — 2× print ${COVER_W*2}×${COVER_H*2}` },
           ].map(({ id, label }) => (
-            <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            <Button key={id} onClick={() => handle(id)} disabled={exporting !== null}>
               {exporting === id ? "exporting…" : `↓ ${label}`}
-            </button>
+            </Button>
           ))}
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* Preview — full A4 shown at constrained width so it doesn't clip */}
@@ -128,7 +84,7 @@ export function PaperCoverGenerator() {
         <div className="border border-xco-ink bg-xco-paper">
           <PaperCoverDiagram {...props} className="w-full h-auto" />
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           A4 portrait — {COVER_W}×{COVER_H}px at 96dpi · exports at 2× for print
         </p>
       </div>

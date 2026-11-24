@@ -3,68 +3,12 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, Checkbox, ExportError, labelClass, RadioList, Section, Segmented, TextField, useExport,
+} from "@/components/generator-controls";
 import { exportPNG, exportSVG } from "@/lib/media/export";
 import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme, StructuralVariant } from "./ThreeRegimesDiagram";
 import type { DiagramLabels } from "./ThreeRegimesDiagram";
-
-// ── Input primitives ────────────────────────────────────────────────
-
-function Field({
-  label,
-  value,
-  onChange,
-  hint,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  hint?: string;
-}) {
-  return (
-    <label className="block space-y-1">
-      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">
-        {label}
-      </span>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-1 focus:border-xco-ink transition-colors"
-      />
-      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
-    </label>
-  );
-}
-
-function TextArea({
-  label,
-  value,
-  onChange,
-  hint,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  hint?: string;
-}) {
-  return (
-    <label className="block space-y-1">
-      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">
-        {label}
-      </span>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={2}
-        className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:border-xco-ink transition-colors resize-none"
-      />
-      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
-    </label>
-  );
-}
-
-// ── Main generator ──────────────────────────────────────────────────
 
 const DEFAULT_LABELS: DiagramLabels = {
   frontier: "Frontier",
@@ -72,6 +16,32 @@ const DEFAULT_LABELS: DiagramLabels = {
   field: "Field",
   fieldSublabel: "precondition",
 };
+
+const SCHEMES: { id: DiagramColorScheme; label: string; hint: string }[] = [
+  { id: "standard", label: "Standard", hint: "ink / cool / ember" },
+  { id: "blueprint", label: "Blueprint", hint: "teal · navy · ocean · dusk" },
+];
+
+const VARIANTS: { id: StructuralVariant; label: string; hint: string }[] = [
+  { id: "classic", label: "Classic", hint: "hub + spoke" },
+  { id: "nested", label: "Nested", hint: "field wraps" },
+  { id: "columns", label: "Columns", hint: "three strips" },
+  { id: "orbital", label: "Orbital", hint: "circle nodes" },
+];
+
+const FORMATS: { id: DiagramFormat; label: string; hint: string }[] = [
+  { id: "hero", label: "Hero", hint: "1200 × 630" },
+  { id: "square", label: "Square", hint: "1200 × 1200" },
+  { id: "mark", label: "Mark", hint: "400 × 200" },
+];
+
+const EXPORTS = [
+  { id: "svg-hero", label: "SVG — 1200×630 hero" },
+  { id: "png-hero", label: "PNG — 1200×630 hero" },
+  { id: "svg-square", label: "SVG — 1200×1200 square" },
+  { id: "png-square", label: "PNG — 1200×1200 square" },
+  { id: "svg-mark", label: "SVG — mark (no labels)" },
+];
 
 export function ThreeRegimesGenerator() {
   const [labels, setLabels] = useState<DiagramLabels>(DEFAULT_LABELS);
@@ -114,197 +84,57 @@ export function ThreeRegimesGenerator() {
       if (type === "png-square") await exportPNG(squareRef.current, 1200, 1200, "xco-three-regimes-1200x1200.png");
     });
 
-  const formats: { id: DiagramFormat; label: string; size: string }[] = [
-    { id: "hero",   label: "Hero",   size: "1200 × 630" },
-    { id: "square", label: "Square", size: "1200 × 1200" },
-    { id: "mark",   label: "Mark",   size: "400 × 200" },
-  ];
+  const label = (key: keyof DiagramLabels) => (v: string) => setLabels({ ...labels, [key]: v });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* ── Controls ── */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
+        <Section title="Colour scheme">
+          <RadioList name="colorScheme" value={colorScheme} options={SCHEMES} onChange={setColorScheme} />
+        </Section>
 
-        <div className="space-y-2">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-              Colour Scheme
-            </h2>
-            {([
-              { id: "standard", label: "Standard", hint: "ink / cool / ember" },
-              { id: "blueprint", label: "Blueprint", hint: "teal · navy · ocean · dusk" },
-            ] as { id: DiagramColorScheme; label: string; hint: string }[]).map(({ id, label, hint }) => (
-              <label key={id} className="flex items-start gap-2 cursor-pointer">
-                <input type="radio" name="colorScheme" value={id} checked={colorScheme === id}
-                  onChange={() => setColorScheme(id)} className="accent-xco-dusk mt-0.5" />
-                <span className="space-y-0.5">
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
-                </span>
-              </label>
-            ))}
-        </div>
+        <Section title="Layout">
+          <Segmented value={structuralVariant} options={VARIANTS} onChange={setStructuralVariant} columns={2} />
+        </Section>
 
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-              Layout
-            </h2>
-            <div className="grid grid-cols-2 gap-1">
-              {([
-                { id: "classic", label: "Classic",  hint: "hub + spoke" },
-                { id: "nested",  label: "Nested",   hint: "field wraps" },
-                { id: "columns", label: "Columns",  hint: "three strips" },
-                { id: "orbital", label: "Orbital",  hint: "circle nodes" },
-              ] as { id: StructuralVariant; label: string; hint: string }[]).map(({ id, label, hint }) => (
-                <button
-                  key={id}
-                  onClick={() => setStructuralVariant(id)}
-                  className={`text-left font-mono font-medium text-[0.9375rem] leading-[1.6] px-2 py-2 border transition-colors ${
-                    structuralVariant === id
-                      ? "bg-xco-ink text-xco-paper border-xco-ink"
-                      : "text-xco-ink border-xco-ink"
-                  }`}
-                >
-                  <span className="block">{label}</span>
-                  <span className="block opacity-80">{hint}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+        <Section title="Node labels">
+          <TextField label="Frontier" value={labels.frontier} onChange={label("frontier")} />
+          <TextField label="Fortress" value={labels.fortress} onChange={label("fortress")} />
+          <TextField label="Field" value={labels.field} onChange={label("field")} />
+          <TextField label="Field sublabel" value={labels.fieldSublabel} onChange={label("fieldSublabel")} hint="shown smaller, below the field label" />
+        </Section>
 
-            <div className="space-y-1 pb-4">
-              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-                Node Labels
-              </h2>
-            </div>
+        <Section title="Text">
+          <TextField label="Relationship statement" value={statement} onChange={setStatement} multiline hint="Untitled Sans, below the diagram" />
+          <TextField label="Caption" value={caption} onChange={setCaption} multiline hint="optional — smaller, below statement" />
+          <Checkbox label="Show annotation marginalia" checked={showAnnotations} onChange={setShowAnnotations} />
+        </Section>
 
-            <Field
-              label="Frontier"
-              value={labels.frontier}
-              onChange={(v) => setLabels({ ...labels, frontier: v })}
-            />
-            <Field
-              label="Fortress"
-              value={labels.fortress}
-              onChange={(v) => setLabels({ ...labels, fortress: v })}
-            />
-            <Field
-              label="Field"
-              value={labels.field}
-              onChange={(v) => setLabels({ ...labels, field: v })}
-            />
-            <Field
-              label="Field sublabel"
-              value={labels.fieldSublabel}
-              onChange={(v) => setLabels({ ...labels, fieldSublabel: v })}
-              hint="shown smaller, below the field label"
-            />
+        <Section title="Preview format">
+          <RadioList name="format" value={previewFormat} options={FORMATS} onChange={setPreviewFormat} />
+        </Section>
 
-            <div className="space-y-1 pb-4 pt-2">
-              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-                Text
-              </h2>
-            </div>
-
-            <TextArea
-              label="Relationship statement"
-              value={statement}
-              onChange={setStatement}
-              hint="Untitled Sans, below the diagram"
-            />
-            <TextArea
-              label="Caption"
-              value={caption}
-              onChange={setCaption}
-              hint="optional — smaller, below statement"
-            />
-
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showAnnotations}
-                onChange={(e) => setShowAnnotations(e.target.checked)}
-                className="accent-xco-dusk w-4 h-4"
-              />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                Show annotation marginalia
-              </span>
-            </label>
-
-
-        <div className="space-y-3 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Preview Format
-          </h2>
-          <div className="space-y-1">
-            {formats.map((f) => (
-              <label key={f.id} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="format"
-                  value={f.id}
-                  checked={previewFormat === f.id}
-                  onChange={() => setPreviewFormat(f.id)}
-                  className="accent-xco-dusk"
-                />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                  {f.label}
-                </span>
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                  {f.size}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">
-            Export
-          </h2>
-          <label className="flex items-start gap-3 cursor-pointer pb-2">
-            <input
-              type="checkbox"
-              checked={timePrintOn}
-              onChange={(e) => setTimePrintOn(e.target.checked)}
-              className="accent-xco-dusk w-4 h-4 mt-1 shrink-0"
-            />
-            <span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
-            </span>
-          </label>
-          {[
-            { id: "svg-hero",   label: "SVG  — 1200×630 hero" },
-            { id: "png-hero",   label: "PNG  — 1200×630 hero" },
-            { id: "svg-square", label: "SVG  — 1200×1200 square" },
-            { id: "png-square", label: "PNG  — 1200×1200 square" },
-            { id: "svg-mark",   label: "SVG  — mark (no labels)" },
-          ].map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => handleExport(id)}
-              disabled={exporting !== null}
-              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40"
-            >
+        <Section title="Export">
+          <Checkbox label="Time print" hint={TIME_PRINT_HINT} checked={timePrintOn} onChange={setTimePrintOn} />
+          {EXPORTS.map(({ id, label }) => (
+            <Button key={id} onClick={() => handleExport(id)} disabled={exporting !== null}>
               {exporting === id ? "exporting…" : `↓ ${label}`}
-            </button>
+            </Button>
           ))}
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-1">
-            PNG exports use server-side font embedding for accurate typography.
+          <p className={`${labelClass} text-xco-ink-muted`}>
+            PNG labels render in DM Mono until the export can load Untitled Sans; the SVG keeps the real faces.
           </p>
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
         <div className="border border-xco-ink overflow-hidden bg-xco-paper">
-          <ThreeRegimesDiagram
-            {...diagramProps}
-            format={previewFormat}
-          />
+          <ThreeRegimesDiagram {...diagramProps} format={previewFormat} />
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           {previewFormat === "hero" && "1200 × 630 — substack hero / open graph"}
           {previewFormat === "square" && "1200 × 1200 — social square"}
           {previewFormat === "mark" && "400 × 200 — mark (geometric only, no labels)"}

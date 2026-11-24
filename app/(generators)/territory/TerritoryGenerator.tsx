@@ -7,7 +7,9 @@ import {
   type TerritoryColorMode,
   type TerritoryItem,
 } from "./TerritoryDiagram";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, ExportError, labelClass, RadioList, Section, Slider, useExport,
+} from "@/components/generator-controls";
 import { exportPNG, exportSVG } from "@/lib/media/export";
 
 // The system's largest corner radius is 0.125rem: 2 px at the 16 px root.
@@ -32,27 +34,6 @@ const DEFAULT_ITEMS: ItemState[] = [
   { id: 8, label: "Reversibility", sublabel: "",                     weight: 10  },
 ];
 
-// ── Slider ───────────────────────────────────────────────────────────────────
-
-function Slider({
-  label, value, onChange, min, max, step = 1, display,
-}: {
-  label: string; value: number; onChange: (v: number) => void;
-  min: number; max: number; step?: number; display?: string;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-baseline justify-between">
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">{label}</span>
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{display ?? value}</span>
-      </div>
-      <input type="range" aria-label={label} min={min} max={max} step={step} value={value}
-        onChange={e => onChange(Number(e.target.value))}
-        className="w-full accent-xco-dusk" />
-    </div>
-  );
-}
-
 // ── Generator ────────────────────────────────────────────────────────────────
 
 const FORMATS: { id: TerritoryFormat; label: string; w: number; h: number }[] = [
@@ -66,6 +47,8 @@ const COLOR_MODES: { id: TerritoryColorMode; label: string; hint: string }[] = [
   { id: "warmth",   label: "Warmth",   hint: "sand → dusk" },
   { id: "spectrum", label: "Spectrum",  hint: "warm → cold by rank" },
 ];
+
+const input = `w-full bg-transparent ${labelClass} py-0.5 placeholder:text-xco-ink-weak`;
 
 export function TerritoryGenerator() {
   const [items,        setItems]        = useState<ItemState[]>(DEFAULT_ITEMS);
@@ -123,16 +106,8 @@ export function TerritoryGenerator() {
 
       {/* ── Controls ── */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
-
-        {/* Items editor */}
-        <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-              Concepts
-            </h2>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">weight</span>
-          </div>
-
+        <Section title="Concepts">
+          <p className={`${labelClass} text-xco-ink-muted`}>Label, sublabel and weight; cell area follows weight.</p>
           <div className="space-y-2">
             {items.map(item => (
               <div key={item.id} className="flex items-start gap-2">
@@ -143,7 +118,7 @@ export function TerritoryGenerator() {
                     onChange={e => updateItem(item.id, { label: e.target.value })}
                     placeholder="Concept"
                     aria-label="Concept"
-                    className="w-full bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 focus:border-xco-ink placeholder:text-xco-ink-weak"
+                    className={`${input} border-b border-xco-ink`}
                   />
                   <input
                     type="text"
@@ -151,7 +126,7 @@ export function TerritoryGenerator() {
                     onChange={e => updateItem(item.id, { sublabel: e.target.value })}
                     placeholder="sublabel"
                     aria-label={`Sublabel for ${item.label || "concept"}`}
-                    className="w-full bg-transparent font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink py-0.5 placeholder:text-xco-ink-weak"
+                    className={input}
                   />
                 </div>
                 <div className="flex items-center gap-1 shrink-0 pt-0.5">
@@ -161,13 +136,14 @@ export function TerritoryGenerator() {
                     min={1} max={999}
                     aria-label={`Weight of ${item.label || "concept"}`}
                     onChange={e => updateItem(item.id, { weight: Math.max(1, Number(e.target.value)) })}
-                    className="w-12 bg-transparent border-b border-xco-ink font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink text-right py-0.5"
+                    className={`w-12 bg-transparent border-b border-xco-ink ${labelClass} text-xco-dusk-ink text-right py-0.5`}
                   />
                   <button
+                    type="button"
                     onClick={() => removeItem(item.id)}
                     disabled={items.length <= 2}
                     aria-label={`Remove ${item.label || "concept"}`}
-                    className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-none text-xco-ink hover:text-xco-ink transition-colors disabled:opacity-20 min-w-6 min-h-6 inline-flex items-center justify-center"
+                    className={`${labelClass} leading-none disabled:opacity-20 min-w-6 min-h-6 inline-flex items-center justify-center`}
                   >
                     ×
                   </button>
@@ -175,83 +151,34 @@ export function TerritoryGenerator() {
               </div>
             ))}
           </div>
+          <Button onClick={addItem}>+ Add concept</Button>
+          <Button onClick={() => setItems(DEFAULT_ITEMS)}>↺ Reset to default</Button>
+        </Section>
 
-          <button
-            onClick={addItem}
-            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-dashed border-xco-ink px-2 py-1.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
-          >
-            + Add concept
-          </button>
+        <Section title="Colour">
+          <RadioList name="color" value={colorMode} options={COLOR_MODES} onChange={setColorMode} />
+        </Section>
 
-          <button
-            onClick={() => setItems(DEFAULT_ITEMS)}
-            className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-ink transition-colors"
-          >
-            ↺ Reset to default
-          </button>
-        </div>
+        <Section title="Cells">
+          <Slider label="Corner radius" value={cornerRadius} onChange={setCornerRadius} min={0} max={MAX_RADIUS} step={0.5} display={`${cornerRadius}px`} />
+          <Slider label="Gutter" value={gutter} onChange={setGutter} min={2} max={20} step={1} display={`${gutter}px`} />
+        </Section>
 
-        {/* Colour mode */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
-          {COLOR_MODES.map(({ id, label, hint }) => (
-            <label key={id} className="flex items-start gap-2 cursor-pointer">
-              <input type="radio" name="color" value={id}
-                checked={colorMode === id} onChange={() => setColorMode(id)}
-                className="accent-xco-dusk mt-0.5" />
-              <span className="space-y-0.5">
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
-              </span>
-            </label>
-          ))}
-        </div>
+        <Section title="Format">
+          <RadioList name="format" value={format} options={FORMATS} onChange={setFormat} />
+        </Section>
 
-        {/* Corner radius */}
-        <div className="space-y-3 pt-4">
-          <Slider
-            label="Corner radius"
-            value={cornerRadius}
-            onChange={setCornerRadius}
-            min={0} max={MAX_RADIUS} step={0.5}
-            display={`${cornerRadius}px`}
-          />
-          <Slider
-            label="Gutter"
-            value={gutter}
-            onChange={setGutter}
-            min={2} max={20}
-            display={`${gutter}px`}
-          />
-        </div>
-
-        {/* Format */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
-          {FORMATS.map(({ id, label }) => (
-            <label key={id} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="format" value={id}
-                checked={format === id} onChange={() => setFormat(id)}
-                className="accent-xco-dusk" />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-            </label>
-          ))}
-        </div>
-
-        {/* Export */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
+        <Section title="Export">
           {[
             { id: "svg", label: `SVG — ${activeDim.label}` },
             { id: "png", label: `PNG — ${activeDim.label}` },
           ].map(({ id, label }) => (
-            <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            <Button key={id} onClick={() => handle(id)} disabled={exporting !== null}>
               {exporting === id ? "exporting…" : `↓ ${label}`}
-            </button>
+            </Button>
           ))}
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* ── Preview ── */}
@@ -259,7 +186,7 @@ export function TerritoryGenerator() {
         <div className="border border-xco-ink overflow-hidden">
           <TerritoryDiagram {...diagramProps} format={format} />
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           {activeDim.label} · {diagramProps.items.length} cells · cell area ∝ weight
         </p>
       </div>

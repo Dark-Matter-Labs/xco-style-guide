@@ -3,24 +3,12 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, Checkbox, ExportError, labelClass, RadioList, Section, TextField, useExport,
+} from "@/components/generator-controls";
 import { exportPNG, exportSVG } from "@/lib/media/export";
 import { SocialCardDiagram } from "./SocialCardDiagram";
 import type { CardFormat, CardLayout, DiagramType } from "./SocialCardDiagram";
-
-function FieldInput({ label, value, onChange, hint, mono }: {
-  label: string; value: string; onChange: (v: string) => void;
-  hint?: string; mono?: boolean;
-}) {
-  return (
-    <label className="block space-y-1">
-      <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">{label}</span>
-      <input type="text" value={value} onChange={(e) => onChange(e.target.value)}
-        className={`w-full bg-transparent border-b border-xco-ink text-[24px] text-xco-ink py-1 focus:border-xco-ink transition-colors ${mono ? "font-mono font-medium text-[0.9375rem] leading-[1.6]" : "font-body"}`} />
-      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
-    </label>
-  );
-}
 
 const LAYOUTS: { id: CardLayout; label: string; hint: string }[] = [
   { id: "typographic", label: "Typographic", hint: "Clean text, full-width" },
@@ -34,9 +22,9 @@ const DIAGRAM_TYPES: { id: DiagramType; label: string; hint: string }[] = [
   { id: "territory",     label: "Territory",     hint: "Weighted treemap — concept areas by size" },
 ];
 
-const FORMATS: { id: CardFormat; label: string; size: string; w: number; h: number }[] = [
-  { id: "card",   label: "Card",   size: "1200 × 630", w: 1200, h: 630 },
-  { id: "square", label: "Square", size: "1080 × 1080", w: 1080, h: 1080 },
+const FORMATS: { id: CardFormat; label: string; hint: string; w: number; h: number }[] = [
+  { id: "card",   label: "Card",   hint: "1200 × 630", w: 1200, h: 630 },
+  { id: "square", label: "Square", hint: "1080 × 1080", w: 1080, h: 1080 },
 ];
 
 export function SocialCardGenerator() {
@@ -73,87 +61,38 @@ export function SocialCardGenerator() {
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
-
-        <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Layout</h2>
-          <div className="space-y-1">
-            {LAYOUTS.map(({ id, label, hint }) => (
-              <label key={id} className="flex items-start gap-2 cursor-pointer">
-                <input type="radio" name="layout" value={id} checked={layout === id}
-                  onChange={() => setLayout(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
-                <span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <Section title="Layout">
+          <RadioList name="layout" value={layout} options={LAYOUTS} onChange={setLayout} />
+        </Section>
 
         {layout === "diagram" && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Diagram</h2>
-            <div className="space-y-1">
-              {DIAGRAM_TYPES.map(({ id, label, hint }) => (
-                <label key={id} className="flex items-start gap-2 cursor-pointer">
-                  <input type="radio" name="diagramType" value={id} checked={diagramType === id}
-                    onChange={() => setDiagramType(id)} className="accent-xco-dusk mt-0.5 shrink-0" />
-                  <span>
-                    <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                    <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</span>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <Section title="Diagram">
+            <RadioList name="diagramType" value={diagramType} options={DIAGRAM_TYPES} onChange={setDiagramType} />
+          </Section>
         )}
 
-        <div className="space-y-4 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Content</h2>
-          <label className="block space-y-1">
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-wider">Headline</span>
-            <textarea value={headline} onChange={(e) => setHeadline(e.target.value)} rows={3}
-              className="w-full bg-transparent border border-xco-ink font-body text-[24px] leading-[26px] text-xco-ink py-2 px-2 focus:border-xco-ink transition-colors resize-none" />
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Keep under 60 chars for clean wrapping</p>
-          </label>
-          <FieldInput label="Tag" value={tag} onChange={setTag}
-            hint='Short label — shown as [TAG]' mono />
-          <FieldInput label="Byline" value={byline} onChange={setByline}
-            hint="Author, org, or publication" />
-        </div>
+        <Section title="Content">
+          <TextField label="Headline" value={headline} onChange={setHeadline} multiline rows={3} hint="Keep under 60 chars for clean wrapping" />
+          <TextField label="Tag" value={tag} onChange={setTag} hint="Short label — shown as [TAG]" />
+          <TextField label="Byline" value={byline} onChange={setByline} hint="Author, org, or publication" />
+        </Section>
 
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
-          {FORMATS.map(({ id, label, size }) => (
-            <label key={id} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-dusk" />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{size}</span>
-            </label>
-          ))}
-        </div>
+        <Section title="Format">
+          <RadioList name="format" value={format} options={FORMATS} onChange={setFormat} />
+        </Section>
 
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
-          <label className="flex items-start gap-2 cursor-pointer pb-2">
-            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
-            <span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
-            </span>
-          </label>
+        <Section title="Export">
+          <Checkbox label="Time print" hint={TIME_PRINT_HINT} checked={timePrintOn} onChange={setTimePrintOn} />
           {[
-            { id: "svg", label: `SVG — ${activeFormat.size}` },
-            { id: "png", label: `PNG — ${activeFormat.size}` },
+            { id: "svg", label: `SVG — ${activeFormat.hint}` },
+            { id: "png", label: `PNG — ${activeFormat.hint}` },
           ].map(({ id, label }) => (
-            <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            <Button key={id} onClick={() => handle(id)} disabled={exporting !== null}>
               {exporting === id ? "exporting…" : `↓ ${label}`}
-            </button>
+            </Button>
           ))}
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* Preview */}
@@ -161,7 +100,7 @@ export function SocialCardGenerator() {
         <div className="border border-xco-ink overflow-hidden bg-xco-paper">
           <SocialCardDiagram {...props} format={format} />
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           {format === "card" ? "1200 × 630 — LinkedIn / Substack OG" : "1080 × 1080 — Instagram / social square"}
         </p>
       </div>

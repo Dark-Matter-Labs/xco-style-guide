@@ -3,7 +3,9 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, Checkbox, ExportError, labelClass, RadioList, Section, Slider, useExport,
+} from "@/components/generator-controls";
 import { exportPNG, exportSVG } from "@/lib/media/export";
 import { OptionFieldDiagram, resolveSpacing } from "./OptionFieldDiagram";
 import type { FieldFormat, FieldColorMode } from "./OptionFieldDiagram";
@@ -25,30 +27,7 @@ const COLOR_MODES: { id: FieldColorMode; label: string; hint: string }[] = [
   { id: "warmth",    label: "Warmth",    hint: "dusk to sand on paper" },
 ];
 
-function Slider({
-  label, hint, value, onChange, min = 0, max = 1, step = 0.01,
-  display,
-}: {
-  label: string; hint?: string; value: number; onChange: (v: number) => void;
-  min?: number; max?: number; step?: number; display?: string;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-baseline justify-between">
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-          {label}
-        </span>
-        <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">
-          {display ?? value.toFixed(2)}
-        </span>
-      </div>
-      <input type="range" aria-label={label} min={min} max={max} step={step} value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-xco-dusk" />
-      {hint && <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{hint}</p>}
-    </div>
-  );
-}
+const two = (v: number) => v.toFixed(2);
 
 export function OptionFieldGenerator() {
   const [fieldStr,    setFieldStr]    = useState(0.72);
@@ -85,83 +64,38 @@ export function OptionFieldGenerator() {
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
+        <Section title="Regime composition">
+          <Slider label="Field" hint="systemic foundation — lower register" value={fieldStr} onChange={setFieldStr} display={two(fieldStr)} />
+          <Slider label="Frontier" hint="open, emerging — upper left" value={frontierStr} onChange={setFrontierStr} display={two(frontierStr)} />
+          <Slider label="Fortress" hint="concentrated, constrained — upper right" value={fortressStr} onChange={setFortressStr} display={two(fortressStr)} />
+        </Section>
 
-        {/* Field composition */}
-        <div className="space-y-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Regime composition
-          </h2>
-          <Slider label="Field" hint="systemic foundation — lower register"
-            value={fieldStr} onChange={setFieldStr} />
-          <Slider label="Frontier" hint="open, emerging — upper left"
-            value={frontierStr} onChange={setFrontierStr} />
-          <Slider label="Fortress" hint="concentrated, constrained — upper right"
-            value={fortressStr} onChange={setFortressStr} />
-        </div>
+        <Section title="Texture">
+          <Slider label="Volatility" hint="spatial variation — noise in the field" value={volatility} onChange={setVolatility} display={two(volatility)} />
+          <Slider label="Resolution" min={0} max={100} step={1} value={resolution} onChange={setResolution}
+            display={`${resolveSpacing(resolution)}px`} hint="scanline spacing — coarse to fine" />
+        </Section>
 
-        {/* Volatility */}
-        <div className="space-y-2 pt-4">
-          <Slider label="Volatility" hint="spatial variation — noise in the field"
-            value={volatility} onChange={setVolatility} />
-        </div>
+        <Section title="Colour">
+          <RadioList name="color" value={colorMode} options={COLOR_MODES} onChange={setColorMode} />
+        </Section>
 
-        {/* Resolution */}
-        <div className="space-y-2 pt-4">
-          <Slider label="Resolution" min={0} max={100} step={1}
-            value={resolution} onChange={setResolution}
-            display={`${resolveSpacing(resolution)}px`}
-            hint="scanline spacing — coarse to fine"
-          />
-        </div>
+        <Section title="Format">
+          <RadioList name="format" value={format} options={FORMATS} onChange={setFormat} />
+        </Section>
 
-        {/* Color */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
-          {COLOR_MODES.map(({ id, label, hint }) => (
-            <label key={id} className="flex items-start gap-2 cursor-pointer">
-              <input type="radio" name="color" value={id} checked={colorMode === id}
-                onChange={() => setColorMode(id)} className="accent-xco-dusk mt-0.5" />
-              <span className="space-y-0.5">
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{label}</span>
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">{hint}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-
-        {/* Format */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
-          {FORMATS.map(({ id, label }) => (
-            <label key={id} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="format" value={id} checked={format === id}
-                onChange={() => setFormat(id)} className="accent-xco-dusk" />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-            </label>
-          ))}
-        </div>
-
-        {/* Export */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
-          <label className="flex items-start gap-2 cursor-pointer pb-2">
-            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
-            <span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
-            </span>
-          </label>
+        <Section title="Export">
+          <Checkbox label="Time print" hint={TIME_PRINT_HINT} checked={timePrintOn} onChange={setTimePrintOn} />
           {[
             { id: "svg", label: `SVG — ${activeDim.label}` },
             { id: "png", label: `PNG — ${activeDim.label}` },
           ].map(({ id, label }) => (
-            <button key={id} onClick={() => handle(id)} disabled={exporting !== null}
-              className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+            <Button key={id} onClick={() => handle(id)} disabled={exporting !== null}>
               {exporting === id ? "exporting…" : `↓ ${label}`}
-            </button>
+            </Button>
           ))}
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* Preview */}
@@ -170,7 +104,7 @@ export function OptionFieldGenerator() {
           style={{ background: colorMode === "inverted" ? INK : colorMode === "blueprint" ? NAVY : PAPER }}>
           <OptionFieldDiagram {...props} format={format} />
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           {activeDim.label} · {resolveSpacing(resolution)}px scanlines
           · f{fieldStr.toFixed(2)} fr{frontierStr.toFixed(2)} fo{fortressStr.toFixed(2)}
         </p>

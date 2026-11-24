@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { download } from "@/lib/media/export";
+import { Button, ExportError, labelClass, RadioList, Section, useExport } from "@/components/generator-controls";
 import {
   buildClaudePrompt,
   buildCSSVariables,
@@ -64,11 +65,17 @@ export function DesignExportGenerator() {
   const activeExport = EXPORTS.find((e) => e.id === active)!;
   const content = activeExport.build();
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(content);
-    setCopied(active);
-    setTimeout(() => setCopied(null), 2000);
-  };
+  const { error, run } = useExport();
+  const handleCopy = () =>
+    run("copy", async () => {
+      try {
+        await navigator.clipboard.writeText(content);
+      } catch {
+        throw new Error("The browser blocked the clipboard. Use the download instead.");
+      }
+      setCopied(active);
+      setTimeout(() => setCopied(null), 2000);
+    });
 
   const handleDownload = () => download(new Blob([content], { type: "text/plain;charset=utf-8" }), activeExport.filename);
 
@@ -77,91 +84,48 @@ export function DesignExportGenerator() {
 
       {/* ── Controls ── */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
+        <Section title="Export format">
+          <RadioList name="export" value={active} options={EXPORTS.map(({ id, label, tag }) => ({ id, label, hint: tag }))} onChange={setActive} />
+        </Section>
 
-        {/* Export type selector */}
-        <div className="space-y-1">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">
-            Export format
-          </h2>
-          {EXPORTS.map(({ id, label, tag }) => (
-            <button
-              key={id}
-              onClick={() => setActive(id)}
-              className={`w-full text-left flex items-center justify-between gap-3 py-2.5 px-3 border transition-colors ${
-                active === id
-                  ? "border-xco-ocean bg-xco-ocean/[0.05] text-xco-ink"
-                  : "border-xco-ink text-xco-ink"
-              }`}
-            >
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6]">{label}</span>
-              <span
-                className={`font-mono text-[10px] px-1.5 py-0.5 shrink-0 ${
-                  active === id
-                    ? "bg-xco-ocean text-xco-on-accent"
-                    : "bg-transparent text-xco-ink"
-                }`}
-              >
-                {tag}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Description */}
-        <div className="pt-4 space-y-3">
+        <div className="space-y-3">
           <p className="font-body text-[24px] leading-[26px] text-xco-ink">
             {activeExport.description}
           </p>
           {active === "claude" && (
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug">
+            <p className={labelClass}>
               Works with any framework. Claude Code reads CLAUDE.md automatically at session start.
             </p>
           )}
         </div>
 
-        {/* Actions */}
-        <div className="space-y-2 pt-4">
-          <button
-            onClick={handleCopy}
-            className={`w-full font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2.5 border transition-colors ${
-              copied === active
-                ? "bg-xco-ocean text-xco-on-accent border-xco-ocean"
-                : "text-xco-ink border-xco-ink hover:border-xco-ink hover:bg-xco-ink/[0.04]"
-            }`}
-          >
+        <Section title="Use it">
+          <Button onClick={handleCopy} pressed={copied === active}>
             {copied === active ? "Copied to clipboard" : "Copy to clipboard"}
-          </button>
-          <button
-            onClick={handleDownload}
-            className="w-full font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2.5 hover:border-xco-ink hover:text-xco-ink transition-colors"
-          >
-            ↓ Download — {activeExport.filename}
-          </button>
-        </div>
+          </Button>
+          <Button onClick={handleDownload}>↓ Download — {activeExport.filename}</Button>
+          <ExportError error={error} />
+        </Section>
 
-        {/* Usage hint for Claude */}
         {active === "claude" && (
-          <div className="border border-xco-ink p-3 space-y-1.5">
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
-              How to use
-            </p>
-            <ol className="space-y-1.5 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink leading-snug list-none">
+          <Section title="How to use">
+            <ol className={`space-y-1.5 ${labelClass} list-none`}>
               <li>1. Copy or download the CLAUDE.md</li>
               <li>2. Place it at your project root</li>
               <li>3. Add the CSS tokens (copy the CSS export)</li>
-              <li>4. Run <span className="text-xco-ink">claude</span> in that directory</li>
+              <li>4. Run <code className="font-code">claude</code> in that directory</li>
             </ol>
-          </div>
+          </Section>
         )}
       </aside>
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <span className={labelClass}>
             {activeExport.filename} — {content.split("\n").length} lines
           </span>
-          <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <span className={labelClass}>
             {(new Blob([content]).size / 1024).toFixed(1)} KB
           </span>
         </div>
@@ -172,9 +136,8 @@ export function DesignExportGenerator() {
           </pre>
         </div>
 
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-          Generated from{" "}
-          <span className="text-xco-ink">lib/design-tokens.ts</span> — always reflects the current token set.
+        <p className={labelClass}>
+          Generated from <code className="font-code">lib/design-tokens.ts</code> — always reflects the current token set.
         </p>
       </div>
     </div>
