@@ -7,6 +7,11 @@ import {
   type TerritoryColorMode,
   type TerritoryItem,
 } from "./TerritoryDiagram";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { exportPNG, exportSVG } from "@/lib/media/export";
+
+// The system's largest corner radius is 0.125rem: 2 px at the 16 px root.
+const MAX_RADIUS = 2;
 
 // ── Default data ─────────────────────────────────────────────────────────────
 
@@ -26,42 +31,6 @@ const DEFAULT_ITEMS: ItemState[] = [
   { id: 7, label: "Emergence",     sublabel: "",                     weight: 15  },
   { id: 8, label: "Reversibility", sublabel: "",                     weight: 10  },
 ];
-
-// ── Export helpers ───────────────────────────────────────────────────────────
-
-function svgToString(el: SVGSVGElement): string {
-  return (
-    '<?xml version="1.0" standalone="no"?>\n' +
-    new XMLSerializer().serializeToString(el)
-  );
-}
-
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a   = document.createElement("a");
-  a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportSVG(el: SVGSVGElement | null, name: string) {
-  if (!el) return;
-  downloadBlob(new Blob([svgToString(el)], { type: "image/svg+xml;charset=utf-8" }), name);
-}
-
-async function exportPNG(
-  el: SVGSVGElement | null,
-  w: number, h: number,
-  name: string,
-): Promise<void> {
-  if (!el) return;
-  const res = await fetch("/api/export/png", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ svg: svgToString(el), width: w, height: h }),
-  });
-  if (!res.ok) throw new Error(`PNG export failed: ${res.status}`);
-  downloadBlob(await res.blob(), name);
-}
 
 // ── Slider ───────────────────────────────────────────────────────────────────
 
@@ -101,10 +70,9 @@ const COLOR_MODES: { id: TerritoryColorMode; label: string; hint: string }[] = [
 export function TerritoryGenerator() {
   const [items,        setItems]        = useState<ItemState[]>(DEFAULT_ITEMS);
   const [colorMode,    setColorMode]    = useState<TerritoryColorMode>("ink");
-  const [cornerRadius, setCornerRadius] = useState(10);
+  const [cornerRadius, setCornerRadius] = useState(MAX_RADIUS);
   const [gutter,       setGutter]       = useState(8);
   const [format,       setFormat]       = useState<TerritoryFormat>("hero");
-  const [exporting,    setExporting]    = useState<string | null>(null);
 
   // Refs for each format — hidden SVGs for export
   const heroRef   = useRef<SVGSVGElement>(null);
@@ -141,16 +109,14 @@ export function TerritoryGenerator() {
 
   // ── Export ────────────────────────────────────────────────────────────────
 
-  const handle = async (type: string) => {
-    setExporting(type);
-    try {
+  const { busy: exporting, error, run } = useExport();
+  const handle = (type: string) =>
+    run(type, () => {
       const slug = `xco-territory-${format}-${colorMode}`;
-      if (type === "svg") exportSVG(activeRef.current, `${slug}.svg`);
-      if (type === "png") await exportPNG(activeRef.current, activeDim.w, activeDim.h, `${slug}.png`);
-    } finally {
-      setExporting(null);
-    }
-  };
+      return type === "svg"
+        ? exportSVG(activeRef.current, `${slug}.svg`)
+        : exportPNG(activeRef.current, activeDim.w, activeDim.h, `${slug}.png`);
+    });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -247,7 +213,7 @@ export function TerritoryGenerator() {
             label="Corner radius"
             value={cornerRadius}
             onChange={setCornerRadius}
-            min={0} max={48}
+            min={0} max={MAX_RADIUS} step={0.5}
             display={`${cornerRadius}px`}
           />
           <Slider
@@ -284,6 +250,7 @@ export function TerritoryGenerator() {
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
+          <ExportError error={error} />
         </div>
       </aside>
 

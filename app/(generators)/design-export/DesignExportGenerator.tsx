@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { download } from "@/lib/media/export";
 import {
   buildClaudePrompt,
   buildCSSVariables,
@@ -69,15 +70,7 @@ export function DesignExportGenerator() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = activeExport.filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const handleDownload = () => download(new Blob([content], { type: "text/plain;charset=utf-8" }), activeExport.filename);
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">

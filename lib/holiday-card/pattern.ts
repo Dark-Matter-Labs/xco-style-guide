@@ -51,8 +51,9 @@ export function noise2D(r: () => number, oct = 3) {
   };
 }
 
-export function cliffordParams(r: () => number): [number, number, number, number] {
-  for (let k = 0; k < 80; k++) {
+/** The card's defaults (80 tries, 300 cells) are the animated card's; chaos asks for 60 and 260. */
+export function cliffordParams(r: () => number, tries = 80, minCells = 300): [number, number, number, number] {
+  for (let k = 0; k < tries; k++) {
     const p: [number, number, number, number] = [r() * 4 - 2, r() * 4 - 2, r() * 3 - 1.5, r() * 3 - 1.5];
     const [a, b, c, d] = p, cells = new Set<number>();
     let x = 0.1, y = 0.1;
@@ -60,7 +61,7 @@ export function cliffordParams(r: () => number): [number, number, number, number
       const nx = Math.sin(a * y) + c * Math.cos(a * x); y = Math.sin(b * x) + d * Math.cos(b * y); x = nx;
       if (i > 100) cells.add(Math.floor((x + 3) * 8) * 64 + Math.floor((y + 3) * 8));
     }
-    if (cells.size > 300) return p;
+    if (cells.size > minCells) return p;
   }
   return [-1.4, 1.6, 1.0, 0.7];
 }

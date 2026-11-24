@@ -3,7 +3,8 @@
 import { forwardRef, useMemo } from "react";
 import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
 import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
-import { paletteHex } from "@/lib/design-tokens";
+import { identityScales, paletteHex } from "@/lib/design-tokens";
+import { spatialWeight } from "@/lib/regimes/weight";
 
 const { paper: PAPER, ink: INK, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK } = paletteHex;
 
@@ -33,45 +34,8 @@ const DIMS: Record<FieldFormat, { vw: number; vh: number }> = {
 
 
 // resolution 0–100 → spacing 20→8px (coarser range → cleaner, less linework)
-function resolveSpacing(r: number): number {
+export function resolveSpacing(r: number): number {
   return Math.round(20 - (r / 100) * 12);
-}
-
-// Spatial weight function — encodes optionality field geometry
-// xRel, yRel ∈ [0,1]; y=0 is top, y=1 is bottom
-export function spatialWeight(
-  xRel: number,
-  yRel: number,
-  fieldStr: number,
-  frontierStr: number,
-  fortressStr: number,
-  volatility: number,
-  maxW: number,
-): number {
-  // Field foundation — broad, grows toward bottom (systemic ground)
-  const fld = fieldStr * (0.2 + 0.8 * Math.pow(yRel, 0.38)) * maxW * 0.88;
-
-  // Frontier zone — upper-left, lighter/sparse (open optionality)
-  const frDist = Math.hypot((xRel - 0.22) * 1.6, yRel - 0.28);
-  const fr = frontierStr * Math.max(0, 1 - frDist * 2.1) * maxW * 0.62;
-
-  // Fortress zone — upper-right, heavier/dense (concentrated, constrained)
-  const foDist = Math.hypot((xRel - 0.78) * 1.6, yRel - 0.28);
-  const fo = fortressStr * Math.max(0, 1 - foDist * 1.9) * maxW * 1.12;
-
-  // Convergence — centre-mid where the three regimes meet
-  const cvDist = Math.hypot(xRel - 0.50, (yRel - 0.50) * 1.25);
-  const cv = Math.min(fieldStr, fortressStr) * 0.52
-    * Math.max(0, 1 - cvDist * 2.75) * maxW;
-
-  // Spatial noise: multi-frequency sine combination
-  const noise = volatility * (
-    Math.sin(xRel * 11.3 + yRel *  8.7) * 0.42 +
-    Math.sin(xRel *  6.1 + yRel * 14.9) * 0.33 +
-    Math.sin(xRel * 18.7 + yRel *  3.4) * 0.25
-  ) * maxW * 0.32;
-
-  return Math.max(0.4, Math.min(maxW, fld + fr + fo + cv + noise));
 }
 
 function segmentColor(yRel: number, colorMode: FieldColorMode): string {
@@ -82,16 +46,18 @@ function segmentColor(yRel: number, colorMode: FieldColorMode): string {
     return INK;
   }
   if (colorMode === "blueprint") {
-    // Navy ground — teal (open/frontier) → ocean (field/systemic) by register
+    // Navy ground — teal (open/frontier) → ocean (field/systemic) by register.
+    // Teal and ocean are adjacent Field stops (500, 600), so the middle band
+    // takes the next stop out, Field 400, rather than an off-scale hex.
     if (yRel < 0.38) return TEAL;
     if (yRel > 0.62) return OCEAN;
-    return "#1A6E9B"; // mid interpolated
+    return identityScales.field[400];
   }
   if (colorMode === "warmth") {
-    // White ground — dusk (upper) → sand (lower) warmth gradient
+    // Paper ground — dusk (upper) → sand (lower); Signal 400 sits between them.
     if (yRel < 0.38) return DUSK;
     if (yRel > 0.62) return SAND;
-    return "#F29958"; // mid interpolated
+    return identityScales.signal[400];
   }
   return INK;
 }

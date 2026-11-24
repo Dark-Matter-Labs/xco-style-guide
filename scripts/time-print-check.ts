@@ -252,10 +252,9 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   // ── Task 4: three regimes and option field ──────────────────────────
   const slugFont = (html: string) => Number(/font-size="([\d.]+)"/.exec(lastText(html))![1]);
   const { ThreeRegimesDiagram } = await import("@/app/(generators)/three-regimes/ThreeRegimesDiagram");
-  const { AbstractThreeRegimesDiagram } = await import("@/app/(generators)/three-regimes/AbstractThreeRegimesDiagram");
   const trProps = {
     labels: { frontier: "Frontier", fortress: "Fortress", field: "Field", fieldSublabel: "the commons" },
-    relationshipStatement: "Field is the precondition for everything else", caption: "Three regimes", showAnnotations: true, amplitude: 0,
+    relationshipStatement: "Field is the precondition for everything else", caption: "Three regimes", showAnnotations: true,
   };
   const MARGIN: Record<string, [number, number]> = { classic: [80, 100], orbital: [80, 100], nested: [50, 50], columns: [40, 40] };
   for (const format of ["hero", "square"] as const) {
@@ -269,14 +268,8 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
         assert.ok(slugFont(html) <= margin / 3, `${what}: the slug is at most a third of its margin`);
       }
     }
-    const abs = renderToStaticMarkup(h(AbstractThreeRegimesDiagram, { ...trProps, format, timePrint: prop }));
-    checkArtwork(`three regimes abstract ${format}`, abs, 1200, hgt, format === "hero" ? 80 : 100, PAPER, true);
-    assert.ok(lastText(abs).includes("identity note"), `three regimes abstract ${format}: no words of its own, so the identity note`);
-    assert.ok(lastText(abs).includes('text-anchor="end"'), `three regimes abstract ${format}: on the gradient the slug hangs from the top, where paper type reads`);
-    endsInTheDark(`three regimes abstract ${format}`, abs, hgt);
   }
   absent("three regimes mark", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
-  absent("three regimes abstract mark", renderToStaticMarkup(h(AbstractThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
   absent("three regimes off", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "hero" })));
 
   const { OptionFieldDiagram } = await import("@/app/(generators)/option-field/OptionFieldDiagram");
@@ -362,7 +355,7 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
   for (const f of [
     "app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
-    "app/(generators)/three-regimes/ThreeRegimesDiagram.tsx", "app/(generators)/three-regimes/AbstractThreeRegimesDiagram.tsx",
+    "app/(generators)/three-regimes/ThreeRegimesDiagram.tsx",
     "app/(generators)/option-field/OptionFieldDiagram.tsx",
   ])
     assert.ok(!readFileSync(f, "utf8").includes("useMinute"), `${f} takes its minute from the generator`);

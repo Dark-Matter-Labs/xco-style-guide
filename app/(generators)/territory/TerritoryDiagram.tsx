@@ -3,6 +3,7 @@
 import { forwardRef, useMemo } from "react";
 import { squarify } from "@/lib/squarify";
 import { paletteHex, typography } from "@/lib/design-tokens";
+import { spectrumCell } from "@/lib/regimes/embeds";
 
 const { paper: PAPER, ink: INK, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK } = paletteHex;
 
@@ -52,11 +53,8 @@ function cellColors(
     return t < 0.5 ? { bg: SAND, fg: INK } : { bg: DUSK, fg: INK };
   }
   if (mode === "spectrum") {
-    const stops: [string, string][] = [
-      [SAND, INK], [DUSK, INK], [TEAL, PAPER], [OCEAN, PAPER], [NAVY, PAPER],
-    ];
-    const idx = Math.min(stops.length - 1, Math.floor(t * stops.length));
-    return { bg: stops[idx][0], fg: stops[idx][1] };
+    const [bg, fg] = spectrumCell(rank, total);
+    return { bg, fg };
   }
   return { bg: PAPER, fg: INK };
 }

@@ -3,12 +3,15 @@
 import { forwardRef, useMemo } from "react";
 import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
 import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
-import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
-import { squarify } from "@/lib/squarify";
-import { paletteHex } from "@/lib/design-tokens";
+import { OptionFieldEmbed, SweepGradient, TerritoryEmbed, ThreeRegimesMark } from "@/lib/regimes/embeds";
+import { paletteHex, typography } from "@/lib/design-tokens";
 import { logoGeometry, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
+import { wrap } from "@/lib/wrap";
 
-const { paper: PAPER, ink: INK, ocean: OCEAN, dusk: DUSK, sand: SAND, teal: TEAL, navy: NAVY , inkMuted: MUTED } = paletteHex;
+const { paper: PAPER, ink: INK, inkMuted: MUTED } = paletteHex;
+// Labels are Untitled Sans. The PNG route still renders them in DM Mono until it can load Untitled Sans (F01).
+const LABEL = typography.faces.body.stack;
+const SERIF = typography.faces.display.stack;
 
 // Header wordmark. Drawn from lib/logo.ts, never set in a font: the PNG
 // export only loads DM Mono, so a <text> in Untitled Serif rendered as DM Mono
@@ -41,9 +44,6 @@ function HeaderMark({ x, fill }: { x: number; fill: string }) {
   );
 }
 
-const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap');`;
-
-
 // A4 at 96dpi — 794×1123
 export const COVER_W = 794;
 export const COVER_H = 1123;
@@ -60,146 +60,6 @@ export interface PaperCoverProps {
   className?:  string;
   /** The time print's minute and words, from the generator; null or absent when it is off. */
   timePrint?:  TimePrintProp | null;
-}
-
-function wrap(text: string, maxChars: number): string[] {
-  const words = text.split(/\s+/);
-  const lines: string[] = [];
-  let line = "";
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (test.length > maxChars && line) { lines.push(line); line = word; }
-    else line = test;
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
-// Simplified Three Regimes mark — clean, no jitter
-function CoverMark({ cx, cy, scale }: { cx: number; cy: number; scale: number }) {
-  const S = scale;
-  const fr = { cx: 100, cy: 62, w: 120, h: 45 };
-  const fo = { cx: 300, cy: 62, w: 120, h: 45 };
-  const fi = { cx: 200, cy: 157, w: 300, h: 46 };
-  const merge = { x: 200, y: 116 };
-  const tx = cx - 200 * S;
-  const ty = cy - 100 * S;
-
-  return (
-    <g transform={`translate(${tx},${ty}) scale(${S})`}>
-      <line x1={fr.cx} y1={fr.cy + fr.h/2} x2={merge.x} y2={merge.y}
-        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
-      <line x1={fo.cx} y1={fo.cy + fo.h/2} x2={merge.x} y2={merge.y}
-        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
-      <line x1={merge.x} y1={merge.y} x2={fi.cx} y2={fi.cy - fi.h/2}
-        stroke={DUSK} strokeWidth={1.2/S} strokeLinecap="round" />
-      <circle cx={merge.x} cy={merge.y} r={2.5/S} fill={DUSK} />
-      <rect x={fr.cx - fr.w/2} y={fr.cy - fr.h/2} width={fr.w} height={fr.h}
-        fill={PAPER} stroke={INK} strokeWidth={1/S} />
-      <rect x={fo.cx - fo.w/2} y={fo.cy - fo.h/2} width={fo.w} height={fo.h}
-        fill={PAPER} stroke={INK} strokeWidth={1/S} />
-      <rect x={fi.cx - fi.w/2} y={fi.cy - fi.h/2} width={fi.w} height={fi.h}
-        fill={PAPER} stroke={OCEAN} strokeWidth={1/S} strokeDasharray={`${5/S} ${3.5/S}`} />
-    </g>
-  );
-}
-
-// Linear gradient for cover visual zone — same sweep as other abstract assets
-function CoverAbstractGradient({ top, bottom }: { top: number; bottom: number }) {
-  return (
-    <linearGradient id="cv-abstract" gradientUnits="userSpaceOnUse"
-      x1={COVER_W / 2} y1={top} x2={COVER_W / 2} y2={bottom}>
-      <stop offset="0%"   stopColor={NAVY} />
-      <stop offset="35%"  stopColor={OCEAN} />
-      <stop offset="55%"  stopColor={TEAL} />
-      <stop offset="75%"  stopColor={SAND} />
-      <stop offset="100%" stopColor={DUSK} />
-    </linearGradient>
-  );
-}
-
-// ── Option Field embed ─────────────────────────────────────────────────────
-function OptionFieldCoverEmbed({
-  x0, y0, w, h,
-}: {
-  x0: number; y0: number; w: number; h: number;
-}) {
-  const spacing = 7;
-  const segW    = 5;
-  const maxW    = spacing * 1.5;
-  const segs: { x: number; y: number; sh: number }[] = [];
-
-  for (let y = spacing / 2; y < h; y += spacing) {
-    const yRel = y / h;
-    for (let x = 0; x < w; x += segW) {
-      const xRel = x / w;
-      const sh = spatialWeight(xRel, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
-      segs.push({ x: x0 + x, y: y0 + y, sh });
-    }
-  }
-
-  return (
-    <>
-      {segs.map((s, i) => (
-        <rect key={i} x={s.x} y={s.y - s.sh / 2} width={segW} height={s.sh} fill={INK} />
-      ))}
-    </>
-  );
-}
-
-// ── Territory embed ─────────────────────────────────────────────────────────
-const COVER_TERRITORY_ITEMS = [
-  { label: "Field",       weight: 100 },
-  { label: "Frontier",    weight: 65  },
-  { label: "Fortress",    weight: 50  },
-  { label: "Optionality", weight: 38  },
-  { label: "Transition",  weight: 25  },
-  { label: "Emergence",   weight: 15  },
-];
-
-const COVER_TERRITORY_PALETTE: [string, string][] = [
-  [SAND, INK],
-  [DUSK, INK],
-  [TEAL, PAPER],
-  [OCEAN, PAPER],
-  [NAVY, PAPER],
-];
-
-function TerritoryEmbed({ x0, y0, w, h }: { x0: number; y0: number; w: number; h: number }) {
-  const rects = squarify(COVER_TERRITORY_ITEMS, w, h);
-  const gutter = 3;
-  const half = gutter / 2;
-  return (
-    <>
-      <rect x={x0} y={y0} width={w} height={h} fill={INK} />
-      {rects.map((r, i) => {
-        const cx = r.x + half;
-        const cy = r.y + half;
-        const cw = r.w - gutter;
-        const ch = r.h - gutter;
-        if (cw < 4 || ch < 4) return null;
-        const t = rects.length <= 1 ? 0 : i / (rects.length - 1);
-        const idx = Math.min(COVER_TERRITORY_PALETTE.length - 1, Math.floor(t * COVER_TERRITORY_PALETTE.length));
-        const [bg, fg] = COVER_TERRITORY_PALETTE[idx];
-        const showLabel = cw >= 40 && ch >= 22;
-        const fs = Math.min(Math.min(cw, ch) * 0.14, 22);
-        return (
-          <g key={i}>
-            <rect x={x0 + cx} y={y0 + cy} width={cw} height={ch} fill={bg} />
-            {showLabel && (
-              <text
-                x={x0 + cx + cw / 2} y={y0 + cy + ch / 2}
-                textAnchor="middle" dominantBaseline="middle"
-                fontFamily="'DM Mono', monospace" fontSize={fs} fill={fg}
-              >
-                {r.label}
-              </text>
-            )}
-          </g>
-        );
-      })}
-    </>
-  );
 }
 
 export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
@@ -235,9 +95,8 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         className={className}
       >
         <defs>
-          <style>{FONT_IMPORT}</style>
           {visual === "abstract" && (
-            <CoverAbstractGradient top={visualTop} bottom={visualBottom} />
+            <SweepGradient id="cv-abstract" x={COVER_W / 2} top={visualTop} bottom={visualBottom} />
           )}
         </defs>
 
@@ -253,12 +112,12 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Three Regimes mark visual */}
         {visual === "mark" && (
-          <CoverMark cx={COVER_W / 2} cy={(visualTop + visualBottom) / 2} scale={0.85} />
+          <ThreeRegimesMark x={COVER_W / 2 - 200 * 0.85} y={(visualTop + visualBottom) / 2 - 100 * 0.85} scale={0.85} />
         )}
 
         {/* Option Field visual */}
         {visual === "option-field" && (
-          <OptionFieldCoverEmbed
+          <OptionFieldEmbed
             x0={0} y0={visualTop}
             w={COVER_W} h={visualBottom - visualTop}
           />
@@ -269,6 +128,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
           <TerritoryEmbed
             x0={0} y0={visualTop}
             w={COVER_W} h={visualBottom - visualTop}
+            gutter={3} labelMax={22}
           />
         )}
 
@@ -276,7 +136,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
             variants and an 80% tint is not one of them. */}
         <HeaderMark x={PAD} fill={INK} />
         <text x={PAD + HEADER_MARK_W + HEADER_GAP} y={HEADER_BASELINE}
-          fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.7}>
+          fontFamily={LABEL} fontSize={9} fill={MUTED} fillOpacity={0.7}>
           Expanding Civilizational Optionality
         </text>
 
@@ -291,7 +151,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Paper number */}
         {paperNumber && (
           <text x={PAD} y={numberY}
-            fontFamily="'DM Mono', monospace" fontSize={11}
+            fontFamily={LABEL} fontSize={11}
             fill={MUTED} letterSpacing="2">
             No. {paperNumber}
           </text>
@@ -300,7 +160,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Title */}
         {titleLines.map((line, i) => (
           <text key={i} x={PAD} y={titleStartY + i * titleLineH}
-            fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif"
+            fontFamily={SERIF}
             fontSize={44} fill={INK}>
             {line}
           </text>
@@ -309,7 +169,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Subtitle */}
         {subtitleLines.map((line, i) => (
           <text key={i} x={PAD} y={subtitleStartY + i * subtitleLineH}
-            fontFamily="'Untitled Serif', 'Crimson Pro', Georgia, serif" fontStyle="italic"
+            fontFamily={SERIF} fontStyle="italic"
             fontSize={22} fill={MUTED}>
             {line}
           </text>
@@ -322,7 +182,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Authors */}
         {authors && (
           <text x={PAD} y={COVER_H - 100}
-            fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} letterSpacing="1">
+            fontFamily={LABEL} fontSize={10} fill={MUTED} letterSpacing="1">
             {authors}
           </text>
         )}
@@ -330,14 +190,14 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         {/* Date */}
         {date && (
           <text x={PAD} y={COVER_H - 80}
-            fontFamily="'DM Mono', monospace" fontSize={10} fill={MUTED} fillOpacity={0.7}>
+            fontFamily={LABEL} fontSize={10} fill={MUTED} fillOpacity={0.7}>
             {date}
           </text>
         )}
 
         {/* Footer — org */}
         <text x={PAD} y={COVER_H - 44}
-          fontFamily="'DM Mono', monospace" fontSize={9} fill={MUTED} fillOpacity={0.5}
+          fontFamily={LABEL} fontSize={9} fill={MUTED} fillOpacity={0.5}
           letterSpacing="1">
           Dark Matter Labs
         </text>

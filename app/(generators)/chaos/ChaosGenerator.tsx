@@ -2,7 +2,8 @@
 
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { chaosSystems, generateChaos, type ChaosParams, type ChaosSystem } from "@/lib/chaos/systems";
-import { download, recordCanvas, videoSupport } from "@/lib/media/record-video";
+import { download } from "@/lib/media/export";
+import { recordCanvas, videoSupport } from "@/lib/media/record-video";
 import { Button, labelClass, RadioList, Section } from "@/components/generator-controls";
 import { attractorRaster, chaosPalettes, chaosSvg, drawChaos, type ChaosFrame, type ChaosLook, type ChaosPaletteId } from "./render";
 

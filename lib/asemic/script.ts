@@ -9,6 +9,9 @@
 // text always writes the same sheet but no word maps to a fixed glyph: open
 // writing, not a cipher. Pure and deterministic; no DOM.
 
+import { paletteHex } from "@/lib/design-tokens";
+import { fnv1a, lcg } from "@/lib/random";
+
 export type Register = "paper" | "ink";
 type Base = { row: number; token: number };
 export type Mark = Base & (
@@ -41,9 +44,7 @@ export interface Sheet {
   lines: string[];
 }
 
-export const INK = "#101F24";
-export const PAPER = "#F6F1E5";
-export const DUSK = "#F47743";
+export const { ink: INK, paper: PAPER, dusk: DUSK } = paletteHex;
 export const DENSITY = {
   sparse: [0.35, 0.55],
   normal: [0.45, 0.8],
@@ -57,11 +58,6 @@ const TOKEN = new RegExp("[\\p{L}\\p{M}\\p{N}’'\\-]+(?:\\.\\p{N}+)*|[.,:;]", "
 const LETTER = new RegExp("\\p{L}|\\p{N}", "u");
 const letters = (t: string) => Array.from(t).filter((c) => LETTER.test(c)).length;
 
-function rng(seed: number) {
-  let s = seed >>> 0 || 1;
-  return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
-}
-const hash = (str: string) => Array.from(str).reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
 const pick = <T,>(r: () => number, a: readonly T[]) => a[Math.floor(r() * a.length)];
 
 /** Words, punctuation (. , : ;) and "¶" after every line. */
@@ -184,7 +180,7 @@ export function writeSheet(text: string, o: SheetOptions): Sheet {
   // Repeat the text until the sheet is full; the token index keeps counting so every repeat is new.
   for (let tok = 0; row < o.rows && tok < once.length * 400; tok++) {
     const t = once[tok % once.length];
-    const r = rng(hash(o.seed + "|" + tok + "|" + t));
+    const r = lcg(fnv1a(o.seed + "|" + tok + "|" + t));
 
     if (t === "¶" || (t === "." && r() < 0.5)) {
       if (t === ".") {

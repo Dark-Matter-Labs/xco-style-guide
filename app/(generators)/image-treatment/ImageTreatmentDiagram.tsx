@@ -1,4 +1,5 @@
-import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { MARK } from "@/lib/regimes/embeds";
+import { embedWeight } from "@/lib/regimes/weight";
 
 export type ColorMode       = "ink" | "ember" | "inverted";
 export type TreatmentFormat = "card" | "square";
@@ -11,20 +12,17 @@ export const DIMS = {
   square: { vw: 1200, vh: 1200 },
 } as const;
 
-// Mark geometry — exported so the generator's SVG/canvas builders can share it
+// Mark geometry, from the shared mark — exported so the generator's SVG/canvas builders can share it
+const { frontier: FR, fortress: FO, field: FI, merge: M } = MARK;
 export const MARK_LINES: [number, number, number, number][] = [
-  [100, 84.5, 200, 116],
-  [300, 84.5, 200, 116],
-  [200, 116,  200, 134],
+  [FR.cx, FR.cy + FR.h / 2, M.x, M.y],
+  [FO.cx, FO.cy + FO.h / 2, M.x, M.y],
+  [M.x, M.y, FI.cx, FI.cy - FI.h / 2],
 ];
 
-const RECTS = [
-  { x: 40,  y: 39.5, w: 120, h: 45  },
-  { x: 240, y: 39.5, w: 120, h: 45  },
-  { x: 50,  y: 134,  w: 300, h: 46  },
-] as const;
+const RECTS = [FR, FO, FI].map((b) => ({ x: b.cx - b.w / 2, y: b.cy - b.h / 2, w: b.w, h: b.h }));
 
-const MERGE = { x: 200, y: 116, r: 4 };
+const MERGE = { ...M, r: 4 };
 
 function distSeg(px: number, py: number, x1: number, y1: number, x2: number, y2: number): number {
   const dx = x2 - x1, dy = y2 - y1;
@@ -80,7 +78,7 @@ export function computeOptionFieldDots(vw: number, vh: number, dotSpacing: numbe
   const dots: Dot[] = [];
   for (let cy = dotSpacing / 2; cy < vh; cy += dotSpacing) {
     for (let cx = dotSpacing / 2; cx < vw; cx += dotSpacing) {
-      const w = spatialWeight(cx / vw, cy / vh, 0.72, 0.60, 0.52, 0.34, maxW);
+      const w = embedWeight(cx / vw, cy / vh, maxW);
       const cov = Math.min(1, w / maxW);
       if (cov > 0.05) dots.push({ cx, cy, r: maxR * cov });
     }

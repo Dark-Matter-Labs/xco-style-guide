@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 
 // Form primitives shared by the generators (event-series, growth), in the
 // instruments' idiom (see social-card): mono labels, hairline inputs, native radios.
@@ -102,3 +102,26 @@ export function Button({
 }
 
 export const labelClass = label;
+
+/** Runs one export at a time and keeps a failure's message until the next try (show it with ExportError). */
+export function useExport() {
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const run = useCallback(async (id: string, task: () => void | Promise<void>) => {
+    setBusy(id);
+    setError(null);
+    try {
+      await task();
+    } catch (e) {
+      setError(e instanceof Error && e.message ? e.message : "Export failed. Try again.");
+    } finally {
+      setBusy(null);
+    }
+  }, []);
+  return { busy, error, run };
+}
+
+/** A failed export, said beside the export buttons. Always mounted, so a screen reader hears it arrive. */
+export function ExportError({ error }: { error: string | null }) {
+  return <p role="alert" className={`${label} text-xco-dusk-ink`}>{error}</p>;
+}

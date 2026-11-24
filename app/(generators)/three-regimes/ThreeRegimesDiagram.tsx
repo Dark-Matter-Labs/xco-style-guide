@@ -3,8 +3,8 @@
 import { forwardRef, useMemo } from "react";
 import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
 import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
-import { colors } from "@/lib/design-tokens";
-import { paletteHex } from "@/lib/design-tokens";
+import { colors, paletteHex, typography } from "@/lib/design-tokens";
+import { wrap } from "@/lib/wrap";
 
 const { navy: NAVY, ocean: OCEAN, teal: TEAL, dusk: DUSK } = paletteHex;
 
@@ -25,7 +25,6 @@ export interface ThreeRegimesDiagramProps {
   caption: string;
   showAnnotations: boolean;
   format: DiagramFormat;
-  amplitude: number;
   colorScheme?: DiagramColorScheme;
   structuralVariant?: StructuralVariant;
   /** The time print's minute and words, from the generator; null or absent when it is off. Never on the mark. */
@@ -33,7 +32,7 @@ export interface ThreeRegimesDiagramProps {
 }
 
 /** The slug's side margin: each variant's own side padding (classic and orbital leave the layout's 80 / 100). */
-export function slugMargin(variant: StructuralVariant, format: DiagramFormat): number {
+function slugMargin(variant: StructuralVariant, format: DiagramFormat): number {
   if (variant === "nested") return 50;
   if (variant === "columns") return 40;
   return format === "square" ? 100 : 80;
@@ -74,7 +73,7 @@ const LAYOUTS = {
 
 type LayoutData = (typeof LAYOUTS)[DiagramFormat];
 
-const FONT_SANS = `"Untitled Sans", system-ui, Arial, sans-serif`;
+const FONT_SANS = typography.faces.body.stack;
 
 const INK   = colors.ink.hex;
 const PAPER = colors.paper.hex;
@@ -146,19 +145,6 @@ function ClearLabel({
       )}
     </g>
   );
-}
-
-function wrapText(text: string, maxChars: number): string[] {
-  const words = text.split(/\s+/);
-  const lines: string[] = [];
-  let line = "";
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (test.length > maxChars && line) { lines.push(line); line = word; }
-    else line = test;
-  }
-  if (line) lines.push(line);
-  return lines;
 }
 
 // ── Variant props ──────────────────────────────────────────────────────────
@@ -410,7 +396,7 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
     };
 
     const annoLines = showAnnotations
-      ? wrapText(
+      ? wrap(
           "[inference] Field optionality as precondition — assumes capital can be directed toward systemic enablement, not only frontier push or fortress defence",
           L.annoChars,
         )

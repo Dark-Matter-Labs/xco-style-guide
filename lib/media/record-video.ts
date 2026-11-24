@@ -64,12 +64,3 @@ export async function recordCanvas(canvas: HTMLCanvasElement, o: RecordOptions):
   o.onProgress?.(1);
   return { blob: new Blob(chunks, { type: type.mime.split(";")[0] }), ext: type.ext };
 }
-
-export function download(blob: Blob, name: string): void {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
