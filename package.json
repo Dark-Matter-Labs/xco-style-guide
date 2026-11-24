@@ -16,6 +16,7 @@
     "x:check": "tsx scripts/x-operator-check.ts",
     "card:check": "tsx scripts/holiday-card-check.ts",
     "asemic:check": "tsx scripts/asemic-check.ts",
+    "time-print:check": "tsx scripts/time-print-check.ts",
     "a11y:audit": "tsx scripts/a11y-audit.ts"
   },
   "dependencies": {

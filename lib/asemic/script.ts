@@ -231,7 +231,15 @@ const f = (n: number) => +n.toFixed(2);
 export function toSvg(sheet: Sheet, register: Register, label: string, physical?: { w: string; h: string }): string {
   const fg = register === "ink" ? PAPER : INK;
   const bg = register === "ink" ? INK : PAPER;
+  const body = marksBody(sheet, fg, bg);
+  const w = sheet.width, h = sheet.height, l = esc(label);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${physical?.w ?? w}" height="${physical?.h ?? h}" role="img" aria-label="${l}"><title>${l}</title><rect width="${w}" height="${h}" fill="${bg}"/><g fill="none" stroke-linecap="butt">${body}</g></svg>`;
+}
+
+/** The marks alone, in fg. Beads knock out the thread with bg; null leaves them unfilled (for gradient grounds). */
+export function marksBody(sheet: Sheet, fg: string, bg: string | null): string {
   const U = sheet.unit;
+  const knock = bg ?? "none";
   let body = "";
   for (const m of sheet.marks) {
     switch (m.kind) {
@@ -245,14 +253,14 @@ export function toSvg(sheet: Sheet, register: Register, label: string, physical?
         body += `<path d="M${f(m.x)} ${f(m.y)}h${f(m.w)}" stroke="${fg}" stroke-width="${f(U * 0.22)}"/>`;
         break;
       case "box":
-        body += `<rect x="${f(m.x - m.w / 2)}" y="${f(m.y - m.h / 2)}" width="${f(m.w)}" height="${f(m.h)}" fill="${bg}" stroke="${fg}" stroke-width="${f(U * 0.25)}"/>`;
+        body += `<rect x="${f(m.x - m.w / 2)}" y="${f(m.y - m.h / 2)}" width="${f(m.w)}" height="${f(m.h)}" fill="${knock}" stroke="${fg}" stroke-width="${f(U * 0.25)}"/>`;
         break;
       case "ring":
         if (m.open) {
           // The logotype's C: a 100° opening, facing right.
           const a = (50 * Math.PI) / 180, px = f(m.x + m.r * Math.cos(a)), dy = m.r * Math.sin(a);
-          body += `<path d="M${px} ${f(m.y - dy)}A${f(m.r)} ${f(m.r)} 0 1 0 ${px} ${f(m.y + dy)}" fill="${bg}" stroke="${fg}" stroke-width="${f(U * 0.3)}"/>`;
-        } else body += `<circle cx="${f(m.x)}" cy="${f(m.y)}" r="${f(m.r)}" fill="${bg}" stroke="${fg}" stroke-width="${f(U * 0.3)}"/>`;
+          body += `<path d="M${px} ${f(m.y - dy)}A${f(m.r)} ${f(m.r)} 0 1 0 ${px} ${f(m.y + dy)}" fill="${knock}" stroke="${fg}" stroke-width="${f(U * 0.3)}"/>`;
+        } else body += `<circle cx="${f(m.x)}" cy="${f(m.y)}" r="${f(m.r)}" fill="${knock}" stroke="${fg}" stroke-width="${f(U * 0.3)}"/>`;
         break;
       case "x": {
         // The logotype's x proportions, 56 wide by 62 tall.
@@ -262,6 +270,5 @@ export function toSvg(sheet: Sheet, register: Register, label: string, physical?
       }
     }
   }
-  const w = sheet.width, h = sheet.height, l = esc(label);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${physical?.w ?? w}" height="${physical?.h ?? h}" role="img" aria-label="${l}"><title>${l}</title><rect width="${w}" height="${h}" fill="${bg}"/><g fill="none" stroke-linecap="butt">${body}</g></svg>`;
+  return body;
 }
