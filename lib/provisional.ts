@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-11",
+    title: "Exports may carry a time print: a faint asemic watermark of the minute they were made",
+    target: "Logo / Watermark",
+    href: "/logo#watermark",
+    status: "proposed",
+    proposedBy: "Indy",
+    date: "2026-11-24",
+    why: "Every snapshot that leaves the instruments carries a mark of its moment. The marks are grown from its own words, and the minute is printed in words beside them.",
+    previous: "The full logo may appear at about 7% as a decorative footer watermark, cropped by a corner, never at a size where it must be read.",
+    proposed: "Exports from the instruments may also carry a time print: an asemic sheet at about 6%, grown from the artwork's own words and seeded by the minute it was made, with that minute printed along one edge. It is decorative and proves nothing.",
+    decision: "Waiting for a named adopter.",
+  },
+  {
     id: "CH-10",
     title: "The logotype's parts may be used as marks in the asemic script",
     target: "Logo / Misuse",

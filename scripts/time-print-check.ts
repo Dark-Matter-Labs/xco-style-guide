@@ -323,6 +323,20 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
     assert.ok(!off.includes("Time print"), "no time print, no sentence");
   }
 
+  // ── Task 6: CH-11 ───────────────────────────────────────────────────
+  {
+    const { changeLog } = await import("@/lib/provisional");
+    const ch = changeLog.find((c) => c.id === "CH-11");
+    assert.ok(ch, "CH-11 is recorded");
+    eq(ch!.status, "proposed");
+    eq(ch!.href, "/logo#watermark");
+    eq(ch!.proposedBy, "Indy");
+    assert.ok((ch!.proposed ?? "").includes("proves nothing"), "CH-11 says the time print proves nothing");
+    const logo = readFileSync("app/(system)/logo/page.tsx", "utf8");
+    assert.ok(logo.includes('id="watermark"'), "the logo page's Watermark section has its anchor");
+    assert.ok(/c\.id === "CH-11"\)!\} compact/.test(logo), "CH-11 shows compact on the logo page");
+  }
+
   // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
   for (const f of [
     "app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
