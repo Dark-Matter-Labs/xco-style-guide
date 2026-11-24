@@ -160,21 +160,6 @@ export const antiPatterns = [
 
 export type AntiPattern = (typeof antiPatterns)[number];
 
-// ── Chromatic discipline (§11) ───────────────────────────────────────
-// Compositional proportion, stated as area roles rather than colour families.
-// Signal derives force from scarcity. 6.1 states the proportion outright as
-// "design defaults, not measured findings or a rule for every encounter".
-
-export const compositionalProportion = [
-  { pct: 70, role: "canvas", detail: "The reading ground." },
-  { pct: 20, role: "structure", detail: "Readable structure and boundary." },
-  { pct: 8, role: "trace", detail: "Analytic domain accents." },
-  { pct: 2, role: "signal", detail: "The current operative event." },
-] as const;
-
-export const proportionNote =
-  "Design defaults, not measured findings or a rule for every encounter. These are area roles, not mutually exclusive colour families.";
-
 // The one-jurisdiction-per-channel rule (§11).
 export const channelJurisdictions = [
   { channel: "Hue", carries: "Domain", never: "Epistemic status or sequence" },

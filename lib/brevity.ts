@@ -1,10 +1,13 @@
 // A red pencil — heuristics for the brevity practice (writing-practice.ts).
 //
-// These flag places to look, not errors: brevity is a judgment, and a long
-// sentence or a repeated phrase can be deliberate. The guard from Dm's
-// complexity check applies — cut words, not complexity.
+// These flag places to look, not errors: brevity is a judgment, and a
+// repeated phrase can be deliberate. The guard from Dm's complexity check
+// applies — cut words, not complexity.
+//
+// Sentence length has one cap, the plain register's (lib/ste.ts): 20 words
+// strict, 25 flavoured. The red pencil used to add a third, at 35; it no
+// longer measures length.
 
-export const LONG_SENTENCE_WORDS = 35;
 const REPEAT_N = 4; // phrases of this many words or more
 
 /** Wordy phrases with a shorter way to say them. */
@@ -26,7 +29,6 @@ export interface BrevityReport {
   words: number;
   sentences: number;
   meanSentence: number;
-  longSentences: { words: number; start: string }[];
   repeats: { phrase: string; count: number }[];
   wordy: { phrase: string; instead: string; count: number }[];
 }
@@ -44,12 +46,6 @@ const words = (s: string) => s.toLowerCase().match(/[a-z0-9’']+/g) ?? [];
 export function brevityReport(text: string): BrevityReport {
   const sents = sentencesOf(text);
   const all = words(text);
-  const sentenceWords = sents.map((s) => words(s).length);
-
-  const longSentences = sents
-    .map((s, i) => ({ words: sentenceWords[i], start: s.split(" ").slice(0, 8).join(" ") }))
-    .filter((s) => s.words > LONG_SENTENCE_WORDS);
-
   // Repeated phrases: find every REPEAT_N-word window seen more than once,
   // then merge consecutive repeated windows into the longest repeated run, so
   // "the system of care is fragile" is reported once, not as three overlaps.
@@ -86,7 +82,6 @@ export function brevityReport(text: string): BrevityReport {
     words: all.length,
     sentences: sents.length,
     meanSentence: sents.length ? Math.round(all.length / sents.length) : 0,
-    longSentences,
     repeats,
     wordy,
   };

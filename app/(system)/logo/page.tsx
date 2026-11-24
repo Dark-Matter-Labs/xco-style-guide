@@ -4,29 +4,16 @@ import { Logo } from "@/components/xco/Logo";
 import { changeLog } from "@/lib/provisional";
 import { logoGeometry } from "@/lib/logo";
 import { BRAND_NAME } from "@/lib/design-tokens";
-import { GroupMark, groundHex, ProvisionalChange } from "@/components/xco";
-import {
-  groupMarks,
-  groupColors,
-  aperturePositions,
-  markRules,
-  allocationStatus,
-  auditPairs,
-  contrastRatio,
-  MARK_CONTRAST_MIN,
-  VALUE_TWIN_MAX,
-  ANGLE_TWIN_MAX,
-} from "@/lib/group-marks";
-import { paletteHex } from "@/lib/design-tokens";
+import { ProvisionalChange } from "@/components/xco";
 import { LogoDownloads } from "./LogoDownloads";
 import { ConstructionDiagram } from "./ConstructionDiagram";
 
 const MISUSE = [
   { label: "Don't retype it", note: "The mark is drawn geometry, not set type. Never rebuild it in a font." },
-  { label: "Don't recolour freely", note: "Three variants exist. The x may carry dusk; nothing else may carry colour. One exception: a faint footer watermark at about 7%, cropped by a corner (CH-09)." },
+  { label: "Don't recolour freely", note: "Three colour variants exist, and one quiet fourth use: a faint footer watermark at about 7%, cropped by a corner (CH-09). The x may carry dusk; nothing else may carry colour." },
   { label: "Don't stretch it", note: "Scale proportionally. The stroke weight is tied to the cap height." },
   { label: "Don't add effects", note: "No shadows, gradients, outlines, or rounded caps. Terminals are cut flat." },
-  { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs." },
+  { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs. One exception: the x may leave the mark as operator, under the rules on /logo/x (CH-08). At rest it is always in place." },
   { label: "Don't box it", note: "Clear space is built into the file. Do not add a frame or a container." },
 ];
 
@@ -107,7 +94,7 @@ export default function LogoPage() {
 
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink max-w-2xl">
           [proposal] Not adopted. Before it can be: the x→C gap needs re-measuring
-          (<code className="font-mono">npm run logo:spacing</code> still checks the monoline
+          (<code className="font-code">npm run logo:spacing</code> still checks the monoline
           x), the lockup lines are still aligned to the monoline x&apos;s ink, and Klim&apos;s
           licence must cover outlining a glyph into a logo. Downloads stay monoline.
         </p>
@@ -155,7 +142,7 @@ export default function LogoPage() {
             [rule] The two gaps are equal in optical space, not in metric distance. The
             C&apos;s aperture faces the O and pours white into that gap, so C→O is negative:
             the boxes overlap before the pair holds as much space as x→C. Measured, not
-            eyeballed — <code className="font-mono">npm run logo:spacing</code> fails if the
+            eyeballed — <code className="font-code">npm run logo:spacing</code> fails if the
             pairs drift more than 10% apart.
           </p>
         </div>
@@ -231,13 +218,13 @@ export default function LogoPage() {
         <div className="max-w-2xl space-y-3 pt-2">
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
             [note] The descriptor and the &ldquo;An initiative of&rdquo; label are the one part
-            that is live text, set in DM Mono. The descriptor is tracked to span the mark flush on
-            both edges. Dark Matter Labs&apos; logo is DM&apos;s own master artwork, drawn as
-            paths: never retype it, and keep its clear space of one stamp height.
-            It rasterises correctly to PNG because the exporter loads that face, but an SVG
-            lockup opened on a machine without DM Mono will substitute those lines.
-            The glyphs themselves are unaffected. For third parties, send the PNG lockup or
-            the plain SVG.
+            that is live text, set in Untitled Sans, like every label. The descriptor is tracked
+            to span the mark flush on both edges. Dark Matter Labs&apos; logo is DM&apos;s own
+            master artwork, drawn as paths: never retype it, and keep its clear space of one
+            stamp height. An SVG lockup opened on a machine without Untitled Sans will
+            substitute those lines; the glyphs themselves are unaffected. Until the PNG exporter
+            can load Untitled Sans, PNG lockups still set these two lines in DM Mono, the one
+            face it has. For third parties, send the plain SVG, or the PNG once that is fixed.
           </p>
         </div>
       </section>
@@ -268,217 +255,18 @@ export default function LogoPage() {
 
       {/* Misuse */}
 
-      {/* ── Aperture system ─────────────────────────────────────────────
-          Documented from lib/group-marks.ts, the same module the PNG
-          generator renders from. The audit below is computed at build time,
-          so a bad combination surfaces here rather than in a chat list. */}
-      <section className="space-y-10">
-        <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Aperture system
-          </h2>
-          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-            One device for any family of related marks — Signal groups today,
-            anything needing a set tomorrow. Every mark is this same lockup with
-            the C&apos;s aperture rotated: the logotype&apos;s own argument made
-            literal, the same circle at a different openness.
-          </p>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [rule] A mark is ground <em>and</em> aperture. No pair may be weak on
-            both channels at once.
-          </p>
-        </div>
-
-        {/* The eight positions */}
-        <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            Eight positions, {aperturePositions.length} of {aperturePositions.length} allocated
-          </p>
-          <div className="flex flex-wrap gap-5">
-            {aperturePositions.map((deg) => {
-              const owner = groupMarks.find((m) => m.aperture === deg);
-              return (
-                <div key={deg} className="space-y-2">
-                  {owner ? (
-                    <GroupMark mark={owner} size={64} />
-                  ) : (
-                    <div
-                      className="w-16 h-16 rounded-full"
-                      style={{ border: "1px dashed var(--rule)" }}
-                    />
-                  )}
-                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink text-center">
-                    {deg}°
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Registry */}
-        <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            Registry
-          </p>
-          <div className="space-y-0">
-            {groupMarks.map((m) => {
-              const bg = groundHex(m);
-              const markContrast = Math.min(
-                contrastRatio(paletteHex[m.c], bg),
-                contrastRatio(paletteHex[m.x], bg),
-              );
-              const groundLabel =
-                m.ground.kind === "token"
-                  ? m.ground.token
-                  : groupColors[m.ground.color].label;
-              return (
-                <div
-                  key={m.id}
-                  className="grid grid-cols-[56px_1fr] lg:grid-cols-[56px_260px_1fr] gap-x-5 gap-y-2 py-5 items-start"
-                  style={{ borderTop: "1px solid var(--rule)" }}
-                >
-                  <GroupMark mark={m} size={48} />
-                  <div className="min-w-0 space-y-1">
-                    <p className="font-mono font-medium text-[0.9375rem] leading-[1.4] text-xco-ink">
-                      {m.name}
-                    </p>
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                      {groundLabel} · {m.aperture}° · {markContrast.toFixed(2)}:1
-                    </p>
-                    <a
-                      href={`/signal-groups/${m.file}.png`}
-                      className="inline-block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors"
-                    >
-                      {m.file}.png ↓
-                    </a>
-                  </div>
-                  <p className="col-span-2 lg:col-span-1 font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                    {m.note}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Greyscale proof */}
-        <div className="space-y-3">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            With hue removed
-          </p>
-          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-            What a colour-blind reader, a print run, or forced colours leaves
-            behind. The apertures still separate every mark — which is the test
-            of whether the second channel was ever real.
-          </p>
-          <div className="flex flex-wrap gap-3 pt-1">
-            {groupMarks.map((m) => (
-              <GroupMark key={m.id} mark={m} size={52} greyscale />
-            ))}
-          </div>
-        </div>
-
-        {/* Live audit */}
-        <div className="space-y-3">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            Pair audit
-          </p>
-          {(() => {
-            const pairs = auditPairs(groundHex);
-            const failing = pairs.filter((p) => p.failing);
-            const single = pairs.filter((p) => p.singleChannel);
-            return (
-              <>
-                <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-                  {pairs.length} pairs. {failing.length} weak on both channels.{" "}
-                  {single.length} rely on a single channel, each with the other
-                  channel far — listed below so the thin margins are visible
-                  rather than assumed.
-                </p>
-                {failing.length > 0 && (
-                  <div
-                    className="p-4 space-y-1"
-                    style={{ borderLeft: "3px solid var(--xco-dusk)" }}
-                  >
-                    {failing.map((p) => (
-                      <p
-                        key={`${p.a}-${p.b}`}
-                        className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                        style={{ color: "var(--xco-dusk-ink)" }}
-                      >
-                        ✗ {p.a} vs {p.b} — value {p.value.toFixed(2)}:1, angle {p.angle}°
-                      </p>
-                    ))}
-                  </div>
-                )}
-                <div className="space-y-0 max-w-3xl">
-                  {single.map((p) => (
-                    <div
-                      key={`${p.a}-${p.b}`}
-                      className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-x-4 py-2"
-                      style={{ borderBottom: "1px solid var(--border-subtle)" }}
-                    >
-                      <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink">
-                        {p.a} · {p.b}
-                      </p>
-                      <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted sm:text-right">
-                        value {p.value.toFixed(2)}:1 · angle {p.angle}° ·{" "}
-                        {p.value < VALUE_TWIN_MAX ? "aperture carries it" : "ground carries it"}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            );
-          })()}
-        </div>
-
-        {/* Rules */}
-        <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            Rules
-          </p>
-          <div className="space-y-0 max-w-3xl">
-            {markRules.map((r) => (
-              <div key={r.rule} className="py-4 space-y-1" style={{ borderBottom: "1px solid var(--rule)" }}>
-                <p className="font-display text-[20px] leading-[1.3] text-xco-ink">{r.rule}</p>
-                <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                  {r.detail}
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-            Thresholds: mark clears {MARK_CONTRAST_MIN}:1 on its ground ·
-            grounds under {VALUE_TWIN_MAX}:1 are one tone in greyscale ·
-            apertures within {ANGLE_TWIN_MAX}° are one shape at listing size.
-          </p>
-        </div>
-
-        {/* Adding one */}
-        <div
-          className="max-w-3xl p-6 space-y-3"
-          style={{ border: "1px solid var(--rule)", background: "var(--panel)" }}
-        >
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
-            Adding a mark
-          </p>
-          <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-            Add an entry to <code className="font-mono text-[0.9375rem]">lib/group-marks.ts</code>{" "}
-            and run <code className="font-mono text-[0.9375rem]">npm run avatars</code>. The
-            generator fails the run if any pair ends up weak on both channels,
-            and this page updates from the same registry.
-          </p>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [note] {allocationStatus.marks} marks on {allocationStatus.aperturesUsed}/
-            {allocationStatus.aperturesTotal} apertures, every documented tone, plus{" "}
-            {allocationStatus.groupColorsUsed} group colours — so apertures are now shared.
-          </p>
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-            {allocationStatus.nextNeeds}
-          </p>
-        </div>
+      {/* Group marks — their own page since 24 November 2026 */}
+      <section className="space-y-2 max-w-2xl">
+        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          Group marks
+        </h2>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+          One lockup with the C&apos;s aperture rotated, for any family of related
+          marks.{" "}
+          <Link href="/logo/groups" className="underline underline-offset-4 hover:text-xco-dusk-ink">
+            See group marks →
+          </Link>
+        </p>
       </section>
 
       <section className="space-y-8 pb-16">

@@ -8,6 +8,7 @@
 
 import { useEffect, useRef } from "react";
 import { cPath, inkBounds, logoGeometry, oPath, xPaths } from "@/lib/logo";
+import { identityScales, paletteHex } from "@/lib/design-tokens";
 import { dmInkLeft, dmStampHeight, dmStampPath, dmViewBox, dmWordmarkPath } from "@/lib/dm-logo";
 import { FACTS, attractor, density, fitter, network, places, tone, type Attractor } from "@/lib/holiday-card/pattern";
 
@@ -18,7 +19,8 @@ export interface Recipient {
   message?: string;
 }
 
-const GROUND = "#101F2D", CHALK = "#F6F1E5", EMBER = "#F47743", INK = "#101F24", MUTED = "#516962";
+const { navy: GROUND, paper: CHALK, dusk: EMBER, ink: INK } = paletteHex;
+const MUTED = identityScales.matter[600];
 const MM = 300 / 25.4; // print pixels per mm (300 dpi)
 const SHEET_W = 216, SHEET_H = 154, FOLD = 108, BLEED = 3, SAFE = 8;
 const INK_W = inkBounds.right - inkBounds.left, INK_H = inkBounds.bottom - inkBounds.top;

@@ -37,6 +37,8 @@ export interface VoicePrinciple {
   body: string;
   strand: StrandId;
   decision: { name: string; title: string; rationale: string };
+  /** The guide's note where the system has since moved on from the text. */
+  note?: string;
 }
 
 export const voicePrinciples: VoicePrinciple[] = [
@@ -63,6 +65,7 @@ export const voicePrinciples: VoicePrinciple[] = [
       title: "Declare how the claim is made.",
       rationale: "“Conjecture” names the status of the work. Observation, inference and hypothesis become visible parts of the argument. This allows a strong proposition to remain open to challenge.",
     },
+    note: "Indy's text names observation, inference and hypothesis, and stays as written. The guide's uncertainty markers are hunch, inference and hypothesis (Gurden, 24 Nov 2026). An observation with a source needs no marker.",
   },
   {
     n: "03",
@@ -175,6 +178,7 @@ export function voiceMarkdown(): string {
       "",
       `> **Decision ${p.n} · ${p.decision.name}: ${p.decision.title}** ${p.decision.rationale}`,
       "",
+      ...(p.note ? [`*Note: ${p.note}*`, ""] : []),
     ]),
     voiceSynthesis,
     "",

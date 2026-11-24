@@ -112,7 +112,7 @@
   /* Text on a saturated ground (ocean, navy). Static: unlike text-xco-paper
      it does not flip in the ink register, where paper-coloured text becomes
      ink and vanishes on ocean. Dusk and sand take ink instead — paper on
-     dusk is 2.77:1. */
+     dusk is under even the 3:1 bar (/logo/x shows the measured ratio). */
   --color-xco-on-accent: #F6F1E5;
   --color-xco-ink-fixed: #101F24;
 
@@ -137,6 +137,8 @@
   --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
   --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
   --font-code:    "DM Mono", "Courier New", monospace;
+  /* Preflight sets code, kbd, samp and pre in this face: code, not labels. */
+  --default-mono-font-family: "DM Mono", "Courier New", monospace;
 
   /* Tailwind's preflight reads --font-sans as the page's default face. */
   --font-sans:    "Untitled Sans", system-ui, Arial, sans-serif;
@@ -224,7 +226,7 @@
 
   /* Ink-safe accents — the only forms of dusk, ocean and teal allowed to be
      text. The saturated values are fills and strokes: dusk on paper is
-     2.77:1, under the 4.5:1 text bar. Solved for 4.6:1 on every text surface
+     under even the 3:1 bar, let alone 4.5:1 for text. Solved for 4.6:1 on every text surface
      (paper, raised, quiet) at the original hue — see lib/a11y. Ratios are
      not written here: npm run a11y measures them, and fails the build if any
      falls short. */
@@ -240,13 +242,13 @@
      3:1 on every surface in both registers (WCAG 2.4.7, 2.4.11). */
   --focus-ring: var(--xco-ink);
 
-  /* Semantic meanings — colour + shape, never colour alone */
-  --meaning-continuity: #267b61;  /* ● circle  */
-  --meaning-system:     #50649f;  /* ■ square  */
-  --meaning-risk:       #a0567e;  /* ▲ triangle */
-  --meaning-agency:     #8e6713;  /* ◆ diamond  */
-  --meaning-contested:  #41376d;  /* ⬡ hexagon  */
-  --meaning-critical:   #60221e;  /* ✕ cross    */
+  /* Semantic meanings — colour + shape, never colour alone. 8.1 stops. */
+  --meaning-continuity: #516962;  /* ∞ loop     MATTER 600 */
+  --meaning-system:     #335D76;  /* ≡ bars     FIELD 600  */
+  --meaning-risk:       #B84826;  /* ↯ break    SIGNAL 600 */
+  --meaning-agency:     #A13E25;  /* ↗ arrow    SIGNAL 700 */
+  --meaning-contested:  #1B344B;  /* ⬡ hexagon  FIELD 800  */
+  --meaning-critical:   #753122;  /* ✕ cross    SIGNAL 800 */
 
   /* Domain colours — orientational, not semantic */
   --domain-bio:     #699287;  /* TRACE biophysical, a step darker to clear 3:1 as a mark */

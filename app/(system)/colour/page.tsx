@@ -1,4 +1,4 @@
-import { colors, surfaceTokens, semanticMeanings, domainColors } from "@/lib/design-tokens";
+import { colors, surfaceTokens, semanticMeanings } from "@/lib/design-tokens";
 import { WIP } from "@/components/WIP";
 import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
 import { colorIn } from "@/lib/a11y/css-tokens";
@@ -153,6 +153,13 @@ export default function ColourPage() {
           identifier — colour reinforces but never substitutes. This ensures meaning is
           accessible regardless of colour vision.
         </p>
+        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
+          Hue carries domain, never epistemic status. The meanings keep to that: they name
+          what a thing does in a diagram, not how sure we are of it, so evidence status
+          stays in line, label and source. Their colours are Field, Signal and Matter
+          stops, never TRACE, and their shapes are line glyphs, never a domain&apos;s solid
+          circle, square, triangle or diamond, so a meaning never reads as a domain.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {semanticMeanings.map((m) => {
             const textColor = onSwatch(m.hex);
@@ -179,7 +186,7 @@ export default function ColourPage() {
                       className="font-mono font-medium text-[0.9375rem] leading-[1.6]"
                       style={swatchLabel(m.hex)}
                     >
-                      {m.shapeLabel}
+                      {m.shapeLabel} · {m.stop}
                     </p>
                   </div>
                 </div>
@@ -215,7 +222,7 @@ export default function ColourPage() {
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
           Five tones in two registers. Never mix registers within a single diagram.
-          Pick cool (blueprint) or warm (field) — not both.
+          Pick cool (blueprint, from Field) or warm (from Signal) — not both.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           <div>
@@ -248,7 +255,7 @@ export default function ColourPage() {
           </div>
           <div>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
-              Warm — Field
+              Warm — Signal
             </p>
             <div className="grid grid-cols-2 gap-4">
               {(["sand", "dusk"] as const).map((key) => (
@@ -279,49 +286,6 @@ export default function ColourPage() {
 
       <Proportion />
 
-      {/* Domain colours */}
-      <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
-          Domain Colours
-        </h2>
-        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
-          Four TRACE families ship as domain tokens — for tagging domains, not signalling
-          meanings. A bio-coloured element is not in "risk" or "agency": it is bio.
-          Biophysical is set a step deeper (#699287) so the mark clears 3:1 on paper.
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {domainColors.map((d) => {
-            const textColor = onSwatch(d.hex);
-            return (
-              <div key={d.name}>
-                <div
-                  className="h-28 flex flex-col justify-end p-3"
-                  style={{ backgroundColor: d.hex }}
-                >
-                  <p
-                    className="font-mono font-medium text-[0.75rem] leading-[1.4]"
-                    style={swatchLabel(d.hex)}
-                  >
-                    {d.hex}
-                  </p>
-                </div>
-                <div className="pt-3 space-y-1">
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                    {d.name}
-                  </p>
-                  <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                    {d.cssVar}
-                  </p>
-                  <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-                    {d.usage}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
       <Trace />
 
       <Highlights />
@@ -336,11 +300,13 @@ export default function ColourPage() {
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
           The inverse register is the cool deep field: Field 950 ground ({INVERSE_PAPER}) with
           chalk ink ({INVERSE_INK}). It exists as a reader preference (dark mode) and as an authored choice
-          for high-contrast sections using <code className="font-mono text-[0.9375rem]">data-register="inverse"</code>.
+          for high-contrast sections using <code className="font-code text-[0.9375rem]">data-register="inverse"</code>.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
-          Semantic meanings and domain colours are fixed — they do not swap in either register.
-          Only the surface tokens (paper, paper-raised, paper-quiet) and ink tokens invert.
+          Semantic meanings, the diagram palette and the domain marks are fixed — they do not
+          swap. Everything that is a ground or a text colour does: the four paper surfaces,
+          the three inks, the ink-safe accents (dusk-ink, ocean-ink, teal-ink), the domain
+          tints, grounds and inks, and the rule, border and grain tokens.
         </p>
         <div
           className="p-6 space-y-2"

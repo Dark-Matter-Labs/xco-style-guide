@@ -19,7 +19,7 @@ export const identityIntro = {
 export const typeAffordances = [
   { face: "Editorial serif", role: "Proposition", question: "What is being claimed?", body: "Titles, questions, propositions and reflective synthesis. Its default affordance is discursive authority — not an inherent “human” meaning." },
   { face: "Sans", role: "Operation", question: "Who acts next?", body: "Instructions, interfaces, connective copy and explicit actions. It carries operational clarity, not neutrality." },
-  { face: "Mono", role: "State + notation", question: "[ STATE / PROVISIONAL ]", body: "Identifiers, evidence status, local syntax and machine-readable states. Never to manufacture computational authority." },
+  { face: "Mono", role: "State + notation", question: "[ STATE / PROVISIONAL ]", body: "Identifiers, evidence status, local syntax and machine-readable states. Never to manufacture computational authority.", inXco: "In xCO, state and notation are set in Untitled Sans. A monospace is for code only (see /typography)." },
   { face: "Italic", role: "Voice + stance", question: "Whose voice enters?", body: "Situated voice, quotation, reflection or performed difference. Not a generic visual mannerism for vulnerability or doubt." },
 ] as const;
 
@@ -114,7 +114,7 @@ export function proofFragmentCSS(): string {
 }
 .xco-spine { min-width: 0; }
 .xco-spine p { font: 1.2rem/1.65 Georgia, serif; max-width: 65ch; }
-.xco-meta { font: .75rem/1.6 monospace !important; }
+.xco-meta { font: .75rem/1.6 "Untitled Sans", system-ui, sans-serif !important; }
 .xco-band { border-top: 1px solid var(--xco-rule); padding-top: 1rem; }
 .xco-condition {
   padding: .04em .17em;

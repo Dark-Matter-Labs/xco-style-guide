@@ -17,7 +17,7 @@ Live: **https://xco-style-guide.vercel.app**
 | Typography | `/typography` | ✓ live |
 | Colour | `/colour` | ✓ live |
 | Grid | `/grid` | [wip] stub |
-| Diagrammatic Grammar | `/diagrams` | ✓ live |
+| Diagrams | `/diagrams` | ✓ live |
 | Tone of Voice | `/tone` | ✓ live |
 | Components | `/components` | [wip] stub |
 

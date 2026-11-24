@@ -1,7 +1,7 @@
 // Group marks — the aperture system.
 //
 // One identity device, used wherever xCO needs a family of related marks that
-// must stay distinguishable: Signal group avatars today, and anything else
+// must stay distinguishable: chat-group avatars today, and anything else
 // needing a set rather than a single mark.
 //
 // THE DEVICE. Every mark is the same lockup — the lowercase x and the
@@ -23,7 +23,7 @@
 // This module is the single source of truth. scripts/generate-group-avatars.mjs
 // renders from it; the logo page documents from it. Ground colours are stored
 // as design-token NAMES rather than hex, so the two consumers both resolve
-// through lib/design-tokens.ts and no hex is duplicated — except the two
+// through lib/design-tokens.ts and no hex is duplicated — except the
 // group-identity colours, which have no token and are defined here.
 
 import { contrastRatio } from "./a11y/contrast";
@@ -55,7 +55,7 @@ export const ANGLE_TWIN_MAX = 45;
 // ── Group-identity colours ───────────────────────────────────────────
 // Not system tokens, and deliberately not added to design-tokens.ts. The
 // documented palette is allocated; these exist only to keep this family
-// separable. Both were chosen by measurement — see the notes on each mark.
+// separable. Each was chosen by measurement — see the notes on each mark.
 
 export const groupColors = {
   green: {
@@ -78,7 +78,7 @@ export const groupColors = {
 export type GroupColor = keyof typeof groupColors;
 
 // ── Ground and glyph references ──────────────────────────────────────
-// Ground is either a documented palette token or one of the two group
+// Ground is either a documented palette token or one of the group
 // colours. Glyphs are always palette tokens.
 
 export type Ground =

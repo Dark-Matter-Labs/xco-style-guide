@@ -1,4 +1,4 @@
-import { identityScales, identityScaleMeta, traceColors, highlightTokens, routeColors } from "@/lib/design-tokens";
+import { identityScales, identityScaleMeta, traceColors, domainColors, highlightTokens, routeColors } from "@/lib/design-tokens";
 import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
 import { PAPER_HEX, swatchLabel } from "./swatch";
 
@@ -23,8 +23,9 @@ export function IdentityScales() {
       <p className={`${BODY} mb-8 max-w-2xl`}>
         Prussian and atmospheric blue hold the wider field. Chalk and mineral
         matter carry legibility. Ember orange gives a locally declared hinge,
-        transition or possibility its presence. Every colour on this page is
-        one of these stops.
+        transition or possibility its presence. Paper, ink, the diagram palette
+        and the semantic meanings are drawn from these stops. TRACE and the
+        highlight fills are separate keys, further down.
       </p>
       <div className="space-y-10">
         {(Object.keys(identityScales) as ScaleKey[]).map((key) => (
@@ -97,16 +98,35 @@ export function Trace() {
       <p className={`${BODY} mb-8 max-w-2xl`}>
         Five subdued families distinguish analytic domains. Evidence status
         stays in line, label, source and relation type — never in the hue.
+        Four of them ship as domain tokens, for tagging domains, not
+        signalling meanings: a bio-coloured element is not in &ldquo;risk&rdquo;
+        or &ldquo;agency&rdquo;, it is bio.
       </p>
       <ul className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        {traceColors.map((t) => (
-          <li key={t.name}>
-            <div className="h-16 flex flex-col justify-end p-2" style={{ backgroundColor: t.hex }}>
-              <span className={SMALL} style={swatchLabel(t.hex)}>{t.hex}</span>
-            </div>
-            <p className={`${MONO} text-xco-ink pt-2`}>{t.name}</p>
-          </li>
-        ))}
+        {traceColors.map((t) => {
+          const d = domainColors.find((c) => c.name === t.domain);
+          return (
+            <li key={t.name}>
+              <div className="h-16 flex flex-col justify-end p-2" style={{ backgroundColor: t.hex }}>
+                <span className={SMALL} style={swatchLabel(t.hex)}>{t.hex}</span>
+              </div>
+              <p className={`${MONO} text-xco-ink pt-2`}>{t.name}</p>
+              {d ? (
+                <>
+                  <p className={`${SMALL} text-xco-ink-muted`}>{d.cssVar}</p>
+                  {d.hex !== t.hex && (
+                    <p className={`${SMALL} text-xco-ink-muted`}>
+                      As a mark, {d.hex}: a step deeper, to clear 3:1 on paper
+                      ({formatRatio(contrastRatio(d.hex, PAPER_HEX))}).
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className={`${SMALL} text-xco-ink-muted`}>No domain token</p>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

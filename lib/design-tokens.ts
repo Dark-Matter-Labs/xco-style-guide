@@ -8,7 +8,7 @@
 // Single source of truth for the version badge shown on the home page
 // footer and every system/generator page. Bump here only.
 
-export const SYSTEM_VERSION = "v0.2" as const;
+export const SYSTEM_VERSION = "v0.3" as const;
 
 // ── Colour ──────────────────────────────────────────────────────────
 // Since the Polyphonic Style Guide v8.1 (5 October 2026), the system's
@@ -100,13 +100,14 @@ export const identityScaleMeta = {
   matter: { name: "Matter", gloss: "Chalk to ink — ground, evidence, rule, readable structure" },
 } as const;
 
-/** TRACE — analytic accents. Name domain, never truth (8.1). */
+/** TRACE — analytic accents. Name domain, never truth (8.1). `domain` names
+ *  the family's shipped domain token, in domainColors below. */
 export const traceColors = [
-  { name: "Biophysical", hex: "#6F9A8E" },
-  { name: "Institutional", hex: "#70858B" },
-  { name: "Technical", hex: "#768197" },
-  { name: "Cultural", hex: "#956A73" },
-  { name: "Capital", hex: "#8D765B" },
+  { name: "Biophysical", hex: "#6F9A8E", domain: "bio" },
+  { name: "Institutional", hex: "#70858B", domain: "inst" },
+  { name: "Technical", hex: "#768197", domain: "tech" },
+  { name: "Cultural", hex: "#956A73", domain: "culture" },
+  { name: "Capital", hex: "#8D765B", domain: null },
 ] as const;
 
 /** Exact-span highlight fills — local roles behind Matter 900 text, always named. */
@@ -139,43 +140,53 @@ export type SurfaceToken = keyof typeof surfaceTokens;
 // ── Semantic meanings ────────────────────────────────────────────────
 // Six meanings, each with two channels: colour and shape.
 // Colour is never the sole carrier — shape is the primary identifier.
+// Re-derived from 8.1 (24 November 2026): each colour is the nearest
+// identity stop to its old value, and risk is the ember of the risk node,
+// taken one stop deeper (Signal 600) so the mark clears 3:1 on paper. The
+// shapes are line glyphs, so none repeats a domain's solid circle, square,
+// triangle or diamond (components/xco/Mark).
 
 export const semanticMeanings = [
   {
     name: "continuity",
-    hex: "#267b61",
+    hex: identityScales.matter[600],
+    stop: "Matter 600",
     cssVar: "--meaning-continuity",
-    shape: "●",
-    shapeLabel: "circle",
+    shape: "∞",
+    shapeLabel: "loop",
     usage: "Ongoing processes, maintenance, reproduction — what keeps going.",
   },
   {
     name: "system",
-    hex: "#50649f",
+    hex: identityScales.field[600],
+    stop: "Field 600",
     cssVar: "--meaning-system",
-    shape: "■",
-    shapeLabel: "square",
+    shape: "≡",
+    shapeLabel: "bars",
     usage: "Infrastructure, institutions, platforms — what structures action.",
   },
   {
     name: "risk",
-    hex: "#a0567e",
+    hex: identityScales.signal[600],
+    stop: "Signal 600",
     cssVar: "--meaning-risk",
-    shape: "▲",
-    shapeLabel: "triangle",
+    shape: "↯",
+    shapeLabel: "break",
     usage: "Threats, instabilities, failure modes — what could break.",
   },
   {
     name: "agency",
-    hex: "#8e6713",
+    hex: identityScales.signal[700],
+    stop: "Signal 700",
     cssVar: "--meaning-agency",
-    shape: "◆",
-    shapeLabel: "diamond",
-    usage: "Actor capacity, leverage points, decision power — who can act.",
+    shape: "↗",
+    shapeLabel: "arrow",
+    usage: "Actor capacity, decision power — who can act.",
   },
   {
     name: "contested",
-    hex: "#41376d",
+    hex: identityScales.field[800],
+    stop: "Field 800",
     cssVar: "--meaning-contested",
     shape: "⬡",
     shapeLabel: "hexagon",
@@ -183,7 +194,8 @@ export const semanticMeanings = [
   },
   {
     name: "critical",
-    hex: "#60221e",
+    hex: identityScales.signal[800],
+    stop: "Signal 800",
     cssVar: "--meaning-critical",
     shape: "✕",
     shapeLabel: "cross",
@@ -223,6 +235,8 @@ export const typography = {
   faces: {
     display: {
       family: "Untitled Serif",
+      // The CSS stack, for SVG and canvas, which cannot read var(--font-*).
+      stack: '"Untitled Serif", "Crimson Pro", Georgia, serif',
       cssVar: "--font-display",
       twClass: "font-display",
       weights: ["400 (regular)", "400i (italic)"],
@@ -230,6 +244,7 @@ export const typography = {
     },
     body: {
       family: "Untitled Sans",
+      stack: '"Untitled Sans", system-ui, Arial, sans-serif',
       cssVar: "--font-body",
       twClass: "font-body",
       weights: ["400 (regular)"],
@@ -237,6 +252,7 @@ export const typography = {
     },
     ui: {
       family: "Untitled Sans",
+      stack: '"Untitled Sans", system-ui, Arial, sans-serif',
       cssVar: "--font-ui",
       twClass: "font-ui",
       weights: ["400 (regular)", "500 (medium)"],
@@ -246,14 +262,16 @@ export const typography = {
       // The label role. Kept under its old name so every use moves together. Untitled Sans
       // since 3 November 2026: no monospace labels.
       family: "Untitled Sans",
+      stack: '"Untitled Sans", system-ui, Arial, sans-serif',
       cssVar: "--font-mono",
       twClass: "font-mono",
-      weights: ["400 (regular)", "400i (italic, annotations)"],
+      weights: ["400 (regular)"],
       usage:
         "Small text. Numbers, labels, annotations — showing the working. Untitled Sans, never a monospace.",
     },
     code: {
       family: "DM Mono",
+      stack: '"DM Mono", "Courier New", monospace',
       cssVar: "--font-code",
       twClass: "font-code",
       weights: ["400 (regular)"],
@@ -348,7 +366,7 @@ export const diagram = {
       fill: colors.dusk.hex,
       stroke: colors.ink.hex,
       strokeWidth: 1.5,
-      textColor: colors.paper.hex,
+      textColor: colors.ink.hex, // paper on dusk fails contrast
       border: "solid",
       usage: "The thing that triggers the response.",
     },
@@ -428,6 +446,23 @@ export const bannedWords = [
   // core vocabulary. Phrases are matched whole.
   "in this space",
 ] as const;
+
+// ── Uncertainty markers ──────────────────────────────────────────────
+// One vocabulary for how sure a claim is, settled by Gurden on 24 November
+// 2026: the EpistemicTag, the prompt templates, the linter and the diagram
+// annotations all read it. Firmest first. A claim with a source needs no
+// marker — cite the source.
+
+export const uncertaintyMarkers = [
+  { id: "inference",  use: "reasoning forward from known facts" },
+  { id: "hypothesis", use: "a claim put forward to be tested, including a fact not yet confirmed from a primary source" },
+  { id: "hunch",      use: "a felt sense, not yet reasoned or tested" },
+] as const;
+
+export type UncertaintyMarker = (typeof uncertaintyMarkers)[number]["id"];
+
+/** "[inference], [hypothesis], [hunch]" — for prompts and docs. */
+export const uncertaintyMarkerList = uncertaintyMarkers.map((m) => `[${m.id}]`).join(", ");
 
 // ── Spelling corrections — US English (linter) ───────────────────────
 // xCO writes in US English. Flag British spellings and show corrections.

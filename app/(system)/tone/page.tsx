@@ -161,12 +161,15 @@ export default function TonePage() {
       {/* Spelling — US English */}
       <section className="max-w-3xl">
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
-          Spelling — US English Throughout
+          Spelling — US English for Outward Copy
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8">
-          xCO writes in US English. The project name itself — Expanding
-          Civilizational Optionality — uses the American -{`>`}ization spelling.
-          Use -ize, not -ise. Use -or, not -our. Use -er, not -re.
+          Everything xCO publishes is in US English: papers, posts, the website,
+          slides, captions and anything a prompt template drafts. The project
+          name itself — Expanding Civilizational Optionality — uses the American
+          -ization spelling. Use -ize, not -ise. Use -or, not -our. Use -er, not
+          -re. The rule is for outward copy only: this guide&apos;s own pages keep
+          the spelling they were written in.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-2">
           {[...spellingCorrections].map(({ british, american }) => (

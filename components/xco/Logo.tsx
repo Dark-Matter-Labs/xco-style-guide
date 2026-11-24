@@ -10,6 +10,8 @@ import {
   endorsementMetrics,
   lockupHeight,
   inkBounds,
+  LOCKUP_FONT,
+  LOCKUP_WEIGHT,
   type LogoVariant,
 } from "@/lib/logo";
 import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
@@ -93,9 +95,9 @@ export function Logo({
         <text
           x={d.x}
           y={baseline + d.baselineGap}
-          fontFamily="DM Mono, monospace"
+          fontFamily={LOCKUP_FONT}
           fontSize={d.size}
-          fontWeight={500}
+          fontWeight={LOCKUP_WEIGHT}
           letterSpacing={d.tracking}
           fill={fg}
         >
@@ -107,9 +109,9 @@ export function Logo({
           <text
             x={e.labelX}
             y={baseline + d.baselineGap + e.labelBaselineGap}
-            fontFamily="DM Mono, monospace"
+            fontFamily={LOCKUP_FONT}
             fontSize={e.labelSize}
-            fontWeight={500}
+            fontWeight={LOCKUP_WEIGHT}
             letterSpacing={e.labelTracking}
             fill={fg}
           >

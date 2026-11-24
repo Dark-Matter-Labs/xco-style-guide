@@ -57,7 +57,7 @@ Rules and dividers: \`rgba(${rgbOf(colors.ink.hex)}, ${colors.rule.opacity})\` �
 
 ## Typography
 
-Four typefaces only. Do not introduce any other font families.
+Three typefaces only. Do not introduce any other font families.
 
 | Family | Tailwind class | Usage |
 |---|---|---|
@@ -69,7 +69,7 @@ ${faceRows}
 |---|---|---|---|
 ${scaleRows}
 
-Body measure (max-width): 68ch for body text. Reduce for captions and mono.
+Body measure (max-width): 68ch for body text. Reduce for captions and labels.
 
 ## Visual principles
 
@@ -123,9 +123,9 @@ ${meaningLines}
 \`\`\`
 
 Then load fonts:
-- Untitled Serif (licensed) — display + body; fallback: Crimson Pro (Google Fonts)
-- Untitled Sans (licensed) — UI; fallback: Inter (Google Fonts)
-- Untitled Sans — labels and annotations too. A monospace (DM Mono, Google Fonts) only for code.
+- Untitled Serif (licensed) — display; fallback: Crimson Pro (Google Fonts)
+- Untitled Sans (licensed) — body, UI, labels and annotations; fallback: the system sans
+- DM Mono (Google Fonts) — code only, never labels.
 `;
 }
 
@@ -172,11 +172,11 @@ export function buildTailwindV4(): string {
 ${colorEntries}
 
   /* Typography — Untitled fonts (licensed); system fallbacks shown */
-  --font-display: "Untitled Serif", "Crimson Pro", Georgia, serif;
-  --font-body:    "Untitled Serif", "Crimson Pro", Georgia, serif;
-  --font-ui:      "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-mono:    "Untitled Sans", system-ui, Arial, sans-serif;
-  --font-code:    "DM Mono", "Courier New", monospace;
+  --font-display: ${typography.faces.display.stack};
+  --font-body:    ${typography.faces.body.stack};
+  --font-ui:      ${typography.faces.ui.stack};
+  --font-mono:    ${typography.faces.mono.stack};
+  --font-code:    ${typography.faces.code.stack};
 
   /* Spacing */
   --xco-gutter: ${spacing.gutter};
@@ -209,7 +209,7 @@ ${colorEntries}
       },
       fontFamily: {
         display: ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
-        body:    ["Untitled Serif", "Crimson Pro", "Georgia", "serif"],
+        body:    ["Untitled Sans", "system-ui", "Arial", "sans-serif"],
         ui:      ["Untitled Sans", "system-ui", "Arial", "sans-serif"],
         mono:    ["Untitled Sans", "system-ui", "Arial", "sans-serif"],
         code:    ["DM Mono", "monospace"],

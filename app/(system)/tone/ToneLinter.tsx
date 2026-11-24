@@ -6,9 +6,12 @@ import {
   spellingCorrections,
   brandCasingErrors,
   BRAND_NAME,
+  uncertaintyMarkers,
 } from "@/lib/design-tokens";
-import { brevityReport, LONG_SENTENCE_WORDS, type BrevityReport } from "@/lib/brevity";
+import { brevityReport, type BrevityReport } from "@/lib/brevity";
 import { SteCheck } from "./SteCheck";
+
+const MARKER = new RegExp(`\\[(${uncertaintyMarkers.map((m) => m.id).join("|")})\\]`, "i");
 
 interface BannedMatch {
   word: string;
@@ -188,7 +191,7 @@ function classifyRegister(text: string): Omit<LinterResult, "bannedMatches" | "s
   if (/depends on/i.test(lower)) {
     aScore += 2; signals.push('"depends on" — dependency notation');
   }
-  if (/\[(unverified|inference|speculation)\]/i.test(lower)) {
+  if (MARKER.test(lower)) {
     aScore += 4; signals.push("explicit uncertainty marker");
   }
 
@@ -464,7 +467,7 @@ export function ToneLinter() {
 // can be deliberate. Cut words, not complexity.
 function RedPencil({ report }: { report: BrevityReport }) {
   const mono = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-  const nothing = !report.longSentences.length && !report.repeats.length && !report.wordy.length;
+  const nothing = !report.repeats.length && !report.wordy.length;
   return (
     <div className="space-y-3 pt-2" style={{ borderTop: "1px solid var(--border-default)" }}>
       <p className={`${mono} text-xco-ink tracking-widest uppercase pt-4`}>Red pencil — brevity</p>
@@ -474,15 +477,7 @@ function RedPencil({ report }: { report: BrevityReport }) {
       {nothing ? (
         <p className={`${mono} text-xco-ink`}>✓ Nothing obvious to cut. Read it once more for what only sounds like thinking.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {report.longSentences.length > 0 && (
-            <div className="space-y-1">
-              <p className={`${mono} text-xco-ink`}>Long sentences (over {LONG_SENTENCE_WORDS} words)</p>
-              {report.longSentences.map((l, i) => (
-                <p key={i} className={`${mono} text-xco-ink-muted`}>— {l.words} words: “{l.start}…”</p>
-              ))}
-            </div>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {report.repeats.length > 0 && (
             <div className="space-y-1">
               <p className={`${mono} text-xco-ink`}>Repeated phrases — deliberate?</p>

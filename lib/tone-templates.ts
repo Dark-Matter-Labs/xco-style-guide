@@ -15,11 +15,25 @@ function plainFor(mode: SteMode): string {
   return "- Plain register (STE-flavoured): 25 words or fewer per sentence. Active voice unless the actor is unknown. No semicolons. No phrasal verbs (start, not kick off). Verbs, not nominalizations. A list for three or more steps. Keep every hedge — never change “may” to “is”.";
 }
 
+import { bannedWords, uncertaintyMarkers, uncertaintyMarkerList } from "./design-tokens";
 import { voiceBrief } from "./voice-principles";
 import { pauseQuestions } from "./writing-practice";
 import type { SteMode } from "./ste";
 
 const VOICE = voiceBrief();
+
+// The banned words, built from the linter's list so the two cannot drift.
+// Two carry the sense in which they are banned.
+const BANNED_SENSE: Partial<Record<(typeof bannedWords)[number], string>> = {
+  regenerative: "as adjective",
+  ecosystem: "as metaphor",
+};
+const BANNED = bannedWords
+  .map((w) => (w.includes(" ") ? `"${w}"` : BANNED_SENSE[w] ? `${w} [${BANNED_SENSE[w]}]` : w))
+  .join(", ");
+
+// One line per uncertainty marker, from the shared vocabulary.
+const MARKER_USES = uncertaintyMarkers.map((m) => `- Use [${m.id}] for ${m.use}`).join("\n");
 
 // The writing practices (writing-practice.ts), as instructions to the model,
 // with the plain-register mode the register sets.
@@ -90,11 +104,11 @@ export const toneRegisters = [
       "Never assert more than you know. Every dependency and assumption gets a tag. This is what makes xCO diagrams different from McKinsey slides.",
     examples: [
       {
-        good: "Mistifier governance assumes a legionella testing regime [unverified — depends on Madrid water authority compliance].",
+        good: "Mistifier governance assumes a legionella testing regime [hypothesis — depends on Madrid water authority compliance].",
         bad: "Mistifiers will prevent waterborne disease through robust governance frameworks.",
       },
       {
-        good: "// [inference] food forest cooling assumes 60% canopy cover by year 5 — actual rate depends on site soil type and water table [unverified for Madrid Cañada Real site].",
+        good: "// [inference] food forest cooling assumes 60% canopy cover by year 5 — actual rate depends on site soil type and water table [hypothesis, not confirmed for Madrid Cañada Real site].",
         bad: "The food forest will provide comprehensive cooling benefits through its innovative integrated design approach.",
       },
     ],
@@ -125,9 +139,9 @@ EXAMPLES OF THE REGISTER:
 
 INSTRUCTIONS:
 - Use named places (Madrid, Santiago, the Mackenzie Basin), real numbers (+7.5°C, 40,000 ha, 4×), specific verbs (combines, requires, produces, removes, fails to)
-- Avoid: transformative, unprecedented, regenerative [as adjective], holistic, paradigm, ecosystem [as metaphor], unlock, leverage, empower, journey, "in this space"
-- Mark all uncertainty inline — do not drop uncertain claims, mark them: [unverified], [inference], [speculation]
-- If you don't have a number, say "X ha [unverified]" — don't omit the structure
+- Avoid: ${BANNED}
+- Mark all uncertainty inline — do not drop uncertain claims, mark them: ${uncertaintyMarkerList}
+- If you don't have a number, say "X ha [hypothesis]" — don't omit the structure
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 
@@ -155,9 +169,9 @@ EXAMPLES OF THE REGISTER:
 INSTRUCTIONS:
 - State the problem clearly and confidently — do not hedge about the question
 - Be tentative about answers: "we're trying to", "might be", "it's not clear whether", "the question is"
-- Allergic to: transformative, unprecedented, regenerative [as adjective], paradigm, ecosystem [as metaphor], unlock, leverage, empower, journey, "in this space"
+- Allergic to: ${BANNED}
 - No "we believe" or "we envision" — if you're stating a belief, state the reasoning instead
-- Mark all uncertainty: [unverified], [inference], [speculation]
+- Mark all uncertainty: ${uncertaintyMarkerList}
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 
@@ -176,21 +190,19 @@ ${practice("flavoured")}
 RULE: Show the working. Mark every assumption, dependency, and uncertainty inline. Never assert more than you know.
 
 EXAMPLES OF THE REGISTER:
-✓ "Mistifier governance assumes a legionella testing regime [unverified — depends on Madrid water authority compliance]."
+✓ "Mistifier governance assumes a legionella testing regime [hypothesis — depends on Madrid water authority compliance]."
 ✗ "Mistifiers will prevent waterborne disease through robust governance frameworks."
 
-✓ "// [inference] food forest cooling assumes 60% canopy cover by year 5 — actual rate depends on site soil type and water table [unverified for Madrid Cañada Real site]."
+✓ "// [inference] food forest cooling assumes 60% canopy cover by year 5 — actual rate depends on site soil type and water table [hypothesis, not confirmed for Madrid Cañada Real site]."
 ✗ "The food forest will provide comprehensive cooling benefits through its innovative integrated design approach."
 
 INSTRUCTIONS:
 - Every claim that depends on something else: state the dependency explicitly
-- Use [unverified] when a fact hasn't been confirmed from primary source
-- Use [inference] when reasoning forward from known facts
-- Use [speculation] when genuinely unknown
+${MARKER_USES}
 - The // prefix is optional but signals "this is the thinking behind the claim above"
 - Never drop an uncertain claim — mark it and keep it
 - Keep sentences short. One claim per sentence where possible.
-- No: transformative, unprecedented, holistic, paradigm, ecosystem [as metaphor]
+- No: ${BANNED}
 - Write in US English: civilization (not civilisation), organize (not organise), analyze (not analyse)
 - Always write the project name as xCO — lowercase x, uppercase CO. Never XCO, xco, or Xco
 

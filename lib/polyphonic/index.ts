@@ -74,8 +74,6 @@ export {
   releaseTests,
   releaseGates,
   antiPatterns,
-  compositionalProportion,
-  proportionNote,
   channelJurisdictions,
 } from "./integrity";
 export type { AmbiguityClass, ReleaseGate, AntiPattern } from "./integrity";
