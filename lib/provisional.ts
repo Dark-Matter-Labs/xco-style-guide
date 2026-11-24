@@ -71,6 +71,7 @@ export const changeLog: ChangeRecord[] = [
     previous: "The full logo may appear at about 7% as a decorative footer watermark, cropped by a corner, never at a size where it must be read.",
     proposed: "Exports from the instruments may also carry a time print: an asemic sheet at about 6%, grown from the artwork's own words and seeded by the minute it was made, with that minute printed along one edge. It is decorative and proves nothing.",
     decision: "Waiting for a named adopter.",
+    respond: PR(56),
   },
   {
     id: "CH-10",
