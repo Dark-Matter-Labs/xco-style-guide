@@ -9,6 +9,8 @@
 process.env.TZ = "Europe/Berlin";
 
 import { strict as assert } from "node:assert";
+import * as React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync, readdirSync } from "node:fs";
 import { DENSITY, DUSK, toSvg, writeSheet, type Mark, type Sheet } from "@/lib/asemic/script";
 import { SOURCES } from "@/lib/asemic/sources";
@@ -154,4 +156,32 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   for (const f of files) assert.ok(!readFileSync(f, "utf8").includes("time-print"), `${f} never imports the time print`);
 }
 
-console.log("time-print: all checks passed");
+// ── The React pieces (rendered to markup; see the plan's Global Constraints) ──
+// tsx compiles JSX with the classic transform (tsconfig jsx: preserve), so React must be global
+// before any component module loads; the imports are dynamic for that reason.
+(globalThis as unknown as { React: typeof React }).React = React;
+
+(async () => {
+  const { TimePrintMarks, TimePrintSlug, useMinute } = await import("@/components/xco/TimePrint");
+  const tp = makeTimePrint(base);
+  const h = React.createElement;
+
+  const marks = renderToStaticMarkup(h("svg", null, h(TimePrintMarks, { print: tp })));
+  assert.ok(marks.includes('<g opacity="0.06" aria-hidden="true"'), "the marks group is faint and hidden from assistive tech");
+  assert.ok(marks.includes(tp.body.slice(0, 60)), "the marks group holds the print's marks");
+
+  const slugX = (html: string) => Number(/translate\(([\d.]+) /.exec(html)![1]);
+  const slug = renderToStaticMarkup(h("svg", null, h(TimePrintSlug, { print: tp, width: 1200, height: 630, margin: 80, bottom: 80, size: 13 })));
+  for (const part of ["rotate(-90)", tp.stamp, "Untitled Sans", INK]) assert.ok(slug.includes(part), `the slug carries ${part}`);
+  assert.ok(slugX(slug) > 1200 - 80 && slugX(slug) < 1200, "a right slug sits in the right margin");
+  const left = renderToStaticMarkup(h("svg", null, h(TimePrintSlug, { print: tp, width: 1080, height: 1080, margin: 60, bottom: 60, size: 12, side: "left" })));
+  assert.ok(slugX(left) < 60, "a left slug sits in the left margin");
+
+  const Probe = () => (useMinute() === null ? "none" : "some");
+  eq(renderToStaticMarkup(h(Probe)), "none", "no minute on the server, so static pages hydrate cleanly");
+
+  console.log("time-print: all checks passed");
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
