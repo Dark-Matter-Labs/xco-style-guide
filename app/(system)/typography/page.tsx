@@ -6,7 +6,7 @@ const specimens: Record<string, string> = {
   heading:  "Three Regimes of Optionality",
   heading2: "Madrid — the heat question",
   body:     "Madrid faces +7.5°C. The question is not whether to respond at proportional scale, but what response at that scale looks like when capital systematically under-prices preconditions.",
-  small:    "// [inference] assumes legionella testing compliance — unverified with Madrid water authority",
+  small:    "// [hypothesis] assumes legionella testing compliance — not confirmed with Madrid water authority",
 };
 
 const faceClass: Record<string, string> = {
@@ -14,6 +14,7 @@ const faceClass: Record<string, string> = {
   body:    "font-body",
   ui:      "font-ui",
   mono:    "font-mono",
+  code:    "font-code",
 };
 
 export default function TypographyPage() {
@@ -103,7 +104,7 @@ export default function TypographyPage() {
       {/* Italic specimens */}
       <section>
         <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
-          Italic — Diagram Annotations Only
+          Italic — Quoted Pull-Text Only
         </h2>
         <div className="space-y-8">
           <div className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
@@ -113,15 +114,6 @@ export default function TypographyPage() {
             <p className="font-display italic text-[60px] leading-[60px] text-xco-ink">
               "If field optionality is the precondition, the allocation problem isn&apos;t about
               choosing between regimes."
-            </p>
-          </div>
-          <div className="grid grid-cols-[160px_1fr] gap-8 items-baseline">
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              Untitled Sans<br />400i
-            </p>
-            <p className="font-mono italic text-[0.9375rem] leading-[1.6] text-xco-ink">
-              // [unverified] governance assumes legionella testing regime — depends on
-              Madrid water authority compliance
             </p>
           </div>
         </div>
@@ -135,7 +127,7 @@ export default function TypographyPage() {
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
           Four scales: Logo (Untitled Serif 100px), Heading (Untitled Serif 60px), Heading 2
           (Untitled Sans 36px), Body (Untitled Sans 24px). Labels and annotations use Untitled Sans
-          at 0.9375rem. Italic appears in diagram annotations and quoted pull-text only. No bold.
+          at 0.9375rem. Italic appears in quoted pull-text only; diagram annotations stay upright. No bold.
           No light. Restraint is the rule, not a constraint.
         </p>
       </section>

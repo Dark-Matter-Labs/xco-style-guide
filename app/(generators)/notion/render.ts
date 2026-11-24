@@ -1,4 +1,5 @@
 import type { ChaosResult } from "@/lib/chaos/systems";
+import { typography } from "@/lib/design-tokens";
 import { cPath, inkBounds, logoGeometry, oPath, xPaths } from "@/lib/logo";
 import { drawChaos, paletteOf, type ChaosLook, type ChaosPaletteId } from "../chaos/render";
 
@@ -13,8 +14,8 @@ export const ICON = 512;
 // and the reader can drag it. Words stay inside this band so no crop cuts them.
 export const SAFE_BAND = { top: 0.25, bottom: 0.75 } as const;
 
-export const SERIF = '"Untitled Serif", Georgia, serif';
-export const SANS = '"Untitled Sans", Arial, sans-serif';
+export const SERIF = typography.faces.display.stack;
+export const SANS = typography.faces.body.stack;
 
 export type IconGlyph = "monogram" | "x" | "field";
 

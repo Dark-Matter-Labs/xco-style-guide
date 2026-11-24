@@ -109,7 +109,8 @@ assert.ok(ch09, "CH-09 is in the change log");
 eq(ch09!.status, "adopted");
 eq(ch09!.proposedBy, "Gurden");
 const ch08 = changeLog.find((c) => c.id === "CH-08")!;
-eq(ch08.status, "proposed", "CH-08 stands as written");
+eq(ch08.status, "adopted", "CH-08 adopted by Gurden, 24 Nov 2026");
+eq(ch08.decision, "Adopted by Gurden, 24 Nov 2026.");
 eq(ch08.proposed, "The x may leave the mark as operator, under the rules on /logo/x. At rest it is always the logo's x, in place.");
 eq(ch09!.previous, ch08.proposed, "CH-09 amends CH-08");
 {

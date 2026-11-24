@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo } from "react";
 import { squarify } from "@/lib/squarify";
-import { paletteHex } from "@/lib/design-tokens";
+import { paletteHex, typography } from "@/lib/design-tokens";
 
 const { paper: PAPER, ink: INK, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK } = paletteHex;
 
@@ -113,7 +113,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={labelY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily={`"Untitled Sans", system-ui, Arial, sans-serif`} fontWeight="500"
+                  fontFamily={typography.faces.body.stack} fontWeight="500"
                   fontSize={fs} fill={fg}
                 >
                   {r.label}
@@ -123,7 +123,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={subY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily={`"Untitled Sans", system-ui, Arial, sans-serif`} fontWeight="400"
+                  fontFamily={typography.faces.body.stack} fontWeight="400"
                   fontSize={sub} fill={fg}
                 >
                   {r.sublabel}

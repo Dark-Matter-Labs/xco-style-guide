@@ -115,6 +115,13 @@ export default function PageGrammarPage() {
       {/* Starting values */}
       <section className="space-y-6" aria-labelledby="values">
         <h2 id="values" className={LABEL}>Typography and composition — starting values</h2>
+        <p className={`${MONO} text-xco-ink max-w-3xl`}>
+          [xCO] These are 8.1&apos;s starting values. For xCO, see{" "}
+          <Link href="/typography" className="underline underline-offset-2 hover:text-xco-dusk-ink">/typography</Link>{" "}
+          for faces and sizes (labels are Untitled Sans, never a monospace) and{" "}
+          <Link href="/diagrams" className="underline underline-offset-2 hover:text-xco-dusk-ink">/diagrams</Link>{" "}
+          for line weights.
+        </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>

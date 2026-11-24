@@ -54,7 +54,7 @@ export const pairings: Pairing[] = [
   { id: "on-accent/ocean", fg: "--color-xco-on-accent", bg: "--color-xco-ocean", use: "text", where: "Selected chips and toggles on ocean" },
   { id: "on-accent/navy", fg: "--color-xco-on-accent", bg: "--color-xco-navy", use: "text", where: "Text on the blueprint ground" },
   { id: "ink/dusk", fg: "--color-xco-ink-fixed", bg: "--color-xco-dusk", use: "text", where: "Text on a dusk ground — never paper" },
-  { id: "wip-badge", fg: "--xco-dusk-ink", bg: "--wip-ground", use: "text", where: "The [v0.2] / [wip] badge" },
+  { id: "wip-badge", fg: "--xco-dusk-ink", bg: "--wip-ground", use: "text", where: "The [v0.3] / [wip] badge" },
 
   // Domains: saturated colour is a stroke or fill; -ink is the only text form.
   ...domains.flatMap((d): Pairing[] => [

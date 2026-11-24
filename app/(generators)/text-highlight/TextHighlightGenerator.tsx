@@ -31,18 +31,20 @@ const LEVEL_COLORS: Record<Level, { bg: string; fg: string; name: string }> = {
   5: { bg: NAVY, fg: PAPER, name: "Navy — peripheral" },
 };
 
-const LEVEL_SIZE: Record<Level, { em: number; weight: number }> = {
-  1: { em: 2.0,  weight: 600 },
-  2: { em: 1.4,  weight: 500 },
-  3: { em: 1.0,  weight: 400 },
-  4: { em: 0.85, weight: 400 },
-  5: { em: 0.7,  weight: 300 },
+// Importance is carried by size alone: Untitled ships one weight, 400, so
+// any other weight would be faked by the browser.
+const LEVEL_SIZE: Record<Level, { em: number }> = {
+  1: { em: 2.0 },
+  2: { em: 1.4 },
+  3: { em: 1.0 },
+  4: { em: 0.85 },
+  5: { em: 0.7 },
 };
 
 // ── Sample content ──────────────────────────────────────────────────
 
 const SAMPLE_TEXT =
-  "xCO operates across three distinct regimes — Field, Frontier, and Fortress — each with its own logic of value creation and risk. The Field is the systemic foundation, the shared substrate on which all other activity depends. Without healthy Field conditions, neither Frontier exploration nor Fortress consolidation can sustain itself over generational timescales. The Fortress represents concentrated optionality — positions of structural advantage that compound over time through network effects and switching costs. The Frontier is where new possibility space opens, always in relation to what the Field affords and what the Fortress can leverage. Navigating between these regimes requires a different grammar than conventional strategy.";
+  "xCO operates across three distinct regimes — Field, Frontier, and Fortress — each with its own logic of value creation and risk. The Field is the systemic foundation, the shared substrate on which all other activity depends. Without healthy Field conditions, neither Frontier exploration nor Fortress consolidation can sustain itself over generational timescales. The Fortress represents concentrated optionality — positions of structural advantage that compound over time through network effects and switching costs. The Frontier is where new possibility space opens, always in relation to what the Field affords and what the Fortress can hold. Navigating between these regimes requires a different grammar than conventional strategy.";
 
 const SAMPLE_ANNOTATIONS: Annotation[] = [
   {
@@ -324,7 +326,6 @@ export function TextHighlightGenerator() {
                           fontSize: "0.62em",
                           marginLeft: "2px",
                           lineHeight: 0,
-                          fontWeight: 600,
                         }}
                       >
                         {ann.id}
@@ -340,7 +341,6 @@ export function TextHighlightGenerator() {
                     data-ann={ann.id}
                     style={{
                       fontSize: `${s.em}em`,
-                      fontWeight: s.weight,
                       color: c.bg,
                       lineHeight: 1.1,
                       display: "inline",
@@ -354,7 +354,6 @@ export function TextHighlightGenerator() {
                         fontSize: "0.5em",
                         marginLeft: "2px",
                         lineHeight: 0,
-                        fontWeight: 600,
                       }}
                     >
                       {ann.id}
@@ -392,7 +391,7 @@ export function TextHighlightGenerator() {
                     className="font-mono font-medium text-[0.9375rem] leading-[1.6] leading-snug text-xco-ink"
                   >
                     <span
-                      style={{ color: c.bg, fontWeight: 700, marginRight: "5px" }}
+                      style={{ color: c.bg, marginRight: "5px" }}
                     >
                       {ann.id}
                     </span>

@@ -24,7 +24,7 @@ const DEFAULT_ITEMS: ItemState[] = [
   { id: 5, label: "Systemic Risk", sublabel: "",                     weight: 28  },
   { id: 6, label: "Transition",    sublabel: "",                     weight: 20  },
   { id: 7, label: "Emergence",     sublabel: "",                     weight: 15  },
-  { id: 8, label: "Leverage",      sublabel: "",                     weight: 10  },
+  { id: 8, label: "Reversibility", sublabel: "",                     weight: 10  },
 ];
 
 // ── Export helpers ───────────────────────────────────────────────────────────

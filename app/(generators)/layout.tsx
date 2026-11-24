@@ -1,21 +1,5 @@
-import { SiteNav, ReadingProgress, Grain, type NavLink } from "@/components/doc";
-
-const generators: NavLink[] = [
-  { href: "/three-regimes",   label: "Three Regimes" },
-  { href: "/social-card",     label: "Social Card" },
-  { href: "/paper-cover",     label: "Paper Cover" },
-  { href: "/event-series",    label: "Event Series" },
-  { href: "/growth",          label: "Growth" },
-  { href: "/chaos",           label: "Chaos" },
-  { href: "/asemic",          label: "Asemic" },
-  { href: "/notion",          label: "Notion" },
-  { href: "/image-treatment", label: "Image Treatment" },
-  { href: "/option-field",    label: "Option Field" },
-  { href: "/align",           label: "Align" },
-  { href: "/text-highlight",  label: "Text Highlight" },
-  { href: "/territory",       label: "Territory" },
-  { href: "/design-export",   label: "Token Export" },
-];
+import { SiteNav, ReadingProgress, Grain } from "@/components/doc";
+import { instruments } from "@/lib/instruments";
 
 export default function GeneratorsLayout({
   children,
@@ -26,7 +10,7 @@ export default function GeneratorsLayout({
     <div className="min-h-screen">
       <Grain />
       <ReadingProgress />
-      <SiteNav links={generators} register="instruments" />
+      <SiteNav links={[...instruments]} register="instruments" />
       <main id="main" tabIndex={-1} className="doc-wrap py-12">{children}</main>
     </div>
   );

@@ -91,13 +91,13 @@ export const changeLog: ChangeRecord[] = [
     title: "The x may leave the mark",
     target: "Logo / Misuse",
     href: "/logo/x",
-    status: "proposed",
+    status: "adopted",
     proposedBy: "Gurden",
     date: "2026-11-16",
     why: "The x is the operator in the logotype. On the website it can act on the page — keep the reader's place, frame, walk and expand — under fixed rules.",
     previous: "Don't reflow it. Never re-space, stack, or reorder the glyphs.",
     proposed: "The x may leave the mark as operator, under the rules on /logo/x. At rest it is always the logo's x, in place.",
-    decision: "Waiting for a named adopter.",
+    decision: "Adopted by Gurden, 24 Nov 2026.",
   },
   {
     id: "CH-07",
@@ -133,7 +133,7 @@ export const changeLog: ChangeRecord[] = [
     proposedBy: "Style guide (authored reading)",
     date: "2026-10-05",
     why: "The 8.1 source file was not available to confirm which phrases carry each highlight role. The roles follow the 8.1 key. The placements are this site's reading.",
-    decision: "Waiting for Indy's review.",
+    decision: "Closed by Gurden, 24 Nov 2026, in the year-end clean-up. Indy's review was not received.",
     respond: PR(35),
   },
   {
@@ -173,7 +173,7 @@ export const changeLog: ChangeRecord[] = [
     proposedBy: "Sarah, with Indy's caveat on attribution",
     date: "2026-10-05",
     why: "Team feedback on brevity, audience, attribution, positionality and a critical pause in AI-assisted drafting.",
-    decision: "Adopted and merged 2026-10-05. Open item: Sarah to confirm how she is credited.",
+    decision: "Adopted and merged 2026-10-05. The open item, Sarah to confirm how she is credited, was closed by Gurden, 24 Nov 2026, in the year-end clean-up.",
     respond: PR(33),
   },
   {
@@ -185,7 +185,7 @@ export const changeLog: ChangeRecord[] = [
     proposedBy: "Indy",
     date: "2026-10-05",
     why: "Indy drafted how xCO's voice should change.",
-    decision: "Adopted and merged 2026-10-05. Open item: Indy to review the integrated page.",
+    decision: "Adopted and merged 2026-10-05. The open item, Indy to review the integrated page, was closed by Gurden, 24 Nov 2026, in the year-end clean-up.",
     respond: PR(31),
   },
 ];
@@ -265,7 +265,7 @@ export function provisionalCSS(): string {
   padding: .75rem 1rem;
   margin-block: 1rem;
 }
-.xco-change__label { font: .75rem/1.5 ui-monospace, monospace; letter-spacing: .04em; }
+.xco-change__label { font: .75rem/1.5 "Untitled Sans", system-ui, sans-serif; letter-spacing: .04em; }
 .xco-change__previous { color: ${identityScales.matter[700]}; text-decoration-thickness: 1px; }
 .xco-change__proposed {
   text-decoration: none;

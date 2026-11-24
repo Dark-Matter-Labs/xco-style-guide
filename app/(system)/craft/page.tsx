@@ -20,7 +20,7 @@ const TELLS: { tell: string; instead: string; inXco?: string }[] = [
   { tell: "Vague filler copy", instead: "Plain, specific words and real figures with their sources. See Tone of Voice." },
   { tell: "Massive footers", instead: "The few links people use." },
   { tell: "Random decorative symbols", instead: "A mark only where the grammar gives it a meaning." },
-  { tell: "Pills and hairline borders", instead: "Plain words, and the three line weights of the diagram rules." },
+  { tell: "Pills and hairline borders", instead: "Plain words, and the two line weights of the diagram rules." },
   { tell: "Random 3D (the bonus)", instead: "Motion that answers what a person did, or none." },
 ];
 

@@ -10,6 +10,7 @@ import {
   RegisterSwitch,
 } from "@/components/doc";
 import { Mark, Logo } from "@/components/xco";
+import { instruments } from "@/lib/instruments";
 
 const templateLinks = [
   {
@@ -25,36 +26,18 @@ const templateLinks = [
 ];
 
 // Order matches the section nav in app/(system)/layout.tsx.
-// Numbers are derived from position, not written down — a hardcoded list
-// silently drifts out of step the moment an entry is added or reordered.
 const systemLinks = [
   { href: "/logo",        label: "Logo",                 blurb: "Wordmark, lockups, clear space, export." },
   { href: "/typography",  label: "Typography",           blurb: "Display tight and negative, labels wide and positive." },
   { href: "/colour",      label: "Colour",               blurb: "Field, Signal, Matter. Chalk paper, one ember." },
   { href: "/grid",        label: "Grid",                 blurb: "Golden ratio, Fibonacci spacing, 12 and 24 columns." },
-  { href: "/diagrams",    label: "Diagrammatic Grammar", blurb: "Two line weights. Three node types." },
+  { href: "/diagrams",    label: "Diagrams",             blurb: "Two line weights. Three node types." },
   { href: "/tone",        label: "Tone of Voice",        blurb: "Radical conjecture, held with care. Plain where it is acted on." },
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },
   { href: "/accessibility", label: "Accessibility",      blurb: "WCAG 2.2 AA, measured on every build." },
   { href: "/craft",       label: "Designing with AI",    blurb: "The tells of generated design, and what xCO does instead." },
   { href: "/changes",     label: "Changes",              blurb: "Suggested changes stay provisional, and visible, until adopted." },
-].map((link, i) => ({ ...link, n: String(i + 1).padStart(2, "0") }));
-
-const generatorLinks = [
-  { href: "/three-regimes",   label: "Three Regimes" },
-  { href: "/option-field",    label: "Option Field" },
-  { href: "/territory",       label: "Territory" },
-  { href: "/social-card",     label: "Social Card" },
-  { href: "/paper-cover",     label: "Paper Cover" },
-  { href: "/event-series",    label: "Event Series" },
-  { href: "/growth",          label: "Growth" },
-  { href: "/chaos",           label: "Chaos" },
-  { href: "/notion",          label: "Notion" },
-  { href: "/image-treatment", label: "Image Treatment" },
-  { href: "/align",           label: "Align" },
-  { href: "/text-highlight",  label: "Text Highlight" },
-  { href: "/design-export",   label: "Token Export" },
 ];
 
 // The four domains, each with its shape. Colour reinforces; shape carries.
@@ -188,8 +171,8 @@ export default function Home() {
         title="Every piece, with a name you can type."
         intro={
           <p className="doc-intro-copy">
-            Eight sections. Each one documents its primitives and the rules that
-            govern them.
+            The system has {systemLinks.length} sections. Each one documents its
+            primitives and the rules that govern them.
           </p>
         }
       >
@@ -214,13 +197,14 @@ export default function Home() {
         title="Generators, not templates."
         intro={
           <p className="doc-intro-copy">
-            Each instrument composes the primitives into an exportable asset —
-            SVG, PNG or token file.
+            Each instrument composes the primitives into an asset you can
+            export — SVG, PNG, video or token file. Text Highlight is the one
+            without an export yet.
           </p>
         }
       >
         <Cells cols={3} className="mt-10">
-          {generatorLinks.map(({ href, label }) => (
+          {instruments.map(({ href, label }) => (
             <Link key={href} href={href} className="group block px-5 py-6">
               <b className="block font-display text-[17px] font-normal text-xco-ink group-hover:text-xco-ink-muted transition-colors">
                 {label}

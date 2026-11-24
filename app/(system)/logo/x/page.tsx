@@ -5,6 +5,9 @@ import { ProvisionalChange } from "@/components/xco";
 import { changeLog } from "@/lib/provisional";
 import { RoleFigure, type FigureRole } from "./RoleFigure";
 import { DINO_ARMS, DINO_BOX, dinoFigure } from "@/lib/dino";
+import { paletteHex } from "@/lib/design-tokens";
+import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
+import { colorIn } from "@/lib/a11y/css-tokens";
 
 export const metadata: Metadata = { title: "The x as operator — xCO" };
 
@@ -14,6 +17,10 @@ const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
 const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.4]";
 
 const change = changeLog.find((c) => c.id === "CH-08")!;
+
+// Measured, never typed: the hand-written 2.46:1 had drifted from the palette.
+const DUSK_ON_PAPER = formatRatio(contrastRatio(paletteHex.dusk, paletteHex.paper));
+const DUSK_ON_DARK = formatRatio(contrastRatio(paletteHex.dusk, colorIn("ink", "--xco-paper")));
 
 const RULES = [
   { n: "01", rule: "The x has no face. It shows character only through how it moves." },
@@ -105,8 +112,8 @@ export default function XOperatorPage() {
           ))}
         </ol>
         <p className={`${MONO} max-w-2xl text-xco-ink`}>
-          [rule] Dusk on paper is 2.46:1, below the 3:1 a meaningful graphic needs. That is
-          why rule 04 exists. On dark paper it is 6.02:1.
+          [rule] Dusk on paper is {DUSK_ON_PAPER}, below the 3:1 a meaningful graphic needs. That is
+          why rule 04 exists. On dark paper it is {DUSK_ON_DARK}.
         </p>
       </section>
 

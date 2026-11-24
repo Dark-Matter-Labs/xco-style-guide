@@ -174,7 +174,7 @@ export function DesignExportGenerator() {
         </div>
 
         <div className="border border-xco-ink overflow-hidden">
-          <pre tabIndex={0} aria-label="Export preview" className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
+          <pre tabIndex={0} aria-label="Export preview" className="font-code text-[0.9375rem] leading-[1.6] text-xco-ink p-6 overflow-x-auto overflow-y-auto max-h-[70vh] bg-xco-paper whitespace-pre">
             {content}
           </pre>
         </div>

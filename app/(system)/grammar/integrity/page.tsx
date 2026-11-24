@@ -6,8 +6,6 @@ import {
   releaseTests,
   releaseGates,
   antiPatterns,
-  compositionalProportion,
-  proportionNote,
   channelJurisdictions,
 } from "@/lib/polyphonic";
 import { LABEL, BODY, MONO, SMALL, DISPLAY, ROW, RULE } from "../styles";
@@ -129,42 +127,14 @@ export default function IntegrityPage() {
         </div>
       </section>
 
-      {/* Compositional proportion */}
-      <section className="space-y-8">
-        <div className="space-y-2">
-          <h2 className={LABEL}>Chromatic discipline</h2>
-          <p className={`${BODY} max-w-2xl`}>
-            Area roles, not colour families. Signal derives its force from
-            scarcity — this is the same discipline as the 5% dusk rule on the
-            colour page, stated as a full-composition budget.
-          </p>
-          <p className={`${SMALL} text-xco-ink-muted max-w-2xl`}>[note] {proportionNote}</p>
-        </div>
-        <div className="max-w-3xl space-y-3">
-          <div className="flex h-16 overflow-hidden" style={{ border: "1px solid var(--border-default)" }}>
-            {compositionalProportion.map((p) => (
-              <div
-                key={p.role}
-                style={{
-                  width: `${p.pct}%`,
-                  background:
-                    p.role === "canvas" ? "var(--xco-paper)"
-                    : p.role === "structure" ? "var(--xco-paper-structural)"
-                    : p.role === "trace" ? "var(--domain-inst)"
-                    : "var(--xco-dusk)",
-                }}
-                title={`${p.pct}% ${p.role}`}
-              />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {compositionalProportion.map((p) => (
-              <p key={p.role} className={`${SMALL} text-xco-ink`}>
-                <span className="text-xco-ink-muted">{p.pct} /</span> {p.role} — {p.detail}
-              </p>
-            ))}
-          </div>
-        </div>
+      {/* Compositional proportion — kept on the colour page */}
+      <section className="space-y-2 max-w-2xl">
+        <h2 className={LABEL}>Chromatic discipline</h2>
+        <p className={BODY}>
+          Area roles, not colour families. Signal derives its force from
+          scarcity. The default proportion, 70 : 20 : 8 : 2, is on the{" "}
+          <Link href="/colour#proportion" className="underline underline-offset-2 hover:text-xco-dusk-ink">colour page</Link>.
+        </p>
       </section>
 
       {/* Anti-patterns */}

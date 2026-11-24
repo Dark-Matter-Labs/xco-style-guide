@@ -28,7 +28,7 @@ const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
   {
     id: "descriptor",
     label: "Descriptor lockup",
-    note: "Adds the full name in DM Mono. Live text, not outlines — see the note below.",
+    note: "Adds the full name in Untitled Sans. Live text, not outlines — see the note below.",
     suffix: "-lockup",
   },
   {
@@ -227,7 +227,7 @@ export function LogoDownloads() {
         <pre
           tabIndex={0}
           aria-label="SVG source"
-          className="mt-4 p-4 overflow-x-auto font-mono font-medium text-[0.75rem] leading-[1.5] text-xco-ink-muted"
+          className="mt-4 p-4 overflow-x-auto font-code text-[0.75rem] leading-[1.5] text-xco-ink-muted"
           style={{ background: "var(--xco-paper-quiet)" }}
         >
           {svg}

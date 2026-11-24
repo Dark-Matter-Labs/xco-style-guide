@@ -115,7 +115,7 @@ export default function AccessibilityPage() {
         <div className="max-w-2xl space-y-4">
           <h2 id="pairings" className={H2}>Every pairing</h2>
           <p className={BODY}>
-            The registry in <code className="font-mono text-[0.9375rem]">lib/a11y/pairings.ts</code>.
+            The registry in <code className="font-code text-[0.9375rem]">lib/a11y/pairings.ts</code>.
             Adding a colour to the system means adding its pairings there. A pairing that
             cannot pass is not an exception — it is not a pairing.
           </p>

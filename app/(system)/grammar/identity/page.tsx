@@ -97,6 +97,7 @@ export default function IdentityPage() {
               <p className={`${MONO} text-xco-ink`}>{t.face} / {t.role}</p>
               <p className={`${BODY} font-display`}>{t.question}</p>
               <p className={`${SMALL} text-xco-ink-muted`}>{t.body}</p>
+              {"inXco" in t && <p className={`${SMALL} text-xco-ink`}>[xCO] {t.inXco}</p>}
             </div>
           ))}
         </div>

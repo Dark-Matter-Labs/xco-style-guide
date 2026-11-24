@@ -1,4 +1,5 @@
 import { logoGeometry, cPath, oPath, xPaths } from "@/lib/logo";
+import { typography } from "@/lib/design-tokens";
 
 const TEXTURE = 0.75;    // texture weight — guides, per the two-weight system
 const STRUCTURAL = 1.5;  // structural weight — measured extents
@@ -54,9 +55,8 @@ export function ConstructionDiagram() {
 
       <g
         fill="var(--xco-ink-muted)"
-        fontFamily="DM Mono, monospace"
+        fontFamily={typography.faces.mono.stack}
         fontSize={7}
-        fontWeight={500}
       >
         {/* Labels sit in the margins and counters — never over a stroke. */}
         <text x={20} y={g.capTop - 4}>cap {g.cap}</text>

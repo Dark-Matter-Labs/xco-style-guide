@@ -67,20 +67,20 @@ export interface NodeProps {
   seed?: number;
 }
 
-// ── Risk Node — ember fill, paper text ───────────────────────────────
+// ── Risk Node — ember fill, ink text ─────────────────────────────────
 
 export function RiskNode({
   cx, cy,
   width = 160, height = 60,
   label, sublabel,
-  amplitude = 1.8,
+  amplitude = 0,
   seed = 42,
 }: NodeProps) {
   const d = jitteredRectPath(cx, cy, width, height, amplitude, seed);
   return (
     <g>
-      <path d={d} fill={colors.dusk.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} strokeLinecap="round" />
-      <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.paper.hex} />
+      <path d={d} fill={colors.dusk.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} />
+      <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.ink.hex} />
     </g>
   );
 }
@@ -91,13 +91,13 @@ export function OptionNode({
   cx, cy,
   width = 160, height = 60,
   label, sublabel,
-  amplitude = 1.8,
+  amplitude = 0,
   seed = 42,
 }: NodeProps) {
   const d = jitteredRectPath(cx, cy, width, height, amplitude, seed);
   return (
     <g>
-      <path d={d} fill={colors.paper.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} strokeLinecap="round" />
+      <path d={d} fill={colors.paper.hex} stroke={colors.ink.hex} strokeWidth={diagram.lineWeights.structural} />
       <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.ink.hex} />
     </g>
   );
@@ -109,13 +109,13 @@ export function FieldNode({
   cx, cy,
   width = 160, height = 60,
   label, sublabel,
-  amplitude = 1.8,
+  amplitude = 0,
   seed = 42,
 }: NodeProps) {
   const d = jitteredRectPath(cx, cy, width, height, amplitude, seed);
   return (
     <g>
-      <path d={d} fill={colors.paper.hex} stroke={colors.ocean.hex} strokeWidth={diagram.lineWeights.structural} strokeDasharray="6 4" strokeLinecap="round" />
+      <path d={d} fill={colors.paper.hex} stroke={colors.ocean.hex} strokeWidth={diagram.lineWeights.structural} strokeDasharray="6 4" />
       <NodeText cx={cx} cy={cy} label={label} sublabel={sublabel} fill={colors.ink.hex} />
     </g>
   );
@@ -123,7 +123,7 @@ export function FieldNode({
 
 // ── Usage source strings ──────────────────────────────────────────────
 
-export const RiskNodeSource = `// Triggers the response — ember fill, paper text
+export const RiskNodeSource = `// Triggers the response — ember fill, ink text
 <RiskNode cx={200} cy={80} label="Arctic destabilisation" />`;
 
 export const OptionNodeSource = `// The response — paper fill, ink stroke (default node)

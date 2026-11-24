@@ -1,49 +1,8 @@
+import Link from "next/link";
 import { WIP } from "@/components/WIP";
 import { FibGrid } from "./FibGrid";
 
 const FIB = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-
-const DIAGRAM_TYPES = [
-  {
-    id: "A",
-    label: "Stack / Column",
-    usage: "Ranked order, proportion, accumulation",
-    rules: "Vertical or horizontal bars. Widths proportional to value. No baseline grid lines — only the bar edge reads.",
-    example: "Risk weighting across three regimes; carbon budget allocation by sector.",
-  },
-  {
-    id: "B",
-    label: "2-axis scatter / matrix",
-    usage: "Relationship between two independent variables",
-    rules: "Dot or region placement on a plain field. Axis labels at extremes only. No tick marks, no grid lines — region defines meaning.",
-    example: "Feasibility vs impact quadrant; state capacity vs ambition level.",
-  },
-  {
-    id: "C",
-    label: "3-axis isometric",
-    usage: "Three-dimensional relationships shown in flat space",
-    rules: "Isometric projection (30° / 120° angles). No perspective distortion. Each face reads as a 2D surface. Stack C diagrams only if each face is independent.",
-    example: "Three Regimes as volumetric field; territory + trajectory + time.",
-  },
-  {
-    id: "D",
-    label: "Flow / sequence",
-    usage: "Process, causation, dependency, decision",
-    rules: "Left-to-right or top-to-bottom reading order. Solid lines = direct connection. Dotted lines = conditional / weak link. Merge dot (filled circle) at convergence points.",
-    example: "Three Regimes diagram; policy cascade; intervention logic.",
-  },
-];
-
-const DIAGRAM_RULES = [
-  "Sans-serif only — no mono in diagram labels",
-  "Regular weight only — no bold, no italic",
-  "Max two font sizes: label (≥ 13px) and annotation (10px minimum)",
-  "Annotation minimum: 0.9375rem / 1.6 lh when rendered at web size",
-  "No grey lines — ink or paper only; dotted lines are fine",
-  "Max three line weights: hairline (0.5px), structural (1.5px), emphasis (2.5px)",
-  "No fills other than paper, ink, ocean, dusk, teal, navy, sand",
-  "Label only what can be read — if the space is too small, omit or use Annotation",
-];
 
 export default function GridPage() {
   return (
@@ -181,55 +140,15 @@ export default function GridPage() {
         </div>
       </section>
 
-      {/* Diagram types */}
-      <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-2">
-          Diagram Types
-        </h2>
-        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-10 max-w-2xl">
-          xCO uses four diagram types. Pick the one that matches the
-          relationship in the data — not the one that looks most complex.
+      {/* Diagrams live on their own page */}
+      <section className="max-w-2xl pb-12">
+        <p className="font-body text-[24px] text-xco-ink leading-[26px]">
+          Diagram types and style rules are on{" "}
+          <Link href="/diagrams" className="underline underline-offset-2 hover:text-xco-dusk-ink">
+            Diagrams
+          </Link>
+          .
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {DIAGRAM_TYPES.map((d) => (
-            <div key={d.id} className="space-y-4">
-              <div>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest">
-                  {d.id}
-                </p>
-                <h3 className="doc-h2 text-xco-ink">{d.label}</h3>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
-                  {d.usage}
-                </p>
-              </div>
-              <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-                {d.rules}
-              </p>
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                e.g. {d.example}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Diagram style rules */}
-      <section className="pb-12">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
-          Diagram Style Rules — All Types
-        </h2>
-        <ul className="space-y-3 max-w-2xl">
-          {DIAGRAM_RULES.map((rule, i) => (
-            <li key={i} className="flex items-baseline gap-4">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink shrink-0">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="font-body text-[24px] text-xco-ink leading-[26px]">
-                {rule}
-              </span>
-            </li>
-          ))}
-        </ul>
       </section>
     </div>
   );

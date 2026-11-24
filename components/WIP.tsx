@@ -1,12 +1,6 @@
-import { SYSTEM_VERSION } from "@/lib/design-tokens";
+import { SYSTEM_VERSION, type UncertaintyMarker } from "@/lib/design-tokens";
 
-type WIPVariant =
-  | "draft"
-  | "wip"
-  | "version"
-  | "unverified"
-  | "inference"
-  | "speculation";
+type WIPVariant = "draft" | "wip" | "version" | UncertaintyMarker;
 
 interface WIPProps {
   variant?: WIPVariant;

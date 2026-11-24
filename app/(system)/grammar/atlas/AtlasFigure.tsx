@@ -1,5 +1,8 @@
 import { atlasRoutes, type AtlasStep } from "@/lib/polyphonic";
-import { colors, routeColors } from "@/lib/design-tokens";
+import { colors, routeColors, typography } from "@/lib/design-tokens";
+
+// Labels are Untitled Sans, never a monospace (since 3 November 2026).
+const LABEL_FONT = typography.faces.mono.stack;
 
 // AT-H1 drawn as a relational field: no geography, no time scale. Positions
 // are arranged so the routes meet at the shared threshold (A3 ↔ B4) and both
@@ -30,7 +33,7 @@ function Node({ step, colour, below }: { step: AtlasStep; colour: string; below:
     <g>
       {step.wait && <circle cx={p.x} cy={p.y} r={13} fill="none" stroke={colour} strokeWidth={1} />}
       <circle cx={p.x} cy={p.y} r={5} fill={colour} />
-      <text x={p.x} y={below ? p.y + 30 : p.y - 20} textAnchor="middle" fontSize={13} fontFamily="ui-monospace, monospace" fill={colors.ink.hex}>
+      <text x={p.x} y={below ? p.y + 30 : p.y - 20} textAnchor="middle" fontSize={13} fontFamily={LABEL_FONT} fill={colors.ink.hex}>
         {step.id} / {step.name}
       </text>
     </g>
@@ -57,9 +60,9 @@ export function AtlasFigure() {
 
       {/* Shared threshold and review — permission is an independent condition. */}
       <rect x={418} y={150} width={86} height={72} fill="none" stroke={ink} strokeWidth={0.75} strokeDasharray="2 3" />
-      <text x={460} y={258} textAnchor="middle" fontSize={12} fontFamily="ui-monospace, monospace" fill={ink}>shared threshold</text>
+      <text x={460} y={258} textAnchor="middle" fontSize={12} fontFamily={LABEL_FONT} fill={ink}>shared threshold</text>
       <rect x={REVIEW.x - 36} y={REVIEW.y - 18} width={72} height={36} fill="none" stroke={ink} strokeWidth={1} />
-      <text x={REVIEW.x} y={REVIEW.y + 4} textAnchor="middle" fontSize={12} fontFamily="ui-monospace, monospace" fill={ink}>Review</text>
+      <text x={REVIEW.x} y={REVIEW.y + 4} textAnchor="middle" fontSize={12} fontFamily={LABEL_FONT} fill={ink}>Review</text>
 
       {atlasRoutes.map((route) => {
         const colour = hexOf(route.route);
@@ -85,7 +88,7 @@ export function AtlasFigure() {
         );
       })}
 
-      <text x={20} y={368} fontSize={11} fontFamily="ui-monospace, monospace" fill={ink}>
+      <text x={20} y={368} fontSize={11} fontFamily={LABEL_FONT} fill={ink}>
         AT-H1 / RELATIONAL FIELD · NO GEOGRAPHICAL OR TEMPORAL SCALE
       </text>
     </svg>

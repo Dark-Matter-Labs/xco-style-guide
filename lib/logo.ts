@@ -189,21 +189,32 @@ export const descriptor = "EXPANDING CIVILIZATIONAL OPTIONALITY";
 // (an earlier fixed value overflowed the canvas and truncated "OPTIONALITY").
 //
 // Flush means INK to INK. Aligning the text's advance boxes to PAD left the
-// letters visibly inset: every glyph sits inside its mono cell with a side
+// letters visibly inset: every glyph sits inside its advance with a side
 // bearing, and the x's cut feet reach 4.45 past PAD. So each line is placed
 // and tracked so its first glyph's ink starts at inkBounds.left and its last
 // glyph's ink ends at inkBounds.right.
+//
+// Set in Untitled Sans 400 since 24 November 2026, like every label (it was
+// DM Mono). The PNG exporter loads only DM Mono, so PNG lockups set these
+// lines in DM Mono at this tracking until it can load Untitled Sans; DM Mono
+// runs 0.41 em wider over the descriptor, about 4 units at this size.
+
+/** The lockup lines' face, for SVG attributes. Only the 400 weight ships. */
+export const LOCKUP_FONT = "'Untitled Sans', system-ui, Arial, sans-serif";
+export const LOCKUP_WEIGHT = 400;
 
 const DESC_SIZE = 10;
 const DESC_BASELINE_GAP = 38;      // below the logotype baseline
 const DESC_SPACE = 44;             // extra viewBox height when present
-const MONO_ADVANCE = 0.6;          // DM Mono advance width, in em
 
 /**
- * Side bearings of the end glyphs, in em, measured from DM Mono with canvas
- * measureText (actualBoundingBox). Re-measure if the text or weight changes.
+ * A line's measured metrics, in em, from Untitled Sans 400 with canvas
+ * measureText: the advance width of the whole line, kerning included, and
+ * the side bearings of its end glyphs (actualBoundingBox). Re-measure if the
+ * text, face or weight changes.
  */
-interface Bearings {
+interface LineMetrics {
+  width: number;   // advance width of the untracked line
   first: number;   // left side bearing of the first glyph
   last: number;    // right side bearing of the last glyph
 }
@@ -213,15 +224,15 @@ interface Bearings {
  * ink. SVG letter-spacing follows every glyph, the last included, but that
  * trailing space carries no ink, so only the n−1 gaps count.
  */
-function flushLine(text: string, size: number, b: Bearings) {
-  const x = inkBounds.left - b.first * size;
-  const lastInkRight = (MONO_ADVANCE - b.last) * size;
-  const pitch = (inkBounds.right - x - lastInkRight) / (text.length - 1);
-  const tracking = pitch - MONO_ADVANCE * size;
+function flushLine(text: string, size: number, m: LineMetrics) {
+  const x = inkBounds.left - m.first * size;
+  const inkWidth = (m.width - m.first - m.last) * size;
+  const tracking = (inkBounds.right - inkBounds.left - inkWidth) / (text.length - 1);
   return { x: round(x), tracking: round(tracking) };
 }
 
-const DESC_LINE = flushLine(descriptor, DESC_SIZE, { first: 0.08, last: 0.016 }); // E, Y at 500
+// E opens it, Y closes it.
+const DESC_LINE = flushLine(descriptor, DESC_SIZE, { width: 21.19, first: 0.093, last: 0.016 });
 
 export const descriptorMetrics = {
   size: DESC_SIZE,
@@ -244,9 +255,9 @@ export const descriptorMetrics = {
 export const endorsementLabel = "AN INITIATIVE OF";
 
 const LABEL_SIZE = 10;              // the descriptor's size: one caption register
-const LABEL_TRACKING = 1.4;        // matches the descriptor's derived tracking
+const LABEL_TRACKING = DESC_LINE.tracking; // the descriptor's derived tracking
 const LABEL_BASELINE_GAP = 26;     // below the descriptor baseline
-const LABEL_A_BEARING = 0.028;     // DM Mono "A" at 500, measured like the others
+const LABEL_A_BEARING = 0.017;     // Untitled Sans "A" at 400, measured like the others
 const DM_STAMP = 25;               // stamp height: a quarter of cap height
 const DM_SCALE = DM_STAMP / dmStampHeight;
 const DM_TOP = BASELINE + DESC_BASELINE_GAP + LABEL_BASELINE_GAP + DM_STAMP;
@@ -276,7 +287,7 @@ export function lockupHeight(withDescriptor: boolean, withEndorsement = false): 
 
 interface BuildOptions {
   variant?: LogoVariant;
-  /** Include the descriptor line set in DM Mono. Text stays live, not outlined. */
+  /** Include the descriptor line, set in Untitled Sans. Text stays live, not outlined. */
   withDescriptor?: boolean;
   /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
   withEndorsement?: boolean;
@@ -314,11 +325,11 @@ export function buildLogoSvg({
       : "";
 
   const descriptorEl = showDesc
-    ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="DM Mono, monospace" font-size="${d.size}" font-weight="500" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
+    ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="${LOCKUP_FONT}" font-size="${d.size}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
     : "";
 
   const endorsementEl = withEndorsement
-    ? `\n  <text x="${e.labelX}" y="${baseline + d.baselineGap + e.labelBaselineGap}" font-family="DM Mono, monospace" font-size="${e.labelSize}" font-weight="500" letter-spacing="${e.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
+    ? `\n  <text x="${e.labelX}" y="${baseline + d.baselineGap + e.labelBaselineGap}" font-family="${LOCKUP_FONT}" font-size="${e.labelSize}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${e.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
   <g transform="${e.dmTransform}" fill="${v.dmFg}">
     <path d="${dmWordmarkPath}"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>

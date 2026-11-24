@@ -170,8 +170,8 @@ export default function ComponentsPage() {
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
             How confident are we? Epistemic tags make the claim&apos;s standing visible.
-            Three levels — evidence, inference, assumption — coded by border style:
-            solid, dotted, dashed.
+            Three levels — inference, hypothesis, hunch — coded by border style:
+            solid, dashed, dotted. A claim with a source needs no tag: cite the source.
           </p>
         </div>
 
@@ -179,24 +179,24 @@ export default function ComponentsPage() {
           <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">EpistemicTag</h3>
 
           <div className="flex flex-wrap gap-4 items-center">
-            <EpistemicTag status="evidence" />
             <EpistemicTag status="inference" />
-            <EpistemicTag status="assumption" />
+            <EpistemicTag status="hypothesis" />
+            <EpistemicTag status="hunch" />
           </div>
 
           <div className="space-y-4 max-w-3xl">
             {([
               {
-                status: "evidence" as const,
-                text: "Three longitudinal studies across 40 years confirm that institutional diversity correlates with system resilience under stress.",
-              },
-              {
                 status: "inference" as const,
                 text: "This likely reflects a selection effect: systems with more institutional variation have more redundant pathways when dominant structures fail.",
               },
               {
-                status: "assumption" as const,
-                text: "We assume continued access to distributed sensing data through the next programme cycle.",
+                status: "hypothesis" as const,
+                text: "Distributed sensing data stays open through the next programme cycle. We have not confirmed this with the data owners.",
+              },
+              {
+                status: "hunch" as const,
+                text: "The institutions that failed together seem to share a funder. We have not traced it.",
               },
             ]).map(({ status, text }) => (
               <div key={status} className="flex items-start gap-3">
@@ -259,7 +259,7 @@ export default function ComponentsPage() {
             <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Chain</h3>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Sequence of steps connected by arrows. For process flows, causal chains,
-              intervention logic. Mono type, bordered steps.
+              intervention logic. Label type (Untitled Sans), bordered steps.
             </p>
           </div>
 
@@ -282,7 +282,7 @@ export default function ComponentsPage() {
           <div className="space-y-1">
             <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Stat / StatGrid</h3>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
-              Large-number display. Display type for the value, mono for the label.
+              Large-number display. Display type for the value, label type (Untitled Sans) for the label.
               Optional domain colour on the value. StatGrid for multi-stat layout.
             </p>
           </div>
@@ -306,7 +306,7 @@ export default function ComponentsPage() {
           <div className="space-y-1">
             <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Kicker</h3>
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
-              Section eyebrow label. Mono, small-caps, tracked out. Use before a heading to
+              Section eyebrow label. Untitled Sans, small-caps, tracked out. Use before a heading to
               set context. Optional domain colour.
             </p>
           </div>

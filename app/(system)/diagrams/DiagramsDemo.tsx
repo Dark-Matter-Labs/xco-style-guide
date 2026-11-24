@@ -18,7 +18,9 @@ import {
   AnnotationSource,
 } from "@/lib/diagram-primitives";
 import { SourceBlock } from "@/components/SourceBlock";
-import { colors } from "@/lib/design-tokens";
+import { colors, diagram } from "@/lib/design-tokens";
+
+const { structural, texture } = diagram.lineWeights;
 
 interface PrimitiveCardProps {
   title: string;
@@ -66,14 +68,14 @@ export function DiagramsDemo() {
     <div className="space-y-12">
       <PrimitiveCard
         title="Line"
-        description="Two weights, no others. Structural (1.5px) carries the diagram. Texture (0.75px) carries density — hatching, grid, leaders. Both are crisp and precise."
+        description={`Two weights, no others. Structural (${structural}px) carries the diagram. Texture (${texture}px) carries density — hatching, grid, leaders. Both are crisp and precise.`}
         source={JitteredLineSource}
         preview={
           <>
-            <line x1={20} y1={50} x2={380} y2={50} stroke={colors.ink.hex} strokeWidth={1.5} />
-            <line x1={20} y1={90} x2={380} y2={90} stroke={colors.ink.hex} strokeWidth={0.75} strokeDasharray="4 4" />
-            <text x={20} y={38} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>structural (1.5px)</text>
-            <text x={20} y={110} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>texture (0.75px, dashed)</text>
+            <line x1={20} y1={50} x2={380} y2={50} stroke={colors.ink.hex} strokeWidth={structural} />
+            <line x1={20} y1={90} x2={380} y2={90} stroke={colors.ink.hex} strokeWidth={texture} strokeDasharray="4 4" />
+            <text x={20} y={38} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>structural ({structural}px)</text>
+            <text x={20} y={110} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>texture ({texture}px, dashed)</text>
           </>
         }
         viewBox="0 0 400 130"
@@ -86,7 +88,7 @@ export function DiagramsDemo() {
         preview={
           <>
             <RiskNode cx={200} cy={80} label="Arctic destabilisation" amplitude={amplitude} seed={10} />
-            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>ember fill / paper text / ink stroke</text>
+            <text x={20} y={148} fontSize={9} fontFamily="Untitled Sans, Arial, sans-serif" fill={colors.ink.hex}>ember fill / ink text / ink stroke</text>
           </>
         }
         viewBox="0 0 400 160"
@@ -94,7 +96,7 @@ export function DiagramsDemo() {
 
       <PrimitiveCard
         title="OptionNode"
-        description="The response. Default node — white fill, ink border. Frontier and Fortress are both OptionNodes. Hatching optional to encode weight."
+        description="The response. Default node — paper fill, ink border. Frontier and Fortress are both OptionNodes. Hatching optional to encode weight."
         source={OptionNodeSource}
         preview={
           <>
@@ -146,7 +148,7 @@ export function DiagramsDemo() {
 
       <PrimitiveCard
         title="ScaleRule"
-        description="Scale boundary marker. When a diagram crosses scales — macro, bioregional, urban, neighbourhood — draw this rule. The scale label lives in the left margin in Untitled Sans italic."
+        description="Scale boundary marker. When a diagram crosses scales — macro, bioregional, urban, neighbourhood — draw this rule. The scale label lives in the left margin in upright Untitled Sans."
         source={ScaleRuleSource}
         preview={
           <>
@@ -160,7 +162,7 @@ export function DiagramsDemo() {
 
       <PrimitiveCard
         title="Annotation"
-        description="Marginalia in Untitled Sans italic. Every diagram should permit and visibly invite these. This is what differentiates xCO diagrams from McKinsey diagrams — the working is visible."
+        description="Marginalia in upright Untitled Sans, never italic. Every diagram should permit and visibly invite these. This is what differentiates xCO diagrams from McKinsey diagrams — the working is visible."
         source={AnnotationSource}
         preview={
           <>
@@ -168,7 +170,7 @@ export function DiagramsDemo() {
             <Annotation
               x={20}
               y={130}
-              text="[inference] governance assumes legionella testing — unverified with Madrid water authority"
+              text="[hypothesis] governance assumes legionella testing — not confirmed with Madrid water authority"
               charsPerLine={55}
             />
           </>

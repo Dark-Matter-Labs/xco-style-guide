@@ -11,7 +11,7 @@ export interface AnnotationProps {
 /**
  * Marginalia annotation. Every diagram permits and visibly invites these —
  * showing the working, marking uncertainty.
- * Use [unverified], [inference], [speculation] inline in the text.
+ * Mark uncertainty inline with the system's markers (uncertaintyMarkers in lib/design-tokens).
  */
 export function Annotation({
   x,
@@ -58,5 +58,5 @@ export const AnnotationSource = `// Marginalia — always mark uncertainty inlin
 <Annotation
   x={20}
   y={160}
-  text="[inference] governance assumes legionella testing — unverified with Madrid water authority"
+  text="[hypothesis] governance assumes legionella testing — not confirmed with Madrid water authority"
 />`;

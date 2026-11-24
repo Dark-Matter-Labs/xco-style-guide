@@ -92,6 +92,7 @@ export function VoicePrinciples() {
               </p>
               <p className={`${MONO} text-xco-ink`}>{p.decision.title}</p>
               <p className={`${SMALL} text-xco-ink-muted`}>{p.decision.rationale}</p>
+              {p.note && <p className={`${SMALL} text-xco-ink`}>[note] {p.note}</p>}
               <p className={`${SMALL} text-xco-ink-muted`}>Strand: {strandName(p.strand)}</p>
             </aside>
           </article>
