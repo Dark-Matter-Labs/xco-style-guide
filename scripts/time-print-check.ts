@@ -221,27 +221,6 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   const absent = (what: string, html: string) =>
     assert.ok(!html.includes('opacity="0.06"') && !html.includes("time print ·"), `${what}: no print when it is off`);
 
-  const { SocialCardDiagram } = await import("@/app/(generators)/social-card/SocialCardDiagram");
-  for (const format of ["card", "square"] as const) {
-    const [w, hgt, pad] = format === "card" ? [1200, 630, 80] : [1080, 1080, 90];
-    for (const layout of ["abstract", "diagram", "typographic"] as const) {
-      for (const diagramType of layout === "diagram" ? (["option-field", "territory", "three-regimes"] as const) : (["option-field"] as const)) {
-        const what = `social card ${format} ${layout} ${diagramType}`;
-        const props = { headline: "A field of options", tag: "Note", byline: "xCO", layout, format, diagramType };
-        const x = checkArtwork(what, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop })), w, hgt, pad, layout === "abstract" ? PAPER : INK, layout === "abstract");
-        if (format === "card" && layout === "diagram") assert.ok(x > 1120, `${what}: the slug clears the embed`);
-        if (layout === "abstract") {
-          assert.ok(lastText(renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop }))).includes('text-anchor="end"'), `${what}: on the navy-to-dusk gradient the slug hangs from the top, where paper type reads`);
-          // With every field cleared the stamp is at its longest ("identity note").
-          const cleared = { ...props, headline: "", tag: "", byline: "", timePrint: { ...prop, words: "" } };
-          endsInTheDark(`${what}, fields cleared`, renderToStaticMarkup(h(SocialCardDiagram, cleared)), hgt);
-        }
-        absent(what, renderToStaticMarkup(h(SocialCardDiagram, props)));
-        absent(`${what} (null)`, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: null })));
-      }
-    }
-  }
-
   const { PaperCoverDiagram } = await import("@/app/(generators)/paper-cover/PaperCoverDiagram");
   for (const visual of ["none", "abstract", "mark", "option-field", "territory"] as const) {
     const props = { paperNumber: "Paper 01", title: "Optionality", subtitle: "A field guide", authors: "Gurden", date: "May 2026", visual };
@@ -299,12 +278,14 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
       const S = Math.min(W, H), u = S / 1000, m = 64 * u, tall = H > W * 1.4;
       const safeTop = tall ? H * 0.09 : 0, safeBottom = tall ? H * 0.11 : 0;
       const size = slugSize(22 * u, m);
-      for (const template of ["window", "corner", "globe"] as const) {
+      for (const template of ["window", "corner", "globe", "note-typographic", "note-diagram", "note-abstract"] as const) {
         const what = `event series ${template} ${f.id}`;
         const nominal = longest.length * size * SLUG_EM;
         const pl = slugPlacement(template, W, H, m, safeTop, safeBottom, size, nominal);
         const fitted = fitSize(size, nominal, pl.room);
-        assert.ok(fitted >= size * 0.85, `${what}: the longest stamp needs at most a 15% shrink (${nominal.toFixed(0)} into ${pl.room.toFixed(0)} px)`);
+        // On the abstract note's sweep the slug must end where paper type still reads, so it may shrink further.
+        if (template === "note-abstract") assert.ok(pl.y + nominal * (fitted / size) <= H * 0.55 + 0.01, `${what}: the slug ends in the dark part of the sweep`);
+        else assert.ok(fitted >= size * 0.85, `${what}: the longest stamp needs at most a 15% shrink (${nominal.toFixed(0)} into ${pl.room.toFixed(0)} px)`);
         const length = nominal * (fitted / size);
         eq(pl.side, SLUG[template].side, `${what}: on the side the template leaves clear`);
         if (pl.side === "left") assert.ok(pl.x < m, `${what}: in the left margin`);
@@ -316,6 +297,16 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
       }
     }
     eq(SLUG.corner.from, "top", "the corner's band crosses the right edge low down, so its slug hangs from the top");
+    eq(SLUG["note-abstract"].from, "top", "on the navy-to-dusk sweep the slug hangs from the top, where paper type reads");
+    // The notes (the old social card) print in their own text colour: ink on paper, paper on the sweep with no ground.
+    {
+      const { printColours } = await import("@/app/(generators)/event-series/render/time-print");
+      const { programme: presets } = await import("@/lib/event-series/programme");
+      const note = (template: "note-typographic" | "note-diagram" | "note-abstract") => ({ template, palette: "dusk" as const, imagery: "globe" as const, format: cardFormats[0], content: presets[0].content, titleFace: "xco" as const, uppercase: false, seed: 1 });
+      assert.deepEqual(printColours(note("note-typographic")), { ink: INK, ground: PAPER }, "a paper note prints ink, knocked out in paper");
+      assert.deepEqual(printColours(note("note-diagram")), { ink: INK, ground: PAPER });
+      assert.deepEqual(printColours(note("note-abstract")), { ink: PAPER, ground: null }, "the sweep note prints paper with no knock-outs");
+    }
     eq(palettes.dusk.onGround, INK, "on dusk the print is ink, as the palette's own text");
     eq(palettes.paper.onGround, INK);
     eq(palettes.ink.onGround, PAPER);
@@ -354,7 +345,7 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
 
   // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
   for (const f of [
-    "app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
+    "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
     "app/(generators)/three-regimes/ThreeRegimesDiagram.tsx",
     "app/(generators)/option-field/OptionFieldDiagram.tsx",
   ])

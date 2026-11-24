@@ -5,7 +5,6 @@ export const instruments = [
   { href: "/three-regimes",   label: "Three Regimes" },
   { href: "/option-field",    label: "Option Field" },
   { href: "/territory",       label: "Territory" },
-  { href: "/social-card",     label: "Social Card" },
   { href: "/paper-cover",     label: "Paper Cover" },
   { href: "/event-series",    label: "Event Series" },
   { href: "/growth",          label: "Growth" },

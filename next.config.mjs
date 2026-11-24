@@ -11,6 +11,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/align", destination: "/image-treatment?source=tritone", permanent: true },
+      { source: "/social-card", destination: "/event-series?template=note-typographic", permanent: true },
     ];
   },
 };

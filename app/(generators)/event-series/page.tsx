@@ -17,7 +17,7 @@ export default function EventSeriesPage() {
         <div>
           <h1 className="font-display text-[60px] leading-[60px]">Event Series</h1>
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
-            xCO at Medulla · Luma covers, posts and stories, still or looping
+            xCO at Medulla · Luma covers, posts and stories, still or looping · and xCO notes, the old social card
           </p>
         </div>
         <WIP variant="version" />

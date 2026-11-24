@@ -2,7 +2,11 @@ import type { TimePrintProp } from "@/lib/asemic/time-print";
 import type { CardFormat } from "@/lib/event-series/formats";
 import type { EventContent } from "@/lib/event-series/programme";
 
-export type TemplateId = "window" | "corner" | "globe";
+export type TemplateId = "window" | "corner" | "globe" | NoteId;
+/** xCO's own notes, folded in from the social card: no Medulla, no imagery, no motion. */
+export type NoteId = "note-typographic" | "note-diagram" | "note-abstract";
+/** What a diagram note embeds. */
+export type EmbedId = "three-regimes" | "option-field" | "territory";
 export type PaletteId = "dusk" | "paper" | "ink";
 export type TitleFace = "xco" | "medulla";
 export type ImageryId = "globe" | "ascii-globe" | "storm" | "collapse" | "lattice" | "line" | "ripples" | "ridges";
@@ -20,6 +24,8 @@ export interface CardSpec {
   seed: number;
   /** The time print's minute and words, from the generator; null or absent when it is off. */
   timePrint?: TimePrintProp | null;
+  /** The diagram a note-diagram card embeds. */
+  embed?: EmbedId;
 }
 
 /** Resolved CSS font-family strings, ready for ctx.font. */

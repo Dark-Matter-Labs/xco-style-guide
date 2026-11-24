@@ -59,18 +59,26 @@ export function SweepGradient({ id, x, top, bottom }: { id: string; x: number; t
 }
 
 // ── Option Field ─────────────────────────────────────────────────────
-/** A small option field filling the rect at (x0, y0), at the field's default strengths. */
-export function OptionFieldEmbed({ x0, y0, w, h, fg = INK }: { x0: number; y0: number; w: number; h: number; fg?: string }) {
-  const spacing = 7;
-  const segW = 5;
+/** The small option field's bars in a w × h rect, at the field's default strengths. `scale` widens the pitch. */
+export function optionFieldBars(w: number, h: number, scale = 1): { x: number; y: number; w: number; h: number }[] {
+  const spacing = 7 * scale;
+  const segW = 5 * scale;
   const maxW = spacing * 1.5;
-  const segs: { x: number; y: number; sh: number }[] = [];
+  const bars: { x: number; y: number; w: number; h: number }[] = [];
   for (let y = spacing / 2; y < h; y += spacing) {
-    for (let x = 0; x < w; x += segW) segs.push({ x: x0 + x, y: y0 + y, sh: embedWeight(x / w, y / h, maxW) });
+    for (let x = 0; x < w; x += segW) {
+      const sh = embedWeight(x / w, y / h, maxW);
+      bars.push({ x, y: y - sh / 2, w: segW, h: sh });
+    }
   }
+  return bars;
+}
+
+/** A small option field filling the rect at (x0, y0). */
+export function OptionFieldEmbed({ x0, y0, w, h, fg = INK }: { x0: number; y0: number; w: number; h: number; fg?: string }) {
   return (
     <>
-      {segs.map((s, i) => <rect key={i} x={s.x} y={s.y - s.sh / 2} width={segW} height={s.sh} fill={fg} />)}
+      {optionFieldBars(w, h).map((b, i) => <rect key={i} x={x0 + b.x} y={y0 + b.y} width={b.w} height={b.h} fill={fg} />)}
     </>
   );
 }
@@ -100,30 +108,37 @@ export const TERRITORY_ITEMS = [
   { label: "Emergence", weight: 15 },
 ];
 
-/** A small territory treemap on ink, filling the rect at (x0, y0). Labels show where a cell can hold `labelMax`-px type. */
-export function TerritoryEmbed({ x0, y0, w, h, gutter, labelMax }: { x0: number; y0: number; w: number; h: number; gutter: number; labelMax: number }) {
+export interface TerritoryCell { x: number; y: number; w: number; h: number; bg: string; fg: string; label: string; size: number | null }
+
+/** The small territory's cells in a w × h rect on ink. `size` is the label's px, or null where it would not fit `labelMax`. */
+export function territoryCells(w: number, h: number, gutter: number, labelMax: number): TerritoryCell[] {
   const rects = squarify(TERRITORY_ITEMS, w, h);
   const half = gutter / 2;
+  return rects.flatMap((r, i) => {
+    const cw = r.w - gutter, ch = r.h - gutter;
+    if (cw < 4 || ch < 4) return [];
+    const [bg, fg] = spectrumCell(i, rects.length);
+    const size = cw >= labelMax * 1.8 && ch >= labelMax ? Math.min(Math.min(cw, ch) * 0.14, labelMax) : null;
+    return [{ x: r.x + half, y: r.y + half, w: cw, h: ch, bg, fg, label: r.label, size }];
+  });
+}
+
+/** A small territory treemap on ink, filling the rect at (x0, y0). Labels show where a cell can hold `labelMax`-px type. */
+export function TerritoryEmbed({ x0, y0, w, h, gutter, labelMax }: { x0: number; y0: number; w: number; h: number; gutter: number; labelMax: number }) {
   return (
     <>
       <rect x={x0} y={y0} width={w} height={h} fill={INK} />
-      {rects.map((r, i) => {
-        const cx = r.x + half, cy = r.y + half, cw = r.w - gutter, ch = r.h - gutter;
-        if (cw < 4 || ch < 4) return null;
-        const [bg, fg] = spectrumCell(i, rects.length);
-        const showLabel = cw >= labelMax * 1.8 && ch >= labelMax;
-        return (
-          <g key={i}>
-            <rect x={x0 + cx} y={y0 + cy} width={cw} height={ch} fill={bg} />
-            {showLabel && (
-              <text x={x0 + cx + cw / 2} y={y0 + cy + ch / 2} textAnchor="middle" dominantBaseline="middle"
-                fontFamily={typography.faces.body.stack} fontSize={Math.min(Math.min(cw, ch) * 0.14, labelMax)} fill={fg}>
-                {r.label}
-              </text>
-            )}
-          </g>
-        );
-      })}
+      {territoryCells(w, h, gutter, labelMax).map((c, i) => (
+        <g key={i}>
+          <rect x={x0 + c.x} y={y0 + c.y} width={c.w} height={c.h} fill={c.bg} />
+          {c.size !== null && (
+            <text x={x0 + c.x + c.w / 2} y={y0 + c.y + c.h / 2} textAnchor="middle" dominantBaseline="middle"
+              fontFamily={typography.faces.body.stack} fontSize={c.size} fill={c.fg}>
+              {c.label}
+            </text>
+          )}
+        </g>
+      ))}
     </>
   );
 }

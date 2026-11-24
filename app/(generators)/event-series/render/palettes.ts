@@ -54,7 +54,7 @@ export const palettes: Record<PaletteId, Palette> = {
     onPanel: paper,
     onGround: ink,
     accentOnPanel: sand,
-    accentOnGround: duskInk,   // dusk itself is 2.77:1 on paper
+    accentOnGround: duskInk,   // dusk itself is 2.46:1 on paper
     groundIsLight: true,
     panelIsLight: false,
   },
