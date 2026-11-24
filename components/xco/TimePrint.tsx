@@ -31,7 +31,11 @@ export function TimePrintMarks({ print }: { print: TimePrint }) {
   return <g opacity={TIME_PRINT_OPACITY} aria-hidden="true" fill="none" strokeLinecap="butt" dangerouslySetInnerHTML={{ __html: print.body }} />;
 }
 
-/** The stamp, as a printer's slug: reading upward, centred in a side margin, starting level with the bottom padding. */
+/**
+ * The stamp, as a printer's slug: reading upward, centred in a side margin, starting level with
+ * the bottom padding. With `top`, it hangs from that y instead: on a gradient that is dark at the
+ * top and light at the bottom, that keeps the whole slug where its type reads.
+ */
 export function TimePrintSlug({
   print,
   width,
@@ -40,6 +44,7 @@ export function TimePrintSlug({
   bottom,
   size,
   side = "right",
+  top,
 }: {
   print: TimePrint;
   width: number;
@@ -48,10 +53,18 @@ export function TimePrintSlug({
   bottom: number;
   size: number;
   side?: "left" | "right";
+  top?: number;
 }) {
   const x = (side === "right" ? width - margin / 2 : margin / 2) + size * 0.35;
+  const y = top ?? height - bottom;
   return (
-    <text transform={`translate(${x} ${height - bottom}) rotate(-90)`} fontFamily="'Untitled Sans', system-ui, sans-serif" fontSize={size} fill={print.ink}>
+    <text
+      transform={`translate(${x} ${y}) rotate(-90)`}
+      textAnchor={top === undefined ? undefined : "end"}
+      fontFamily="'Untitled Sans', system-ui, sans-serif"
+      fontSize={size}
+      fill={print.ink}
+    >
       {print.stamp}
     </text>
   );

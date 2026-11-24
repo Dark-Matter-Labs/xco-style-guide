@@ -297,7 +297,7 @@ export const SocialCardDiagram = forwardRef<SVGSVGElement, SocialCardProps>(
         <defs><style>{FONT_IMPORT}</style></defs>
         {props.format === "card"   && <CardInner   {...props} print={print} />}
         {props.format === "square" && <SquareInner {...props} print={print} />}
-        {print && <TimePrintSlug print={print} width={vw} height={vh} margin={pad} bottom={pad} size={slugSize(10, pad)} />}
+        {print && <TimePrintSlug print={print} width={vw} height={vh} margin={pad} bottom={pad} size={slugSize(10, pad)} top={abstract ? pad : undefined} />}
       </svg>
     );
   }

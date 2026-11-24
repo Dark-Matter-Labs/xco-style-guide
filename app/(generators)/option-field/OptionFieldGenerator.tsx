@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useMinute } from "@/components/xco/TimePrint";
+import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
 import { OptionFieldDiagram } from "./OptionFieldDiagram";
 import type { FieldFormat, FieldColorMode } from "./OptionFieldDiagram";
 import { paletteHex } from "@/lib/design-tokens";
@@ -77,6 +79,10 @@ export function OptionFieldGenerator() {
   const [colorMode,   setColorMode]   = useState<FieldColorMode>("ink");
   const [format,      setFormat]      = useState<FieldFormat>("hero");
   const [exporting,   setExporting]   = useState<string | null>(null);
+  const [timePrintOn, setTimePrintOn] = useState(true);
+  // One minute for the preview and the hidden export copies; the field has no words, so the diagram uses the identity note.
+  const minute = useMinute();
+  const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words: "" } : null), [timePrintOn, minute]);
 
   const heroRef   = useRef<SVGSVGElement>(null);
   const squareRef = useRef<SVGSVGElement>(null);
@@ -85,7 +91,7 @@ export function OptionFieldGenerator() {
   const activeRef = format === "hero" ? heroRef : format === "square" ? squareRef : markRef;
   const activeDim = FORMATS.find(f => f.id === format)!;
 
-  const props = { fieldStr, frontierStr, fortressStr, volatility, resolution, colorMode };
+  const props = { fieldStr, frontierStr, fortressStr, volatility, resolution, colorMode, timePrint };
 
   const handle = async (type: string) => {
     setExporting(type);
@@ -161,6 +167,13 @@ export function OptionFieldGenerator() {
         {/* Export */}
         <div className="space-y-2 pt-4">
           <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
+          <label className="flex items-start gap-2 cursor-pointer pb-2">
+            <input type="checkbox" checked={timePrintOn} onChange={(e) => setTimePrintOn(e.target.checked)} className="accent-xco-dusk mt-1.5 shrink-0" />
+            <span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink block">Time print</span>
+              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{TIME_PRINT_HINT}</span>
+            </span>
+          </label>
           {[
             { id: "svg", label: `SVG — ${activeDim.label}` },
             { id: "png", label: `PNG — ${activeDim.label}` },

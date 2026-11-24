@@ -176,6 +176,8 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
   assert.ok(slugX(slug) > 1200 - 80 && slugX(slug) < 1200, "a right slug sits in the right margin");
   const left = renderToStaticMarkup(h("svg", null, h(TimePrintSlug, { print: tp, width: 1080, height: 1080, margin: 60, bottom: 60, size: 12, side: "left" })));
   assert.ok(slugX(left) < 60, "a left slug sits in the left margin");
+  const hung = renderToStaticMarkup(h("svg", null, h(TimePrintSlug, { print: tp, width: 1200, height: 630, margin: 80, bottom: 80, size: 13, top: 80 })));
+  assert.ok(hung.includes("translate(") && / 80\) rotate\(-90\)/.test(hung) && hung.includes('text-anchor="end"'), "a slug can hang from the top padding instead");
 
   const Probe = () => (useMinute() === null ? "none" : "some");
   eq(renderToStaticMarkup(h(Probe)), "none", "no minute on the server, so static pages hydrate cleanly");
@@ -212,6 +214,7 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
         const props = { headline: "A field of options", tag: "Note", byline: "xCO", layout, format, diagramType };
         const x = checkArtwork(what, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop })), w, hgt, pad, layout === "abstract" ? PAPER : INK, layout === "abstract");
         if (format === "card" && layout === "diagram") assert.ok(x > 1120, `${what}: the slug clears the embed`);
+        if (layout === "abstract") assert.ok(lastText(renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: prop }))).includes('text-anchor="end"'), `${what}: on the navy-to-dusk gradient the slug hangs from the top, where paper type reads`);
         absent(what, renderToStaticMarkup(h(SocialCardDiagram, props)));
         absent(`${what} (null)`, renderToStaticMarkup(h(SocialCardDiagram, { ...props, timePrint: null })));
       }
@@ -225,8 +228,54 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
     absent(`paper cover ${visual}`, renderToStaticMarkup(h(PaperCoverDiagram, props)));
   }
 
+  // ── Task 4: three regimes and option field ──────────────────────────
+  const slugFont = (html: string) => Number(/font-size="([\d.]+)"/.exec(lastText(html))![1]);
+  const { ThreeRegimesDiagram } = await import("@/app/(generators)/three-regimes/ThreeRegimesDiagram");
+  const { AbstractThreeRegimesDiagram } = await import("@/app/(generators)/three-regimes/AbstractThreeRegimesDiagram");
+  const trProps = {
+    labels: { frontier: "Frontier", fortress: "Fortress", field: "Field", fieldSublabel: "the commons" },
+    relationshipStatement: "Field is the precondition for everything else", caption: "Three regimes", showAnnotations: true, amplitude: 0,
+  };
+  const MARGIN: Record<string, [number, number]> = { classic: [80, 100], orbital: [80, 100], nested: [50, 50], columns: [40, 40] };
+  for (const format of ["hero", "square"] as const) {
+    const hgt = format === "hero" ? 630 : 1200;
+    for (const variant of ["classic", "nested", "columns", "orbital"] as const) {
+      for (const colorScheme of ["standard", "blueprint"] as const) {
+        const margin = MARGIN[variant][format === "hero" ? 0 : 1];
+        const what = `three regimes ${format} ${variant} ${colorScheme}`;
+        const html = renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format, structuralVariant: variant, colorScheme, timePrint: prop }));
+        checkArtwork(what, html, 1200, hgt, margin, INK, false);
+        assert.ok(slugFont(html) <= margin / 3, `${what}: the slug is at most a third of its margin`);
+      }
+    }
+    const abs = renderToStaticMarkup(h(AbstractThreeRegimesDiagram, { ...trProps, format, timePrint: prop }));
+    checkArtwork(`three regimes abstract ${format}`, abs, 1200, hgt, format === "hero" ? 80 : 100, PAPER, true);
+    assert.ok(lastText(abs).includes("identity note"), `three regimes abstract ${format}: no words of its own, so the identity note`);
+    assert.ok(lastText(abs).includes('text-anchor="end"'), `three regimes abstract ${format}: on the gradient the slug hangs from the top, where paper type reads`);
+  }
+  absent("three regimes mark", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
+  absent("three regimes abstract mark", renderToStaticMarkup(h(AbstractThreeRegimesDiagram, { ...trProps, format: "mark", timePrint: prop })));
+  absent("three regimes off", renderToStaticMarkup(h(ThreeRegimesDiagram, { ...trProps, format: "hero" })));
+
+  const { OptionFieldDiagram } = await import("@/app/(generators)/option-field/OptionFieldDiagram");
+  const ofProps = { fieldStr: 0.6, frontierStr: 0.5, fortressStr: 0.4, volatility: 0.5, resolution: 50 };
+  for (const format of ["hero", "square"] as const) {
+    for (const colorMode of ["ink", "spectrum", "inverted", "blueprint", "warmth"] as const) {
+      const what = `option field ${format} ${colorMode}`;
+      const html = renderToStaticMarkup(h(OptionFieldDiagram, { ...ofProps, format, colorMode, timePrint: prop }));
+      checkArtwork(what, html, 1200, format === "hero" ? 630 : 1200, 64, colorMode === "inverted" || colorMode === "blueprint" ? PAPER : INK, false);
+      assert.ok(lastText(html).includes("identity note"), `${what}: no words of its own, so the identity note`);
+      absent(`${what} off`, renderToStaticMarkup(h(OptionFieldDiagram, { ...ofProps, format, colorMode })));
+    }
+  }
+  absent("option field mark", renderToStaticMarkup(h(OptionFieldDiagram, { ...ofProps, format: "mark", colorMode: "ink", timePrint: prop })));
+
   // The generator owns the minute; a diagram never reads the clock itself (Review Focus 1).
-  for (const f of ["app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx"])
+  for (const f of [
+    "app/(generators)/social-card/SocialCardDiagram.tsx", "app/(generators)/paper-cover/PaperCoverDiagram.tsx",
+    "app/(generators)/three-regimes/ThreeRegimesDiagram.tsx", "app/(generators)/three-regimes/AbstractThreeRegimesDiagram.tsx",
+    "app/(generators)/option-field/OptionFieldDiagram.tsx",
+  ])
     assert.ok(!readFileSync(f, "utf8").includes("useMinute"), `${f} takes its minute from the generator`);
 
   console.log("time-print: all checks passed");

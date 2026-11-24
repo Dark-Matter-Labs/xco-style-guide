@@ -1,6 +1,8 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
+import { TimePrintMarks, TimePrintSlug } from "@/components/xco/TimePrint";
+import { makeTimePrint, slugSize, type TimePrintProp } from "@/lib/asemic/time-print";
 import { colors } from "@/lib/design-tokens";
 import { paletteHex } from "@/lib/design-tokens";
 
@@ -26,6 +28,15 @@ export interface ThreeRegimesDiagramProps {
   amplitude: number;
   colorScheme?: DiagramColorScheme;
   structuralVariant?: StructuralVariant;
+  /** The time print's minute and words, from the generator; null or absent when it is off. Never on the mark. */
+  timePrint?: TimePrintProp | null;
+}
+
+/** The slug's side margin: each variant's own side padding (classic and orbital leave the layout's 80 / 100). */
+export function slugMargin(variant: StructuralVariant, format: DiagramFormat): number {
+  if (variant === "nested") return 50;
+  if (variant === "columns") return 40;
+  return format === "square" ? 100 : 80;
 }
 
 const LAYOUTS = {
@@ -376,11 +387,17 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
   function ThreeRegimesDiagram(
     {
       labels, relationshipStatement, caption, showAnnotations,
-      format, colorScheme = "standard", structuralVariant = "classic",
+      format, colorScheme = "standard", structuralVariant = "classic", timePrint,
     },
     ref,
   ) {
     const L = LAYOUTS[format];
+    const tp = format === "mark" ? null : timePrint;
+    const print = useMemo(
+      () => (tp ? makeTimePrint({ ...tp, width: L.vw, height: L.vh, ink: INK, ground: PAPER }) : null),
+      [tp, L.vw, L.vh],
+    );
+    const margin = slugMargin(structuralVariant, format);
     const showText = format !== "mark";
     const hasSub = Boolean(labels.fieldSublabel);
 
@@ -429,6 +446,7 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
         </defs>
 
         <rect width={L.vw} height={L.vh} fill={PAPER} />
+        {print && <TimePrintMarks print={print} />}
 
         {/* ── Classic layout ── */}
         {structuralVariant === "classic" && (() => {
@@ -505,6 +523,8 @@ export const ThreeRegimesDiagram = forwardRef<SVGSVGElement, ThreeRegimesDiagram
 
         {/* Shared text rows for non-classic variants */}
         {structuralVariant !== "classic" && sharedTextRows}
+
+        {print && <TimePrintSlug print={print} width={L.vw} height={L.vh} margin={margin} bottom={margin} size={slugSize(L.subSize, margin)} />}
       </svg>
     );
   }
