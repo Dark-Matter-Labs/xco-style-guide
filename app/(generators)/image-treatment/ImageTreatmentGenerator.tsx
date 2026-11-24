@@ -8,7 +8,9 @@ import {
 import type { ColorMode, TreatmentFormat, TreatmentMode, SourceDiagram, DiagramVariant } from "./ImageTreatmentDiagram";
 import { embedWeight } from "@/lib/regimes/weight";
 import { paletteHex } from "@/lib/design-tokens";
-import { ExportError, useExport } from "@/components/generator-controls";
+import {
+  Button, Checkbox, ExportError, labelClass, RadioList, Section, Segmented, Slider, useExport,
+} from "@/components/generator-controls";
 import { canvasPNG, download, exportPNG, exportSVG } from "@/lib/media/export";
 
 const { ink: INK, paper: PAPER, dusk: DUSK, ocean: OCEAN } = paletteHex;
@@ -536,6 +538,35 @@ const FORMATS: { id: TreatmentFormat; label: string; w: number; h: number }[] = 
   { id: "square", label: "1200 × 1200", w: 1200, h: 1200 },
 ];
 
+const SOURCES: { id: SourceMode; label: string }[] = [
+  { id: "three-regimes", label: "Three Regimes" },
+  { id: "option-field",  label: "Option Field" },
+  { id: "photo",         label: "Photo ↑" },
+];
+
+const VARIANTS: { id: DiagramVariant; label: string; hint: string }[] = [
+  { id: "mark",        label: "Mark",        hint: "Original geometric mark — sources converging to field" },
+  { id: "territories", label: "Territories", hint: "Three regime zones — block diagram layout" },
+  { id: "signal",      label: "Signal",      hint: "Scanline topology — two streams merging into one" },
+];
+
+const MODES: { id: TreatmentMode; label: string }[] = [
+  { id: "raster", label: "Raster" },
+  { id: "sharp",  label: "Sharp" },
+];
+
+const CELL_SHAPES: { id: CellShape; label: string; hint: string }[] = [
+  { id: "square", label: "Square", hint: "Equal width & height — classic halftone" },
+  { id: "hbars",  label: "H bars", hint: "Full column width — horizontal bars" },
+  { id: "vbars",  label: "V bars", hint: "Full row height — vertical bars" },
+];
+
+const resolutionHint = (r: number) =>
+  r <= 20 ? "Abstract texture — mark unreadable"
+  : r <= 45 ? "Suggested: placeholder / teaser"
+  : r <= 70 ? "Suggested: evolving state"
+  : "Mark readable — approaching sharp";
+
 const COLOR_MODES: { id: ColorMode; label: string }[] = [
   { id: "ink",      label: "Ink on paper" },
   { id: "ember",    label: "Dusk on paper" },
@@ -633,48 +664,30 @@ export function ImageTreatmentGenerator() {
     colorMode, photoPalette, uploadedImg: activeImg, grain, format, cellShape, showPhoto,
   };
 
-  const btnClass = (active: boolean) =>
-    `flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
-      active
-        ? "bg-xco-ink text-xco-paper border-xco-ink"
-        : "text-xco-ink border-xco-ink"
-    }`;
-
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* Controls */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
-
-        {/* Source */}
-        <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Source</h2>
-          <div className="flex gap-0 flex-wrap">
-            {(["three-regimes", "option-field", "photo"] as SourceMode[]).map((s) => (
-              <button key={s} onClick={() => setSource(s)} className={btnClass(source === s)}>
-                {s === "three-regimes" ? "Three Regimes" : s === "option-field" ? "Option Field" : "Photo ↑"}
-              </button>
-            ))}
-          </div>
-        </div>
+        <Section title="Source">
+          <Segmented value={source} options={SOURCES} onChange={setSource} />
+        </Section>
 
         {/* Photo upload — multi-image (max 4) */}
         {source === "photo" && (
-          <div className="space-y-2 pt-4">
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Images</h2>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{uploadedImgs.length}/4</span>
-            </div>
+          <Section title={`Images — ${uploadedImgs.length}/4`}>
             {uploadedImgs.map((img, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink flex-1">
+                <span className={`${labelClass} flex-1`}>
                   {i + 1} — {img.naturalWidth}×{img.naturalHeight}
                 </span>
                 <button
+                  type="button"
+                  aria-label={`Remove image ${i + 1}`}
                   onClick={() => {
                     setUploadedImgs((prev) => prev.filter((_, j) => j !== i));
                     setActiveIdx((a) => Math.min(a, Math.max(0, uploadedImgs.length - 2)));
                   }}
-                  className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink hover:text-xco-dusk-ink transition-colors"
+                  className={`${labelClass} min-w-6 min-h-6 hover:text-xco-dusk-ink transition-colors`}
                 >
                   ✕
                 </button>
@@ -683,198 +696,94 @@ export function ImageTreatmentGenerator() {
             {uploadedImgs.length < 4 && (
               <label className="block border border-dashed border-xco-ink p-3 text-center cursor-pointer hover:bg-xco-ink/[0.03] transition-colors">
                 <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <span className={labelClass}>
                   {uploadedImgs.length === 0 ? "Click to upload photos" : "+ Add image"}
                 </span>
               </label>
             )}
             {uploadedImgs.length > 0 && (
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={showPhoto} onChange={(e) => setShowPhoto(e.target.checked)}
-                  className="accent-xco-dusk w-4 h-4" />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Show source photo</span>
-              </label>
+              <Checkbox label="Show source photo" checked={showPhoto} onChange={setShowPhoto} />
             )}
-          </div>
+          </Section>
         )}
 
         {/* Diagram variant (three-regimes only) */}
         {source === "three-regimes" && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Variant</h2>
-            <div className="flex gap-0">
-              {(["mark", "territories", "signal"] as DiagramVariant[]).map((v) => (
-                <button key={v} onClick={() => setVariant(v)} className={btnClass(variant === v)}>
-                  {v}
-                </button>
-              ))}
-            </div>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              {variant === "mark"        && "Original geometric mark — sources converging to field"}
-              {variant === "territories" && "Three regime zones — block diagram layout"}
-              {variant === "signal"      && "Scanline topology — two streams merging into one"}
-            </p>
-          </div>
+          <Section title="Variant">
+            <Segmented value={variant} options={VARIANTS.map(({ id, label }) => ({ id, label }))} onChange={setVariant} />
+            <p className={`${labelClass} text-xco-ink-muted`}>{VARIANTS.find((v) => v.id === variant)!.hint}</p>
+          </Section>
         )}
 
         {/* Mode (raster / sharp) — only where applicable */}
         {showMode && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Mode</h2>
-            <div className="flex gap-0">
-              {(["raster", "sharp"] as TreatmentMode[]).map((m) => (
-                <button key={m} onClick={() => setMode(m)} className={btnClass(mode === m)}>
-                  {m}
-                </button>
-              ))}
-            </div>
-          </div>
+          <Section title="Mode">
+            <Segmented value={mode} options={MODES} onChange={setMode} />
+          </Section>
         )}
 
         {/* Resolution */}
         {showResolution && (
-          <div className="space-y-3 pt-4">
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Resolution</h2>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{dotSpacing}px grid</span>
-            </div>
-            <input type="range" aria-label="Resolution" min={0} max={100} step={1}
-              value={resolution} onChange={(e) => setResolution(Number(e.target.value))}
-              className="w-full accent-xco-dusk" />
-            <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              <span>coarse</span><span>fine</span>
-            </div>
-            {source !== "photo" && (
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-                {resolution <= 20 && "Abstract texture — mark unreadable"}
-                {resolution > 20 && resolution <= 45 && "Suggested: placeholder / teaser"}
-                {resolution > 45 && resolution <= 70 && "Suggested: evolving state"}
-                {resolution > 70 && "Mark readable — approaching sharp"}
-              </p>
-            )}
-          </div>
+          <Section title="Resolution">
+            <Slider label="Grid" min={0} max={100} step={1} value={resolution} onChange={setResolution}
+              display={`${dotSpacing}px grid`} ends={["coarse", "fine"]}
+              hint={source === "photo" ? undefined : resolutionHint(resolution)} />
+          </Section>
         )}
 
         {/* Cell shape — photo and diagram raster (not territories/signal which have fixed geometry) */}
         {(source === "photo" || (mode === "raster" && !(source === "three-regimes" && variant !== "mark"))) && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Cell Shape</h2>
-            <div className="flex gap-0">
-              {([
-                { id: "square", label: "Square" },
-                { id: "hbars",  label: "H bars"  },
-                { id: "vbars",  label: "V bars"  },
-              ] as { id: CellShape; label: string }[]).map(({ id, label }) => (
-                <button key={id} onClick={() => setCellShape(id)} className={btnClass(cellShape === id)}>
-                  {label}
-                </button>
-              ))}
-            </div>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              {cellShape === "square" && "Equal width & height — classic halftone"}
-              {cellShape === "hbars"  && "Full column width — horizontal bars"}
-              {cellShape === "vbars"  && "Full row height — vertical bars"}
-            </p>
-          </div>
+          <Section title="Cell shape">
+            <Segmented value={cellShape} options={CELL_SHAPES.map(({ id, label }) => ({ id, label }))} onChange={setCellShape} />
+            <p className={`${labelClass} text-xco-ink-muted`}>{CELL_SHAPES.find((c) => c.id === cellShape)!.hint}</p>
+          </Section>
         )}
 
         {/* Colour — diagram */}
         {source !== "photo" && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Colour</h2>
-            {COLOR_MODES.map(({ id, label }) => (
-              <label key={id} className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="color" value={id} checked={colorMode === id}
-                  onChange={() => setColorMode(id)} className="accent-xco-dusk" />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-              </label>
-            ))}
-          </div>
+          <Section title="Colour">
+            <RadioList name="color" value={colorMode} options={COLOR_MODES} onChange={setColorMode} />
+          </Section>
         )}
 
-        {/* Palette — photo */}
+        {/* Palette and grain — photo */}
         {source === "photo" && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Palette</h2>
-            {PHOTO_PALETTES.map(({ id, label }) => (
-              <label key={id} className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="photo-palette" value={id} checked={photoPalette === id}
-                  onChange={() => setPhotoPalette(id)} className="accent-xco-dusk" />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-              </label>
-            ))}
-          </div>
-        )}
-
-        {/* Grain — photo only */}
-        {source === "photo" && (
-          <div className="pt-4">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={grain} onChange={(e) => setGrain(e.target.checked)}
-                className="accent-xco-dusk" />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Film grain</span>
-            </label>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-1">
-              Adds photographic noise — organic, less cold
-            </p>
-          </div>
+          <Section title="Palette">
+            <RadioList name="photo-palette" value={photoPalette} options={PHOTO_PALETTES} onChange={setPhotoPalette} />
+            <Checkbox label="Film grain" hint="Adds photographic noise — organic, less cold" checked={grain} onChange={setGrain} />
+          </Section>
         )}
 
         {/* Animation — crossfade when multiple photos loaded */}
         {source === "photo" && uploadedImgs.length > 1 && (
-          <div className="space-y-3 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Animation</h2>
-            <div className="flex gap-0">
-              <button onClick={() => setAnimating((a) => !a)} className={btnClass(animating)}>
-                {animating ? "pause" : "play"}
-              </button>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Hold per frame</span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-dusk-ink">{(animSpeed / 1000).toFixed(1)}s</span>
-            </div>
-            <input type="range" aria-label="Hold per frame" min={500} max={6000} step={100}
-              value={animSpeed} onChange={(e) => setAnimSpeed(Number(e.target.value))}
-              className="w-full accent-xco-dusk" />
-            <div className="flex justify-between font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              <span>fast</span><span>slow</span>
-            </div>
-          </div>
+          <Section title="Animation">
+            <Button onClick={() => setAnimating((a) => !a)} pressed={animating}>
+              {animating ? "❚❚ Pause" : "▶ Play"}
+            </Button>
+            <Slider label="Hold per frame" min={500} max={6000} step={100} value={animSpeed} onChange={setAnimSpeed}
+              display={`${(animSpeed / 1000).toFixed(1)}s`} ends={["fast", "slow"]} />
+          </Section>
         )}
 
         {/* Format — not applicable in photo mode (dims come from the image) */}
         {source !== "photo" && (
-          <div className="space-y-2 pt-4">
-            <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">Format</h2>
-            {FORMATS.map(({ id, label }) => (
-              <label key={id} className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="format" value={id} checked={format === id}
-                  onChange={() => setFormat(id)} className="accent-xco-dusk" />
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{label}</span>
-              </label>
-            ))}
-          </div>
+          <Section title="Format">
+            <RadioList name="format" value={format} options={FORMATS} onChange={setFormat} />
+          </Section>
         )}
 
-        {/* Export */}
-        <div className="space-y-2 pt-4">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-3">Export</h2>
-          <button onClick={() => handle("svg")}
-            disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}
-            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+        <Section title="Export">
+          <Button onClick={() => handle("svg")} disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}>
             {exporting === "svg" ? "exporting…" : `↓ SVG — ${activeFormat.label}`}
-          </button>
-          <button
-            onClick={() => handle("png")}
-            disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}
-            className="w-full text-left font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink border border-xco-ink px-3 py-2 hover:border-xco-ink hover:bg-xco-ink/[0.04] transition-colors disabled:opacity-40">
+          </Button>
+          <Button onClick={() => handle("png")} disabled={exporting !== null || (source === "photo" && uploadedImgs.length === 0)}>
             {exporting === "png" ? "exporting…" : `↓ PNG — ${source === "photo" && uploadedImgs.length > 1 ? `frame ${activeIdx + 1}/${uploadedImgs.length}` : activeFormat.label}`}
-          </button>
+          </Button>
           {source === "photo" && uploadedImgs.length === 0 && (
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to enable export</p>
+            <p className={labelClass}>Upload a photo to enable export</p>
           )}
           <ExportError error={error} />
-        </div>
+        </Section>
       </aside>
 
       {/* Preview */}
@@ -882,7 +791,7 @@ export function ImageTreatmentGenerator() {
         {source === "photo" && uploadedImgs.length === 0 ? (
           <div className="border border-xco-ink flex items-center justify-center"
             style={{ aspectRatio: format === "card" ? "1200/630" : "1" }}>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to preview</span>
+            <span className={labelClass}>Upload a photo to preview</span>
           </div>
         ) : source === "photo" ? (
           <div className="relative border border-xco-ink overflow-hidden"
@@ -917,24 +826,16 @@ export function ImageTreatmentGenerator() {
 
         {/* Frame picker — shown when multiple images loaded */}
         {source === "photo" && uploadedImgs.length > 1 && (
-          <div className="flex gap-2">
-            {uploadedImgs.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => { setActiveIdx(i); setAnimating(false); }}
-                className={`font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-1 border transition-colors ${
-                  i === activeIdx
-                    ? "bg-xco-ink text-xco-paper border-xco-ink"
-                    : "text-xco-ink border-xco-ink"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
+          <div className="max-w-xs" role="group" aria-label="Frame">
+            <Segmented
+              value={String(activeIdx)}
+              options={uploadedImgs.map((_, i) => ({ id: String(i), label: String(i + 1) }))}
+              onChange={(v) => { setActiveIdx(Number(v)); setAnimating(false); }}
+            />
           </div>
         )}
 
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+        <p className={labelClass}>
           {source === "photo"
             ? uploadedImgs.length > 0
               ? (() => {
