@@ -5,6 +5,7 @@ import { LOOP_SECONDS } from "@/lib/event-series/formats";
 import { drawCard } from "./render/templates";
 import { altText } from "./render/blocks";
 import { imageStatusText, statusOf } from "./render/imagery";
+import { isNote, noteImage } from "./render/notes";
 import type { Assets, CardSpec } from "./render/types";
 import { labelOf } from "@/lib/asemic/time-print";
 
@@ -46,7 +47,7 @@ export function CardPreview({ spec, assets, playing, stillPhase }: CardPreviewPr
       width={w}
       height={h}
       role="img"
-      aria-label={`${label} event card. ${altText(spec, imageStatusText[statusOf(spec.imagery)])}${spec.timePrint ? ` ${labelOf(spec.timePrint.minute)}` : ""}`}
+      aria-label={`${label} ${isNote(spec.template) ? "xCO note" : "event card"}. ${altText(spec, isNote(spec.template) ? noteImage(spec) : imageStatusText[statusOf(spec.imagery)])}${spec.timePrint ? ` ${labelOf(spec.timePrint.minute)}` : ""}`}
       className="block w-full h-auto"
       style={{ aspectRatio: `${w} / ${h}` }}
     />

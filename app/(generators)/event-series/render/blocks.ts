@@ -130,6 +130,15 @@ export function drawHeadline(
  */
 export function altText(spec: CardSpec, imageStatus: string): string {
   const { kicker, title, subtitle, date, time, location } = spec.content;
+  if (spec.template.startsWith("note-")) {
+    return [
+      kicker.trim() && `${kicker.trim()}:`,
+      title.trim() && `${title.trim()}.`,
+      subtitle.trim() && `${subtitle.trim()}.`,
+      "xCO.",
+      imageStatus,
+    ].filter(Boolean).join(" ");
+  }
   const when = [date, time].map((s) => s.trim()).filter(Boolean).join(", ");
   return [
     kicker.trim() && `${kicker.trim()}:`,

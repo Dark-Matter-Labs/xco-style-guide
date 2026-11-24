@@ -4,6 +4,8 @@ import { lockupWidth } from "./lockup";
 import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
 import { drawTimePrint, drawTimePrintSlug } from "./time-print";
+import { metrics } from "./metrics";
+import { notes, noteList } from "./notes";
 import type { Assets, CardSpec, TemplateId } from "./types";
 
 type Ctx = CanvasRenderingContext2D;
@@ -16,17 +18,6 @@ type Template = (ctx: Ctx, spec: CardSpec, phase: number, assets: Assets) => voi
 // series announcement. Each describes an image slot; render/imagery.ts fills it
 // with the globe or one of the ASCII fields.
 
-function metrics(spec: CardSpec) {
-  const { w: W, h: H } = spec.format;
-  const S = Math.min(W, H);
-  const u = S / 1000;
-  const tall = H > W * 1.4;
-  // Stories are covered by the app's own chrome — the account row at the top,
-  // the reply bar at the bottom — so text keeps out of those bands.
-  const safeTop = tall ? H * 0.09 : 0;
-  const safeBottom = tall ? H * 0.11 : 0;
-  return { W, H, S, u, m: 64 * u, landscape: W > H * 1.2, tall, safeTop, safeBottom };
-}
 
 const clear = "rgba(0,0,0,0)";
 
@@ -203,12 +194,14 @@ export const templates: Record<TemplateId, Template> = {
   window: windowTemplate,
   corner: cornerTemplate,
   globe: globeTemplate,
+  ...notes,
 };
 
 export const templateList: { id: TemplateId; label: string; hint: string }[] = [
   { id: "window", label: "Window", hint: "Offset window over the field — after Medulla's posters" },
   { id: "corner", label: "Corner", hint: "Heavy L-band carrying the details — after Medulla's posters" },
   { id: "globe",  label: "Globe",  hint: "The globe alone — xCO's register, for the series itself" },
+  ...noteList,
 ];
 
 /** Draws one frame of a card. `phase` is the loop position in [0, 1). */

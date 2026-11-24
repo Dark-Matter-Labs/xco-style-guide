@@ -47,23 +47,32 @@ interface LockupOptions {
   onLight?: boolean;
 }
 
-/** Draws the lockup with its cap band from `top` to `top + cap`. Returns its width. */
-export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: LockupOptions): number {
+/** Width of the xCO logotype alone at a given cap height. */
+export const logotypeWidth = (cap: number) => logoWidth * (cap / g.cap);
+
+/** The xCO logotype alone, stroked geometry cropped to its ink, its cap band from `top` to `top + cap`. */
+export function drawLogotype(ctx: Ctx, left: number, top: number, cap: number, color: string, xColor = color): void {
   const p = getPaths();
   const s = cap / g.cap;
-
-  // xCO — stroked geometry, cropped to its ink.
   ctx.save();
   ctx.translate(left - inkBounds.left * s, top - inkBounds.top * s);
   ctx.scale(s, s);
   ctx.lineWidth = g.stroke;
   ctx.lineCap = "butt";
-  ctx.strokeStyle = o.xColor ?? o.color;
+  ctx.strokeStyle = xColor;
   p.x.forEach((path) => ctx.stroke(path));
-  ctx.strokeStyle = o.color;
+  ctx.strokeStyle = color;
   ctx.stroke(p.c);
   ctx.stroke(p.o);
   ctx.restore();
+}
+
+/** Draws the lockup with its cap band from `top` to `top + cap`. Returns its width. */
+export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: LockupOptions): number {
+  const p = getPaths();
+  const s = cap / g.cap;
+
+  drawLogotype(ctx, left, top, cap, o.color, o.xColor ?? o.color);
 
   // × — centred on the x-height band, the same weight as the logotype at half.
   const midY = top + cap - (g.xHeight * s) / 2;

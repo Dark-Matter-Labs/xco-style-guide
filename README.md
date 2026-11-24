@@ -30,9 +30,8 @@ The list the nav and the home page share is `lib/instruments.ts`.
 | Three Regimes | `/three-regimes` |
 | Option Field | `/option-field` |
 | Territory | `/territory` |
-| Social Card | `/social-card` |
 | Paper Cover | `/paper-cover` |
-| Event Series | `/event-series` |
+| Event Series | `/event-series` (Medulla event cards and xCO notes) |
 | Growth | `/growth` |
 | Chaos | `/chaos` |
 | Asemic | `/asemic` |
@@ -41,7 +40,7 @@ The list the nav and the home page share is `lib/instruments.ts`.
 | Text Highlight | `/text-highlight` |
 | Token Export | `/design-export` |
 
-Align folded into Image Treatment as its Tritone source; `/align` redirects there (`next.config.mjs`).
+Align folded into Image Treatment as its Tritone source, and Social Card into Event Series as the xCO note templates; `/align` and `/social-card` redirect there (`next.config.mjs`).
 
 ### Token system
 
@@ -122,9 +121,6 @@ After the team has used Phase 1 for at least one real publication (Robyn's subst
 
 **Paper cover generator** (`/paper-cover`)
 Cover images for xCO papers and briefings. Needs: paper number, title, date, optional subtitle. Output: A4 portrait PDF-ready SVG + web-optimised PNG.
-
-**Social card generator** (`/social-card`)
-Stubbed. LinkedIn and Substack thumbnail format. Likely re-uses the Three Regimes layout with a different template.
 
 **Claude-mediated text draft generation** (`/api/generate`)
 An API route that takes a brief and a register (A/B/C), sends it to Claude with the appropriate prompt template from `lib/tone-templates.ts`, and returns a draft. Requires Anthropic API key in Vercel env. No hallucinated facts — the caller must supply the factual grounding.

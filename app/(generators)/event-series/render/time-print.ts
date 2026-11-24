@@ -4,6 +4,7 @@
 // Spec: docs/superpowers/specs/2026-11-24-time-print-design.md
 
 import { TIME_PRINT_OPACITY, makeTimePrint, paintMarks, slugSize, type TimePrint } from "@/lib/asemic/time-print";
+import { paletteHex } from "@/lib/design-tokens";
 import { palettes } from "./palettes";
 import { font, setTracking } from "./text";
 import type { CardSpec, Fonts, TemplateId } from "./types";
@@ -20,7 +21,15 @@ export const SLUG: Record<TemplateId, { side: "left" | "right"; from: "bottom" |
   window: { side: "left", from: "bottom" },
   corner: { side: "right", from: "top" },
   globe: { side: "left", from: "bottom" },
+  // The xCO notes set their text left, so the right margin is clear. On the
+  // sweep the slug hangs from the top and ends before the teal, where paper type stops reading.
+  "note-typographic": { side: "right", from: "bottom" },
+  "note-diagram": { side: "right", from: "bottom" },
+  "note-abstract": { side: "right", from: "top" },
 };
+
+/** Where paper type stops reading on the abstract note's sweep: the teal stop, 55% down. */
+export const SWEEP_DARK = 0.55;
 
 /** A conservative average advance for Untitled Sans, for fit checks without a canvas. */
 export const SLUG_EM = 0.55;
@@ -48,22 +57,32 @@ export function slugPlacement(
   // Corner's band top, as templates.ts places it; the slug must end a margin above it.
   const floor = template === "corner"
     ? H - S * (landscape ? 0.2 : 0.165) - S * (landscape ? 0.08 : 0.13) - safeBottom - m
-    : H - m - safeBottom;
+    : template === "note-abstract"
+      ? H * SWEEP_DARK
+      : H - m - safeBottom;
   const room = floor - ceil;
   return { x, y: from === "bottom" ? floor : ceil, side, from, room, fits: length <= room };
 }
 
-// One cached layer: rebuilt when the minute, words, size or palette change, not per frame.
+/** The print takes the card's own text colour and ground: the palette's, ink on paper for the notes, paper on the sweep (no ground). */
+export function printColours(spec: CardSpec): { ink: string; ground: string | null } {
+  if (spec.template === "note-abstract") return { ink: paletteHex.paper, ground: null };
+  if (spec.template.startsWith("note-")) return { ink: paletteHex.ink, ground: paletteHex.paper };
+  const p = palettes[spec.palette];
+  return { ink: p.onGround, ground: p.ground };
+}
+
+// One cached layer: rebuilt when the minute, words, size or colours change, not per frame.
 let cache: { key: string; canvas: HTMLCanvasElement; print: TimePrint } | null = null;
 
 function layer(spec: CardSpec): { canvas: HTMLCanvasElement; print: TimePrint } | null {
   const tp = spec.timePrint;
   if (!tp) return null;
   const { w: W, h: H } = spec.format;
-  const key = `${tp.minute.seed}|${tp.words}|${W}x${H}|${spec.palette}`;
+  const { ink, ground } = printColours(spec);
+  const key = `${tp.minute.seed}|${tp.words}|${W}x${H}|${ink}|${ground}`;
   if (cache?.key !== key) {
-    const p = palettes[spec.palette];
-    const print = makeTimePrint({ ...tp, width: W, height: H, ink: p.onGround, ground: p.ground });
+    const print = makeTimePrint({ ...tp, width: W, height: H, ink, ground });
     const canvas = document.createElement("canvas");
     canvas.width = W;
     canvas.height = H;

@@ -12,6 +12,7 @@ import { pairings, TEXT_SURFACES, type Pairing } from "./pairings";
 import { colors, surfaceTokens, semanticMeanings, domainColors, paletteHex, identityScales, highlightTokens, routeColors } from "@/lib/design-tokens";
 import { groupMarks, groupColors, auditPairs, MARK_CONTRAST_MIN, type GroupMark } from "@/lib/group-marks";
 import { palettes } from "@/app/(generators)/event-series/render/palettes";
+import { NOTE_INKS } from "@/app/(generators)/event-series/render/notes";
 
 export interface Finding {
   check: string;
@@ -239,12 +240,26 @@ function measure(check: string, label: string, fg: string, bg: string, use: Cont
 }
 
 export function checkEventSeries(): Finding[] {
-  return Object.values(palettes).flatMap((p) => [
-    measure("event-series", `${p.id}: text on panel`, p.onPanel, p.panel, "text", "Title, details, lockup in the window / band"),
-    measure("event-series", `${p.id}: kicker on panel`, p.accentOnPanel, p.panel, "text", "[KICKER] in the window"),
-    measure("event-series", `${p.id}: text on ground`, p.onGround, p.ground, "text", "Title and details on the ground"),
-    measure("event-series", `${p.id}: kicker on ground`, p.accentOnGround, p.ground, "text", "[KICKER] on the ground"),
-  ]);
+  const { paper, sweepTop, sweepFooter } = NOTE_INKS;
+  return [
+    ...Object.values(palettes).flatMap((p) => [
+      measure("event-series", `${p.id}: text on panel`, p.onPanel, p.panel, "text", "Title, details, lockup in the window / band"),
+      measure("event-series", `${p.id}: kicker on panel`, p.accentOnPanel, p.panel, "text", "[KICKER] in the window"),
+      measure("event-series", `${p.id}: text on ground`, p.onGround, p.ground, "text", "Title and details on the ground"),
+      measure("event-series", `${p.id}: kicker on ground`, p.accentOnGround, p.ground, "text", "[KICKER] on the ground"),
+    ]),
+    // The xCO notes (the old social card).
+    measure("event-series", "note: headline on paper", paper.text, paper.ground, "text", "Typographic and diagram notes"),
+    measure("event-series", "note: tag on paper", paper.tag, paper.ground, "text", "[TAG] on the paper notes"),
+    measure("event-series", "note: byline on paper", paper.byline, paper.ground, "text", "Byline beside the logotype"),
+    // The sweep's upper stops carry the headline and tag; its lower stops, the footer.
+    ...[paletteHex.navy, paletteHex.ocean, paletteHex.teal].flatMap((ground) => [
+      measure("event-series", `note: headline on the sweep (${ground})`, sweepTop.text, ground, "text", "Abstract note, top 55%"),
+    ]),
+    ...[paletteHex.sand, paletteHex.dusk].flatMap((ground) => [
+      measure("event-series", `note: footer on the sweep (${ground})`, sweepFooter.byline, ground, "text", "Abstract note, byline and logotype"),
+    ]),
+  ];
 }
 
 function markGround(m: GroupMark): string {
