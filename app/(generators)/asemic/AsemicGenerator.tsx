@@ -6,7 +6,7 @@
 
 import { useMemo, useState } from "react";
 import { Button, labelClass, RadioList, Section, TextField } from "@/components/generator-controls";
-import { download } from "@/lib/media/record-video";
+import { download, exportPNG } from "@/lib/media/export";
 import { DENSITY, toSvg, writeSheet, type Register } from "@/lib/asemic/script";
 import { SOURCES, type SourceId } from "@/lib/asemic/sources";
 
@@ -69,15 +69,9 @@ export function AsemicGenerator() {
     setMessage(null);
     try {
       // The rasteriser takes pixel sizes, so the PNG uses the sheet's own pixel dimensions.
-      const res = await fetch("/api/export/png", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ svg: toSvg(sheet, register, description), width: format.w, height: format.h }),
-      });
-      if (!res.ok) throw new Error(String(res.status));
-      download(await res.blob(), `${name}.png`);
-    } catch {
-      setMessage("PNG export failed. Try again.");
+      await exportPNG(toSvg(sheet, register, description), format.w, format.h, `${name}.png`);
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "PNG export failed. Try again.");
     } finally {
       setBusy(false);
     }

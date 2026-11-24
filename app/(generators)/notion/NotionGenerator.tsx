@@ -2,7 +2,7 @@
 
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { chaosSystems, generateChaos, type ChaosParams, type ChaosSystem } from "@/lib/chaos/systems";
-import { download } from "@/lib/media/record-video";
+import { download } from "@/lib/media/export";
 import { Button, labelClass, RadioList, Section, TextField } from "@/components/generator-controls";
 import { chaosPalettes, type ChaosPaletteId } from "../chaos/render";
 import { COVER, drawCover, drawIcon, ICON, initials, SAFE_BAND, SANS, SERIF, seedFrom, type IconGlyph } from "./render";

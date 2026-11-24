@@ -6,7 +6,7 @@
 // deterministic system, or loosens a random one. Every output lives in the
 // unit square and is expressive only: no mark encodes a quantity.
 
-import { gaussian, noise2D, rng } from "./random";
+import { cliffordParams, gaussian, mulberry32 as rng, noise2D } from "@/lib/random";
 
 export type ChaosSystem = "attractor" | "flow" | "drift";
 
@@ -57,26 +57,10 @@ function fitUnit(arrays: Float32Array[]): void {
 // over the plane (some draws collapse to a few points). Chaos adds Gaussian
 // jitter to every step — stochastic chaos on top of deterministic chaos.
 
-function cliffordParams(rand: () => number): [number, number, number, number] {
-  for (let attempt = 0; attempt < 60; attempt++) {
-    const p: [number, number, number, number] = [rand() * 4 - 2, rand() * 4 - 2, rand() * 3 - 1.5, rand() * 3 - 1.5];
-    const [a, b, c, d] = p;
-    const cells = new Set<number>();
-    let x = 0.1, y = 0.1;
-    for (let i = 0; i < 6000; i++) {
-      const nx = Math.sin(a * y) + c * Math.cos(a * x);
-      y = Math.sin(b * x) + d * Math.cos(b * y);
-      x = nx;
-      if (i > 100) cells.add(Math.floor((x + 3) * 8) * 64 + Math.floor((y + 3) * 8));
-    }
-    if (cells.size > 260) return p;
-  }
-  return [-1.4, 1.6, 1.0, 0.7]; // a known chaotic set
-}
-
 function attractor({ seed, chaos, density }: ChaosParams): ChaosResult {
   const rand = rng(seed);
-  const [a, b, c, d] = cliffordParams(rand);
+  // Fewer tries and a lower spread bar than the holiday card: chaos patterns were drawn this way.
+  const [a, b, c, d] = cliffordParams(rand, 60, 260);
   const n = Math.round(900_000 * density);
   const jitter = chaos * chaos * 0.06;
   const xy = new Float32Array(n * 2);

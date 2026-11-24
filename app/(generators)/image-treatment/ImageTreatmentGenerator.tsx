@@ -6,8 +6,10 @@ import {
   DIMS, MARK_LINES,
 } from "./ImageTreatmentDiagram";
 import type { ColorMode, TreatmentFormat, TreatmentMode, SourceDiagram, DiagramVariant } from "./ImageTreatmentDiagram";
-import { spatialWeight } from "@/app/(generators)/option-field/OptionFieldDiagram";
+import { embedWeight } from "@/lib/regimes/weight";
 import { paletteHex } from "@/lib/design-tokens";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { canvasPNG, download, exportPNG, exportSVG } from "@/lib/media/export";
 
 const { ink: INK, paper: PAPER, dusk: DUSK, ocean: OCEAN } = paletteHex;
 
@@ -227,7 +229,7 @@ function drawOptionFieldScanlines(
   for (let y = spacing / 2; y < vh; y += spacing) {
     const yRel = y / vh;
     for (let x = pad; x < vw - pad; x += segW) {
-      const sh = spatialWeight((x - pad) / usableW, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
+      const sh = embedWeight((x - pad) / usableW, yRel, maxW);
       fillRectPixel(ctx, x, y - sh / 2, segW, sh);
     }
   }
@@ -439,7 +441,7 @@ function buildSVGString(
       for (let y = spacing / 2; y < vh; y += spacing) {
         const yRel = y / vh;
         for (let x = pad; x < vw - pad; x += segW) {
-          const sh = spatialWeight((x - pad) / usableW, yRel, 0.72, 0.60, 0.52, 0.34, maxW);
+          const sh = embedWeight((x - pad) / usableW, yRel, maxW);
           parts.push(`<rect x="${x}" y="${(y-sh/2).toFixed(1)}" width="${segW}" height="${sh.toFixed(1)}" fill="${fg}"/>`);
         }
       }
@@ -528,17 +530,6 @@ function buildSVGString(
   return `<?xml version="1.0" standalone="no"?><svg viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg"><rect width="${vw}" height="${vh}" fill="${bg}"/>${body}</svg>`;
 }
 
-// ── Download helpers ───────────────────────────────────────────────────────
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadDataURL(dataURL: string, name: string) {
-  const a = document.createElement("a"); a.href = dataURL; a.download = name; a.click();
-}
-
 // ── Statics ───────────────────────────────────────────────────────────────
 const FORMATS: { id: TreatmentFormat; label: string; w: number; h: number }[] = [
   { id: "card",   label: "1200 × 630",  w: 1200, h: 630  },
@@ -572,7 +563,6 @@ export function ImageTreatmentGenerator() {
   const [showPhoto,    setShowPhoto]    = useState(true);
   const [format,       setFormat]       = useState<TreatmentFormat>("card");
   const [uploadedImgs, setUploadedImgs] = useState<HTMLImageElement[]>([]);
-  const [exporting,    setExporting]    = useState<string | null>(null);
   const [activeIdx,    setActiveIdx]    = useState(0);
   const [animating,    setAnimating]    = useState(false);
   const [animSpeed,    setAnimSpeed]    = useState(2000);
@@ -617,9 +607,9 @@ export function ImageTreatmentGenerator() {
 
   const slug = `xco-treatment-${format}-${source === "photo" ? `photo-${photoPalette}` : `${source === "three-regimes" ? variant : source}-${mode === "raster" ? `r${debouncedResolution}` : "sharp"}`}`;
 
-  const handle = async (type: string) => {
-    setExporting(type);
-    try {
+  const { busy: exporting, error, run } = useExport();
+  const handle = (type: string) =>
+    run(type, async () => {
       const photoDims = source === "photo" && activeImg ? getPhotoDims(activeImg) : null;
       const { w, h } = photoDims
         ? { w: photoDims.vw, h: photoDims.vh }
@@ -628,27 +618,15 @@ export function ImageTreatmentGenerator() {
       // Photo PNG: use canvas directly
       if (source === "photo" && type === "png") {
         const canvas = canvasRefs.current[activeIdx];
-        if (canvas) downloadDataURL(canvas.toDataURL("image/png"), `${slug}.png`);
+        if (!canvas) throw new Error("The preview has not drawn yet. Wait a moment and try again.");
+        download(await canvasPNG(canvas), `${slug}.png`);
         return;
       }
 
       const svgStr = buildSVGString(source, mode, variant, debouncedResolution, colorMode, photoPalette, activeImg, w, h, cellShape, showPhoto);
-
-      if (type === "svg") {
-        downloadBlob(new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" }), `${slug}.svg`);
-      }
-      if (type === "png") {
-        const res = await fetch("/api/export/png", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ svg: svgStr, width: w, height: h }),
-        });
-        if (res.ok) downloadBlob(await res.blob(), `${slug}.png`);
-      }
-    } finally {
-      setExporting(null);
-    }
-  };
+      if (type === "svg") exportSVG(svgStr, `${slug}.svg`);
+      else await exportPNG(svgStr, w, h, `${slug}.png`);
+    });
 
   const previewProps: PreviewProps = {
     source, mode, variant, resolution: debouncedResolution,
@@ -895,6 +873,7 @@ export function ImageTreatmentGenerator() {
           {source === "photo" && uploadedImgs.length === 0 && (
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload a photo to enable export</p>
           )}
+          <ExportError error={error} />
         </div>
       </aside>
 

@@ -3,33 +3,13 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
-import { OptionFieldDiagram } from "./OptionFieldDiagram";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { exportPNG, exportSVG } from "@/lib/media/export";
+import { OptionFieldDiagram, resolveSpacing } from "./OptionFieldDiagram";
 import type { FieldFormat, FieldColorMode } from "./OptionFieldDiagram";
 import { paletteHex } from "@/lib/design-tokens";
 
 const { navy: NAVY, ink: INK, paper: PAPER } = paletteHex;
-
-function svgToString(el: SVGSVGElement): string {
-  return '<?xml version="1.0" standalone="no"?>\n' +
-    new XMLSerializer().serializeToString(el);
-}
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-function exportSVG(el: SVGSVGElement | null, name: string) {
-  if (!el) return;
-  downloadBlob(new Blob([svgToString(el)], { type: "image/svg+xml;charset=utf-8" }), name);
-}
-async function exportPNG(el: SVGSVGElement | null, w: number, h: number, name: string) {
-  if (!el) return;
-  const res = await fetch("/api/export/png", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ svg: svgToString(el), width: w, height: h }),
-  });
-  if (res.ok) downloadBlob(await res.blob(), name);
-}
 
 const FORMATS: { id: FieldFormat; label: string; w: number; h: number }[] = [
   { id: "hero",   label: "1200 × 630",  w: 1200, h: 630  },
@@ -38,11 +18,11 @@ const FORMATS: { id: FieldFormat; label: string; w: number; h: number }[] = [
 ];
 
 const COLOR_MODES: { id: FieldColorMode; label: string; hint: string }[] = [
-  { id: "ink",       label: "Ink",       hint: "ink on white" },
+  { id: "ink",       label: "Ink",       hint: "ink on paper" },
   { id: "spectrum",  label: "Spectrum",  hint: "cool → ink → ember by register" },
-  { id: "inverted",  label: "Inverted",  hint: "white on ink" },
+  { id: "inverted",  label: "Inverted",  hint: "paper on ink" },
   { id: "blueprint", label: "Blueprint", hint: "navy ground — teal to ocean scanlines" },
-  { id: "warmth",    label: "Warmth",    hint: "dusk to sand on white" },
+  { id: "warmth",    label: "Warmth",    hint: "dusk to sand on paper" },
 ];
 
 function Slider({
@@ -78,7 +58,6 @@ export function OptionFieldGenerator() {
   const [resolution,  setResolution]  = useState(35);
   const [colorMode,   setColorMode]   = useState<FieldColorMode>("ink");
   const [format,      setFormat]      = useState<FieldFormat>("hero");
-  const [exporting,   setExporting]   = useState<string | null>(null);
   const [timePrintOn, setTimePrintOn] = useState(true);
   // One minute for the preview and the hidden export copies; the field has no words, so the diagram uses the identity note.
   const minute = useMinute();
@@ -93,16 +72,14 @@ export function OptionFieldGenerator() {
 
   const props = { fieldStr, frontierStr, fortressStr, volatility, resolution, colorMode, timePrint };
 
-  const handle = async (type: string) => {
-    setExporting(type);
-    try {
+  const { busy: exporting, error, run } = useExport();
+  const handle = (type: string) =>
+    run(type, () => {
       const slug = `xco-option-field-${format}`;
-      if (type === "svg") exportSVG(activeRef.current, `${slug}.svg`);
-      if (type === "png") await exportPNG(activeRef.current, activeDim.w, activeDim.h, `${slug}.png`);
-    } finally {
-      setExporting(null);
-    }
-  };
+      return type === "svg"
+        ? exportSVG(activeRef.current, `${slug}.svg`)
+        : exportPNG(activeRef.current, activeDim.w, activeDim.h, `${slug}.png`);
+    });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -132,7 +109,7 @@ export function OptionFieldGenerator() {
         <div className="space-y-2 pt-4">
           <Slider label="Resolution" min={0} max={100} step={1}
             value={resolution} onChange={setResolution}
-            display={`${Math.round(10 - (resolution / 100) * 7)}px`}
+            display={`${resolveSpacing(resolution)}px`}
             hint="scanline spacing — coarse to fine"
           />
         </div>
@@ -183,6 +160,7 @@ export function OptionFieldGenerator() {
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
+          <ExportError error={error} />
         </div>
       </aside>
 
@@ -193,7 +171,7 @@ export function OptionFieldGenerator() {
           <OptionFieldDiagram {...props} format={format} />
         </div>
         <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-          {activeDim.label} · {Math.round(10 - (resolution / 100) * 7)}px scanlines
+          {activeDim.label} · {resolveSpacing(resolution)}px scanlines
           · f{fieldStr.toFixed(2)} fr{frontierStr.toFixed(2)} fo{fortressStr.toFixed(2)}
         </p>
       </div>

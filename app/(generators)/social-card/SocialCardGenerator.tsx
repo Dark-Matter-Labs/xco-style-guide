@@ -3,36 +3,10 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { exportPNG, exportSVG } from "@/lib/media/export";
 import { SocialCardDiagram } from "./SocialCardDiagram";
 import type { CardFormat, CardLayout, DiagramType } from "./SocialCardDiagram";
-
-function svgToString(el: SVGSVGElement): string {
-  return '<?xml version="1.0" standalone="no"?>\n' +
-    new XMLSerializer().serializeToString(el);
-}
-
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportSVG(el: SVGSVGElement | null, name: string) {
-  if (!el) return;
-  downloadBlob(new Blob([svgToString(el)], { type: "image/svg+xml;charset=utf-8" }), name);
-}
-
-async function exportPNG(el: SVGSVGElement | null, w: number, h: number, name: string) {
-  if (!el) return;
-  const res = await fetch("/api/export/png", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ svg: svgToString(el), width: w, height: h }),
-  });
-  if (!res.ok) return;
-  downloadBlob(await res.blob(), name);
-}
 
 function FieldInput({ label, value, onChange, hint, mono }: {
   label: string; value: string; onChange: (v: string) => void;
@@ -72,7 +46,6 @@ export function SocialCardGenerator() {
   const [layout, setLayout]         = useState<CardLayout>("typographic");
   const [diagramType, setDiagramType] = useState<DiagramType>("three-regimes");
   const [format, setFormat]         = useState<CardFormat>("card");
-  const [exporting, setExporting]   = useState<string | null>(null);
   const [timePrintOn, setTimePrintOn] = useState(true);
   // One minute for the preview and both hidden export copies, so the export matches what's shown.
   const minute = useMinute();
@@ -88,17 +61,13 @@ export function SocialCardGenerator() {
 
   const props = { headline, tag, byline, layout, diagramType, timePrint };
 
-  const handle = async (type: string) => {
-    setExporting(type);
-    try {
+  const { busy: exporting, error, run } = useExport();
+  const handle = (type: string) =>
+    run(type, () => {
       const { w, h } = activeFormat;
       const slug = `xco-social-${format}-${layout}`;
-      if (type === "svg") exportSVG(activeRef.current, `${slug}.svg`);
-      if (type === "png") await exportPNG(activeRef.current, w, h, `${slug}.png`);
-    } finally {
-      setExporting(null);
-    }
-  };
+      return type === "svg" ? exportSVG(activeRef.current, `${slug}.svg`) : exportPNG(activeRef.current, w, h, `${slug}.png`);
+    });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -183,6 +152,7 @@ export function SocialCardGenerator() {
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
+          <ExportError error={error} />
         </div>
       </aside>
 

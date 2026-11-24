@@ -1,5 +1,6 @@
 import type { ChaosResult } from "@/lib/chaos/systems";
 import { typography } from "@/lib/design-tokens";
+import { fnv1aCodePoints } from "@/lib/random";
 import { cPath, inkBounds, logoGeometry, oPath, xPaths } from "@/lib/logo";
 import { drawChaos, paletteOf, type ChaosLook, type ChaosPaletteId } from "../chaos/render";
 
@@ -21,12 +22,7 @@ export type IconGlyph = "monogram" | "x" | "field";
 
 /** FNV-1a: the same page name always gives the same seed. */
 export function seedFrom(name: string): number {
-  let h = 0x811c9dc5;
-  for (const ch of name.trim().toLowerCase()) {
-    h ^= ch.codePointAt(0)!;
-    h = Math.imul(h, 0x01000193);
-  }
-  return ((h >>> 0) % 100000) || 1;
+  return fnv1aCodePoints(name.trim().toLowerCase()) % 100000 || 1;
 }
 
 /** Up to two initials: "Decisions Log" → "DL". */

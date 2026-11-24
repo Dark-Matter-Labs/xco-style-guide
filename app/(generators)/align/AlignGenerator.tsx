@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { paletteHex } from "@/lib/design-tokens";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { canvasPNG, download, exportSVG } from "@/lib/media/export";
 
 const { ink: INK, paper: PAPER, navy: NAVY, ocean: OCEAN, teal: TEAL, sand: SAND, dusk: DUSK , inkMuted: MUTED } = paletteHex;
 
@@ -251,17 +253,6 @@ function buildAlignSVG(
   return `<?xml version="1.0" standalone="no"?><svg viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg"><rect width="${vw}" height="${vh}" fill="${shadow}"/><image href="${dataURL}" x="0" y="0" width="${vw}" height="${vh}"/>${rasterParts}</svg>`;
 }
 
-// ── Download helpers ───────────────────────────────────────────────────────
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadDataURL(dataURL: string, name: string) {
-  const a = document.createElement("a"); a.href = dataURL; a.download = name; a.click();
-}
-
 // ── Generator ──────────────────────────────────────────────────────────────
 export function AlignGenerator() {
   const [uploadedImg,  setUploadedImg]  = useState<HTMLImageElement | null>(null);
@@ -271,7 +262,6 @@ export function AlignGenerator() {
   const [resolution,   setResolution]   = useState(40);
   const [cellShape,    setCellShape]    = useState<CellShape>("square");
   const [grain,        setGrain]        = useState(false);
-  const [exporting,    setExporting]    = useState<string | null>(null);
   const [copied,       setCopied]       = useState(false);
 
   const canvasRef           = useRef<HTMLCanvasElement>(null);
@@ -306,20 +296,18 @@ export function AlignGenerator() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const { busy: exporting, error, run } = useExport();
   const handleExport = (type: "png" | "svg") => {
     if (!uploadedImg) return;
-    setExporting(type);
-    try {
+    return run(type, async () => {
       if (type === "png") {
         const canvas = canvasRef.current;
-        if (canvas) downloadDataURL(canvas.toDataURL("image/png"), `${slug}.png`);
+        if (!canvas) throw new Error("The preview has not drawn yet. Wait a moment and try again.");
+        download(await canvasPNG(canvas), `${slug}.png`);
       } else {
-        const svgStr = buildAlignSVG(uploadedImg, preset, debouncedMidpoint, raster, spacing, cellShape, vw, vh);
-        downloadBlob(new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" }), `${slug}.svg`);
+        exportSVG(buildAlignSVG(uploadedImg, preset, debouncedMidpoint, raster, spacing, cellShape, vw, vh), `${slug}.svg`);
       }
-    } finally {
-      setExporting(null);
-    }
+    });
   };
 
   const btnClass = (active: boolean) =>
@@ -469,6 +457,7 @@ export function AlignGenerator() {
           {!uploadedImg && (
             <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Upload an image to enable export</p>
           )}
+          <ExportError error={error} />
         </div>
 
       </aside>

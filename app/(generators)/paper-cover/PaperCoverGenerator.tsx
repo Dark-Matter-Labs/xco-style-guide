@@ -3,35 +3,10 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { exportPNG, exportSVG } from "@/lib/media/export";
 import { PaperCoverDiagram, COVER_W, COVER_H } from "./PaperCoverDiagram";
 import type { CoverVisual } from "./PaperCoverDiagram";
-
-function svgToString(el: SVGSVGElement): string {
-  return '<?xml version="1.0" standalone="no"?>\n' +
-    new XMLSerializer().serializeToString(el);
-}
-
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = name; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportSVG(el: SVGSVGElement | null, name: string) {
-  if (!el) return;
-  downloadBlob(new Blob([svgToString(el)], { type: "image/svg+xml;charset=utf-8" }), name);
-}
-
-async function exportPNG(el: SVGSVGElement | null, w: number, h: number, name: string) {
-  if (!el) return;
-  const res = await fetch("/api/export/png", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ svg: svgToString(el), width: w, height: h }),
-  });
-  if (!res.ok) return;
-  downloadBlob(await res.blob(), name);
-}
 
 function Field({ label, value, onChange, hint, mono, rows }: {
   label: string; value: string; onChange: (v: string) => void;
@@ -67,7 +42,6 @@ export function PaperCoverGenerator() {
   const [authors,     setAuthors]     = useState("Indy Johar, Robyn Bennett");
   const [date,        setDate]        = useState("May 2026");
   const [visual,      setVisual]      = useState<CoverVisual>("abstract");
-  const [exporting,   setExporting]   = useState<string | null>(null);
   const [timePrintOn, setTimePrintOn] = useState(true);
   // One minute for the preview and the hidden export copy, so the export matches what's shown.
   const minute = useMinute();
@@ -79,17 +53,15 @@ export function PaperCoverGenerator() {
 
   const props = { paperNumber, title, subtitle, authors, date, visual, timePrint };
 
-  const handle = async (type: string) => {
-    setExporting(type);
-    try {
+  const { busy: exporting, error, run } = useExport();
+  const handle = (type: string) =>
+    run(type, () => {
       const slug = `xco-paper-${paperNumber.padStart(2, "0")}`;
-      if (type === "svg") exportSVG(coverRef.current, `${slug}.svg`);
       // PNG at 2× for print quality
-      if (type === "png") await exportPNG(coverRef.current, COVER_W * 2, COVER_H * 2, `${slug}.png`);
-    } finally {
-      setExporting(null);
-    }
-  };
+      return type === "svg"
+        ? exportSVG(coverRef.current, `${slug}.svg`)
+        : exportPNG(coverRef.current, COVER_W * 2, COVER_H * 2, `${slug}.png`);
+    });
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -147,6 +119,7 @@ export function PaperCoverGenerator() {
               {exporting === id ? "exporting…" : `↓ ${label}`}
             </button>
           ))}
+          <ExportError error={error} />
         </div>
       </aside>
 

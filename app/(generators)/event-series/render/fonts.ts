@@ -1,11 +1,12 @@
+import { typography } from "@/lib/design-tokens";
 import type { Fonts } from "./types";
 
 // Canvas draws with whatever font is loaded at the moment of drawing, and
 // silently falls back if it is not. So every face is resolved to its real
 // family string and loaded explicitly before the first frame.
 
-const SERIF = '"Untitled Serif", Georgia, serif';
-const SANS = '"Untitled Sans", Arial, sans-serif';
+const SERIF = typography.faces.display.stack;
+const SANS = typography.faces.body.stack;
 
 
 export function resolveFonts(instrumentFamily: string): Fonts {

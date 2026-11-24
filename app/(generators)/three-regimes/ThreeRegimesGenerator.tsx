@@ -3,52 +3,10 @@
 import { useMemo, useRef, useState } from "react";
 import { useMinute, useSettled } from "@/components/xco/TimePrint";
 import { TIME_PRINT_HINT } from "@/lib/asemic/time-print";
+import { ExportError, useExport } from "@/components/generator-controls";
+import { exportPNG, exportSVG } from "@/lib/media/export";
 import { ThreeRegimesDiagram, DiagramFormat, DiagramColorScheme, StructuralVariant } from "./ThreeRegimesDiagram";
-import { AbstractThreeRegimesDiagram } from "./AbstractThreeRegimesDiagram";
 import type { DiagramLabels } from "./ThreeRegimesDiagram";
-import { WIP } from "@/components/WIP";
-
-type DiagramMode = "structural" | "abstract";
-
-// ── Export helpers ──────────────────────────────────────────────────
-
-function svgToString(el: SVGSVGElement): string {
-  const serializer = new XMLSerializer();
-  return '<?xml version="1.0" standalone="no"?>\n' + serializer.serializeToString(el);
-}
-
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportSVG(el: SVGSVGElement | null, filename: string) {
-  if (!el) return;
-  const blob = new Blob([svgToString(el)], { type: "image/svg+xml;charset=utf-8" });
-  downloadBlob(blob, filename);
-}
-
-async function exportPNGViaServer(
-  el: SVGSVGElement | null,
-  width: number,
-  height: number,
-  filename: string,
-): Promise<void> {
-  if (!el) return;
-  const svg = svgToString(el);
-  const res = await fetch("/api/export/png", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ svg, width, height }),
-  });
-  if (!res.ok) throw new Error(`PNG export failed: ${res.status}`);
-  const blob = await res.blob();
-  downloadBlob(blob, filename);
-}
 
 // ── Input primitives ────────────────────────────────────────────────
 
@@ -123,54 +81,38 @@ export function ThreeRegimesGenerator() {
   const [caption, setCaption] = useState("");
   const [showAnnotations, setShowAnnotations] = useState(false);
   const [previewFormat, setPreviewFormat] = useState<DiagramFormat>("hero");
-  const [mode, setMode] = useState<DiagramMode>("structural");
   const [colorScheme, setColorScheme] = useState<DiagramColorScheme>("standard");
   const [structuralVariant, setStructuralVariant] = useState<StructuralVariant>("classic");
-  const [exporting, setExporting] = useState<string | null>(null);
   const [timePrintOn, setTimePrintOn] = useState(true);
-  // One minute for the preview and all six hidden export copies, so the export matches what's shown.
+  // One minute for the preview and the three hidden export copies, so the export matches what's shown.
   const minute = useMinute();
   // Settled: the print regrows once typing pauses, so keystrokes never wait on it.
   const words = useSettled([labels.frontier, labels.fortress, labels.field, labels.fieldSublabel, statement, caption].join(" "));
   const timePrint = useMemo(() => (timePrintOn && minute ? { minute, words } : null), [timePrintOn, minute, words]);
 
-  // Structural mode refs
   const heroRef   = useRef<SVGSVGElement>(null);
   const squareRef = useRef<SVGSVGElement>(null);
   const markRef   = useRef<SVGSVGElement>(null);
-
-  // Abstract mode refs
-  const absHeroRef   = useRef<SVGSVGElement>(null);
-  const absSquareRef = useRef<SVGSVGElement>(null);
-  const absMarkRef   = useRef<SVGSVGElement>(null);
-
-  const activeRefs = mode === "structural"
-    ? { hero: heroRef, square: squareRef, mark: markRef }
-    : { hero: absHeroRef, square: absSquareRef, mark: absMarkRef };
 
   const diagramProps = {
     labels,
     relationshipStatement: statement,
     caption,
     showAnnotations,
-    amplitude: 0,
     colorScheme,
     structuralVariant,
     timePrint,
   };
 
-  const handleExport = async (type: string) => {
-    setExporting(type);
-    try {
-      if (type === "svg-hero")   exportSVG(activeRefs.hero.current, "xco-three-regimes-hero.svg");
-      if (type === "svg-square") exportSVG(activeRefs.square.current, "xco-three-regimes-square.svg");
-      if (type === "svg-mark")   exportSVG(activeRefs.mark.current, "xco-three-regimes-mark.svg");
-      if (type === "png-hero")   await exportPNGViaServer(activeRefs.hero.current, 1200, 630, "xco-three-regimes-1200x630.png");
-      if (type === "png-square") await exportPNGViaServer(activeRefs.square.current, 1200, 1200, "xco-three-regimes-1200x1200.png");
-    } finally {
-      setExporting(null);
-    }
-  };
+  const { busy: exporting, error, run } = useExport();
+  const handleExport = (type: string) =>
+    run(type, async () => {
+      if (type === "svg-hero")   exportSVG(heroRef.current, "xco-three-regimes-hero.svg");
+      if (type === "svg-square") exportSVG(squareRef.current, "xco-three-regimes-square.svg");
+      if (type === "svg-mark")   exportSVG(markRef.current, "xco-three-regimes-mark.svg");
+      if (type === "png-hero")   await exportPNG(heroRef.current, 1200, 630, "xco-three-regimes-1200x630.png");
+      if (type === "png-square") await exportPNG(squareRef.current, 1200, 1200, "xco-three-regimes-1200x1200.png");
+    });
 
   const formats: { id: DiagramFormat; label: string; size: string }[] = [
     { id: "hero",   label: "Hero",   size: "1200 × 630" },
@@ -178,44 +120,12 @@ export function ThreeRegimesGenerator() {
     { id: "mark",   label: "Mark",   size: "400 × 200" },
   ];
 
-  const DiagramComponent =
-    mode === "structural" ? ThreeRegimesDiagram : AbstractThreeRegimesDiagram;
-
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* ── Controls ── */}
       <aside className="w-full lg:w-72 shrink-0 space-y-6">
 
-        {/* Mode toggle */}
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Diagram Mode
-          </h2>
-          <div className="flex gap-0">
-            {(["structural", "abstract"] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => setMode(m)}
-                className={`flex-1 font-mono font-medium text-[0.9375rem] leading-[1.6] px-3 py-2 border transition-colors ${
-                  mode === m
-                    ? "bg-xco-ink text-xco-paper border-xco-ink"
-                    : "text-xco-ink border-xco-ink"
-                }`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-          {mode === "abstract" && (
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
-              Gradient mood — Field, Frontier, Fortress as colour atmosphere.
-              No text, no structure.
-            </p>
-          )}
-        </div>
-
-        {mode === "structural" && (
-          <div className="space-y-2 pt-4">
             <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
               Colour Scheme
             </h2>
@@ -232,10 +142,8 @@ export function ThreeRegimesGenerator() {
                 </span>
               </label>
             ))}
-          </div>
-        )}
+        </div>
 
-        {mode === "structural" && (
           <div className="space-y-2 pt-4">
             <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
               Layout
@@ -262,10 +170,7 @@ export function ThreeRegimesGenerator() {
               ))}
             </div>
           </div>
-        )}
 
-        {mode === "structural" && (
-          <>
             <div className="space-y-1 pb-4">
               <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
                 Node Labels
@@ -291,7 +196,7 @@ export function ThreeRegimesGenerator() {
               label="Field sublabel"
               value={labels.fieldSublabel}
               onChange={(v) => setLabels({ ...labels, fieldSublabel: v })}
-              hint="shown below field label in mono"
+              hint="shown smaller, below the field label"
             />
 
             <div className="space-y-1 pb-4 pt-2">
@@ -304,7 +209,7 @@ export function ThreeRegimesGenerator() {
               label="Relationship statement"
               value={statement}
               onChange={setStatement}
-              hint="Untitled Sans italic, below the diagram"
+              hint="Untitled Sans, below the diagram"
             />
             <TextArea
               label="Caption"
@@ -324,8 +229,6 @@ export function ThreeRegimesGenerator() {
                 Show annotation marginalia
               </span>
             </label>
-          </>
-        )}
 
 
         <div className="space-y-3 pt-4">
@@ -389,13 +292,14 @@ export function ThreeRegimesGenerator() {
           <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink pt-1">
             PNG exports use server-side font embedding for accurate typography.
           </p>
+          <ExportError error={error} />
         </div>
       </aside>
 
       {/* ── Preview ── */}
       <div className="flex-1 min-w-0 space-y-4">
         <div className="border border-xco-ink overflow-hidden bg-xco-paper">
-          <DiagramComponent
+          <ThreeRegimesDiagram
             {...diagramProps}
             format={previewFormat}
           />
@@ -409,14 +313,9 @@ export function ThreeRegimesGenerator() {
 
       {/* Hidden SVGs for export */}
       <div className="sr-only" aria-hidden="true">
-        {/* Structural */}
         <ThreeRegimesDiagram ref={heroRef}   {...diagramProps} format="hero" />
         <ThreeRegimesDiagram ref={squareRef} {...diagramProps} format="square" />
         <ThreeRegimesDiagram ref={markRef}   {...diagramProps} format="mark" />
-        {/* Abstract */}
-        <AbstractThreeRegimesDiagram ref={absHeroRef}   {...diagramProps} format="hero" />
-        <AbstractThreeRegimesDiagram ref={absSquareRef} {...diagramProps} format="square" />
-        <AbstractThreeRegimesDiagram ref={absMarkRef}   {...diagramProps} format="mark" />
       </div>
     </div>
   );
