@@ -11,7 +11,7 @@ const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
 const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
 const LABEL = "font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest";
 
-const change = changeLog.find((c) => c.id === "CH-14")!;
+const change = changeLog.find((c) => c.id === "CH-16")!;
 const groups = ["positions-options-stewards", "oceans-continuity-studio"].map(
   (id) => groupMarks.find((m) => m.id === id)!,
 );
@@ -21,7 +21,7 @@ const tiers = [
     tier: "Strict — must",
     rules: [
       "The xCO logotype appears on every outward artefact, unaltered, from the downloads on /logo.",
-      "The group name is set in Untitled Sans 400: in the descriptor slot under the logotype, or as the lead line with “an xCO group” and the logotype below it.",
+      "The group name is set in Untitled Sans 400: in the descriptor slot under the logotype, or leading on its own with an endorsement strip, “an xCO group” and the logotype, in a zone of its own.",
       "The group mark is its aperture avatar from /logo/groups, and nothing else. No redrawn, recoloured or new marks.",
       "Untitled Sans for all text. DM Mono for code only.",
       "The x may carry dusk. Nothing else carries colour.",
@@ -53,19 +53,19 @@ const tiers = [
 
 const contexts = [
   { ctx: "Funder or investor deck", lead: "xCO leads. The group sits in the descriptor slot." },
-  { ctx: "Public report or paper", lead: "The group leads, endorsed: “an xCO group” and the logotype." },
-  { ctx: "Workshop or event", lead: "The group leads, endorsed." },
-  { ctx: "Social post", lead: "From xCO’s accounts, as xCO. A group channel uses its avatar and the endorsed lockup." },
-  { ctx: "Partner co-brand", lead: "The group’s endorsed lockup beside the partner, at equal height." },
+  { ctx: "Public report or paper", lead: "The group leads. The endorsement strip sits on the back cover or colophon." },
+  { ctx: "Workshop or event", lead: "The group leads. The strip sits in the footer." },
+  { ctx: "Social post", lead: "From xCO’s accounts, as xCO. A group channel uses its avatar, with the strip in its profile." },
+  { ctx: "Partner co-brand", lead: "The group name beside the partner at equal height; the strip in the footer." },
   { ctx: "Internal doc, chat, working file", lead: "The group avatar. Free." },
   { ctx: "A product or tool a group builds", lead: "xCO by default. It may earn its own identity by change record, as d.INO did (CH-09), with “made by xCO” or the faint footer watermark." },
 ];
 
 function Endorsed({ name }: { name: string }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
       <p className="font-body text-[28px] leading-[30px] text-xco-ink">{name}</p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border-default)" }}>
         <span className={LABEL}>An</span>
         <Logo height={28} />
         <span className={LABEL}>group</span>
@@ -109,8 +109,9 @@ export default function BrandArchitecturePage() {
           ))}
         </div>
         <p className={`${MONO} max-w-2xl text-xco-ink`}>
-          [rule] The endorsed lockup: the group name leads, then “an xCO group” with the
-          logotype. Its placement follows the Dark Matter Labs endorsement on /logo.
+          [rule] When a group leads, its name stands alone and xCO appears in an
+          endorsement strip, “an xCO group” and the logotype, in a zone of its own:
+          footer, back cover, colophon. The same pattern as the Dark Matter Labs strip on /logo.
         </p>
       </section>
 
