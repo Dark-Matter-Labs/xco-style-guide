@@ -68,8 +68,8 @@ export const changeLog: ChangeRecord[] = [
     proposedBy: "Anahat",
     date: "2026-11-25",
     why: "The logo page had no visible clear-space logic, and said clear space was the x-height while the files carried 30 units. Lockups with Dark Matter Labs and with projects were made case by case. The two modes were called Paper and Ink, which readers had to translate to light and dark.",
-    previous: "Clear space “equals the x-height” (files padded 30). Three variants: ink, paper, dusk operator. Two lockups: descriptor and DML-endorsed. The x stands on the baseline. Modes named Paper and Ink.",
-    proposed: "Clear space is ½x, from the ink, drawn on the page. Four variants: light and dark, each with an orange x. The x lifted 22.3 units, same size, so its top tips sit level with the top of the C’s cut ends; its feet float above the baseline. Lockups: stack, horizontal, DML-endorsed stack, xCO with DML, xCO × project, with a partner zone. Modes named light and dark everywhere; paper and ink stay as colour names.",
+    previous: "Clear space “equals the x-height” (files padded 30). Three variants: ink, paper, dusk operator. Two lockups: descriptor and DML-endorsed. The x’s feet dip 4.02 below the baseline. Modes named Paper and Ink.",
+    proposed: "Clear space is ½x, from the ink, drawn on the page. Four variants: light and dark, each with an orange x. The x lifted 4.02 units, the overhang of its cut feet, so its lowest tips touch the baseline: bottom-aligned with the C and O. Lockups: stack, horizontal, DML-endorsed stack, xCO with DML, xCO × project, with a partner zone. Modes named light and dark everywhere; paper and ink stay as colour names.",
   },
   {
     id: "CH-14",

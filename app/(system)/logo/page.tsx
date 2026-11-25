@@ -299,8 +299,8 @@ export default function LogoPage() {
           <p className={LEDE}>
             xCO is an initiative of Dark Matter Labs. Two lockups say so. The endorsed stack
             names the relationship in words, with DM small below. The side-by-side lockup gives
-            the two equal standing, split by a rule, with DM&apos;s stamp filling the
-            same band as the x.
+            the two equal standing, split by a rule, with DM&apos;s stamp standing on the
+            x-height band.
           </p>
         </div>
         <LockupSet ids={["endorsed", "with-dml"]} />

@@ -119,7 +119,7 @@ export const lockups: {
     id: "with-dml",
     label: "xCO with Dark Matter Labs",
     family: "dml",
-    note: "Side by side, split by a rule. DM’s stamp fills the same band as the x.",
+    note: "Side by side, split by a rule. DM’s stamp stands on the x-height band.",
     download: true,
     suffix: "-with-dml",
   },
@@ -432,7 +432,7 @@ export function lockupLayout(
       const ruleX = ink.right + ONE_X;
       const stamp = ONE_X;
       const dmLeft = ruleX + ONE_X;
-      const dml = dmLogo(p, dmLeft, g.xBase - stamp, stamp);
+      const dml = dmLogo(p, dmLeft, g.baseline - stamp, stamp);
       parts.push(
         {
           name: "Rule",
@@ -445,8 +445,8 @@ export function lockupLayout(
       guides.push(
         { kind: "gapX", from: ink.right, to: ruleX, y: g.capTop - 10, label: "1x" },
         { kind: "gapX", from: ruleX, to: dmLeft, y: g.capTop - 10, label: "1x" },
-        { kind: "lineY", y: g.xBase - g.xHeight, from: ink.left - 8, to: dml.ink.r + 8, label: "x top" },
-        { kind: "lineY", y: g.xBase, from: ink.left - 8, to: dml.ink.r + 8, label: "x base" },
+        { kind: "lineY", y: g.baseline - g.xHeight, from: ink.left - 8, to: dml.ink.r + 8, label: "x-height" },
+        { kind: "lineY", y: g.baseline, from: ink.left - 8, to: dml.ink.r + 8, label: "baseline" },
       );
       break;
     }

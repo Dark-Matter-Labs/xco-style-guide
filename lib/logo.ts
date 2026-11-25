@@ -50,15 +50,13 @@ const X_LEFT = PAD;                                 // 30
 const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
 const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
 
-// The x is lifted off the baseline so its top tips sit level with the top
-// of the C's cut ends: the x's highest ink (the corner of its butt cap) and
-// the C's highest terminal corner share one line. The x keeps its size; only
-// its own baseline, X_BASE, moves up. Its feet float above the C and O's
-// baseline. Adopted with CH-15 (proposed 25 November 2026).
-const C_END_TOP = MID_Y - (CAP / 2) * Math.sin(((C_APERTURE / 2) * Math.PI) / 180);  // 41.70
-const X_TOP_INK = BASELINE - X_HEIGHT - (STROKE / 2) * (X_WIDTH / Math.hypot(X_WIDTH, X_HEIGHT));
-const X_LIFT = X_TOP_INK - C_END_TOP;   // 22.28
-const X_BASE = BASELINE - X_LIFT;       // 107.72 — the x's own baseline
+// The x's feet are butt caps cut across a diagonal, so their lowest corners
+// overhang the path ends by 4.02. The x is lifted by exactly that overhang:
+// its lowest tips touch the baseline the C and O stand on, bottom-aligned,
+// rather than dipping below it. The x keeps its size. CH-15 (proposed
+// 25 November 2026).
+const X_LIFT = (STROKE / 2) * (X_WIDTH / Math.hypot(X_WIDTH, X_HEIGHT));  // 4.02
+const X_BASE = BASELINE - X_LIFT;       // 125.98 — the x's path ends
 
 /**
  * Clear space: half the x-height, measured from the ink on every side. The
@@ -77,11 +75,9 @@ export const logoGeometry = {
   gapCO: GAP_CO,
   aperture: C_APERTURE,
   baseline: BASELINE,
-  /** The x's own baseline: lifted so its top tips meet the top of the C's ends. */
+  /** Where the x's strokes end: lifted by the butt-cap overhang so its lowest tips touch the baseline. */
   xBase: X_BASE,
   xLift: X_LIFT,
-  /** Top of the C's cut ends, ink. The x's top tips sit on this line. */
-  cEndTop: C_END_TOP,
   capTop: CAP_TOP,
   midY: MID_Y,
   xLeft: X_LEFT,
