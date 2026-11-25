@@ -71,6 +71,7 @@ export const changeLog: ChangeRecord[] = [
     previous: "8.1 scales plus a separate diagram palette (navy, ocean, teal, sand, dusk). “Colour here is syntax.” “Never mix registers within a single diagram.”",
     proposed: "One system, the 8.1 scales. navy, ocean, teal, sand and dusk are Martin Perrow / In Studio's role names on 8.1 stops; their May 2026 hues stay as lineage only. Colour is an affordance, declared in each key. One field, one signal replaces the register rule. The grammar mirrors 8.1's grammar, never its palette.",
     decision: "Adopted by Gurden, 25 Nov 2026, with D10 and D11. Indy to confirm as the owner of 8.1. Martin to be told and credited for the names.",
+    respond: PR(69),
   },
   {
     id: "CH-13",
