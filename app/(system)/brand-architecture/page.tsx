@@ -22,6 +22,7 @@ const tiers = [
     rules: [
       "The xCO logotype appears on every outward artefact, unaltered, from the downloads on /logo.",
       "The group name is set in Untitled Sans 400: in the descriptor slot under the logotype, or leading on its own with an endorsement strip, “an xCO group” and the logotype, in a zone of its own.",
+      "When a group leads, the endorsement strip is required on every outward surface that can hold it. Below 64px (avatars, favicons) the group mark goes alone. Partners share the name’s zone; xCO stays in the strip.",
       "The group mark is its aperture avatar from /logo/groups, and nothing else. No redrawn, recoloured or new marks.",
       "Untitled Sans for all text. DM Mono for code only.",
       "The x may carry dusk. Nothing else carries colour.",
