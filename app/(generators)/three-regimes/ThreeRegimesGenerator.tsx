@@ -87,9 +87,6 @@ export function ThreeRegimesGenerator() {
           <Button onClick={() => handle("png")} disabled={busy !== null}>
             {busy === "png" ? "exporting…" : `↓ PNG — ${format.w} × ${format.h}`}
           </Button>
-          <p className={`${labelClass} text-xco-ink-muted`}>
-            PNG labels render in DM Mono until the export can load Untitled Sans; the SVG keeps the real faces.
-          </p>
           <ExportError error={error} />
         </Section>
       </aside>

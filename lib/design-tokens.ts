@@ -275,7 +275,7 @@ export const typography = {
       cssVar: "--font-code",
       twClass: "font-code",
       weights: ["400 (regular)"],
-      usage: "Code only, where characters must line up. Also the PNG export's only face, until it can load Untitled Sans.",
+      usage: "Code only, where characters must line up.",
     },
   },
 

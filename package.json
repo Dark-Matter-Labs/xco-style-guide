@@ -18,6 +18,7 @@
     "asemic:check": "tsx scripts/asemic-check.ts",
     "time-print:check": "tsx scripts/time-print-check.ts",
     "lib:check": "tsx scripts/lib-check.ts",
+    "png:check": "tsx scripts/png-fonts-check.ts",
     "text-highlight:check": "tsx scripts/text-highlight-check.ts",
     "a11y:audit": "tsx scripts/a11y-audit.ts"
   },

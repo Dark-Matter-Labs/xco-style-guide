@@ -1,8 +1,8 @@
 // xCO logotype — constructed geometry, not typeset text.
 //
 // WHY CONSTRUCTED: a logotype must render identically everywhere, including
-// where Untitled Serif is not installed and in the PNG rasteriser (which only
-// loads DM Mono). Typeset <text> would silently substitute. Every glyph here
+// where Untitled Serif is not installed. Typeset <text> would silently
+// substitute. Every glyph here
 // is drawn from the same circle radius and the same stroke weight, so the mark
 // is self-contained and exact at any size.
 //
@@ -195,9 +195,7 @@ export const descriptor = "EXPANDING CIVILIZATIONAL OPTIONALITY";
 // glyph's ink ends at inkBounds.right.
 //
 // Set in Untitled Sans 400 since 24 November 2026, like every label (it was
-// DM Mono). The PNG exporter loads only DM Mono, so PNG lockups set these
-// lines in DM Mono at this tracking until it can load Untitled Sans; DM Mono
-// runs 0.41 em wider over the descriptor, about 4 units at this size.
+// DM Mono). The PNG exporter loads Untitled too, so PNG lockups match the SVG.
 
 /** The lockup lines' face, for SVG attributes. Only the 400 weight ships. */
 export const LOCKUP_FONT = "'Untitled Sans', system-ui, Arial, sans-serif";

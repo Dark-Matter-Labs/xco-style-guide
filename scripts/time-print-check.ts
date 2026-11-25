@@ -208,16 +208,6 @@ for (const [w, h] of [[1200, 630], [1080, 1080], [794, 1123], [1200, 1200], [108
     eq((layer.match(/<path fill=/g) || []).length, gradient ? 1 : 2, `${what}: knock-outs ${gradient ? "skipped on a gradient" : "filled with the ground"}`);
     return slugX(slug);
   }
-  // On the navy-to-dusk gradients the slug hangs from the top and must end before the teal stop
-  // (55% down), measured in DM Mono, the wider face the PNG route renders it in (0.6 em a character).
-  const endsInTheDark = (what: string, html: string, hgt: number) => {
-    const slug = lastText(html);
-    const top = Number(/translate\([\d.]+ ([\d.]+)\)/.exec(slug)![1]);
-    const size = Number(/font-size="([\d.]+)"/.exec(slug)![1]);
-    const text = />([^<]*)<\/text>/.exec(slug)![1].replace(/&#x27;/g, "'");
-    const end = top + 0.6 * size * Array.from(text).length;
-    assert.ok(end <= 0.55 * hgt + 0.01, `${what}: the slug ends in the dark part of the gradient (${end.toFixed(0)} of ${(0.55 * hgt).toFixed(0)})`);
-  };
   const absent = (what: string, html: string) =>
     assert.ok(!html.includes('opacity="0.06"') && !html.includes("time print ·"), `${what}: no print when it is off`);
 

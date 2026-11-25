@@ -9,13 +9,12 @@ import { logoGeometry, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
 import { wrap } from "@/lib/wrap";
 
 const { paper: PAPER, ink: INK, inkMuted: MUTED } = paletteHex;
-// Labels are Untitled Sans. The PNG route still renders them in DM Mono until it can load Untitled Sans (F01).
+// Labels are Untitled Sans.
 const LABEL = typography.faces.body.stack;
 const SERIF = typography.faces.display.stack;
 
-// Header wordmark. Drawn from lib/logo.ts, never set in a font: the PNG
-// export only loads DM Mono, so a <text> in Untitled Serif rendered as DM Mono
-// italic in every exported cover. Paths need no font at all.
+// Header wordmark. Drawn from lib/logo.ts, never set in a font: a logotype
+// must not depend on a face being present. Paths need no font at all.
 const HEADER_CAP = 11;                                   // px, matches the old 16px serif cap
 const HEADER_SCALE = HEADER_CAP / logoGeometry.cap;
 const HEADER_BASELINE = 88;

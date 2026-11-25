@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-12",
+    title: "PNG exports set in Untitled, not DM Mono",
+    target: "Typography / the PNG export",
+    href: "/typography",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-24",
+    why: "Labels are Untitled Sans, but every PNG from the instruments and the logo downloads set its text in DM Mono, the one face the rasteriser could load. The export now uses the licensed faces the site already serves.",
+    previous: "PNG exports render all text in DM Mono, fetched from Google Fonts, until the rasteriser can load Untitled.",
+    proposed: "PNG exports render in Untitled Sans and Untitled Serif, decoded from the site's own web fonts. Characters Untitled lacks fall back to Noto, one glyph at a time. DM Mono is for code only.",
+    decision: "Adopted by Gurden, 24 Nov 2026 (F01).",
+  },
+  {
     id: "CH-11",
     title: "Exports may carry a time print: a faint asemic watermark of the minute they were made",
     target: "Logo / Watermark",

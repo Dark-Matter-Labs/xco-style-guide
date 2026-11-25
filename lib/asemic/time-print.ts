@@ -150,16 +150,6 @@ export function makeTimePrint(i: TimePrintInput): TimePrint {
 /** The slug's type size: the artwork's smallest label, never more than a third of its margin. */
 export const slugSize = (smallestLabel: number, margin: number) => Math.min(smallestLabel, margin / 3);
 
-/** The PNG route sets SVG text in DM Mono, about 0.6 em a character: the widest face a slug meets. */
-export const PNG_EM = 0.6;
-
-/**
- * A slug hung from `top` on a gradient that is dark at the top and light below: as large as
- * `size`, but small enough that it ends by `limit` (where paper type stops reading) in any face.
- */
-export const hungSlugSize = (size: number, stamp: string, top: number, limit: number) =>
-  Math.min(size, (limit - top) / (PNG_EM * Array.from(stamp).length));
-
 export type Ctx2D = Pick<
   CanvasRenderingContext2D,
   "fillStyle" | "strokeStyle" | "lineWidth" | "setLineDash" | "beginPath" | "moveTo" | "lineTo" | "arc" | "rect" | "fill" | "stroke"

@@ -2,9 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
-
-const GOOGLE_FONTS_URL =
-  "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;1,400&display=swap";
+import { pngFonts } from "./fonts";
 
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;
@@ -26,30 +24,9 @@ function ensureWasm(): Promise<void> {
 
 async function loadFonts(): Promise<Uint8Array[]> {
   if (cachedFonts) return cachedFonts;
-
-  // Old Android 2.2 UA → Google Fonts returns TTF (magic 00010000).
-  const cssRes = await fetch(GOOGLE_FONTS_URL, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-    },
-  });
-  if (!cssRes.ok) throw new Error(`Google Fonts CSS fetch failed: ${cssRes.status}`);
-  const css = await cssRes.text();
-
-  const urls = Array.from(
-    css.matchAll(/url\((https?:\/\/fonts\.gstatic\.com\/[^)]+)\)/g),
-  ).map((m) => m[1]);
-
-  const results = await Promise.all(
-    urls.map(async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      return new Uint8Array(await res.arrayBuffer());
-    }),
-  );
-
-  cachedFonts = results.filter(Boolean) as Uint8Array[];
+  const { untitled, fallbacks } = await pngFonts((f) => readFile(path.join(process.cwd(), f)).then((b) => new Uint8Array(b)));
+  // Untitled first: resvg looks for a missing character's face in this order.
+  cachedFonts = [...untitled, ...fallbacks];
   return cachedFonts;
 }
 
@@ -68,8 +45,9 @@ export async function POST(req: NextRequest) {
     await ensureWasm();
     const fonts = await loadFonts();
 
-    // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers
-    const svgClean = svg.replace(/@import url\([^)]+\);?/g, "");
+    // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers.
+    // NFC: an accent typed as a separate character joins its letter, which a face can draw whole.
+    const svgClean = svg.replace(/@import url\([^)]+\);?/g, "").normalize("NFC");
 
     // Add explicit pixel dimensions for correct rasterisation size.
     // Any width/height already on the root <svg> must be dropped first —
@@ -84,7 +62,9 @@ export async function POST(req: NextRequest) {
     const resvg = new Resvg(svgWithSize, {
       font: {
         fontBuffers: fonts,
-        defaultFontFamily: "DM Mono",
+        defaultFontFamily: "Untitled Sans",
+        // Only the faces above, never whatever the server happens to have installed.
+        loadSystemFonts: false,
       },
       fitTo: { mode: "width", value: width },
     });

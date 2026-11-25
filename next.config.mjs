@@ -2,9 +2,9 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["sharp", "@resvg/resvg-wasm"],
-    // The PNG route reads this file with fs; nothing imports it, so tracing would skip it.
+    // The PNG route reads these files with fs; nothing imports them, so tracing would skip them.
     outputFileTracingIncludes: {
-      "/api/export/png": ["./node_modules/@resvg/resvg-wasm/index_bg.wasm"],
+      "/api/export/png": ["./node_modules/@resvg/resvg-wasm/index_bg.wasm", "./public/fonts/Untitled*.woff2", "./app/api/export/png/fallback/*.ttf"],
     },
   },
   // Instruments folded into others keep their old links working.

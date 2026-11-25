@@ -32,8 +32,9 @@ export default function TypographyPage() {
           licensed typefaces from Klim Type Foundry, served from{" "}
           <span className="text-xco-dusk-ink">public/fonts/</span>. If they fail to load, the serif falls back to
           Crimson Pro and the sans to the system face. Since 3 November 2026 labels and annotations are set in
-          Untitled Sans too: no monospace labels. DM Mono stays for code, and for the PNG export, which cannot
-          yet load Untitled Sans.
+          Untitled Sans too: no monospace labels. DM Mono stays for code only. PNG exports render in Untitled as
+          well, decoded from these same files; characters Untitled lacks (arrows, maths, Greek, Cyrillic,
+          Vietnamese) fall back to Noto there.
         </p>
       </section>
 
