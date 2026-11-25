@@ -71,7 +71,7 @@ export const changeLog: ChangeRecord[] = [
     previous: "One attached lockup: the descriptor, then \u201cAn initiative of\u201d and DM\u2019s lockup at a quarter of cap height, stacked under the mark. Elsewhere, DML was plain text or absent.",
     proposed: "The xCO mark stands alone. DML appears in an endorsement strip, \u201cAn initiative of\u201d and DM\u2019s own lockup on one line, set in a different zone: footer, back cover, colophon, a signature\u2019s last line. DM\u2019s stamp at least 16px on screen and 6mm in print; below that, xCO alone. The attached lockup stays as a fallback.",
     decision: "Adopted by Gurden, 25 Nov 2026 (option C + A).",
-    respond: PR(0),
+    respond: PR(70),
   },
   {
     id: "CH-13",
