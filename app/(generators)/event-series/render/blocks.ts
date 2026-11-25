@@ -135,7 +135,7 @@ export function altText(spec: CardSpec, imageStatus: string): string {
       kicker.trim() && `${kicker.trim()}:`,
       title.trim() && `${title.trim()}.`,
       subtitle.trim() && `${subtitle.trim()}.`,
-      "xCO.",
+      "xCO, an initiative of Dark Matter Labs.",
       imageStatus,
     ].filter(Boolean).join(" ");
   }
@@ -145,7 +145,7 @@ export function altText(spec: CardSpec, imageStatus: string): string {
     `${title.trim()}${subtitle.trim() ? ` — ${subtitle.trim()}` : ""}.`,
     when && `${when}.`,
     location.trim() && `${location.trim()}.`,
-    "xCO × Medulla.",
+    "xCO × Medulla. An initiative of Dark Matter Labs.",
     imageStatus,
   ]
     .filter(Boolean)

@@ -27,7 +27,7 @@ export function EndorsementStrip({
       <text x={m.labelX} y={m.labelBaseline} fontFamily={LOCKUP_FONT} fontSize={m.labelSize} fontWeight={LOCKUP_WEIGHT} letterSpacing={m.labelTracking} fill={v.fg}>
         {endorsementLabel}
       </text>
-      <g transform={m.dmTransform} fill={v.dmFg}>
+      <g transform={`translate(${m.dm.x} ${m.dm.y}) scale(${m.dm.scale})`} fill={v.dmFg}>
         <path d={dmWordmarkPath} />
         <path fillRule="evenodd" clipRule="evenodd" d={dmStampPath} />
       </g>

@@ -385,7 +385,8 @@ export const stripMetrics = {
   labelX: round(stripLabelX),
   /** On DM's wordmark baseline, so the strip reads as one line of words. */
   labelBaseline: round(STRIP_PAD + (DM_WORDMARK_BASELINE - 0.26) * STRIP_SCALE),
-  dmTransform: `translate(${round(stripDmX - dmInkLeft * STRIP_SCALE)} ${round(STRIP_PAD - 0.26 * STRIP_SCALE)}) scale(${Number(STRIP_SCALE.toFixed(4))})`,
+  /** Where DM's lockup sits: its origin and scale in the strip's units. */
+  dm: { x: round(stripDmX - dmInkLeft * STRIP_SCALE), y: round(STRIP_PAD - 0.26 * STRIP_SCALE), scale: Number(STRIP_SCALE.toFixed(4)) },
   width: Math.ceil(stripDmX + stripDmWidth + STRIP_PAD),
   height: STRIP_PAD * 2 + STRIP_STAMP,
 } as const;
@@ -407,7 +408,7 @@ export function buildEndorsementStripSvg({
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${m.width} ${m.height}" width="${m.width}" height="${m.height}" role="img" aria-label="An initiative of Dark Matter Labs">
   <title>An initiative of Dark Matter Labs</title>${bg}
   <text x="${m.labelX}" y="${m.labelBaseline}" font-family="${LOCKUP_FONT}" font-size="${m.labelSize}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${m.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
-  <g transform="${m.dmTransform}" fill="${v.dmFg}">
+  <g transform="translate(${m.dm.x} ${m.dm.y}) scale(${m.dm.scale})" fill="${v.dmFg}">
     <path d="${dmWordmarkPath}"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>
   </g>
