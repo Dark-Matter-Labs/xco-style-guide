@@ -1,4 +1,4 @@
-import { logoGeometry, cPath, oPath, xPaths } from "@/lib/logo";
+import { logoGeometry, cPath, oPath, xPaths, inkBounds } from "@/lib/logo";
 import { typography } from "@/lib/design-tokens";
 
 const TEXTURE = 0.75;    // texture weight — guides, per the two-weight system
@@ -15,6 +15,13 @@ export function ConstructionDiagram() {
   const guide = "var(--xco-ocean)";
   const [xTop] = [g.baseline - g.xHeight];
 
+  // The x's furthest tip (its butt-cap corner, right side) and the end of the
+  // C (the outer corner of its cut terminals). Ink, not centreline.
+  const xTip = g.xLeft + g.xWidth + (inkBounds.left < g.xLeft ? g.xLeft - inkBounds.left : 0);
+  const half = ((g.aperture / 2) * Math.PI) / 180;
+  const cEnd = g.cCx + (g.radius + g.stroke / 2) * Math.cos(half);
+  const r1 = (n: number) => Math.round(n * 10) / 10;
+
   return (
     <svg
       viewBox={`0 0 ${g.width} ${g.height}`}
@@ -27,7 +34,6 @@ export function ConstructionDiagram() {
         <line x1={0} y1={g.capTop} x2={g.width} y2={g.capTop} />
         <line x1={0} y1={xTop} x2={g.width} y2={xTop} strokeDasharray="3 3" />
         <line x1={0} y1={g.baseline} x2={g.width} y2={g.baseline} />
-        <line x1={0} y1={g.midY} x2={g.width} y2={g.midY} strokeDasharray="1 4" />
       </g>
 
       {/* Shared construction circles — same radius for C and O */}
@@ -44,6 +50,13 @@ export function ConstructionDiagram() {
         <path d={x2} />
         <path d={cPath()} />
         <path d={oPath()} />
+      </g>
+
+      {/* x tip → C end */}
+      <g stroke="var(--xco-dusk)" strokeWidth={TEXTURE} fill="none">
+        <line x1={xTip} y1={g.capTop - 14} x2={xTip} y2={g.baseline + 4} strokeDasharray="3 2" />
+        <line x1={cEnd} y1={g.capTop - 14} x2={cEnd} y2={g.baseline + 4} strokeDasharray="3 2" />
+        <line x1={xTip} y1={g.capTop - 10} x2={cEnd} y2={g.capTop - 10} />
       </g>
 
       {/* Measured extents */}
@@ -63,6 +76,9 @@ export function ConstructionDiagram() {
         <text x={20} y={xTop - 4}>x-height {g.xHeight}</text>
         <text x={g.cCx + 6} y={g.midY - 6}>r {g.radius}</text>
         <text x={g.oCx + 6} y={g.midY - 6}>r {g.radius}</text>
+        <text x={(xTip + cEnd) / 2} y={g.capTop - 13} textAnchor="middle">
+          x tip → C end {r1(cEnd - xTip)}
+        </text>
         <text x={20} y={g.baseline + 12}>
           baseline · stroke {g.stroke} · aperture {g.aperture}°
         </text>
