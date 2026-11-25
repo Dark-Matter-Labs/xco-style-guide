@@ -69,7 +69,7 @@ export const changeLog: ChangeRecord[] = [
     date: "2026-11-24",
     why: "Labels are Untitled Sans, but every PNG from the instruments and the logo downloads set its text in DM Mono, the one face the rasteriser could load. The export now uses the licensed faces the site already serves.",
     previous: "PNG exports render all text in DM Mono, fetched from Google Fonts, until the rasteriser can load Untitled.",
-    proposed: "PNG exports render in Untitled Sans and Untitled Serif, decoded from the site's own web fonts. DM Mono is for code only.",
+    proposed: "PNG exports render in Untitled Sans and Untitled Serif, decoded from the site's own web fonts. Characters Untitled lacks fall back to Noto, one glyph at a time. DM Mono is for code only.",
     decision: "Adopted by Gurden, 24 Nov 2026 (F01).",
   },
   {

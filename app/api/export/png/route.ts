@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
-import { woff2ToSfnt } from "./woff2";
+import { pngFonts } from "./fonts";
 
 let wasmReady: Promise<void> | null = null;
 let cachedFonts: Uint8Array[] | null = null;
@@ -22,14 +22,11 @@ function ensureWasm(): Promise<void> {
   return wasmReady;
 }
 
-// The licensed Untitled faces, read from the site's own web fonts and decoded
-// to TrueType once: resvg reads TTF, not WOFF2. next.config traces the files in.
-const FONT_FILES = ["UntitledSansRegular", "UntitledSansItalic", "UntitledSerifRegular", "UntitledSerifItalic"];
-
 async function loadFonts(): Promise<Uint8Array[]> {
   if (cachedFonts) return cachedFonts;
-  const files = await Promise.all(FONT_FILES.map((f) => readFile(path.join(process.cwd(), "public/fonts", `${f}.woff2`))));
-  cachedFonts = files.map((b) => woff2ToSfnt(new Uint8Array(b)));
+  const { untitled, fallbacks } = await pngFonts((f) => readFile(path.join(process.cwd(), f)).then((b) => new Uint8Array(b)));
+  // Untitled first: resvg looks for a missing character's face in this order.
+  cachedFonts = [...untitled, ...fallbacks];
   return cachedFonts;
 }
 
@@ -48,8 +45,9 @@ export async function POST(req: NextRequest) {
     await ensureWasm();
     const fonts = await loadFonts();
 
-    // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers
-    const svgClean = svg.replace(/@import url\([^)]+\);?/g, "");
+    // Strip @import — resvg-wasm can't fetch external CSS; fonts come from fontBuffers.
+    // NFC: an accent typed as a separate character joins its letter, which a face can draw whole.
+    const svgClean = svg.replace(/@import url\([^)]+\);?/g, "").normalize("NFC");
 
     // Add explicit pixel dimensions for correct rasterisation size.
     // Any width/height already on the root <svg> must be dropped first —
@@ -65,7 +63,7 @@ export async function POST(req: NextRequest) {
       font: {
         fontBuffers: fonts,
         defaultFontFamily: "Untitled Sans",
-        // Only the faces above: a missing glyph shows as missing, not in a stand-in face.
+        // Only the faces above, never whatever the server happens to have installed.
         loadSystemFonts: false,
       },
       fitTo: { mode: "width", value: width },
