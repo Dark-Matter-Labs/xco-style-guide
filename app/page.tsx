@@ -12,18 +12,11 @@ import {
 import { Mark, Logo } from "@/components/xco";
 import { instruments } from "@/lib/instruments";
 
-const templateLinks = [
-  {
-    href: "https://docs.google.com/document/d/1YUHnNz7f1oXnnJY18WoZuP2BHaqnUSgUNfdsvivZVMQ/edit?tab=t.0",
-    label: "Document Template",
-    meta: "Google Docs",
-  },
-  {
-    href: "https://docs.google.com/presentation/d/1ttOljLpcgRGJ4n2r2D6yRfRdqaCZoWtOWQKOe2wLQ0Y/edit?slide=id.g3ddab6f8e13_0_16#slide=id.g3ddab6f8e13_0_16",
-    label: "Slide Template",
-    meta: "Google Slides",
-  },
-];
+const deckLink = {
+  href: "https://claude.ai/artifact/EBDktYpuHA2aGQCdb94VXN",
+  label: "xCO deck",
+  meta: "Claude artifact",
+};
 
 // Order matches the section nav in app/(system)/layout.tsx.
 const systemLinks = [
@@ -215,34 +208,33 @@ export default function Home() {
         </Cells>
       </DocSection>
 
-      {/* ── 04 Templates — inverse register ─────────────────────────── */}
+      {/* ── 04 Deck — inverse register ──────────────────────────────── */}
       <DocSection
-        id="templates"
-        kicker="04 / Templates"
+        id="deck"
+        kicker="04 / Deck"
         title="Where the system leaves the repo."
         register="inverse"
         intro={
           <p className="doc-intro-copy">
-            Working documents for the team, already carrying the system.
+            The latest xCO deck, built in the system: why now, what xCO builds,
+            the proof so far and the capital platform. Present from it, or take
+            slides from it.
           </p>
         }
       >
         <div className="doc-hang mt-10">
-          {templateLinks.map(({ href, label, meta }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-baseline justify-between gap-4 py-4"
-              style={{ borderTop: "1px solid var(--rule)" }}
-            >
-              <span className="font-display text-[20px] group-hover:text-xco-ink-muted transition-colors">
-                {label}
-              </span>
-              <span className="doc-label !text-[9px] shrink-0">{meta} ↗</span>
-            </a>
-          ))}
+          <a
+            href={deckLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-baseline justify-between gap-4 py-4"
+            style={{ borderTop: "1px solid var(--rule)" }}
+          >
+            <span className="font-display text-[20px] group-hover:text-xco-ink-muted transition-colors">
+              {deckLink.label}
+            </span>
+            <span className="doc-label !text-[9px] shrink-0">{deckLink.meta} ↗</span>
+          </a>
         </div>
       </DocSection>
 
