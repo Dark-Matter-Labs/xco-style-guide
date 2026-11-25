@@ -10,7 +10,7 @@ export default function TextHighlightPage() {
       <header className="flex items-baseline justify-between pb-6">
         <div>
           <h1 className="font-display text-[60px] leading-[60px]">Text Highlight</h1>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mt-2">
             Exact-span highlights in the five named roles — numbered sidenotes beside each term, exported as SVG or PNG
           </p>
         </div>

@@ -8,10 +8,10 @@ import { steModes, steStructuralRules, steLexicalRules, steSource, steMarkdown, 
 // practices what we do before a text goes out, and this how plain a text
 // must be, given what a reader will do with it.
 
-const LABEL = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.5]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.75rem] leading-[1.5]";
 const ROW = "1px solid var(--border-subtle)";
 
 export function PlainRegister() {
@@ -49,9 +49,9 @@ export function PlainRegister() {
           <table className="w-full min-w-[640px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Rule</th>
-                <th className="py-2 pr-4 font-medium">Do</th>
-                <th className="py-2 font-medium">Don&apos;t</th>
+                <th className="py-2 pr-4">Rule</th>
+                <th className="py-2 pr-4">Do</th>
+                <th className="py-2">Don&apos;t</th>
               </tr>
             </thead>
             <tbody>

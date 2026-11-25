@@ -103,9 +103,9 @@ export default function AtlasPage() {
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Atlas object</th>
-                <th className="py-2 pr-4 font-medium">Existing object</th>
-                <th className="py-2 font-medium">Declared relation</th>
+                <th className="py-2 pr-4">Atlas object</th>
+                <th className="py-2 pr-4">Existing object</th>
+                <th className="py-2">Declared relation</th>
               </tr>
             </thead>
             <tbody>

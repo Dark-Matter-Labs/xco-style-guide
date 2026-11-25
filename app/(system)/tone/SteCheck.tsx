@@ -7,7 +7,7 @@ import { steLint, steModes, type SteMode } from "@/lib/ste";
 // the mode follows it — because the same paragraph is fine as an encounter
 // and a problem as an instruction. Hedges are never flagged.
 
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
 
 export function SteCheck({ text }: { text: string }) {
   const [mode, setMode] = useState<SteMode>("flavoured");

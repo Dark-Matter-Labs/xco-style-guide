@@ -111,7 +111,7 @@ export const TerritoryDiagram = forwardRef<SVGSVGElement, TerritoryProps>(
                 <text
                   x={cx + cw / 2} y={labelY}
                   textAnchor="middle" dominantBaseline="middle"
-                  fontFamily={typography.faces.body.stack} fontWeight="500"
+                  fontFamily={typography.faces.body.stack} fontWeight="400"
                   fontSize={fs} fill={fg}
                 >
                   {r.label}

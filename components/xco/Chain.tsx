@@ -6,7 +6,7 @@ interface ChainProps {
 export function Chain({ steps, className = "" }: ChainProps) {
   return (
     <div
-      className={`flex flex-wrap items-center font-mono font-medium text-[0.9375rem] leading-none ${className}`}
+      className={`flex flex-wrap items-center font-mono text-[0.9375rem] leading-none ${className}`}
     >
       {steps.map((step, i) => (
         <span key={i} className="flex items-center">

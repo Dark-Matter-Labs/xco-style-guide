@@ -49,9 +49,9 @@ export function MaterialWorlds() {
           <table className="w-full min-w-[640px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Dimension</th>
-                <th className="py-2 pr-4 font-medium">Author&apos;s choice</th>
-                <th className="py-2 font-medium">What must remain clear</th>
+                <th className="py-2 pr-4">Dimension</th>
+                <th className="py-2 pr-4">Author&apos;s choice</th>
+                <th className="py-2">What must remain clear</th>
               </tr>
             </thead>
             <tbody>

@@ -29,20 +29,20 @@ export default function GridPage() {
 
       {/* The ratio */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           The Ratio
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-[61.8fr_38.2fr] gap-12 mb-12">
           <div className="space-y-4">
             <p className="doc-h2 text-xco-ink">φ = 1.618</p>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
               Major — 61.8%
             </p>
             <div className="h-16 bg-xco-ink w-full" style={{ maxWidth: "61.8%" }} />
           </div>
           <div className="space-y-4">
             <p className="doc-h2 text-xco-ink">1 / φ = 0.618</p>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
               Minor — 38.2%
             </p>
             <div className="h-16 bg-xco-ink w-full" style={{ maxWidth: "38.2%" }} />
@@ -51,18 +51,18 @@ export default function GridPage() {
 
         {/* Visual golden ratio bar */}
         <div className="space-y-3">
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Column split — this page
           </p>
           <div className="flex w-full h-12">
             <div className="flex-[61.8] bg-xco-ink flex items-center px-4">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-paper">61.8fr — major</span>
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-paper">61.8fr — major</span>
             </div>
             <div className="flex-[38.2] flex items-center px-4">
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">38.2fr — minor</span>
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">38.2fr — minor</span>
             </div>
           </div>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             Tailwind: <span className="text-xco-dusk-ink">grid-cols-[61.8fr_38.2fr]</span>
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function GridPage() {
 
       {/* Interactive subdivision */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Recursive Subdivision
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl mb-8">
@@ -82,7 +82,7 @@ export default function GridPage() {
 
       {/* Fibonacci sequence */}
       <section>
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8">
           Fibonacci Spacing Scale
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl mb-8">
@@ -97,18 +97,18 @@ export default function GridPage() {
                 className="bg-xco-ink w-4"
                 style={{ height: Math.min(n * 2, 120) }}
               />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{n}</span>
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">{n}</span>
             </div>
           ))}
         </div>
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink mt-4">
+        <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mt-4">
           Sequence: {FIB.join(", ")} …
         </p>
       </section>
 
       {/* Document canvas */}
       <section className="max-w-2xl space-y-4">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-6">
           Document Canvases
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -127,8 +127,8 @@ export default function GridPage() {
             return (
               <div key={label} className="space-y-2">
                 <div className="flex items-baseline gap-4">
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink w-28 shrink-0">{label}</span>
-                  <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">{note}</span>
+                  <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink w-28 shrink-0">{label}</span>
+                  <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">{note}</span>
                 </div>
                 <div className="h-3 flex w-full max-w-xs">
                   <div className="flex-[61.8] bg-xco-ink" />

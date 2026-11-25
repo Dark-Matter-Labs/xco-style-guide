@@ -5,7 +5,7 @@ import { useCallback, useState, type ReactNode } from "react";
 // Form primitives shared by every generator: Untitled Sans labels (the
 // font-mono utility is the label role), hairline inputs, native radios.
 
-const label = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink";
+const label = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink";
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (

@@ -19,10 +19,10 @@ import {
 // exported for the wiki (Markdown + an agent instruction) and the website
 // (HTML/CSS).
 
-const LABEL = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.5]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.75rem] leading-[1.5]";
 const ROW = "1px solid var(--border-subtle)";
 
 const open = changeLog.filter((c) => isProvisional(c.status));

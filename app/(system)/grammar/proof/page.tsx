@@ -142,10 +142,10 @@ export default function ProofPage() {
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
-                <th className="py-2 pr-4 font-medium">Band</th>
-                <th className="py-2 pr-4 font-medium">It can</th>
-                <th className="py-2 pr-4 font-medium">It must expose</th>
-                <th className="py-2 font-medium">It cannot confer</th>
+                <th className="py-2 pr-4">Band</th>
+                <th className="py-2 pr-4">It can</th>
+                <th className="py-2 pr-4">It must expose</th>
+                <th className="py-2">It cannot confer</th>
               </tr>
             </thead>
             <tbody>

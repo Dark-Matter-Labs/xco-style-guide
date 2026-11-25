@@ -25,7 +25,7 @@ export default function GroupMarksPage() {
   return (
     <div className="doc-wrap py-12 space-y-24">
       <header className="space-y-4 pb-6">
-        <Link href="/logo" className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors">
+        <Link href="/logo" className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors">
           ← Logo
         </Link>
         <div className="flex items-baseline justify-between">
@@ -39,7 +39,7 @@ export default function GroupMarksPage() {
           so a bad combination surfaces here rather than in a chat list. */}
       <section className="space-y-10 pb-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Aperture system
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -48,7 +48,7 @@ export default function GroupMarksPage() {
             the C&apos;s aperture rotated: the logotype&apos;s own argument made
             literal, the same circle at a different openness.
           </p>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             [rule] A mark is ground <em>and</em> aperture. No pair may be weak on
             both channels at once.
           </p>
@@ -56,7 +56,7 @@ export default function GroupMarksPage() {
 
         {/* The eight positions */}
         <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             Eight positions, {aperturePositions.length} of {aperturePositions.length} allocated
           </p>
           <div className="flex flex-wrap gap-5">
@@ -72,7 +72,7 @@ export default function GroupMarksPage() {
                       style={{ border: "1px dashed var(--rule)" }}
                     />
                   )}
-                  <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink text-center">
+                  <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink text-center">
                     {deg}°
                   </p>
                 </div>
@@ -83,7 +83,7 @@ export default function GroupMarksPage() {
 
         {/* Registry */}
         <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             Registry
           </p>
           <div className="space-y-0">
@@ -105,20 +105,20 @@ export default function GroupMarksPage() {
                 >
                   <GroupMark mark={m} size={48} />
                   <div className="min-w-0 space-y-1">
-                    <p className="font-mono font-medium text-[0.9375rem] leading-[1.4] text-xco-ink">
+                    <p className="font-mono text-[0.9375rem] leading-[1.4] text-xco-ink">
                       {m.name}
                     </p>
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                    <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                       {groundLabel} · {m.aperture}° · {markContrast.toFixed(2)}:1
                     </p>
                     <a
                       href={`/signal-groups/${m.file}.png`}
-                      className="inline-block font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors"
+                      className="inline-block font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted hover:text-xco-dusk-ink transition-colors"
                     >
                       {m.file}.png ↓
                     </a>
                   </div>
-                  <p className="col-span-2 lg:col-span-1 font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                  <p className="col-span-2 lg:col-span-1 font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                     {m.note}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export default function GroupMarksPage() {
 
         {/* Greyscale proof */}
         <div className="space-y-3">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             With hue removed
           </p>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -146,7 +146,7 @@ export default function GroupMarksPage() {
 
         {/* Live audit */}
         <div className="space-y-3">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             Pair audit
           </p>
           {(() => {
@@ -169,7 +169,7 @@ export default function GroupMarksPage() {
                     {failing.map((p) => (
                       <p
                         key={`${p.a}-${p.b}`}
-                        className="font-mono font-medium text-[0.75rem] leading-[1.4]"
+                        className="font-mono text-[0.75rem] leading-[1.4]"
                         style={{ color: "var(--xco-dusk-ink)" }}
                       >
                         ✗ {p.a} vs {p.b} — value {p.value.toFixed(2)}:1, angle {p.angle}°
@@ -184,10 +184,10 @@ export default function GroupMarksPage() {
                       className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-x-4 py-2"
                       style={{ borderBottom: "1px solid var(--border-subtle)" }}
                     >
-                      <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink">
+                      <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink">
                         {p.a} · {p.b}
                       </p>
-                      <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted sm:text-right">
+                      <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted sm:text-right">
                         value {p.value.toFixed(2)}:1 · angle {p.angle}° ·{" "}
                         {p.value < VALUE_TWIN_MAX ? "aperture carries it" : "ground carries it"}
                       </p>
@@ -201,20 +201,20 @@ export default function GroupMarksPage() {
 
         {/* Rules */}
         <div className="space-y-4">
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             Rules
           </p>
           <div className="space-y-0 max-w-3xl">
             {markRules.map((r) => (
               <div key={r.rule} className="py-4 space-y-1" style={{ borderBottom: "1px solid var(--rule)" }}>
                 <p className="font-display text-[20px] leading-[1.3] text-xco-ink">{r.rule}</p>
-                <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+                <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                   {r.detail}
                 </p>
               </div>
             ))}
           </div>
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
             Thresholds: mark clears {MARK_CONTRAST_MIN}:1 on its ground ·
             grounds under {VALUE_TWIN_MAX}:1 are one tone in greyscale ·
             apertures within {ANGLE_TWIN_MAX}° are one shape at listing size.
@@ -226,7 +226,7 @@ export default function GroupMarksPage() {
           className="max-w-3xl p-6 space-y-3"
           style={{ border: "1px solid var(--rule)", background: "var(--panel)" }}
         >
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
             Adding a mark
           </p>
           <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -235,12 +235,12 @@ export default function GroupMarksPage() {
             generator fails the run if any pair ends up weak on both channels,
             and this page updates from the same registry.
           </p>
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             [note] {allocationStatus.marks} marks on {allocationStatus.aperturesUsed}/
             {allocationStatus.aperturesTotal} apertures, every documented tone, plus{" "}
             {allocationStatus.groupColorsUsed} group colours — so apertures are now shared.
           </p>
-          <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+          <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
             {allocationStatus.nextNeeds}
           </p>
         </div>

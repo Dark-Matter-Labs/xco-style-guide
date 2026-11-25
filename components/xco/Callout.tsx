@@ -31,7 +31,7 @@ export function Callout({ domain, children, label, className = "" }: CalloutProp
       </div>
       <div className="space-y-2 min-w-0">
         <p
-          className="font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-widest"
+          className="font-mono text-[0.75rem] leading-[1.4] uppercase tracking-widest"
           style={{ color: `var(--${domain}-ink)` }}
         >
           {displayLabel}

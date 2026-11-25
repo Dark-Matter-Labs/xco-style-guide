@@ -186,6 +186,14 @@ const fake = (respond: () => Response | Promise<Response>, calls: Call[] = []) =
     assert.ok(n <= 1, `${helper} is defined once across the generators (found ${n})`);
   }
 
+  // ── Type: Untitled ships at 400 only (D18), so nothing asks for more ──
+  const source = ["app", "components", "lib"].flatMap((d) => files(d)).filter((f) => /\.(tsx?|css)$/.test(f));
+  for (const f of source) {
+    const text = readFileSync(f, "utf8");
+    const m = /font-(medium|semibold|bold|extrabold|black)\b|font-?[wW]eight[=:]\s*["{]?\s*([5-9]00)/.exec(text);
+    assert.ok(!m, `${f} asks for a weight that does not ship: ${m?.[0]}`);
+  }
+
   // ── The error is said aloud ────────────────────────────────────────
   // tsx compiles JSX with the classic transform, so React must be global before the module loads.
   (globalThis as unknown as { React: typeof React }).React = React;

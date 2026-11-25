@@ -49,7 +49,7 @@ function Table<T extends Record<string, string>>({ cols, rows, keyOf }: { cols: 
         <thead>
           <tr className={`${SMALL} text-xco-ink-muted uppercase tracking-widest`}>
             {cols.map(([, h]) => (
-              <th key={h} className="py-2 pr-4 font-medium">{h}</th>
+              <th key={h} className="py-2 pr-4">{h}</th>
             ))}
           </tr>
         </thead>

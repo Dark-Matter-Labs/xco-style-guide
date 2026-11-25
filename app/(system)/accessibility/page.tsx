@@ -5,9 +5,9 @@ import { WCAG } from "@/lib/a11y/contrast";
 import { ContrastMatrix } from "./ContrastMatrix";
 import { PairingTable } from "./PairingTable";
 
-const H2 = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8";
+const H2 = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-8";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const SMALL = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.9375rem] leading-[1.6]";
 
 const TIERS: { by: Enforcement; name: string; command: string; when: string; what: string }[] = [
   {

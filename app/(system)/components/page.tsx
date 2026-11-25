@@ -28,7 +28,7 @@ export default function ComponentsPage() {
       {/* ── Domain system ──────────────────────────────────────────── */}
       <section className="space-y-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Domain system
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -41,8 +41,8 @@ export default function ComponentsPage() {
         {/* Mark */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Mark</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Mark</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Inline shape indicator. Circle for bio, square for inst, triangle for tech, diamond for culture.
               Shape is the primary channel — colour reinforces.
             </p>
@@ -54,22 +54,22 @@ export default function ComponentsPage() {
                 <div className="flex items-end gap-4">
                   <div className="space-y-1 text-center">
                     <Mark domain={domain} size="xs" />
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">xs</p>
+                    <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">xs</p>
                   </div>
                   <div className="space-y-1 text-center">
                     <Mark domain={domain} size="sm" />
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">sm</p>
+                    <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">sm</p>
                   </div>
                   <div className="space-y-1 text-center">
                     <Mark domain={domain} size="md" />
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">md</p>
+                    <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">md</p>
                   </div>
                   <div className="space-y-1 text-center">
                     <Mark domain={domain} size="lg" />
-                    <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">lg</p>
+                    <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">lg</p>
                   </div>
                 </div>
-                <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+                <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                   {domain}
                 </p>
               </div>
@@ -77,7 +77,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Mark domain="bio" size="sm" />`}
@@ -87,8 +87,8 @@ export default function ComponentsPage() {
         {/* Port */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Port</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Port</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Inline text tagged to a domain. Domain tint background with coloured left border.
               Use within running prose to annotate a concept as belonging to a domain.
             </p>
@@ -113,7 +113,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Port domain="inst">regulatory frameworks</Port>`}
@@ -123,8 +123,8 @@ export default function ComponentsPage() {
         {/* Callout */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Callout</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Callout</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Block-level domain annotation. Coloured left border, domain tint background.
               Use for observations, conditions, or constraints that belong to one domain.
             </p>
@@ -154,7 +154,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Callout domain="bio">\n  Soil microbiome diversity...\n</Callout>`}
@@ -165,7 +165,7 @@ export default function ComponentsPage() {
       {/* ── Epistemic system ───────────────────────────────────────── */}
       <section className="space-y-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Epistemic system
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -176,7 +176,7 @@ export default function ComponentsPage() {
         </div>
 
         <div className="space-y-8">
-          <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">EpistemicTag</h3>
+          <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">EpistemicTag</h3>
 
           <div className="flex flex-wrap gap-4 items-center">
             <EpistemicTag status="inference" />
@@ -209,7 +209,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<EpistemicTag status="inference" />`}
@@ -220,7 +220,7 @@ export default function ComponentsPage() {
       {/* ── Content patterns ───────────────────────────────────────── */}
       <section className="space-y-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Content patterns
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -232,8 +232,8 @@ export default function ComponentsPage() {
         {/* Thesis */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Thesis</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Thesis</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Pull-quote for the central claim of a section or document. Dusk left border.
               Use once per document — the thesis is singular.
             </p>
@@ -246,7 +246,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Thesis attribution="xCO core frame">\n  The goal is not one good future...\n</Thesis>`}
@@ -256,8 +256,8 @@ export default function ComponentsPage() {
         {/* Chain */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Chain</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Chain</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Sequence of steps connected by arrows. For process flows, causal chains,
               intervention logic. Label type (Untitled Sans), bordered steps.
             </p>
@@ -270,7 +270,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Chain steps={["Observe", "Model", "Intervene", "Evaluate"]} />`}
@@ -280,8 +280,8 @@ export default function ComponentsPage() {
         {/* Stat */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Stat / StatGrid</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Stat / StatGrid</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Large-number display. Display type for the value, label type (Untitled Sans) for the label.
               Optional domain colour on the value. StatGrid for multi-stat layout.
             </p>
@@ -294,7 +294,7 @@ export default function ComponentsPage() {
           </StatGrid>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<StatGrid columns={3}>\n  <Stat value="3.8B" label="..." domain="inst" />\n</StatGrid>`}
@@ -304,8 +304,8 @@ export default function ComponentsPage() {
         {/* Kicker */}
         <div className="space-y-8">
           <div className="space-y-1">
-            <h3 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">Kicker</h3>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">Kicker</h3>
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               Section eyebrow label. Untitled Sans, small-caps, tracked out. Use before a heading to
               set context. Optional domain colour.
             </p>
@@ -327,7 +327,7 @@ export default function ComponentsPage() {
           </div>
 
           <div
-            className="p-4 font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
+            className="p-4 font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted"
             style={{ background: "var(--xco-paper-quiet)" }}
           >
             {`<Kicker domain="bio">Biological dimension</Kicker>`}
@@ -338,7 +338,7 @@ export default function ComponentsPage() {
       {/* ── Composed example ───────────────────────────────────────── */}
       <section className="space-y-8 pb-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Composed
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -388,7 +388,7 @@ export default function ComponentsPage() {
           </div>
 
           <div>
-            <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted mb-6 uppercase tracking-widest text-[0.75rem]">
+            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted mb-6 uppercase tracking-widest text-[0.75rem]">
               Intervention logic
             </p>
             <Chain steps={["Map interfaces", "Stress-test", "Redesign", "Pilot", "Scale"]} />
@@ -405,7 +405,7 @@ export default function ComponentsPage() {
       {/* ── Spacing scale ──────────────────────────────────────────── */}
       <section className="space-y-8 pb-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Fibonacci spacing
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -421,13 +421,13 @@ export default function ComponentsPage() {
                 className="shrink-0"
                 style={{ width: `${step.px}px`, height: "20px", background: "var(--xco-ink)", opacity: 0.7 }}
               />
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink w-12">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink w-12">
                 {step.px}px
               </span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                 {step.cssVar}
               </span>
-              <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+              <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                 {step.usage}
               </span>
             </div>
@@ -438,7 +438,7 @@ export default function ComponentsPage() {
       {/* ── Motion tokens ──────────────────────────────────────────── */}
       <section className="space-y-8 pb-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Motion
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -452,22 +452,22 @@ export default function ComponentsPage() {
             const token = motionTokens[key];
             return (
               <div key={key} className="flex items-center gap-6">
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink w-16">
+                <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink w-16">
                   {token.ms}ms
                 </span>
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted w-20">
+                <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted w-20">
                   {token.cssVar}
                 </span>
-                <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+                <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
                   {token.usage}
                 </span>
               </div>
             );
           })}
           <div className="flex items-center gap-6 pt-2" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink w-16">ease</span>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted w-20">--ease</span>
-            <span className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
+            <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink w-16">ease</span>
+            <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted w-20">--ease</span>
+            <span className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink-muted">
               {motionTokens.ease.value}
             </span>
           </div>

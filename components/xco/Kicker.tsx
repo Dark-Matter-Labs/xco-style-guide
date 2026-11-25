@@ -9,7 +9,7 @@ interface KickerProps {
 export function Kicker({ children, domain, className = "" }: KickerProps) {
   return (
     <p
-      className={`font-mono font-medium text-[0.75rem] leading-[1.4] uppercase tracking-widest ${className}`}
+      className={`font-mono text-[0.75rem] leading-[1.4] uppercase tracking-widest ${className}`}
       style={{ color: domain ? `var(--${domain}-ink)` : "var(--xco-ink-muted)" }}
     >
       {children}

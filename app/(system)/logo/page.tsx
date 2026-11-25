@@ -60,7 +60,7 @@ export default function LogoPage() {
       {/* Proposal: serif x */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Proposed — serif x
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -80,7 +80,7 @@ export default function LogoPage() {
                 <Logo height={110} xStyle={s} />
                 <Logo height={32} xStyle={s} />
               </div>
-              <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {s === "mono" ? "Current — constructed, monoline" : "Proposed — Untitled Serif x"}
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function LogoPage() {
           <Logo height={200} xStyle="serif" withEndorsement />
         </div>
 
-        <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink max-w-2xl">
+        <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink max-w-2xl">
           [proposal] Not adopted. Before it can be: the x→C gap needs re-measuring
           (<code className="font-code">npm run logo:spacing</code> still checks the monoline
           x), the lockup lines are still aligned to the monoline x&apos;s ink, and Klim&apos;s
@@ -103,7 +103,7 @@ export default function LogoPage() {
       {/* Construction */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Construction
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -126,11 +126,11 @@ export default function LogoPage() {
             { k: "Gaps", v: `${g.gapXC} / ${String(g.gapCO).replace("-", "\u2212")}`, n: "x→C / C→O, measured" },
           ].map((item) => (
             <div key={item.k} className="space-y-1">
-              <dt className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
+              <dt className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest">
                 {item.k}
               </dt>
               <dd className="doc-h2 text-xco-ink">{item.v}</dd>
-              <dd className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <dd className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {item.n}
               </dd>
             </div>
@@ -138,7 +138,7 @@ export default function LogoPage() {
         </dl>
 
         <div className="max-w-2xl">
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             [rule] The two gaps are equal in optical space, not in metric distance. The
             C&apos;s aperture faces the O and pours white into that gap, so C→O is negative:
             the boxes overlap before the pair holds as much space as x→C. Measured, not
@@ -151,7 +151,7 @@ export default function LogoPage() {
       {/* Scale */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Scale
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -164,14 +164,14 @@ export default function LogoPage() {
           {[120, 72, 48, 32, 24].map((h) => (
             <div key={h} className="space-y-3">
               <Logo height={h} />
-              <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {h}px
               </p>
             </div>
           ))}
           <div className="space-y-3 opacity-40">
             <Logo height={16} />
-            <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-dusk-ink">
+            <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-dusk-ink">
               16px — too small
             </p>
           </div>
@@ -181,7 +181,7 @@ export default function LogoPage() {
       {/* Clear space */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Clear space
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -197,7 +197,7 @@ export default function LogoPage() {
         >
           <Logo height={96} />
         </div>
-        <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+        <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
           Dashed line marks the file edge — the clear space is the gap between it and the glyphs.
         </p>
       </section>
@@ -205,7 +205,7 @@ export default function LogoPage() {
       {/* Downloads */}
       <section className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Variants and downloads
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -216,7 +216,7 @@ export default function LogoPage() {
         <LogoDownloads />
 
         <div className="max-w-2xl space-y-3 pt-2">
-          <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+          <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
             [note] The descriptor and the &ldquo;An initiative of&rdquo; label are the one part
             that is live text, set in Untitled Sans, like every label. The descriptor is tracked
             to span the mark flush on both edges. Dark Matter Labs&apos; logo is DM&apos;s own
@@ -231,7 +231,7 @@ export default function LogoPage() {
       {/* Watermark (CH-09; the time print is CH-11) */}
       <section id="watermark" className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Watermark
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -256,7 +256,7 @@ export default function LogoPage() {
 
       {/* Group marks — their own page since 24 November 2026 */}
       <section className="space-y-2 max-w-2xl">
-        <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
           Group marks
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
@@ -270,7 +270,7 @@ export default function LogoPage() {
 
       <section className="space-y-8 pb-16">
         <div className="space-y-2">
-          <h2 className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
             Misuse
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
@@ -285,10 +285,10 @@ export default function LogoPage() {
               className="space-y-2 p-5"
               style={{ borderLeft: "3px solid var(--xco-dusk)", background: "var(--xco-paper-quiet)" }}
             >
-              <p className="font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink">
+              <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
                 ✗ {m.label}
               </p>
-              <p className="font-mono font-medium text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
                 {m.note}
               </p>
             </li>

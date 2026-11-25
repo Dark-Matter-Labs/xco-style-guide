@@ -1,10 +1,10 @@
 import { CopyButton } from "@/components/CopyButton";
 import { writingPractices, practiceSource, practiceMarkdown } from "@/lib/writing-practice";
 
-const LABEL = "font-mono font-medium text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
 const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
-const MONO = "font-mono font-medium text-[0.9375rem] leading-[1.6]";
-const SMALL = "font-mono font-medium text-[0.75rem] leading-[1.5]";
+const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
+const SMALL = "font-mono text-[0.75rem] leading-[1.5]";
 
 // The practices sit after the voice: the voice says who xCO is when it
 // writes; these are what a writer does before a text goes out. Each carries
