@@ -60,6 +60,20 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-14",
+    title: "One colour system: 8.1, with Martin's names as roles",
+    target: "Colour / every page that names a colour",
+    href: "/colour",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-25",
+    why: "The colour page showed two vocabularies for the same five colours: the 8.1 scales and a separate diagram palette. It also said colour is syntax and never to mix registers, while the grammar and the diagram kit treat colour as a declared affordance and put a Signal risk node beside Field nodes.",
+    previous: "8.1 scales plus a separate diagram palette (navy, ocean, teal, sand, dusk). “Colour here is syntax.” “Never mix registers within a single diagram.”",
+    proposed: "One system, the 8.1 scales. navy, ocean, teal, sand and dusk are Martin Perrow / In Studio's role names on 8.1 stops; their May 2026 hues stay as lineage only. Colour is an affordance, declared in each key. One field, one signal replaces the register rule. The grammar mirrors 8.1's grammar, never its palette.",
+    decision: "Adopted by Gurden, 25 Nov 2026, with D10 and D11. Indy to confirm as the owner of 8.1. Martin to be told and credited for the names.",
+    respond: PR(69),
+  },
+  {
     id: "CH-13",
     title: "One weight: Untitled at 400",
     target: "Typography / weights",

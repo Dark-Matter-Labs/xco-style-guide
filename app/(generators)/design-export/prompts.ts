@@ -87,13 +87,14 @@ These apply to every string you write — UI copy, comments, alt text, commit me
 - **Spell civilization with a z**, never an s: civilization, civilizational, civilizations. Never civilisation, civilisational, civilisations. xCO writes in US English.
 - **Write the project name as \`xCO\`** — lowercase x, uppercase CO. Never XCO, xco, Xco, XCo, or xCo. The casing is semantic: the lowercase x is the expansion operator, CO is Civilizational Optionality, the thing being expanded.
 
-## Three visual registers (diagram modes)
+## Colour roles (Polyphonic v8.1)
 
-- **Blueprint** (cool): navy → ocean → teal gradient. Use for systemic / structural diagrams.
-- **Warmth** (warm): sand → dusk. Use for field-level / terrestrial context.
-- **Spectrum**: full warm-to-cold arc — sand, dusk, teal, ocean, navy. Use for comparative / ranked diagrams.
+Every colour is a stop on one of three identity scales: Field (blues), Signal (the ember) and Matter (chalk to ink). The token names are roles on those stops:
 
-Never mix registers within a single diagram.
+- **navy** (Field 950), **ocean** (Field 600), **teal** (Field 500): the field. Structure, systemic elements, the open register.
+- **sand** (Signal 300), **dusk** (Signal 500): the signal. A declared hinge, transition or presence. Dusk is a surface, never text; warm text uses dusk-ink.
+
+One field, one signal. The default composition is 70 canvas : 20 structure : 8 trace : 2 signal, so a Field diagram may carry one Signal accent, such as the risk node. Colour is an affordance, not a law: name what each colour does in the diagram's key, and pair it with a shape or line style.
 
 ## Node types (diagram)
 
