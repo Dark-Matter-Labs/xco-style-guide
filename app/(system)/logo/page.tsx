@@ -6,6 +6,8 @@ import { buildEndorsementStripSvg, logoGeometry, logoVariants } from "@/lib/logo
 import { BRAND_NAME } from "@/lib/design-tokens";
 import { ProvisionalChange } from "@/components/xco";
 import { LogoDownloads } from "./LogoDownloads";
+import { CopyButton } from "@/components/CopyButton";
+import { signatureHtml, signatureImages } from "@/lib/email-signature";
 import { ConstructionDiagram } from "./ConstructionDiagram";
 
 const MISUSE = [
@@ -284,6 +286,30 @@ export default function LogoPage() {
             </li>
           ))}
         </ol>
+
+        {/* Email signature: the same two zones, as images mail clients can show */}
+        <div id="email-signature" className="space-y-4 max-w-3xl">
+          <h3 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+            Email signature
+          </h3>
+          <p className="font-body text-[16px] leading-[1.5] text-xco-ink">
+            Name and role, the mark, a hairline, then the strip. Mail clients show neither SVG nor
+            web fonts, so both marks are PNGs at twice their size, and the words fall back to
+            Arial. The mark&apos;s cap is 30px and DM&apos;s stamp {signatureImages.strip.h}px, each at
+            its minimum or above, with one stamp of space each side of the hairline.
+            Replace [Name] and [Role] after pasting.
+          </p>
+          <div className="p-6" style={{ background: "#FFFFFF", border: "1px solid var(--border-default)" }}>
+            <div dangerouslySetInnerHTML={{ __html: signatureHtml("") }} />
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <CopyButton text={signatureHtml()} label="Copy signature HTML" />
+            <span className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+              Images load from xco-style-guide.vercel.app/email. Regenerate with{" "}
+              <code className="font-code">npm run email</code> if the logo changes.
+            </span>
+          </div>
+        </div>
 
         <div className="max-w-3xl">
           <ProvisionalChange change={changeLog.find((c) => c.id === "CH-15")!} compact />
