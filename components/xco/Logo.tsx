@@ -1,28 +1,15 @@
-import {
-  logoGeometry,
-  logoVariants,
-  cPath,
-  oPath,
-  xPaths,
-  descriptor,
-  descriptorMetrics,
-  endorsementLabel,
-  endorsementMetrics,
-  lockupHeight,
-  inkBounds,
-  LOCKUP_FONT,
-  LOCKUP_WEIGHT,
-  type LogoVariant,
-} from "@/lib/logo";
-import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
-import { serifXPath } from "@/lib/serif-x";
+import { inkBounds, type LogoVariant } from "@/lib/logo";
+import { lockupLayout, lockupMarkup, type Lockup } from "@/lib/logo-lockups";
 
 interface LogoProps {
   variant?: LogoVariant;
+  /** Which lockup. See lib/logo-lockups.ts. */
+  lockup?: Lockup;
+  /** Shorthand for lockup="stacked". */
   withDescriptor?: boolean;
-  /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
+  /** Shorthand for lockup="endorsed": the stack plus Dark Matter Labs' endorsement. */
   withEndorsement?: boolean;
-  /** Rendered height in px. Width follows the mark's ratio. */
+  /** Rendered height in px. Width follows the lockup's ratio. */
   height?: number;
   /**
    * Crop to the ink, dropping the built-in clear space. For the mark set
@@ -31,8 +18,8 @@ interface LogoProps {
    */
   inline?: boolean;
   /**
-   * Override every glyph's colour, e.g. "currentColor" so the mark follows the
-   * Paper/Ink register. Without it, the variant's fixed colours are used.
+   * Override every glyph's colour, e.g. "currentColor" so the mark follows
+   * light and dark mode. Without it, the variant's fixed colours are used.
    */
   color?: string;
   /** PROPOSAL: "serif" draws the x from Untitled Serif. See lib/serif-x.ts. */
@@ -43,87 +30,37 @@ interface LogoProps {
 }
 
 export function Logo({
-  variant = "ink",
+  variant = "light",
+  lockup,
   withDescriptor = false,
   withEndorsement = false,
   height = 64,
   inline = false,
   color,
   xStyle = "mono",
-  label = "xCO — Expanding Civilizational Optionality",
+  label,
   className = "",
 }: LogoProps) {
-  const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, stroke, baseline } = logoGeometry;
-
-  const d = descriptorMetrics;
-  const e = endorsementMetrics;
-  const showDesc = withDescriptor || withEndorsement;
-  const totalHeight = lockupHeight(showDesc, withEndorsement);
-  const [x1, x2] = xPaths();
-  const fg = color ?? v.fg;
-  const xFg = color ?? v.xFg;
-
-  // An inline mark has no descriptor: the descriptor belongs to the lockup,
-  // and the lockup carries its own clear space.
+  // An inline mark is the logotype alone: the lockups carry their own clear space.
+  const which: Lockup = inline
+    ? "mark"
+    : lockup ?? (withEndorsement ? "endorsed" : withDescriptor ? "stacked" : "mark");
+  const layout = lockupLayout(which, variant, { color, xStyle });
   const box = inline
-    ? {
-        x: inkBounds.left,
-        y: inkBounds.top,
-        w: inkBounds.right - inkBounds.left,
-        h: inkBounds.bottom - inkBounds.top,
-      }
-    : { x: 0, y: 0, w: width, h: totalHeight };
+    ? { l: inkBounds.left, t: inkBounds.top, r: inkBounds.right, b: inkBounds.bottom }
+    : layout.frame;
+  const w = box.r - box.l;
+  const h = box.b - box.t;
 
   return (
     <svg
-      viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`}
+      viewBox={`${box.l} ${box.t} ${w} ${h}`}
       height={height}
-      width={(box.w / box.h) * height}
+      width={(w / h) * height}
       role="img"
-      aria-label={label}
+      aria-label={label ?? (which === "mark" ? "xCO — Expanding Civilizational Optionality" : layout.label)}
       className={className}
-    >
-      <g fill="none" strokeWidth={stroke} strokeLinecap="butt">
-        {xStyle === "mono" && <path d={x1} stroke={xFg} />}
-        {xStyle === "mono" && <path d={x2} stroke={xFg} />}
-        <path d={cPath()} stroke={fg} />
-        <path d={oPath()} stroke={fg} />
-      </g>
-      {xStyle === "serif" && <path d={serifXPath} fill={xFg} />}
-      {showDesc && !inline && (
-        <text
-          x={d.x}
-          y={baseline + d.baselineGap}
-          fontFamily={LOCKUP_FONT}
-          fontSize={d.size}
-          fontWeight={LOCKUP_WEIGHT}
-          letterSpacing={d.tracking}
-          fill={fg}
-        >
-          {descriptor}
-        </text>
-      )}
-      {withEndorsement && !inline && (
-        <>
-          <text
-            x={e.labelX}
-            y={baseline + d.baselineGap + e.labelBaselineGap}
-            fontFamily={LOCKUP_FONT}
-            fontSize={e.labelSize}
-            fontWeight={LOCKUP_WEIGHT}
-            letterSpacing={e.labelTracking}
-            fill={fg}
-          >
-            {endorsementLabel}
-          </text>
-          {/* DM's mark is never recoloured, so it ignores the color override. */}
-          <g transform={e.dmTransform} fill={v.dmFg}>
-            <path d={dmWordmarkPath} />
-            <path fillRule="evenodd" clipRule="evenodd" d={dmStampPath} />
-          </g>
-        </>
-      )}
-    </svg>
+      dangerouslySetInnerHTML={{ __html: lockupMarkup(layout) }}
+    />
   );
 }

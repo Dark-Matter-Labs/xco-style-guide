@@ -12,7 +12,7 @@
 // expansion operator acting on them, and its reduced height encodes the
 // naming rule (lowercase x, uppercase CO) as a visual fact.
 
-import { dmInkLeft, dmStampHeight, dmStampPath, dmWordmarkPath } from "./dm-logo";
+import { dmInkLeft, dmStampHeight } from "./dm-logo";
 
 // ── Construction grid ────────────────────────────────────────────────
 // All values derive from cap height. Change CAP and the mark scales exactly.
@@ -50,7 +50,14 @@ const X_LEFT = PAD;                                 // 30
 const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
 const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
 
+/**
+ * Clear space: half the x-height, measured from the ink on every side. The
+ * x is the unit, so the rule scales with the mark and is visible in it.
+ */
+const CLEAR = X_HEIGHT / 2;         // 31
+
 export const logoGeometry = {
+  clear: CLEAR,
   cap: CAP,
   stroke: STROKE,
   xHeight: X_HEIGHT,
@@ -138,45 +145,67 @@ export function xPaths(): [string, string] {
 }
 
 // ── Variants ─────────────────────────────────────────────────────────
+// Two modes, light and dark, each with an orange-x companion. Since
+// 25 November 2026 the modes are named light and dark everywhere (they were
+// "ink" and "paper"). paper and ink stay as the names of the two colours.
 
-export type LogoVariant = "ink" | "paper" | "accent";
+export type LogoMode = "light" | "dark";
+export type LogoVariant = "light" | "dark" | "light-accent" | "dark-accent";
+
+const PAPER = "#F6F1E5";
+const INK = "#101F24";
+const DUSK = "#F47743";
 
 export const logoVariants: {
   id: LogoVariant;
   label: string;
+  mode: LogoMode;
   fg: string;
   xFg: string;
-  bg: string | null;
+  bg: string;
   /** Dark Matter Labs' mark: DM allows only black on light, white on dark. */
   dmFg: string;
   usage: string;
 }[] = [
   {
-    id: "ink",
-    label: "Ink on paper",
-    fg: "#101F24",
-    xFg: "#101F24",
-    bg: "#F6F1E5",
+    id: "light",
+    label: "Light",
+    mode: "light",
+    fg: INK,
+    xFg: INK,
+    bg: PAPER,
     dmFg: "#000000",
-    usage: "Default. Use everywhere unless there is a reason not to.",
+    usage: "Default. Ink on a light ground. Use everywhere unless there is a reason not to.",
   },
   {
-    id: "paper",
-    label: "Paper on ink",
-    fg: "#F6F1E5",
-    xFg: "#F6F1E5",
-    bg: "#101F24",
+    id: "dark",
+    label: "Dark",
+    mode: "dark",
+    fg: PAPER,
+    xFg: PAPER,
+    bg: INK,
     dmFg: "#FFFFFF",
-    usage: "Inverse register — dark grounds, covers, closing slides.",
+    usage: "Paper on a dark ground: covers, closing slides, dark interfaces.",
   },
   {
-    id: "accent",
-    label: "Dusk operator",
-    fg: "#101F24",
-    xFg: "#F47743",
-    bg: "#F6F1E5",
+    id: "light-accent",
+    label: "Light, orange x",
+    mode: "light",
+    fg: INK,
+    xFg: DUSK,
+    bg: PAPER,
     dmFg: "#000000",
-    usage: "The x carries dusk. Sparing use — one instance per surface.",
+    usage: "The x carries dusk. One instance per surface.",
+  },
+  {
+    id: "dark-accent",
+    label: "Dark, orange x",
+    mode: "dark",
+    fg: PAPER,
+    xFg: DUSK,
+    bg: INK,
+    dmFg: "#FFFFFF",
+    usage: "The x carries dusk on a dark ground. One instance per surface.",
   },
 ];
 
@@ -281,68 +310,4 @@ export function lockupHeight(withDescriptor: boolean, withEndorsement = false): 
   );
 }
 
-// ── Standalone SVG builder ───────────────────────────────────────────
-
-interface BuildOptions {
-  variant?: LogoVariant;
-  /** Include the descriptor line, set in Untitled Sans. Text stays live, not outlined. */
-  withDescriptor?: boolean;
-  /** Add "AN INITIATIVE OF" + Dark Matter Labs' lockup. Implies the descriptor. */
-  withEndorsement?: boolean;
-  /** Paint the background rectangle. Off by default — logos ship transparent. */
-  withBackground?: boolean;
-}
-
-/**
- * Returns a complete, standalone SVG document. Letterforms are geometry, so
- * this renders identically with no fonts installed. The optional descriptor
- * is the one exception and is documented as such.
- */
-export function buildLogoSvg({
-  variant = "ink",
-  withDescriptor = false,
-  withEndorsement = false,
-  withBackground = false,
-}: BuildOptions = {}): string {
-  const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
-  const { width, stroke, baseline } = logoGeometry;
-
-  const d = descriptorMetrics;
-  const e = endorsementMetrics;
-  const showDesc = withDescriptor || withEndorsement;
-  const totalHeight = lockupHeight(showDesc, withEndorsement);
-  const label = withEndorsement
-    ? "xCO — Expanding Civilizational Optionality, an initiative of Dark Matter Labs"
-    : "xCO — Expanding Civilizational Optionality";
-
-  const [x1, x2] = xPaths();
-
-  const bg =
-    withBackground && v.bg
-      ? `\n  <rect width="${width}" height="${totalHeight}" fill="${v.bg}"/>`
-      : "";
-
-  const descriptorEl = showDesc
-    ? `\n  <text x="${d.x}" y="${baseline + d.baselineGap}" font-family="${LOCKUP_FONT}" font-size="${d.size}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${d.tracking}" fill="${v.fg}">${descriptor}</text>`
-    : "";
-
-  const endorsementEl = withEndorsement
-    ? `\n  <text x="${e.labelX}" y="${baseline + d.baselineGap + e.labelBaselineGap}" font-family="${LOCKUP_FONT}" font-size="${e.labelSize}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${e.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
-  <g transform="${e.dmTransform}" fill="${v.dmFg}">
-    <path d="${dmWordmarkPath}"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>
-  </g>`
-    : "";
-
-  return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${totalHeight}" width="${width}" height="${totalHeight}" role="img" aria-label="${label}">
-  <title>xCO</title>${bg}
-  <g fill="none" stroke-width="${stroke}" stroke-linecap="butt">
-    <path d="${x1}" stroke="${v.xFg}"/>
-    <path d="${x2}" stroke="${v.xFg}"/>
-    <path d="${cPath()}" stroke="${v.fg}"/>
-    <path d="${oPath()}" stroke="${v.fg}"/>
-  </g>${descriptorEl}${endorsementEl}
-</svg>
-`;
-}
+// The SVG builder and every lockup's layout live in lib/logo-lockups.ts.

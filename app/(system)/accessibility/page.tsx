@@ -15,14 +15,14 @@ const TIERS: { by: Enforcement; name: string; command: string; when: string; wha
     name: "Gate",
     command: "npm run a11y",
     when: "Before every build — locally and on Vercel. A failure stops the deploy.",
-    what: "Measures every sanctioned colour pairing in both registers, every text-colour utility in the source, faded text, removed focus rings, saturated accents set as text, the generated-asset palettes and the group marks. Checks the TypeScript token copy against the CSS.",
+    what: "Measures every sanctioned colour pairing in light and dark mode, every text-colour utility in the source, faded text, removed focus rings, saturated accents set as text, the generated-asset palettes and the group marks. Checks the TypeScript token copy against the CSS.",
   },
   {
     by: "audit",
     name: "Audit",
     command: "npm run a11y:audit",
     when: "On every pull request, in CI, against the production build.",
-    what: "Opens every page in Chromium in both registers and runs axe-core (WCAG 2.0–2.2 A/AA and best practice): rendered contrast, names and labels, landmarks, headings, target size. Then emulates reduced motion and fails any page where CSS still animates.",
+    what: "Opens every page in Chromium in light and dark mode and runs axe-core (WCAG 2.0–2.2 A/AA and best practice): rendered contrast, names and labels, landmarks, headings, target size. Then emulates reduced motion and fails any page where CSS still animates.",
   },
   {
     by: "review",
@@ -48,7 +48,7 @@ export default function AccessibilityPage() {
       <section className="max-w-2xl space-y-4">
         <p className={BODY}>
           Accessibility is part of the system, not a pass at the end of it. A colour is only a
-          token here once its pairings clear WCAG 2.2 AA in both registers; a component is only
+          token here once its pairings clear WCAG 2.2 AA in light and dark mode; a component is only
           done once it can be read, named and reached by keyboard.
         </p>
         <p className={BODY}>

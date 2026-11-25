@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/xco/Logo";
-import { RegisterSwitch } from "./RegisterSwitch";
+import { ModeSwitch } from "./ModeSwitch";
 
 export interface NavLink {
   href: string;
@@ -50,7 +50,7 @@ export function SiteNav({ links, register }: SiteNavProps) {
           })}
         </div>
 
-        <RegisterSwitch />
+        <ModeSwitch />
       </div>
     </nav>
   );

@@ -23,8 +23,8 @@ const fnv = (s: string) => Array.from(s).reduce((h, c) => Math.imul(h ^ c.charCo
 // ── toSvg is byte-identical after the marksBody refactor (pinned before it) ──
 {
   const O = { width: 1000, height: 1000, margin: 70, rows: 20, seed: "7", density: DENSITY.normal };
-  const paper = toSvg(writeSheet(SOURCES[0].text, O), "paper", "x");
-  const ink = toSvg(writeSheet(SOURCES[0].text, O), "ink", "x");
+  const paper = toSvg(writeSheet(SOURCES[0].text, O), "light", "x");
+  const ink = toSvg(writeSheet(SOURCES[0].text, O), "dark", "x");
   eq(paper.length, 538092, "toSvg is byte-identical after the refactor (paper length)");
   eq(fnv(paper), 874135700, "toSvg is byte-identical after the refactor (paper)");
   eq(ink.length, 538092, "toSvg is byte-identical after the refactor (ink length)");

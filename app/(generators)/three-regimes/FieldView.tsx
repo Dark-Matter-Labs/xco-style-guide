@@ -9,9 +9,9 @@ import { HERO, MARK_FORMAT, SQUARE, type View } from "./view";
 const { navy: NAVY, ink: INK, paper: PAPER } = paletteHex;
 
 const COLOR_MODES: { id: FieldColorMode; label: string; hint: string }[] = [
-  { id: "ink",       label: "Ink",       hint: "ink on paper" },
+  { id: "ink",       label: "Light",     hint: "ink on paper" },
   { id: "spectrum",  label: "Spectrum",  hint: "cool → ink → ember by register" },
-  { id: "inverted",  label: "Inverted",  hint: "paper on ink" },
+  { id: "inverted",  label: "Dark",      hint: "paper on ink" },
   { id: "blueprint", label: "Blueprint", hint: "navy ground — teal to ocean scanlines" },
   { id: "warmth",    label: "Warmth",    hint: "dusk to sand on paper" },
 ];

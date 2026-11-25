@@ -7,7 +7,7 @@
 import { useMemo, useState } from "react";
 import { Button, labelClass, RadioList, Section, TextField } from "@/components/generator-controls";
 import { download, exportPNG } from "@/lib/media/export";
-import { DENSITY, toSvg, writeSheet, type Register } from "@/lib/asemic/script";
+import { DENSITY, toSvg, writeSheet, type Mode } from "@/lib/asemic/script";
 import { SOURCES, type SourceId } from "@/lib/asemic/sources";
 
 type Source = SourceId | "own";
@@ -37,7 +37,7 @@ export function AsemicGenerator() {
   const [rows, setRows] = useState(20);
   const [density, setDensity] = useState<Density>("normal");
   const [formatId, setFormatId] = useState<FormatId>("square");
-  const [register, setRegister] = useState<Register>("paper");
+  const [mode, setMode] = useState<Mode>("light");
   const [showSource, setShowSource] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -60,8 +60,8 @@ export function AsemicGenerator() {
     [text, format, rows, seed, density],
   );
   const description = `Asemic writing grown from ${sourceLabel}, seed ${seed}, ${rows} rows. It has no readable text. Generated and expressive; it encodes no data.`;
-  const svg = useMemo(() => toSvg(sheet, register, description, format.physical), [sheet, register, description, format]);
-  const name = `xco-asemic-${source}-${seed}-${formatId}-${register}`;
+  const svg = useMemo(() => toSvg(sheet, mode, description, format.physical), [sheet, mode, description, format]);
+  const name = `xco-asemic-${source}-${seed}-${formatId}-${mode}`;
 
   const exportSvg = () => download(new Blob([svg], { type: "image/svg+xml" }), `${name}.svg`);
   const exportPng = async () => {
@@ -69,7 +69,7 @@ export function AsemicGenerator() {
     setMessage(null);
     try {
       // The rasteriser takes pixel sizes, so the PNG uses the sheet's own pixel dimensions.
-      await exportPNG(toSvg(sheet, register, description), format.w, format.h, `${name}.png`);
+      await exportPNG(toSvg(sheet, mode, description), format.w, format.h, `${name}.png`);
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "PNG export failed. Try again.");
     } finally {
@@ -127,10 +127,10 @@ export function AsemicGenerator() {
         <Section title="Look">
           <RadioList name="format" value={formatId} options={FORMATS.map((f) => ({ id: f.id, label: f.label }))} onChange={setFormatId} />
           <RadioList
-            name="register"
-            value={register}
-            options={[{ id: "paper", label: "Paper — ink on paper" }, { id: "ink", label: "Ink — paper on ink" }]}
-            onChange={setRegister}
+            name="mode"
+            value={mode}
+            options={[{ id: "light", label: "Light" }, { id: "dark", label: "Dark" }]}
+            onChange={setMode}
           />
           <label className="flex items-start gap-2 cursor-pointer pt-2">
             <input type="checkbox" checked={showSource} onChange={(e) => setShowSource(e.target.checked)} className="accent-xco-dusk mt-1.5" />
@@ -180,7 +180,7 @@ export function AsemicGenerator() {
                         left: `${(sheet.margin / sheet.width) * 100}%`,
                         right: `${(sheet.margin / sheet.width) * 100}%`,
                         top: `${((sheet.margin + sheet.rowHeight * (i + 0.5) + sheet.rowHeight * 0.36) / sheet.height) * 100}%`,
-                        color: register === "ink" ? "rgba(246,241,229,0.7)" : "rgba(55,78,74,0.85)",
+                        color: mode === "dark" ? "rgba(246,241,229,0.7)" : "rgba(55,78,74,0.85)",
                       }}
                     >
                       {line}

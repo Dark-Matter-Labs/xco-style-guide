@@ -1,5 +1,5 @@
 // Reads the colour tokens out of app/globals.css — the values the browser
-// actually paints — for both registers. Server / Node only (it reads a file).
+// actually paints — in light and dark mode. Server / Node only (it reads a file).
 //
 // The contrast gate measures these rather than lib/design-tokens.ts, because
 // the CSS is what ships; the TypeScript copy is checked against it separately
@@ -9,14 +9,14 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-export type Register = "paper" | "ink";
-export const registers: Register[] = ["paper", "ink"];
+export type Mode = "light" | "dark";
+export const modes: Mode[] = ["light", "dark"];
 
 export type TokenMap = Map<string, string>;
 
 const CSS_PATH = path.join(process.cwd(), "app/globals.css");
 
-/** The selector that switches to the ink register. */
+/** The selector that switches to dark mode. */
 const INVERSE_SELECTOR = /\.dark\b/;
 
 interface Block {
@@ -37,20 +37,20 @@ function blocks(css: string): Block[] {
   return out;
 }
 
-let cache: Record<Register, TokenMap> | null = null;
+let cache: Record<Mode, TokenMap> | null = null;
 
-/** Raw custom properties per register, before var() resolution. */
-export function readRegisters(css = readFileSync(CSS_PATH, "utf8")): Record<Register, TokenMap> {
+/** Raw custom properties per mode, before var() resolution. */
+export function readModes(css = readFileSync(CSS_PATH, "utf8")): Record<Mode, TokenMap> {
   if (cache) return cache;
-  const paper: TokenMap = new Map();
+  const light: TokenMap = new Map();
   const inverse: TokenMap = new Map();
   for (const b of blocks(css)) {
-    const target = INVERSE_SELECTOR.test(b.selector) ? inverse : paper;
+    const target = INVERSE_SELECTOR.test(b.selector) ? inverse : light;
     b.decls.forEach((v, k) => target.set(k, v));
   }
-  const ink: TokenMap = new Map(paper);
-  inverse.forEach((v, k) => ink.set(k, v));
-  cache = { paper, ink };
+  const dark: TokenMap = new Map(light);
+  inverse.forEach((v, k) => dark.set(k, v));
+  cache = { light, dark };
   return cache;
 }
 
@@ -64,9 +64,9 @@ export function resolve(value: string, tokens: TokenMap, seen: string[] = []): s
   });
 }
 
-/** A token (by name, with or without the leading --) or a literal, resolved in a register. */
-export function colorIn(register: Register, tokenOrLiteral: string): string {
-  const tokens = readRegisters()[register];
+/** A token (by name, with or without the leading --) or a literal, resolved in a mode. */
+export function colorIn(mode: Mode, tokenOrLiteral: string): string {
+  const tokens = readModes()[mode];
   if (tokenOrLiteral.startsWith("#") || tokenOrLiteral.startsWith("rgb")) return tokenOrLiteral;
   const name = tokenOrLiteral.startsWith("--") ? tokenOrLiteral : `--${tokenOrLiteral}`;
   const raw = tokens.get(name);
@@ -75,7 +75,7 @@ export function colorIn(register: Register, tokenOrLiteral: string): string {
 }
 
 /** The colour behind a Tailwind `xco-*` colour utility, e.g. "xco-ink-muted". */
-export function utilityColor(register: Register, utility: string): string | null {
+export function utilityColor(mode: Mode, utility: string): string | null {
   const name = `--color-${utility}`;
-  return readRegisters()[register].has(name) ? colorIn(register, name) : null;
+  return readModes()[mode].has(name) ? colorIn(mode, name) : null;
 }

@@ -12,7 +12,7 @@
 import { paletteHex } from "@/lib/design-tokens";
 import { fnv1a, lcg } from "@/lib/random";
 
-export type Register = "paper" | "ink";
+export type Mode = "light" | "dark";
 type Base = { row: number; token: number };
 export type Mark = Base & (
   | { kind: "thread"; x1: number; x2: number; y: number; dotted: boolean }
@@ -224,9 +224,9 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const f = (n: number) => +n.toFixed(2);
 
 /** The sheet as a standalone SVG: its own ground, ink marks, and the x in dusk. */
-export function toSvg(sheet: Sheet, register: Register, label: string, physical?: { w: string; h: string }): string {
-  const fg = register === "ink" ? PAPER : INK;
-  const bg = register === "ink" ? INK : PAPER;
+export function toSvg(sheet: Sheet, mode: Mode, label: string, physical?: { w: string; h: string }): string {
+  const fg = mode === "dark" ? PAPER : INK;
+  const bg = mode === "dark" ? INK : PAPER;
   const body = marksBody(sheet, fg, bg);
   const w = sheet.width, h = sheet.height, l = esc(label);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${physical?.w ?? w}" height="${physical?.h ?? h}" role="img" aria-label="${l}"><title>${l}</title><rect width="${w}" height="${h}" fill="${bg}"/><g fill="none" stroke-linecap="butt">${body}</g></svg>`;

@@ -2,7 +2,7 @@
 //
 // "gate" rules are checked on every build by npm run a11y — a violation fails
 // the build, locally and on Vercel. "audit" rules are checked in a real
-// browser by npm run a11y:audit (axe-core over every page, in both registers),
+// browser by npm run a11y:audit (axe-core over every page, in light and dark mode),
 // which runs in CI on every pull request. "review" rules need a person: they
 // are listed so the review has a checklist, not a memory.
 //
@@ -28,12 +28,12 @@ export const a11yRules: A11yRule[] = [
     id: "text-contrast",
     title: "Text contrast",
     wcag: ["1.4.3"],
-    rule: "Text clears 4.5:1 against what it sits on, in both registers; 3:1 only from 24px regular or 18.66px bold. Saturated accents — dusk, ocean, teal, the domain colours — are never text: their -ink forms are.",
+    rule: "Text clears 4.5:1 against what it sits on, in light and dark mode; 3:1 only from 24px regular or 18.66px bold. Saturated accents — dusk, ocean, teal, the domain colours — are never text: their -ink forms are.",
     checks: [
-      { by: "gate", how: "Every sanctioned pairing is measured in both registers from the shipped CSS." },
+      { by: "gate", how: "Every sanctioned pairing is measured in light and dark mode from the shipped CSS." },
       { by: "gate", how: "Every text-xco-* utility in the source is measured on every text surface, including opacity modifiers and placeholder text." },
       { by: "gate", how: "Inline colour styles may not use a saturated domain colour." },
-      { by: "audit", how: "axe color-contrast on every rendered page, both registers." },
+      { by: "audit", how: "axe color-contrast on every rendered page, light and dark mode." },
     ],
   },
   {

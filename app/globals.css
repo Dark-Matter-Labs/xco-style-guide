@@ -94,7 +94,7 @@
   --color-xco-dusk:      #F47743;  /* SIGNAL 500 — the ember */
 
   /* Text on a saturated ground (ocean, navy). Static: unlike text-xco-paper
-     it does not flip in the ink register, where paper-coloured text becomes
+     it does not flip in dark mode, where paper-coloured text becomes
      ink and vanishes on ocean. Dusk and sand take ink instead — paper on
      dusk is under even the 3:1 bar (/logo/x shows the measured ratio). */
   --color-xco-on-accent: #F6F1E5;
@@ -152,7 +152,7 @@
   --color-xco-teal-ink:  var(--xco-teal-ink);
 }
 
-/* ── Runtime tokens — paper register ─────────────────────────────── */
+/* ── Runtime tokens — light mode ─────────────────────────────────── */
 
 :root {
   /* ── Diagram palette aliases ──────────────────────────────────────
@@ -171,7 +171,7 @@
   /* ── Polyphonic Style Guide v8.1 identity — the reusable colour contract ──
      Field (prussian / atmospheric blue), Signal (the ember), Matter (chalk to
      ink). The system tokens below are drawn from these stops; the full scales
-     are here for compositions that need them. Static across registers. */
+     are here for compositions that need them. Static across modes. */
   --xco-field-50:  #EDF1EC;  --xco-field-100: #D7E2DF;  --xco-field-200: #B3C7C9;
   --xco-field-300: #8FABAF;  --xco-field-400: #668B99;  --xco-field-500: #406D82;
   --xco-field-600: #335D76;  --xco-field-700: #24475F;  --xco-field-800: #1B344B;
@@ -223,7 +223,7 @@
   --wip-ground: rgba(244, 119, 67, 0.1);
 
   /* Focus — one ring for every focusable element, in full ink so it clears
-     3:1 on every surface in both registers (WCAG 2.4.7, 2.4.11). */
+     3:1 on every surface in light and dark mode (WCAG 2.4.7, 2.4.11). */
   --focus-ring: var(--xco-ink);
 
   /* Semantic meanings — colour + shape, never colour alone. 8.1 stops. */
@@ -310,13 +310,13 @@
   --border-strong:  rgba(16, 31, 36, 0.28);
 }
 
-/* ── Inverse register — paper ↔ ink swap ─────────────────────────── */
+/* ── Dark mode — paper ↔ ink swap ────────────────────────────────── */
 /* Applies when: reader toggles dark mode (.dark class),              */
-/* OR when authored section explicitly inverts ([data-register="inverse"]) */
+/* OR when authored section explicitly inverts ([data-mode="dark"]) */
 
 .dark,
 [data-theme="dark"],
-[data-register="inverse"] {
+[data-mode="dark"] {
   /* Surface */
   --xco-paper:            #101F2D;  /* FIELD 950 — 8.1 dark editorial */
   --xco-paper-raised:     #152939;  /* FIELD 900 */
@@ -684,10 +684,10 @@
   }
 
   /* The pressed state is driven from the root attribute, which the FOUC
-     script sets before first paint. So the switch shows the correct register
+     script sets before first paint. So the switch shows the correct mode
      even before React hydrates — aria-pressed then syncs on mount for
      assistive tech. Keying it off component state alone made a returning
-     reader in the Ink register briefly see Paper as active. */
+     reader in dark mode briefly see Light as active. */
   :root:not([data-theme="dark"]) .doc-register button[data-reg="light"],
   :root[data-theme="dark"] .doc-register button[data-reg="dark"] {
     background: var(--xco-ink);

@@ -1,13 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  buildLogoSvg,
-  logoGeometry,
-  logoVariants,
-  lockupHeight,
-  type LogoVariant,
-} from "@/lib/logo";
+import { logoVariants, type LogoVariant } from "@/lib/logo";
+import { buildLockupSvg, lockupRatio, lockups, type Lockup } from "@/lib/logo-lockups";
 import { Logo } from "@/components/xco/Logo";
 
 const PNG_SIZES = [512, 1024, 2048] as const;
@@ -21,39 +16,21 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url);
 }
 
-type Lockup = "mark" | "descriptor" | "endorsed";
-
-const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
-  { id: "mark", label: "Mark only", note: "The logotype alone. Default.", suffix: "" },
-  {
-    id: "descriptor",
-    label: "Descriptor lockup",
-    note: "Adds the full name in Untitled Sans. Live text, not outlines — see the note below.",
-    suffix: "-lockup",
-  },
-  {
-    id: "endorsed",
-    label: "Endorsed by Dark Matter Labs",
-    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, for surfaces that must name the parent organisation.",
-    suffix: "-dml-endorsed",
-  },
-];
+const LOCKUPS = lockups.filter((l) => l.download);
 
 function fileStem(variant: LogoVariant, lockup: Lockup) {
   return `xco-logo-${variant}${LOCKUPS.find((l) => l.id === lockup)!.suffix}`;
 }
 
 export function LogoDownloads() {
-  const [variant, setVariant] = useState<LogoVariant>("ink");
+  const [variant, setVariant] = useState<LogoVariant>("light");
   const [lockup, setLockup] = useState<Lockup>("mark");
-  const withDescriptor = lockup !== "mark";
-  const withEndorsement = lockup === "endorsed";
   const [withBackground, setWithBackground] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const svg = buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
+  const svg = buildLockupSvg({ lockup, variant, withBackground });
   const active = logoVariants.find((v) => v.id === variant)!;
 
   const downloadSvg = () => {
@@ -68,7 +45,7 @@ export function LogoDownloads() {
     setError(null);
     setBusy(`png-${size}`);
     try {
-      const ratio = logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
+      const ratio = lockupRatio(lockup);
       const res = await fetch("/api/export/png", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -103,15 +80,15 @@ export function LogoDownloads() {
       <div
         className="flex items-center justify-center py-16 px-8"
         style={{
-          background: active.bg ?? "transparent",
+          background: active.bg,
           border: "1px solid var(--border-default)",
         }}
       >
         <Logo
           variant={variant}
-          withDescriptor={withDescriptor}
-          withEndorsement={withEndorsement}
-          height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
+          lockup={lockup}
+          height={lockup === "endorsed" ? 200 : lockup === "mark" ? 96 : 130}
+          className="max-w-full h-auto"
         />
       </div>
 
@@ -144,7 +121,7 @@ export function LogoDownloads() {
 
         <fieldset className="space-y-3">
           <legend className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
-            Options
+            Lockup
           </legend>
           {LOCKUPS.map((l) => (
             <label key={l.id} className="flex items-start gap-3 cursor-pointer">

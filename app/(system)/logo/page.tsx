@@ -7,15 +7,59 @@ import { BRAND_NAME } from "@/lib/design-tokens";
 import { ProvisionalChange } from "@/components/xco";
 import { LogoDownloads } from "./LogoDownloads";
 import { ConstructionDiagram } from "./ConstructionDiagram";
+import { LockupFigure } from "./LockupFigure";
+import { logoVariants } from "@/lib/logo";
+import { lockups, coHost, type Lockup } from "@/lib/logo-lockups";
 
 const MISUSE = [
   { label: "Don't retype it", note: "The mark is drawn geometry, not set type. Never rebuild it in a font." },
-  { label: "Don't recolour freely", note: "Three colour variants exist, and one quiet fourth use: a faint footer watermark at about 7%, cropped by a corner (CH-09). The x may carry dusk; nothing else may carry colour." },
+  { label: "Don't recolour freely", note: "Four variants exist: light and dark, each with an orange x. One quiet extra use: a faint footer watermark at about 7%, cropped by a corner (CH-09). The x may carry dusk; nothing else may carry colour." },
   { label: "Don't stretch it", note: "Scale proportionally. The stroke weight is tied to the cap height." },
   { label: "Don't add effects", note: "No shadows, gradients, outlines, or rounded caps. Terminals are cut flat." },
   { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs. One exception: the x may leave the mark as operator, under the rules on /logo/x (CH-08). At rest it is always in place." },
   { label: "Don't box it", note: "Clear space is built into the file. Do not add a frame or a container." },
+  { label: "Don't build your own lockup", note: "Use the lockups on this page. A partner's mark never rises above the cap band or leads the row." },
+  { label: "Don't recolour a partner", note: "Dark Matter Labs and project marks keep their own colours and their own clear space." },
 ];
+
+const H2 = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase";
+const LEDE = "font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl";
+const LABEL = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink";
+const NOTE = "font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted";
+const RULE = "font-mono text-[0.9375rem] leading-[1.6] text-xco-ink";
+
+/** Each lockup twice: with its logic drawn, then light and dark as they ship. */
+function LockupSet({ ids }: { ids: Lockup[] }) {
+  return (
+    <div className="space-y-12">
+      {ids.map((id) => {
+        const l = lockups.find((x) => x.id === id)!;
+        return (
+          <figure key={id} className="space-y-4 max-w-3xl">
+            <div style={{ border: "1px solid var(--border-default)" }}>
+              <LockupFigure lockup={id} />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div style={{ border: "1px solid var(--border-default)" }}>
+                <LockupFigure lockup={id} variant="light" logic={false} />
+              </div>
+              <div style={{ border: "1px solid var(--border-default)" }}>
+                <LockupFigure lockup={id} variant="dark" logic={false} />
+              </div>
+            </div>
+            <figcaption className="space-y-1">
+              <p className={LABEL}>{l.label}</p>
+              <p className={NOTE}>
+                {l.note}
+                {l.download ? " In the downloads below." : " Not in the downloads: it carries another organisation\u2019s artwork."}
+              </p>
+            </figcaption>
+          </figure>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function LogoPage() {
   const g = logoGeometry;
@@ -88,7 +132,7 @@ export default function LogoPage() {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-12 py-10" style={{ background: "var(--xco-paper-quiet)" }}>
-          <Logo height={110} xStyle="serif" variant="accent" />
+          <Logo height={110} xStyle="serif" variant="light-accent" />
           <Logo height={200} xStyle="serif" withEndorsement />
         </div>
 
@@ -179,37 +223,122 @@ export default function LogoPage() {
       </section>
 
       {/* Clear space */}
-      <section className="space-y-8">
+      <section id="clear-space" className="space-y-8">
         <div className="space-y-2">
-          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Clear space
-          </h2>
-          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-            Clear space equals the x-height on every side, and it is already inside the
-            file&apos;s viewBox. Place the mark flush and the spacing is correct — do not add
-            your own padding on top.
+          <h2 className={H2}>Clear space</h2>
+          <p className={LEDE}>
+            The x is the unit. Clear space is half the x-height, ½x, measured from the ink on
+            every side. It is already inside every file, so place the file flush and the
+            spacing is correct. Do not add your own padding on top.
           </p>
         </div>
 
-        <div
-          className="relative inline-flex p-0"
-          style={{ border: "1px dashed var(--xco-ocean)" }}
-        >
-          <Logo height={96} />
+        <div className="max-w-3xl" style={{ border: "1px solid var(--border-default)" }}>
+          <LockupFigure lockup="mark" />
         </div>
-        <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-          Dashed line marks the file edge — the clear space is the gap between it and the glyphs.
+        <p className={NOTE}>
+          Shaded: the clear space. Solid line: the file edge. Dashed line: the ink. The square
+          in the margin is ½x, {g.clear} units at a cap height of {g.cap}.
         </p>
+        <p className={`${RULE} max-w-2xl`}>
+          [rule] ½x is the minimum. Give the mark more room when you can, never less. Inside a
+          lockup, gaps are ½x or 1x. A partner keeps its own clear space where it is larger:
+          Dark Matter Labs asks for one stamp height.
+        </p>
+      </section>
+
+      {/* Variants */}
+      <section id="variants" className="space-y-8">
+        <div className="space-y-2">
+          <h2 className={H2}>Variants</h2>
+          <p className={LEDE}>
+            Two modes, light and dark. Each has an orange-x companion, where the x, and only
+            the x, carries dusk. The C and the O never change colour.
+          </p>
+        </div>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
+          {logoVariants.map((v) => (
+            <li key={v.id} className="space-y-3">
+              <div style={{ border: "1px solid var(--border-default)" }}>
+                <LockupFigure lockup="mark" variant={v.id} logic={false} />
+              </div>
+              <p className={LABEL}>{v.label}</p>
+              <p className={NOTE}>{v.usage}</p>
+            </li>
+          ))}
+        </ul>
+        <p className={`${RULE} max-w-2xl`}>
+          [rule] One orange x per surface. If the page already carries dusk somewhere that
+          speaks, use the plain variant.
+        </p>
+      </section>
+
+      {/* Lockups and stacks */}
+      <section id="lockups" className="space-y-10">
+        <div className="space-y-2">
+          <h2 className={H2}>Lockups and stacks</h2>
+          <p className={LEDE}>
+            The full name, Expanding Civilizational Optionality, travels with the logotype in
+            two arrangements. The stack sets it below on one line, tracked to the
+            logotype&apos;s ink on both edges. The horizontal lockup sets it beside, on three
+            lines that fill the cap band from cap line to baseline.
+          </p>
+        </div>
+        <LockupSet ids={["stacked", "horizontal"]} />
+        <p className={`${RULE} max-w-2xl`}>
+          [rule] Use the logotype alone where the name is already spelled out nearby. Use the
+          stack where width is short: a portrait cover, a profile image. Use the horizontal
+          lockup where height is short: a header, a footer, a slide strip.
+        </p>
+      </section>
+
+      {/* With Dark Matter Labs */}
+      <section id="with-dml" className="space-y-10">
+        <div className="space-y-2">
+          <h2 className={H2}>With Dark Matter Labs</h2>
+          <p className={LEDE}>
+            xCO is an initiative of Dark Matter Labs. Two lockups say so. The endorsed stack
+            names the relationship in words, with DM small below. The side-by-side lockup gives
+            the two equal standing, split by a rule, with DM&apos;s stamp standing on the
+            x-height band.
+          </p>
+        </div>
+        <LockupSet ids={["endorsed", "with-dml"]} />
+        <p className={`${RULE} max-w-2xl`}>
+          [rule] DM&apos;s logo is DM&apos;s master artwork, drawn as paths. Never retype or
+          recolour it: black on light, white on dark. Its clear space is one stamp height, so
+          its side of the file is wider than ½x.
+        </p>
+      </section>
+
+      {/* With projects and partners */}
+      <section id="with-projects" className="space-y-10">
+        <div className="space-y-2">
+          <h2 className={H2}>With projects and partners</h2>
+          <p className={LEDE}>
+            For a co-host or a project, xCO leads, a drawn × follows, and the other mark sits in
+            the cap band. The × is ½x square at half the logotype&apos;s stroke, so it reads as
+            part of the mark, not as a typed character. Medulla, which co-hosts the event
+            series, is the worked example.
+          </p>
+        </div>
+        <LockupSet ids={["with-project", "with-partner", "with-project-endorsed"]} />
+        <ul className={`${RULE} max-w-2xl space-y-2`}>
+          <li>[rule] The partner&apos;s mark fits the cap band and is at most {coHost.partnerMaxWidth} caps wide. Scale it down until both are true.</li>
+          <li>[rule] A round mark is drawn at {Math.round(coHost.discScale * 100)}% of the cap height, because round forms overshoot optically.</li>
+          <li>[rule] Partner marks keep their own colours. On a light ground, a white disc gets a hairline ring for an edge, never a new fill.</li>
+          <li>[rule] When Dark Matter Labs must be named too, add the endorsement below the row, flush left. Never put three marks in one row.</li>
+        </ul>
       </section>
 
       {/* Downloads */}
       <section className="space-y-8">
         <div className="space-y-2">
           <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
-            Variants and downloads
+            Downloads
           </h2>
           <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
-            Pick a variant, then take the file. SVG is the master format.
+            Pick a variant and a lockup, then take the file. SVG is the master format.
           </p>
         </div>
 
@@ -217,9 +346,8 @@ export default function LogoPage() {
 
         <div className="max-w-2xl space-y-3 pt-2">
           <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink">
-            [note] The descriptor and the &ldquo;An initiative of&rdquo; label are the one part
-            that is live text, set in Untitled Sans, like every label. The descriptor is tracked
-            to span the mark flush on both edges. Dark Matter Labs&apos; logo is DM&apos;s own
+            [note] The name lines and the &ldquo;An initiative of&rdquo; label are the one part
+            that is live text, set in Untitled Sans, like every label. Dark Matter Labs&apos; logo is DM&apos;s own
             master artwork, drawn as paths: never retype it, and keep its clear space of one
             stamp height. An SVG lockup opened on a machine without Untitled Sans will
             substitute those lines; the glyphs themselves are unaffected. PNG lockups carry

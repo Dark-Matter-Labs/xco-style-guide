@@ -1,6 +1,7 @@
 import { cPath, oPath, xPaths, inkBounds, logoGeometry as g } from "@/lib/logo";
 import { medullaMark as m } from "@/lib/event-series/medulla-mark";
 import { paletteHex } from "@/lib/design-tokens";
+import { coHost } from "@/lib/logo-lockups";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -12,10 +13,11 @@ type Ctx = CanvasRenderingContext2D;
 // a typed character. Medulla follows as its short-form disc, a touch smaller
 // than the xCO cap height — present, but light.
 
-const X_GAP = 0.34;          // logotype → ×, in cap heights
-const X_SIZE = 0.3;          // the cross, in cap heights
-const MEDULLA_GAP = 0.34;    // × → disc
-const MEDULLA_SCALE = 0.92;  // disc diameter, in cap heights
+// The spacing is the logo page's co-host lockup (lib/logo-lockups.ts), in cap heights.
+const X_GAP = coHost.gap / g.cap;          // logotype → ×: ½x
+const X_SIZE = coHost.cross / g.cap;       // the cross: ½x square
+const MEDULLA_GAP = coHost.gap / g.cap;    // × → disc: ½x
+const MEDULLA_SCALE = coHost.discScale;    // disc diameter
 
 let paths: { x: Path2D[]; c: Path2D; o: Path2D; medulla: Path2D[] } | null = null;
 function getPaths() {
