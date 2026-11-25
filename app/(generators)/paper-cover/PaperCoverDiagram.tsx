@@ -7,6 +7,7 @@ import { OptionFieldEmbed, SweepGradient, TerritoryEmbed, ThreeRegimesMark } fro
 import { paletteHex, typography } from "@/lib/design-tokens";
 import { logoGeometry, inkBounds, cPath, oPath, xPaths } from "@/lib/logo";
 import { wrap } from "@/lib/wrap";
+import { EndorsementStrip } from "@/components/xco/EndorsementStrip";
 
 const { paper: PAPER, ink: INK, inkMuted: MUTED } = paletteHex;
 // Labels are Untitled Sans.
@@ -45,6 +46,7 @@ function HeaderMark({ x, fill }: { x: number; fill: string }) {
 
 // A4 at 96dpi — 794×1123
 export const COVER_W = 794;
+const STRIP_STAMP = 24;
 export const COVER_H = 1123;
 
 export type CoverVisual = "none" | "abstract" | "mark" | "option-field" | "territory";
@@ -175,12 +177,12 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
         ))}
 
         {/* Footer rule */}
-        <line x1={PAD} y1={COVER_H - 130} x2={COVER_W - PAD} y2={COVER_H - 130}
+        <line x1={PAD} y1={COVER_H - 150} x2={COVER_W - PAD} y2={COVER_H - 150}
           stroke={INK} strokeOpacity={0.12} strokeWidth={1} />
 
         {/* Authors */}
         {authors && (
-          <text x={PAD} y={COVER_H - 100}
+          <text x={PAD} y={COVER_H - 124}
             fontFamily={LABEL} fontSize={10} fill={MUTED} letterSpacing="1">
             {authors}
           </text>
@@ -188,18 +190,15 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
 
         {/* Date */}
         {date && (
-          <text x={PAD} y={COVER_H - 80}
+          <text x={PAD} y={COVER_H - 106}
             fontFamily={LABEL} fontSize={10} fill={MUTED} fillOpacity={0.7}>
             {date}
           </text>
         )}
 
-        {/* Footer — org */}
-        <text x={PAD} y={COVER_H - 44}
-          fontFamily={LABEL} fontSize={9} fill={MUTED} fillOpacity={0.5}
-          letterSpacing="1">
-          Dark Matter Labs
-        </text>
+        {/* Footer: the endorsement strip (CH-14). Stamp 24px = 6.4mm at A4, DM's
+            print minimum; one stamp of clear space above it, PAD below. */}
+        <EndorsementStrip x={PAD} y={COVER_H - PAD - STRIP_STAMP} stamp={STRIP_STAMP} />
 
         {print && <TimePrintSlug print={print} width={COVER_W} height={COVER_H} margin={PAD} bottom={PAD} size={slugSize(9, PAD)} />}
       </svg>
