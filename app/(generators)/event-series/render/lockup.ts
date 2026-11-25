@@ -76,8 +76,8 @@ export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: 
 
   drawLogotype(ctx, left, top, cap, o.color, o.xColor ?? o.color);
 
-  // × — centred on the x-height band, the same weight as the logotype at half.
-  const midY = top + cap - (g.xHeight * s) / 2;
+  // × — centred on the x's band, the same weight as the logotype at half.
+  const midY = top + (g.xBase - g.capTop - g.xHeight / 2) * s;
   const crossX = left + logoWidth * s + cap * X_GAP;
   const half = (cap * X_SIZE) / 2;
   ctx.save();

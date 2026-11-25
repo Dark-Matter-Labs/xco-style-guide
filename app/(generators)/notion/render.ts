@@ -104,10 +104,10 @@ export function drawIcon(
 
   if (glyph === "x") {
     // The logo's x, alone, in the signal colour — the operator as the mark.
-    const { xLeft, xWidth, xHeight, baseline } = logoGeometry;
+    const { xLeft, xWidth, xHeight, xBase } = logoGeometry;
     const k = (s * 0.5) / xHeight;
     ctx.save();
-    ctx.translate(s / 2 - (xLeft + xWidth / 2) * k, s / 2 - (baseline - xHeight / 2) * k);
+    ctx.translate(s / 2 - (xLeft + xWidth / 2) * k, s / 2 - (xBase - xHeight / 2) * k);
     ctx.scale(k, k);
     ctx.lineWidth = logoGeometry.stroke;
     ctx.lineCap = "butt";

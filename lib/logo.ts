@@ -50,6 +50,16 @@ const X_LEFT = PAD;                                 // 30
 const C_CX = X_LEFT + X_WIDTH + GAP_XC + CAP / 2;   // 150
 const O_CX = C_CX + CAP / 2 + GAP_CO + CAP / 2;     // 240
 
+// The x is lifted off the baseline so its top tips sit level with the top
+// of the C's cut ends: the x's highest ink (the corner of its butt cap) and
+// the C's highest terminal corner share one line. The x keeps its size; only
+// its own baseline, X_BASE, moves up. Its feet float above the C and O's
+// baseline. Adopted with CH-15 (proposed 25 November 2026).
+const C_END_TOP = MID_Y - (CAP / 2) * Math.sin(((C_APERTURE / 2) * Math.PI) / 180);  // 41.70
+const X_TOP_INK = BASELINE - X_HEIGHT - (STROKE / 2) * (X_WIDTH / Math.hypot(X_WIDTH, X_HEIGHT));
+const X_LIFT = X_TOP_INK - C_END_TOP;   // 22.28
+const X_BASE = BASELINE - X_LIFT;       // 107.72 — the x's own baseline
+
 /**
  * Clear space: half the x-height, measured from the ink on every side. The
  * x is the unit, so the rule scales with the mark and is visible in it.
@@ -67,6 +77,11 @@ export const logoGeometry = {
   gapCO: GAP_CO,
   aperture: C_APERTURE,
   baseline: BASELINE,
+  /** The x's own baseline: lifted so its top tips meet the top of the C's ends. */
+  xBase: X_BASE,
+  xLift: X_LIFT,
+  /** Top of the C's cut ends, ink. The x's top tips sit on this line. */
+  cEndTop: C_END_TOP,
   capTop: CAP_TOP,
   midY: MID_Y,
   xLeft: X_LEFT,
@@ -83,7 +98,7 @@ export const logoGeometry = {
 //
 // The x's diagonals end in butt caps cut perpendicular to the stroke, so their
 // corners overhang the path endpoints: 4.45 sideways and 4.02 vertically. That
-// overhang is why the x's feet sit below the baseline the C and O rest on.
+// overhang is why the x's top tips reach above its x-height line.
 
 const X_DIAGONAL = Math.hypot(X_WIDTH, X_HEIGHT);
 const X_CAP_DX = (STROKE / 2) * (X_HEIGHT / X_DIAGONAL);   // 4.45
@@ -92,8 +107,9 @@ const X_CAP_DY = (STROKE / 2) * (X_WIDTH / X_DIAGONAL);    // 4.02
 export const inkBounds = {
   left: X_LEFT - X_CAP_DX,
   right: O_CX + CAP / 2,
-  top: Math.min(CAP_TOP, BASELINE - X_HEIGHT - X_CAP_DY),
-  bottom: BASELINE + X_CAP_DY,
+  top: Math.min(CAP_TOP, X_BASE - X_HEIGHT - X_CAP_DY),
+  // The C and O reach the baseline at their outer edge; the lifted x ends above it.
+  bottom: Math.max(BASELINE, X_BASE + X_CAP_DY),
 } as const;
 
 // ── Path construction ────────────────────────────────────────────────
@@ -134,13 +150,14 @@ export function oPath(): string {
   return `${top} ${bottom}`;
 }
 
-/** The lowercase x: two crossing strokes, x-height tall. */
+/** The lowercase x: two crossing strokes, x-height tall, standing on X_BASE. */
 export function xPaths(): [string, string] {
-  const top = BASELINE - X_HEIGHT;
+  const top = round(X_BASE - X_HEIGHT);
+  const base = round(X_BASE);
   const right = X_LEFT + X_WIDTH;
   return [
-    `M ${X_LEFT} ${top} L ${right} ${BASELINE}`,
-    `M ${right} ${top} L ${X_LEFT} ${BASELINE}`,
+    `M ${X_LEFT} ${top} L ${right} ${base}`,
+    `M ${right} ${top} L ${X_LEFT} ${base}`,
   ];
 }
 

@@ -119,7 +119,7 @@ export const lockups: {
     id: "with-dml",
     label: "xCO with Dark Matter Labs",
     family: "dml",
-    note: "Side by side, split by a rule. DM’s stamp stands on the x-height band.",
+    note: "Side by side, split by a rule. DM’s stamp fills the same band as the x.",
     download: true,
     suffix: "-with-dml",
   },
@@ -187,7 +187,7 @@ function logotype(p: Paint): Part {
   const [x1, x2] = xPaths();
   const x =
     p.xStyle === "serif"
-      ? `<path d="${serifXPath}" fill="${p.xFg}"/>`
+      ? `<path transform="translate(0 ${r2(-g.xLift)})" d="${serifXPath}" fill="${p.xFg}"/>`
       : `<path d="${x1}" stroke="${p.xFg}"/><path d="${x2}" stroke="${p.xFg}"/>`;
   const strokes = `<g fill="none" stroke-width="${g.stroke}" stroke-linecap="butt">${
     p.xStyle === "serif" ? "" : x
@@ -308,7 +308,7 @@ function horizontalLines(p: Paint): { parts: Part[]; left: number; step: number 
 export const coHost = {
   /** Logotype ink → ×, and × → project mark. */
   gap: HALF_X,
-  /** The × is ½x square, centred on the x-height band, at half the logotype's stroke. */
+  /** The × is ½x square, centred on the x's band, at half the logotype's stroke. */
   cross: HALF_X,
   crossStroke: g.stroke / 2,
   /** A disc-shaped mark is drawn slightly under the cap height, which round forms overshoot optically. */
@@ -319,7 +319,7 @@ export const coHost = {
 
 function cross(p: Paint): Part {
   const left = inkBounds.right + coHost.gap;
-  const mid = g.baseline - g.xHeight / 2;
+  const mid = g.xBase - g.xHeight / 2;
   const h = coHost.cross / 2;
   const r = left + coHost.cross;
   return {
@@ -432,7 +432,7 @@ export function lockupLayout(
       const ruleX = ink.right + ONE_X;
       const stamp = ONE_X;
       const dmLeft = ruleX + ONE_X;
-      const dml = dmLogo(p, dmLeft, g.baseline - stamp, stamp);
+      const dml = dmLogo(p, dmLeft, g.xBase - stamp, stamp);
       parts.push(
         {
           name: "Rule",
@@ -445,8 +445,8 @@ export function lockupLayout(
       guides.push(
         { kind: "gapX", from: ink.right, to: ruleX, y: g.capTop - 10, label: "1x" },
         { kind: "gapX", from: ruleX, to: dmLeft, y: g.capTop - 10, label: "1x" },
-        { kind: "lineY", y: g.baseline - g.xHeight, from: ink.left - 8, to: dml.ink.r + 8, label: "x-height" },
-        { kind: "lineY", y: g.baseline, from: ink.left - 8, to: dml.ink.r + 8, label: "baseline" },
+        { kind: "lineY", y: g.xBase - g.xHeight, from: ink.left - 8, to: dml.ink.r + 8, label: "x top" },
+        { kind: "lineY", y: g.xBase, from: ink.left - 8, to: dml.ink.r + 8, label: "x base" },
       );
       break;
     }

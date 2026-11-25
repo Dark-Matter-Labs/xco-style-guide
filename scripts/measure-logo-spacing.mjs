@@ -96,7 +96,7 @@ function opticalGap(left, right, zone, depth) {
   return sum / r.length;
 }
 
-const zone = [g.baseline - g.xHeight, g.baseline];
+const zone = [g.xBase - g.xHeight, g.xBase];
 
 console.log(`gaps (metric):  x→C ${g.gapXC}   C→O ${g.gapCO}`);
 console.log(`zone: x-height band ${zone[0]}–${zone[1]} · depths ${DEPTHS.join(", ")}\n`);

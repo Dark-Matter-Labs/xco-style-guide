@@ -13,7 +13,7 @@ export function ConstructionDiagram() {
   const g = logoGeometry;
   const [x1, x2] = xPaths();
   const guide = "var(--xco-ocean)";
-  const [xTop] = [g.baseline - g.xHeight];
+  const [xTop] = [g.xBase - g.xHeight];
 
   // The x's furthest tip (its butt-cap corner, right side) and the end of the
   // C (the outer corner of its cut terminals). Ink, not centreline.
@@ -34,6 +34,7 @@ export function ConstructionDiagram() {
         <line x1={0} y1={g.capTop} x2={g.width} y2={g.capTop} />
         <line x1={0} y1={xTop} x2={g.width} y2={xTop} strokeDasharray="3 3" />
         <line x1={0} y1={g.baseline} x2={g.width} y2={g.baseline} />
+        <line x1={0} y1={g.xBase} x2={g.width} y2={g.xBase} strokeDasharray="3 3" />
       </g>
 
       {/* Shared construction circles — same radius for C and O */}
@@ -52,6 +53,9 @@ export function ConstructionDiagram() {
         <path d={oPath()} />
       </g>
 
+      {/* The x's top tips and the C's ends share one line. */}
+      <line x1={0} y1={g.cEndTop} x2={g.width} y2={g.cEndTop} stroke="var(--xco-dusk)" strokeWidth={TEXTURE} strokeDasharray="3 2" />
+
       {/* x tip → C end */}
       <g stroke="var(--xco-dusk)" strokeWidth={TEXTURE} fill="none">
         <line x1={xTip} y1={g.capTop - 14} x2={xTip} y2={g.baseline + 4} strokeDasharray="3 2" />
@@ -68,6 +72,11 @@ export function ConstructionDiagram() {
 
       <g
         fill="var(--xco-ink-muted)"
+        // A halo in the ground colour keeps labels legible where they cross a glyph.
+        stroke="var(--xco-paper)"
+        strokeWidth={2.5}
+        strokeLinejoin="round"
+        paintOrder="stroke"
         fontFamily={typography.faces.mono.stack}
         fontSize={7}
       >
@@ -79,6 +88,8 @@ export function ConstructionDiagram() {
         <text x={(xTip + cEnd) / 2} y={g.capTop - 13} textAnchor="middle">
           x tip → C end {r1(cEnd - xTip)}
         </text>
+        <text x={g.oCx + 6} y={g.cEndTop - 3}>x tips = C ends</text>
+        <text x={20} y={g.xBase - 3}>x base, lifted {r1(g.xLift)}</text>
         <text x={20} y={g.baseline + 12}>
           baseline · stroke {g.stroke} · aperture {g.aperture}°
         </text>
