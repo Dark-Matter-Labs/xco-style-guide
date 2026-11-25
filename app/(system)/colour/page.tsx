@@ -3,7 +3,7 @@ import { WIP } from "@/components/WIP";
 import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
 import { colorIn } from "@/lib/a11y/css-tokens";
 import { onSwatch, swatchLabel } from "./swatch";
-import { IdentityScales, Proportion, Trace, Highlights, Routes } from "./IdentitySections";
+import { IdentityScales, NamedRoles, Proportion, Trace, Highlights, Routes } from "./IdentitySections";
 
 function hexToRgb(hex: string) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -38,8 +38,10 @@ export default function ColourPage() {
           colour variety.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px]">
-          Colour here is syntax. Each colour signals a specific thing. When it stops
-          signalling something specific, remove it.
+          Colour is an affordance, declared locally. The scales and their proportion
+          make xCO recognizable; what a colour means is named in each composition&apos;s
+          key, beside a shape or a line. When a colour stops doing something you can
+          name, remove it.
         </p>
       </section>
 
@@ -215,74 +217,7 @@ export default function ColourPage() {
         </div>
       </section>
 
-      {/* Diagram palette */}
-      <section>
-        <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
-          Diagram Palette
-        </h2>
-        <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-8 max-w-2xl">
-          Five tones in two registers. Never mix registers within a single diagram.
-          Pick cool (blueprint, from Field) or warm (from Signal) — not both.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-          <div>
-            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
-              Cool — Blueprint
-            </p>
-            <div className="grid grid-cols-3 gap-4">
-              {(["navy", "ocean", "teal"] as const).map((key) => (
-                <div key={key}>
-                  <div
-                    className="h-24 flex flex-col justify-end p-3"
-                    style={{ backgroundColor: colors[key].hex }}
-                  >
-                    <p
-                      className="font-mono text-[0.75rem] leading-[1.4]"
-                      style={swatchLabel(colors[key].hex)}
-                    >
-                      {colors[key].hex}
-                    </p>
-                  </div>
-                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
-                    {key}
-                  </p>
-                  <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                    {colors[key].cssVar}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink mb-4 uppercase tracking-widest">
-              Warm — Signal
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              {(["sand", "dusk"] as const).map((key) => (
-                <div key={key}>
-                  <div
-                    className="h-24 flex flex-col justify-end p-3"
-                    style={{ backgroundColor: colors[key].hex }}
-                  >
-                    <p
-                      className="font-mono text-[0.75rem] leading-[1.4]"
-                      style={swatchLabel(colors[key].hex)}
-                    >
-                      {colors[key].hex}
-                    </p>
-                  </div>
-                  <p className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink pt-2">
-                    {key}
-                  </p>
-                  <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
-                    {colors[key].cssVar}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <NamedRoles />
 
       <Proportion />
 
@@ -303,7 +238,7 @@ export default function ColourPage() {
           for high-contrast sections using <code className="font-code text-[0.9375rem]">data-register="inverse"</code>.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
-          Semantic meanings, the diagram palette and the domain marks are fixed — they do not
+          Semantic meanings, the named roles and the domain marks are fixed — they do not
           swap. Everything that is a ground or a text colour does: the four paper surfaces,
           the three inks, the ink-safe accents (dusk-ink, ocean-ink, teal-ink), the domain
           tints, grounds and inks, and the rule, border and grain tokens.
