@@ -2,7 +2,7 @@ import { endorsementLabel, LOCKUP_FONT, LOCKUP_WEIGHT, logoVariants, stripMetric
 import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
 
 /**
- * The endorsement strip (CH-14) as an SVG group, for drawing inside a larger
+ * The endorsement strip (CH-15) as an SVG group, for drawing inside a larger
  * SVG such as a cover. (x, y) is the top-left of the label's ink and DM's
  * stamp; `stamp` is the stamp's height in the parent's units. Clear space of
  * one stamp height lies outside that box and is the caller's to keep.

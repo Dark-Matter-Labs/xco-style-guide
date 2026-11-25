@@ -60,7 +60,7 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
-    id: "CH-14",
+    id: "CH-15",
     title: "Dark Matter Labs shows in an endorsement strip, apart from the mark",
     target: "Logo / Dark Matter Labs",
     href: "/logo#dark-matter-labs",

@@ -15,7 +15,7 @@ const MISUSE = [
   { label: "Don't add effects", note: "No shadows, gradients, outlines, or rounded caps. Terminals are cut flat." },
   { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs. One exception: the x may leave the mark as operator, under the rules on /logo/x (CH-08). At rest it is always in place." },
   { label: "Don't box it", note: "Clear space is built into the file. Do not add a frame or a container." },
-  { label: "Don't set DML beside it", note: "Dark Matter Labs appears in the endorsement strip, in a zone of its own, never next to the mark or inside its clear space (CH-14)." },
+  { label: "Don't set DML beside it", note: "Dark Matter Labs appears in the endorsement strip, in a zone of its own, never next to the mark or inside its clear space (CH-15)." },
 ];
 
 const DML_RULES = [
@@ -244,7 +244,7 @@ export default function LogoPage() {
         </div>
       </section>
 
-      {/* Dark Matter Labs (CH-14) */}
+      {/* Dark Matter Labs (CH-15) */}
       <section id="dark-matter-labs" className="space-y-8">
         <div className="space-y-2">
           <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
@@ -286,7 +286,7 @@ export default function LogoPage() {
         </ol>
 
         <div className="max-w-3xl">
-          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-14")!} compact />
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-15")!} compact />
         </div>
       </section>
 
