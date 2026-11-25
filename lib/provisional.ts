@@ -60,6 +60,20 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-14",
+    title: "Dark Matter Labs shows in an endorsement strip, apart from the mark",
+    target: "Logo / Dark Matter Labs",
+    href: "/logo#dark-matter-labs",
+    status: "adopted",
+    proposedBy: "Gurden, from team feedback (Darko, Prateek)",
+    date: "2026-11-25",
+    why: "Darko could not tell which part of the logo was the logo, DML or xCO. Prateek asked for both: xCO at the centre, but DML holds the brand value today. Four options were drawn on real surfaces: two zones, side by side, an attached endorsement, and a clean mark with a detached strip.",
+    previous: "One attached lockup: the descriptor, then \u201cAn initiative of\u201d and DM\u2019s lockup at a quarter of cap height, stacked under the mark. Elsewhere, DML was plain text or absent.",
+    proposed: "The xCO mark stands alone. DML appears in an endorsement strip, \u201cAn initiative of\u201d and DM\u2019s own lockup on one line, set in a different zone: footer, back cover, colophon, a signature\u2019s last line. DM\u2019s stamp at least 16px on screen and 6mm in print; below that, xCO alone. The attached lockup stays as a fallback.",
+    decision: "Adopted by Gurden, 25 Nov 2026 (option C + A).",
+    respond: PR(0),
+  },
+  {
     id: "CH-13",
     title: "One weight: Untitled at 400",
     target: "Typography / weights",

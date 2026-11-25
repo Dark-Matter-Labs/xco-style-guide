@@ -12,7 +12,7 @@
 // expansion operator acting on them, and its reduced height encodes the
 // naming rule (lowercase x, uppercase CO) as a visual fact.
 
-import { dmInkLeft, dmStampHeight, dmStampPath, dmWordmarkPath } from "./dm-logo";
+import { dmInkLeft, dmStampHeight, dmStampPath, dmViewBox, dmWordmarkPath } from "./dm-logo";
 
 // ── Construction grid ────────────────────────────────────────────────
 // All values derive from cap height. Change CAP and the mark scales exactly.
@@ -343,6 +343,74 @@ export function buildLogoSvg({
     <path d="${cPath()}" stroke="${v.fg}"/>
     <path d="${oPath()}" stroke="${v.fg}"/>
   </g>${descriptorEl}${endorsementEl}
+</svg>
+`;
+}
+
+// ── Endorsement strip (CH-14) ────────────────────────────────────────
+// Dark Matter Labs' place beside xCO, adopted 25 November 2026: the mark
+// stands alone, and DML appears in this strip, set in a different zone (a
+// footer, back cover, colophon or a signature's last line). The same parts as
+// the attached lockup above, on one line: "AN INITIATIVE OF", then DM's own
+// lockup. The words name the relation, so nobody reads DML as part of the logo.
+//
+// Units: DM's stamp is 40 tall. Clear space is one stamp height all round,
+// DM's own rule, and also the gap between the label's ink and the stamp. The
+// label keeps the caption register: 0.4 stamp, the attached lockup's 10 to 25,
+// with the descriptor's tracking in em, and sits on DM's wordmark baseline.
+
+const STRIP_STAMP = 40;
+const STRIP_PAD = STRIP_STAMP;
+const STRIP_LABEL_SIZE = 16;
+const STRIP_TRACKING = round((DESC_LINE.tracking / DESC_SIZE) * STRIP_LABEL_SIZE);
+// "AN INITIATIVE OF" in Untitled Sans 400, measured like the descriptor.
+const STRIP_LABEL: LineMetrics = { width: 8.519, first: 0.017, last: 0.064 };
+// DM's wordmark baseline in its own units (the foot of "Dark Matter Labs").
+const DM_WORDMARK_BASELINE = 77.3916;
+const STRIP_SCALE = STRIP_STAMP / dmStampHeight;
+
+const stripLabelX = STRIP_PAD - STRIP_LABEL.first * STRIP_LABEL_SIZE;
+const stripLabelInkRight =
+  stripLabelX +
+  STRIP_LABEL.width * STRIP_LABEL_SIZE +
+  STRIP_TRACKING * (endorsementLabel.length - 1) -
+  STRIP_LABEL.last * STRIP_LABEL_SIZE;
+const stripDmX = stripLabelInkRight + STRIP_STAMP;
+const stripDmWidth = (Number(dmViewBox.split(" ")[2]) - dmInkLeft) * STRIP_SCALE;
+
+export const stripMetrics = {
+  stamp: STRIP_STAMP,
+  labelSize: STRIP_LABEL_SIZE,
+  labelTracking: STRIP_TRACKING,
+  labelX: round(stripLabelX),
+  /** On DM's wordmark baseline, so the strip reads as one line of words. */
+  labelBaseline: round(STRIP_PAD + (DM_WORDMARK_BASELINE - 0.26) * STRIP_SCALE),
+  dmTransform: `translate(${round(stripDmX - dmInkLeft * STRIP_SCALE)} ${round(STRIP_PAD - 0.26 * STRIP_SCALE)}) scale(${Number(STRIP_SCALE.toFixed(4))})`,
+  width: Math.ceil(stripDmX + stripDmWidth + STRIP_PAD),
+  height: STRIP_PAD * 2 + STRIP_STAMP,
+} as const;
+
+/**
+ * The endorsement strip as a standalone SVG. Never place it beside the mark:
+ * it lives in its own zone. Size it so DM's stamp is at least 16px on screen
+ * and 6mm in print; below that, use xCO alone.
+ */
+export function buildEndorsementStripSvg({
+  variant = "ink",
+  withBackground = false,
+}: Pick<BuildOptions, "variant" | "withBackground"> = {}): string {
+  const v = logoVariants.find((x) => x.id === variant) ?? logoVariants[0];
+  const m = stripMetrics;
+  const bg =
+    withBackground && v.bg ? `\n  <rect width="${m.width}" height="${m.height}" fill="${v.bg}"/>` : "";
+  return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${m.width} ${m.height}" width="${m.width}" height="${m.height}" role="img" aria-label="An initiative of Dark Matter Labs">
+  <title>An initiative of Dark Matter Labs</title>${bg}
+  <text x="${m.labelX}" y="${m.labelBaseline}" font-family="${LOCKUP_FONT}" font-size="${m.labelSize}" font-weight="${LOCKUP_WEIGHT}" letter-spacing="${m.labelTracking}" fill="${v.fg}">${endorsementLabel}</text>
+  <g transform="${m.dmTransform}" fill="${v.dmFg}">
+    <path d="${dmWordmarkPath}"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="${dmStampPath}"/>
+  </g>
 </svg>
 `;
 }

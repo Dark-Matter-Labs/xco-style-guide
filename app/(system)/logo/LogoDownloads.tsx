@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import {
+  buildEndorsementStripSvg,
   buildLogoSvg,
   logoGeometry,
   logoVariants,
   lockupHeight,
+  stripMetrics,
   type LogoVariant,
 } from "@/lib/logo";
 import { Logo } from "@/components/xco/Logo";
@@ -21,7 +23,7 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url);
 }
 
-type Lockup = "mark" | "descriptor" | "endorsed";
+type Lockup = "mark" | "descriptor" | "endorsed" | "strip";
 
 const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
   { id: "mark", label: "Mark only", note: "The logotype alone. Default.", suffix: "" },
@@ -34,8 +36,14 @@ const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
   {
     id: "endorsed",
     label: "Endorsed by Dark Matter Labs",
-    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, for surfaces that must name the parent organisation.",
+    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, attached. A fallback for a single file someone else places alone.",
     suffix: "-dml-endorsed",
+  },
+  {
+    id: "strip",
+    label: "Endorsement strip",
+    note: "\u201cAn initiative of\u201d and DM\u2019s logo on one line, for a footer or back cover. The default way to show DML (CH-14). Never beside the mark.",
+    suffix: "-dml-strip",
   },
 ];
 
@@ -46,14 +54,17 @@ function fileStem(variant: LogoVariant, lockup: Lockup) {
 export function LogoDownloads() {
   const [variant, setVariant] = useState<LogoVariant>("ink");
   const [lockup, setLockup] = useState<Lockup>("mark");
-  const withDescriptor = lockup !== "mark";
+  const isStrip = lockup === "strip";
+  const withDescriptor = lockup === "descriptor" || lockup === "endorsed";
   const withEndorsement = lockup === "endorsed";
   const [withBackground, setWithBackground] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const svg = buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
+  const svg = isStrip
+    ? buildEndorsementStripSvg({ variant, withBackground })
+    : buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
   const active = logoVariants.find((v) => v.id === variant)!;
 
   const downloadSvg = () => {
@@ -68,7 +79,9 @@ export function LogoDownloads() {
     setError(null);
     setBusy(`png-${size}`);
     try {
-      const ratio = logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
+      const ratio = isStrip
+        ? stripMetrics.width / stripMetrics.height
+        : logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
       const res = await fetch("/api/export/png", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,12 +120,20 @@ export function LogoDownloads() {
           border: "1px solid var(--border-default)",
         }}
       >
-        <Logo
-          variant={variant}
-          withDescriptor={withDescriptor}
-          withEndorsement={withEndorsement}
-          height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
-        />
+        {isStrip ? (
+          // The strip is DM's paths plus one live text line; render the file itself.
+          <div
+            className="w-full max-w-[420px] [&>svg]:w-full [&>svg]:h-auto"
+            dangerouslySetInnerHTML={{ __html: svg.replace(/^<\?xml[^>]*>\s*/, "") }}
+          />
+        ) : (
+          <Logo
+            variant={variant}
+            withDescriptor={withDescriptor}
+            withEndorsement={withEndorsement}
+            height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
+          />
+        )}
       </div>
 
       {/* Controls */}

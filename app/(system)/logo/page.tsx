@@ -2,7 +2,7 @@ import Link from "next/link";
 import { WIP } from "@/components/WIP";
 import { Logo } from "@/components/xco/Logo";
 import { changeLog } from "@/lib/provisional";
-import { logoGeometry } from "@/lib/logo";
+import { buildEndorsementStripSvg, logoGeometry, logoVariants } from "@/lib/logo";
 import { BRAND_NAME } from "@/lib/design-tokens";
 import { ProvisionalChange } from "@/components/xco";
 import { LogoDownloads } from "./LogoDownloads";
@@ -15,7 +15,23 @@ const MISUSE = [
   { label: "Don't add effects", note: "No shadows, gradients, outlines, or rounded caps. Terminals are cut flat." },
   { label: "Don't reflow it", note: "The gaps are optically tuned. Never re-space, stack, or reorder the glyphs. One exception: the x may leave the mark as operator, under the rules on /logo/x (CH-08). At rest it is always in place." },
   { label: "Don't box it", note: "Clear space is built into the file. Do not add a frame or a container." },
+  { label: "Don't set DML beside it", note: "Dark Matter Labs appears in the endorsement strip, in a zone of its own, never next to the mark or inside its clear space (CH-14)." },
 ];
+
+const DML_RULES = [
+  "The xCO mark stands alone. Nothing from Dark Matter Labs enters its clear space.",
+  "DML appears in the endorsement strip: \u201cAn initiative of\u201d in Untitled Sans, then DM\u2019s own lockup from master artwork.",
+  "The strip lives in a different zone from the mark: a footer, back cover, colophon or a signature\u2019s last line.",
+  "Size the strip to its zone. DM\u2019s stamp is at least 16px tall on screen and 6mm in print.",
+  "Where the strip can\u2019t reach that size (avatars, favicons, anything under 64px), use xCO alone.",
+  "DM\u2019s own rules hold: black on light, white on dark, never dusk, clear space one stamp height.",
+  "Partners share the mark\u2019s zone (xCO \u00d7 Medulla). DML stays in the strip.",
+  "The attached \u201cEndorsed by Dark Matter Labs\u201d lockup stays as a fallback, for a single file someone else places alone.",
+];
+
+/** The strip file itself, inline, so the page shows exactly what the download holds. */
+const stripMarkup = (variant: "ink" | "paper") =>
+  buildEndorsementStripSvg({ variant }).replace(/^<\?xml[^>]*>\s*/, "");
 
 export default function LogoPage() {
   const g = logoGeometry;
@@ -225,6 +241,52 @@ export default function LogoPage() {
             substitute those lines; the glyphs themselves are unaffected. PNG lockups carry
             Untitled Sans in the image itself, so for third parties without the font, send the PNG.
           </p>
+        </div>
+      </section>
+
+      {/* Dark Matter Labs (CH-14) */}
+      <section id="dark-matter-labs" className="space-y-8">
+        <div className="space-y-2">
+          <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase">
+            Dark Matter Labs
+          </h2>
+          <p className="font-body text-[24px] text-xco-ink leading-[26px] max-w-2xl">
+            xCO is an initiative of Dark Matter Labs. The mark leads alone, and DML appears in
+            an endorsement strip that sits in a zone of its own. The words name the relation,
+            so nobody has to ask which part is the logo.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {(["ink", "paper"] as const).map((v) => (
+            <div
+              key={v}
+              className="flex flex-col justify-between gap-16 p-8 min-h-[320px]"
+              style={{ background: logoVariants.find((x) => x.id === v)!.bg ?? undefined, border: "1px solid var(--border-default)" }}
+            >
+              <Logo height={56} inline variant={v} label="xCO" />
+              <div
+                className="max-w-[300px] [&>svg]:w-full [&>svg]:h-auto"
+                dangerouslySetInnerHTML={{ __html: stripMarkup(v) }}
+              />
+            </div>
+          ))}
+        </div>
+        <p className="font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">
+          Two zones: the mark at the head, the strip at the foot. Download the strip under Variants and downloads.
+        </p>
+
+        <ol className="max-w-3xl space-y-0">
+          {DML_RULES.map((r, i) => (
+            <li key={r} className="grid grid-cols-[3ch_1fr] gap-3 py-2 font-body text-[16px] leading-[1.5] text-xco-ink" style={{ borderTop: "1px solid var(--border-default)" }}>
+              <span className="text-xco-ink-muted tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+              <span>{r}</span>
+            </li>
+          ))}
+        </ol>
+
+        <div className="max-w-3xl">
+          <ProvisionalChange change={changeLog.find((c) => c.id === "CH-14")!} compact />
         </div>
       </section>
 
