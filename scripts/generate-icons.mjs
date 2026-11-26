@@ -21,25 +21,20 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { tsImport } from "tsx/esm/api";
 
 const require = createRequire(import.meta.url);
 const ts = require("typescript");
 const sharp = require("sharp");
 
 const ROOT = process.cwd();
-const TMP = path.join(ROOT, ".icon-build");
 
 // ── Load the logo geometry by transpiling the real module ─────────────
 // Parsing constants out of the file with regexes would be a second copy of
 // the geometry, which is exactly the drift this repo has been fixing.
-mkdirSync(TMP, { recursive: true });
-const src = readFileSync(path.join(ROOT, "lib/logo.ts"), "utf8");
-const js = ts.transpileModule(src, {
-  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
-}).outputText;
-const modPath = path.join(TMP, "logo.mjs");
-writeFileSync(modPath, js);
-const logo = await import(`file://${modPath}`);
+// tsx resolves lib/logo.ts's own imports, which a bare transpile could not.
+const logo = await tsImport(pathToFileURL(path.join(ROOT, "lib/logo.ts")).href, import.meta.url);
 
 const { logoGeometry: g, cPath } = logo;
 
@@ -129,7 +124,6 @@ writeFileSync(path.join(ROOT, "app/favicon.ico"), buildIco(icoImages));
 // Apple touch icon: no transparency, no rounding of our own — iOS masks it.
 writeFileSync(path.join(ROOT, "app/apple-icon.png"), await png(180));
 
-rmSync(TMP, { recursive: true, force: true });
 
 console.log("app/icon.svg          register-aware SVG favicon");
 console.log(`app/favicon.ico       ${icoSizes.join(", ")} px`);
