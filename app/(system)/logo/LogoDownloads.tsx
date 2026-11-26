@@ -42,7 +42,7 @@ const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
   {
     id: "strip",
     label: "Endorsement strip",
-    note: "\u201cAn initiative of\u201d and DM\u2019s logo on one line, for a footer or back cover. The default way to show DML (CH-15). Never beside the mark.",
+    note: "\u201cAn initiative of\u201d and DM\u2019s logo on one line, for a footer or back cover. The default way to show DML (CH-16). Never beside the mark.",
     suffix: "-dml-strip",
   },
 ];

@@ -60,7 +60,7 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
-    id: "CH-15",
+    id: "CH-16",
     title: "Dark Matter Labs shows in an endorsement strip, apart from the mark",
     target: "Logo / Dark Matter Labs",
     href: "/logo#dark-matter-labs",
@@ -72,6 +72,19 @@ export const changeLog: ChangeRecord[] = [
     proposed: "The xCO mark stands alone. DML appears in an endorsement strip, \u201cAn initiative of\u201d and DM\u2019s own lockup on one line, set in a different zone: footer, back cover, colophon, a signature\u2019s last line. DM\u2019s stamp at least 16px on screen and 6mm in print; below that, xCO alone. The attached lockup stays as a fallback.",
     decision: "Adopted by Gurden, 25 Nov 2026 (option C + A).",
     respond: PR(70),
+  },
+  {
+    id: "CH-15",
+    title: "ASCII fields get their own section",
+    target: "ASCII",
+    href: "/ascii",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-25",
+    why: "The optionality site and the event cards already use ASCII fields, but the guide said nothing about them. The rules are read off those two implementations.",
+    proposed: "A new ASCII page: the density ramp, the six fields, and nine rules. Glyphs are set in Untitled Sans on a square cell, with no solid blocks and one ember accent. The field stays quiet behind text, it is ground and not content, and it is never decoration.",
+    decision: "Adopted by Gurden, 25 Nov 2026, by merging PR #72. Rule 09 (no ASCII lettering, logos or box-drawing frames) is this guide's reading, not observed practice. Reply on the PR to change it.",
+    respond: PR(72),
   },
   {
     id: "CH-14",

@@ -117,7 +117,7 @@ export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: 
   return discLeft + d - left;
 }
 
-// ── Endorsement strip (CH-15) ────────────────────────────────────────
+// ── Endorsement strip (CH-16) ────────────────────────────────────────
 // "AN INITIATIVE OF" and Dark Matter Labs' own lockup, the strip from
 // lib/logo.ts redrawn for canvas. It heads the card; the xCO mark closes it,
 // so DML is never read as part of the logo. One stamp of clear space below

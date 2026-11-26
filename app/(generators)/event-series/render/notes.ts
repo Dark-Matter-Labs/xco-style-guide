@@ -70,7 +70,7 @@ function footer(ctx: Ctx, spec: CardSpec, assets: Assets, k: ReturnType<typeof m
   return base - cap;
 }
 
-/** DML heads every note (CH-15); the logotype closes it. Returns where the content may start. */
+/** DML heads every note (CH-16); the logotype closes it. Returns where the content may start. */
 function head(ctx: Ctx, k: ReturnType<typeof metrics>, assets: Assets, text: string, ground: string): number {
   const stamp = STRIP_STAMP * k.u;
   const top = k.m + k.safeTop;

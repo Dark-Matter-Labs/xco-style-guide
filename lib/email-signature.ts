@@ -1,4 +1,4 @@
-// The email signature (CH-15): the xCO mark in its zone, a hairline, then the
+// The email signature (CH-16): the xCO mark in its zone, a hairline, then the
 // endorsement strip in its own. Email clients drop SVG and web fonts, so the
 // two marks ship as 2× PNGs from public/email (npm run email) and the words
 // fall back to Arial. Both images are cropped to their ink, so they align with

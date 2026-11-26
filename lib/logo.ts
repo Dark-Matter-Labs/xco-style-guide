@@ -347,7 +347,7 @@ export function buildLogoSvg({
 `;
 }
 
-// ── Endorsement strip (CH-15) ────────────────────────────────────────
+// ── Endorsement strip (CH-16) ────────────────────────────────────────
 // Dark Matter Labs' place beside xCO, adopted 25 November 2026: the mark
 // stands alone, and DML appears in this strip, set in a different zone (a
 // footer, back cover, colophon or a signature's last line). The same parts as

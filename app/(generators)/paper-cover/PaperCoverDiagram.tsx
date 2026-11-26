@@ -196,7 +196,7 @@ export const PaperCoverDiagram = forwardRef<SVGSVGElement, PaperCoverProps>(
           </text>
         )}
 
-        {/* Footer: the endorsement strip (CH-15). Stamp 24px = 6.4mm at A4, DM's
+        {/* Footer: the endorsement strip (CH-16). Stamp 24px = 6.4mm at A4, DM's
             print minimum; one stamp of clear space above it, PAD below. */}
         <EndorsementStrip x={PAD} y={COVER_H - PAD - STRIP_STAMP} stamp={STRIP_STAMP} />
 
