@@ -1,7 +1,7 @@
 import { paletteHex } from "@/lib/design-tokens";
 import { paintMark, paintOptionField, paintTerritory, sweep } from "@/lib/regimes/paint";
 import { drawHeadline, type Ink } from "./blocks";
-import { drawLogotype, logotypeWidth } from "./lockup";
+import { dmOn, drawEndorsementStrip, drawLogotype, logotypeWidth, STRIP_STAMP, stripBlock } from "./lockup";
 import { metrics } from "./metrics";
 import { font, setTracking } from "./text";
 import { drawTimePrint, SWEEP_DARK } from "./time-print";
@@ -16,7 +16,7 @@ type Template = (ctx: Ctx, spec: CardSpec, phase: number, assets: Assets) => voi
 // the Three Regimes embeds. Fields map as Kicker = tag, Title = headline,
 // Subtitle = byline; date, time and location are not drawn.
 
-const { paper: PAPER, ink: INK, inkMuted: MUTED, duskInk: DUSK_INK } = paletteHex;
+const { paper: PAPER, ink: INK, inkMuted: MUTED, duskInk: DUSK_INK, navy: NAVY } = paletteHex;
 const clear = "rgba(0,0,0,0)";
 
 /** Text colours per note: on paper, and on the navy-to-dusk sweep (paper above, ink in the light footer). */
@@ -70,6 +70,14 @@ function footer(ctx: Ctx, spec: CardSpec, assets: Assets, k: ReturnType<typeof m
   return base - cap;
 }
 
+/** DML heads every note (CH-16); the logotype closes it. Returns where the content may start. */
+function head(ctx: Ctx, k: ReturnType<typeof metrics>, assets: Assets, text: string, ground: string): number {
+  const stamp = STRIP_STAMP * k.u;
+  const top = k.m + k.safeTop;
+  drawEndorsementStrip(ctx, k.m, top, stamp, { text, dm: dmOn(ground), font: assets.fonts.label });
+  return top + stripBlock(stamp);
+}
+
 function rule(ctx: Ctx, x1: number, y1: number, x2: number, y2: number, alpha: number): void {
   ctx.save();
   ctx.strokeStyle = INK;
@@ -97,14 +105,14 @@ const onPaper: Ink = { text: INK, accent: DUSK_INK, halo: clear, onLight: true, 
 
 const typographic: Template = (ctx, spec, _phase, assets) => {
   const k = metrics(spec);
-  const { W, H, u, m, landscape, safeTop } = k;
+  const { W, H, u, m, landscape } = k;
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
   drawTimePrint(ctx, spec);
   const top = footer(ctx, spec, assets, k, MUTED, INK);
   const ruleY = top - 28 * u;
   rule(ctx, m, ruleY, W - m, ruleY, 0.12);
-  const y = m + safeTop;
+  const y = head(ctx, k, assets, INK, PAPER);
   drawHeadline(ctx, headlineOnly(spec), assets, { x: m, y, w: (W - 2 * m) * (landscape ? 0.8 : 1), h: ruleY - m - y }, onPaper, u, {
     maxSize: landscape ? 112 : 130,
     titleShare: 0.85,
@@ -113,14 +121,14 @@ const typographic: Template = (ctx, spec, _phase, assets) => {
 
 const diagram: Template = (ctx, spec, _phase, assets) => {
   const k = metrics(spec);
-  const { W, H, u, m, landscape, safeTop } = k;
+  const { W, H, u, m, landscape } = k;
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
   drawTimePrint(ctx, spec);
   const top = footer(ctx, spec, assets, k, MUTED, INK);
   const ruleY = top - 28 * u;
   rule(ctx, m, ruleY, W - m, ruleY, 0.12);
-  const y = m + safeTop;
+  const y = head(ctx, k, assets, INK, PAPER);
   const id = spec.embed ?? "three-regimes";
   if (landscape) {
     // Text left, diagram right, a faint rule between, as the social card had.
@@ -138,12 +146,13 @@ const diagram: Template = (ctx, spec, _phase, assets) => {
 
 const abstract: Template = (ctx, spec, _phase, assets) => {
   const k = metrics(spec);
-  const { W, H, u, m, landscape, safeTop } = k;
+  const { W, H, u, m, landscape } = k;
   sweep(ctx, 0, 0, W, H);
   drawTimePrint(ctx, spec);
   // The footer sits on the light end of the sweep (sand to dusk), so it is ink.
   footer(ctx, spec, assets, k, INK, INK);
-  const y = m + safeTop;
+  // The top of the sweep is navy, so the strip is paper and DM's mark white.
+  const y = head(ctx, k, assets, PAPER, NAVY);
   const ink: Ink = { text: PAPER, accent: PAPER, halo: clear, onLight: false, plate: INK };
   drawHeadline(ctx, headlineOnly(spec), assets, { x: m, y, w: (W - 2 * m) * (landscape ? 0.75 : 1), h: H * SWEEP_DARK * 0.92 - y }, ink, u, {
     maxSize: landscape ? 112 : 130,

@@ -1,4 +1,5 @@
-import { cPath, oPath, xPaths, inkBounds, logoGeometry as g } from "@/lib/logo";
+import { cPath, oPath, xPaths, inkBounds, logoGeometry as g, endorsementLabel, LOCKUP_WEIGHT, stripMetrics } from "@/lib/logo";
+import { dmStampPath, dmWordmarkPath } from "@/lib/dm-logo";
 import { medullaMark as m } from "@/lib/event-series/medulla-mark";
 import { paletteHex } from "@/lib/design-tokens";
 import { coHost } from "@/lib/logo-lockups";
@@ -116,4 +117,61 @@ export function drawLockup(ctx: Ctx, left: number, top: number, cap: number, o: 
   ctx.restore();
 
   return discLeft + d - left;
+}
+
+// ── Endorsement strip (CH-16) ────────────────────────────────────────
+// "AN INITIATIVE OF" and Dark Matter Labs' own lockup, the strip from
+// lib/logo.ts redrawn for canvas. It heads the card; the xCO mark closes it,
+// so DML is never read as part of the logo. One stamp of clear space below
+// it is the caller's to keep (STRIP_BLOCK).
+
+let dm: { wordmark: Path2D; stamp: Path2D } | null = null;
+const strip = stripMetrics;
+
+/** DM's stamp height on a card: 30 at a 1000px short side (32px at 1080), above DM's 16px minimum at every format and below the xCO cap (44). */
+export const STRIP_STAMP = 30;
+/** Height the strip takes from the layout: the stamp plus one stamp of clear space. */
+export const stripBlock = (stamp: number) => stamp * 2;
+/** Ink width of the strip at a given stamp height. */
+export const stripWidth = (stamp: number) => ((strip.width - 2 * strip.stamp) * stamp) / strip.stamp;
+
+/** DM allows black on light grounds and white on dark ones, never another colour. */
+export function dmOn(ground: string): string {
+  const n = parseInt(ground.slice(1), 16);
+  const lin = (c: number) => ((c /= 255) <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const L = 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+  return L > 0.18 ? "#000000" : "#FFFFFF";
+}
+
+/** Draws the strip with its ink box's top-left at (left, top). */
+export function drawEndorsementStrip(
+  ctx: Ctx,
+  left: number,
+  top: number,
+  stamp: number,
+  o: { text: string; dm: string; font: string },
+): void {
+  if (!dm) dm = { wordmark: new Path2D(dmWordmarkPath), stamp: new Path2D(dmStampPath) };
+  const k = stamp / strip.stamp;
+  const ox = left - strip.stamp * k;
+  const oy = top - strip.stamp * k;
+
+  ctx.save();
+  ctx.font = `${LOCKUP_WEIGHT} ${strip.labelSize * k}px ${o.font}`;
+  const c = ctx as Ctx & { letterSpacing?: string };
+  if ("letterSpacing" in c) c.letterSpacing = `${strip.labelTracking * k}px`;
+  ctx.fillStyle = o.text;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(endorsementLabel, ox + strip.labelX * k, oy + strip.labelBaseline * k);
+  if ("letterSpacing" in c) c.letterSpacing = "0px";
+
+  ctx.translate(ox, oy);
+  ctx.scale(k, k);
+  ctx.translate(strip.dm.x, strip.dm.y);
+  ctx.scale(strip.dm.scale, strip.dm.scale);
+  ctx.fillStyle = o.dm;
+  ctx.fill(dm.wordmark);
+  ctx.fill(dm.stamp, "evenodd");
+  ctx.restore();
 }
