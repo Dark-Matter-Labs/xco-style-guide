@@ -2,6 +2,7 @@ import { SiteNav, ReadingProgress, Grain, type NavLink } from "@/components/doc"
 
 const sections: NavLink[] = [
   { href: "/logo", label: "Logo" },
+  { href: "/brand-architecture", label: "Brands" },
   { href: "/typography", label: "Type" },
   { href: "/colour", label: "Colour" },
   { href: "/grid", label: "Grid" },

@@ -21,6 +21,7 @@ const deckLink = {
 // Order matches the section nav in app/(system)/layout.tsx.
 const systemLinks = [
   { href: "/logo",        label: "Logo",                 blurb: "Wordmark, lockups, clear space, export." },
+  { href: "/brand-architecture", label: "Brand architecture", blurb: "When Options and Studio lead, and what stays strict." },
   { href: "/typography",  label: "Typography",           blurb: "Display tight and negative, labels wide and positive." },
   { href: "/colour",      label: "Colour",               blurb: "Field, Signal, Matter. Chalk paper, one ember." },
   { href: "/grid",        label: "Grid",                 blurb: "Golden ratio, Fibonacci spacing, 12 and 24 columns." },

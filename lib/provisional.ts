@@ -60,6 +60,19 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-17",
+    title: "Options and Studio may lead, endorsed as an xCO group",
+    target: "Brand architecture",
+    href: "/brand-architecture",
+    status: "adopted",
+    proposedBy: "Gurden",
+    date: "2026-11-25",
+    why: "xCO Options and xCO Studio had group marks but no rule for when they speak as xCO and when under their own name.",
+    previous: "No rule. Group marks were chat avatars only.",
+    proposed: "Both are xCO groups, not brands. Each may lead with its own name, with an endorsement strip, “an xCO group” and the logotype, in a zone of its own, as DML endorses xCO; xCO leads funder decks. The logotype, Untitled, the colour rule, the a11y gate and change records are strict. Palette registers and visual modes are recommended. Neither has a mark beyond its group avatar.",
+    decision: "Adopted by Gurden, 25 Nov 2026.",
+  },
+  {
     id: "CH-16",
     title: "Dark Matter Labs shows in an endorsement strip, apart from the mark",
     target: "Logo / Dark Matter Labs",
