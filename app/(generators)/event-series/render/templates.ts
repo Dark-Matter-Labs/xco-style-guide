@@ -1,6 +1,6 @@
 import { drawField } from "./field";
 import { drawImagery } from "./imagery";
-import { lockupWidth } from "./lockup";
+import { dmOn, drawEndorsementStrip, lockupWidth, STRIP_STAMP, stripBlock, stripWidth } from "./lockup";
 import { drawCoLockup, drawDetails, drawHeadline, scrim, type Ink } from "./blocks";
 import { palettes } from "./palettes";
 import { drawTimePrint, drawTimePrintSlug } from "./time-print";
@@ -31,7 +31,7 @@ const scrimFor = (spec: CardSpec, full: number) =>
 // a dark window pushed off the bottom-right corner, the globe inside it.
 
 const windowTemplate: Template = (ctx, spec, phase, assets) => {
-  const { W, H, S, u, m, landscape, tall, safeBottom } = metrics(spec);
+  const { W, H, S, u, m, landscape, tall, safeTop, safeBottom } = metrics(spec);
   const p = palettes[spec.palette];
 
   ctx.fillStyle = p.ground;
@@ -67,6 +67,9 @@ const windowTemplate: Template = (ctx, spec, phase, assets) => {
   // Hold the text side of the window: fade the globe out towards the left.
   scrim(ctx, { x: ox, y: oy, w: pw * 0.72, h: ph }, p.panel, "left", scrimFor(spec, 0.9));
   ctx.restore();
+
+  // DML heads the card on the ground above the window; the co-lockup closes it.
+  drawEndorsementStrip(ctx, m, m + safeTop, STRIP_STAMP * u, { text: p.onGround, dm: dmOn(p.ground), font: assets.fonts.label });
 
   const ink: Ink = { text: p.onPanel, accent: p.accentOnPanel, halo: p.panel, onLight: p.panelIsLight, plate: p.panel };
   const box = { x: ox + m, y: oy + m, w: (pw - 2 * m) * (landscape ? 0.66 : 0.9), h: ph - 2 * m };
@@ -127,7 +130,10 @@ const cornerTemplate: Template = (ctx, spec, phase, assets) => {
   // Title in the open quarter, right-aligned as on the Medulla poster.
   const ground: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight, plate: p.ground };
   const qx = bx + b + m;
-  const qy = m * 1.2 + safeTop;
+  const stamp = STRIP_STAMP * u;
+  // DML heads the open quarter, right-aligned like the title below it.
+  drawEndorsementStrip(ctx, W - m - stripWidth(stamp), m * 1.2 + safeTop, stamp, { text: p.onGround, dm: dmOn(p.ground), font: assets.fonts.label });
+  const qy = m * 1.2 + safeTop + stripBlock(stamp);
   drawHeadline(ctx, spec, assets, { x: qx, y: qy, w: W - qx - m, h: (by - qy - m * 1.2) * (tall ? 0.7 : 1) }, ground, u, {
     maxSize: landscape ? 112 : tall ? 140 : 112,
     titleShare: 0.62,
@@ -179,7 +185,9 @@ const globeTemplate: Template = (ctx, spec, phase, assets) => {
   }
 
   const ink: Ink = { text: p.onGround, accent: p.accentOnGround, halo: p.ground, onLight: p.groundIsLight, plate: p.ground };
-  drawHeadline(ctx, spec, assets, { x: m, y: m + safeTop, w: (W - 2 * m) * (landscape ? 0.6 : 0.86), h: H * (tall ? 0.3 : 0.5) }, ink, u, {
+  const stamp = STRIP_STAMP * u;
+  drawEndorsementStrip(ctx, m, m + safeTop, stamp, { text: p.onGround, dm: dmOn(p.ground), font: assets.fonts.label });
+  drawHeadline(ctx, spec, assets, { x: m, y: m + safeTop + stripBlock(stamp), w: (W - 2 * m) * (landscape ? 0.6 : 0.86), h: H * (tall ? 0.3 : 0.5) - stripBlock(stamp) }, ink, u, {
     maxSize: landscape ? 124 : tall ? 150 : 124,
     titleShare: 0.62,
   });

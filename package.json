@@ -10,6 +10,7 @@
     "lint": "next lint",
     "icons": "node scripts/generate-icons.mjs",
     "avatars": "node scripts/generate-group-avatars.mjs",
+    "email": "tsx scripts/generate-email-signature.ts",
     "logo:spacing": "node scripts/measure-logo-spacing.mjs",
     "globe": "node scripts/build-globe-field.mjs",
     "a11y": "tsx scripts/a11y-check.ts",
