@@ -1,19 +1,19 @@
 import { formatRatio, contrastRatio, WCAG } from "@/lib/a11y/contrast";
-import { colorIn, registers, type Register } from "@/lib/a11y/css-tokens";
+import { colorIn, modes, type Mode } from "@/lib/a11y/css-tokens";
 import { TEXT_COLOURS, TEXT_SURFACES } from "@/lib/a11y/pairings";
 
 const LABEL = "font-mono text-[0.75rem] leading-[1.4] uppercase tracking-widest";
-const REGISTER_NAME: Record<Register, string> = { paper: "Paper register", ink: "Ink register" };
+const MODE_NAME: Record<Mode, string> = { light: "Light mode", dark: "Dark mode" };
 
-// Every text colour on every text surface, in both registers, measured at
+// Every text colour on every text surface, in light and dark mode, measured at
 // build time from the shipped CSS. Each cell is set in its real colours with
-// fixed hex, so the ink register shows dark even when the page is on paper.
+// fixed hex, so dark mode shows dark even when the page is in light mode.
 export function ContrastMatrix() {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-      {registers.map((register) => (
-        <table key={register} className="w-full border-collapse">
-          <caption className={`${LABEL} text-xco-ink text-left pb-3`}>{REGISTER_NAME[register]}</caption>
+      {modes.map((mode) => (
+        <table key={mode} className="w-full border-collapse">
+          <caption className={`${LABEL} text-xco-ink text-left pb-3`}>{MODE_NAME[mode]}</caption>
           <thead>
             <tr>
               <th scope="col" className={`${LABEL} text-xco-ink-muted text-left pb-2 pr-3`}>
@@ -28,7 +28,7 @@ export function ContrastMatrix() {
           </thead>
           <tbody>
             {TEXT_COLOURS.map(({ token, role }) => {
-              const fg = colorIn(register, token);
+              const fg = colorIn(mode, token);
               return (
                 <tr key={token}>
                   <th scope="row" className="text-left font-normal align-top py-1 pr-3">
@@ -36,7 +36,7 @@ export function ContrastMatrix() {
                     <span className="block font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted">{role}</span>
                   </th>
                   {TEXT_SURFACES.map((surface) => {
-                    const bg = colorIn(register, surface);
+                    const bg = colorIn(mode, surface);
                     const ratio = contrastRatio(fg, bg);
                     const ok = ratio >= WCAG.text;
                     return (

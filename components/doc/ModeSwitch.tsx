@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-type Register = "light" | "dark";
+type Mode = "light" | "dark";
 
-// Paper / Ink, as two pressed states rather than one ambiguous toggle — the
-// reader can see which register is active, not just what the next one would be.
-export function RegisterSwitch() {
-  const [reg, setReg] = useState<Register>("light");
+// Light / Dark, as two pressed states rather than one ambiguous toggle — the
+// reader can see which mode is active, not just what the next one would be.
+export function ModeSwitch() {
+  const [reg, setReg] = useState<Mode>("light");
 
   useEffect(() => {
     setReg(document.documentElement.classList.contains("dark") ? "dark" : "light");
   }, []);
 
-  const set = (next: Register) => {
+  const set = (next: Mode) => {
     setReg(next);
     const root = document.documentElement;
     root.classList.toggle("dark", next === "dark");
@@ -27,12 +27,12 @@ export function RegisterSwitch() {
   };
 
   return (
-    <div className="doc-register" role="group" aria-label="Register">
+    <div className="doc-register" role="group" aria-label="Mode">
       <button type="button" data-reg="light" aria-pressed={reg === "light"} onClick={() => set("light")}>
-        Paper
+        Light
       </button>
       <button type="button" data-reg="dark" aria-pressed={reg === "dark"} onClick={() => set("dark")}>
-        Ink
+        Dark
       </button>
     </div>
   );

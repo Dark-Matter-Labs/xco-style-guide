@@ -22,20 +22,20 @@ export function PairingTable() {
   return (
     <div className="overflow-x-auto" tabIndex={0} aria-label="Every sanctioned colour pairing">
       <table className="w-full border-collapse min-w-[720px]">
-        <caption className="sr-only">Every sanctioned colour pairing, measured in both registers</caption>
+        <caption className="sr-only">Every sanctioned colour pairing, measured in light and dark mode</caption>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--rule)" }}>
             <th scope="col" className={HEAD}>Pairing</th>
             <th scope="col" className={HEAD}>Where</th>
             <th scope="col" className={HEAD}>Bar</th>
-            <th scope="col" className={HEAD}>Paper</th>
-            <th scope="col" className={HEAD}>Ink</th>
+            <th scope="col" className={HEAD}>Light</th>
+            <th scope="col" className={HEAD}>Dark</th>
           </tr>
         </thead>
         <tbody>
           {ids.map((id) => {
-            const paper = results.find((r) => r.pairing.id === id && r.register === "paper");
-            const ink = results.find((r) => r.pairing.id === id && r.register === "ink");
+            const paper = results.find((r) => r.pairing.id === id && r.mode === "light");
+            const ink = results.find((r) => r.pairing.id === id && r.mode === "dark");
             const p = (paper ?? ink)!.pairing;
             return (
               <tr key={id} style={{ borderBottom: "1px solid var(--border-subtle)" }}>

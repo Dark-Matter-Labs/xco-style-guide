@@ -1,15 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  buildEndorsementStripSvg,
-  buildLogoSvg,
-  logoGeometry,
-  logoVariants,
-  lockupHeight,
-  stripMetrics,
-  type LogoVariant,
-} from "@/lib/logo";
+import { logoVariants, type LogoVariant } from "@/lib/logo";
+import { buildLockupSvg, lockupRatio, lockups, type Lockup } from "@/lib/logo-lockups";
 import { Logo } from "@/components/xco/Logo";
 
 const PNG_SIZES = [512, 1024, 2048] as const;
@@ -23,48 +16,21 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url);
 }
 
-type Lockup = "mark" | "descriptor" | "endorsed" | "strip";
-
-const LOCKUPS: { id: Lockup; label: string; note: string; suffix: string }[] = [
-  { id: "mark", label: "Mark only", note: "The logotype alone. Default.", suffix: "" },
-  {
-    id: "descriptor",
-    label: "Descriptor lockup",
-    note: "Adds the full name in Untitled Sans. Live text, not outlines — see the note below.",
-    suffix: "-lockup",
-  },
-  {
-    id: "endorsed",
-    label: "Endorsed by Dark Matter Labs",
-    note: "Descriptor, then \u201cAn initiative of\u201d and DM\u2019s own logo, attached. A fallback for a single file someone else places alone.",
-    suffix: "-dml-endorsed",
-  },
-  {
-    id: "strip",
-    label: "Endorsement strip",
-    note: "\u201cAn initiative of\u201d and DM\u2019s logo on one line, for a footer or back cover. The default way to show DML (CH-16). Never beside the mark.",
-    suffix: "-dml-strip",
-  },
-];
+const LOCKUPS = lockups.filter((l) => l.download);
 
 function fileStem(variant: LogoVariant, lockup: Lockup) {
   return `xco-logo-${variant}${LOCKUPS.find((l) => l.id === lockup)!.suffix}`;
 }
 
 export function LogoDownloads() {
-  const [variant, setVariant] = useState<LogoVariant>("ink");
+  const [variant, setVariant] = useState<LogoVariant>("light");
   const [lockup, setLockup] = useState<Lockup>("mark");
-  const isStrip = lockup === "strip";
-  const withDescriptor = lockup === "descriptor" || lockup === "endorsed";
-  const withEndorsement = lockup === "endorsed";
   const [withBackground, setWithBackground] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const svg = isStrip
-    ? buildEndorsementStripSvg({ variant, withBackground })
-    : buildLogoSvg({ variant, withDescriptor, withEndorsement, withBackground });
+  const svg = buildLockupSvg({ lockup, variant, withBackground });
   const active = logoVariants.find((v) => v.id === variant)!;
 
   const downloadSvg = () => {
@@ -79,9 +45,7 @@ export function LogoDownloads() {
     setError(null);
     setBusy(`png-${size}`);
     try {
-      const ratio = isStrip
-        ? stripMetrics.width / stripMetrics.height
-        : logoGeometry.width / lockupHeight(withDescriptor, withEndorsement);
+      const ratio = lockupRatio(lockup);
       const res = await fetch("/api/export/png", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -116,24 +80,16 @@ export function LogoDownloads() {
       <div
         className="flex items-center justify-center py-16 px-8"
         style={{
-          background: active.bg ?? "transparent",
+          background: active.bg,
           border: "1px solid var(--border-default)",
         }}
       >
-        {isStrip ? (
-          // The strip is DM's paths plus one live text line; render the file itself.
-          <div
-            className="w-full max-w-[420px] [&>svg]:w-full [&>svg]:h-auto"
-            dangerouslySetInnerHTML={{ __html: svg.replace(/^<\?xml[^>]*>\s*/, "") }}
-          />
-        ) : (
-          <Logo
-            variant={variant}
-            withDescriptor={withDescriptor}
-            withEndorsement={withEndorsement}
-            height={withEndorsement ? 200 : withDescriptor ? 130 : 96}
-          />
-        )}
+        <Logo
+          variant={variant}
+          lockup={lockup}
+          height={lockup === "endorsed" ? 200 : lockup === "mark" ? 96 : 130}
+          className="max-w-full h-auto"
+        />
       </div>
 
       {/* Controls */}
@@ -165,7 +121,7 @@ export function LogoDownloads() {
 
         <fieldset className="space-y-3">
           <legend className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink uppercase tracking-widest mb-3">
-            Options
+            Lockup
           </legend>
           {LOCKUPS.map((l) => (
             <label key={l.id} className="flex items-start gap-3 cursor-pointer">

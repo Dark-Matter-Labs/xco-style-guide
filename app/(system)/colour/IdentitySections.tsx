@@ -223,7 +223,7 @@ export function Routes() {
         atlas. The colours distinguish; they confer no rank. Route B is also
         dashed and each is named in the key, so colour is never the only carrier.
       </p>
-      {/* Routes are specified on paper, so the figure keeps a paper ground in both registers. */}
+      {/* Routes are specified on paper, so the figure keeps a paper ground in light and dark mode. */}
       <svg viewBox="0 0 600 120" className="w-full h-auto" style={{ backgroundColor: PAPER_HEX }} role="img" aria-label="Route A in Field 600 and Route B in Signal 700, crossing twice">
         <path d="M10 90 C 150 90, 200 20, 300 30 S 470 100, 590 40" fill="none" stroke={routeColors[0].hex} strokeWidth="2" />
         <path d="M10 30 C 140 30, 220 110, 320 90 S 460 20, 590 90" fill="none" stroke={routeColors[1].hex} strokeWidth="2" strokeDasharray="6 4" />

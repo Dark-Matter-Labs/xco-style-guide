@@ -27,7 +27,7 @@ const DEFAULT_ITEMS: ItemState[] = [
 ];
 
 const COLOR_MODES: { id: TerritoryColorMode; label: string; hint: string }[] = [
-  { id: "ink",       label: "Ink",       hint: "paper cells on ink" },
+  { id: "ink",       label: "Dark",      hint: "paper cells on ink" },
   { id: "blueprint", label: "Blueprint", hint: "teal → ocean → navy" },
   { id: "warmth",    label: "Warmth",    hint: "sand → dusk" },
   { id: "spectrum",  label: "Spectrum",  hint: "warm → cold by rank" },

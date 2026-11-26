@@ -46,7 +46,7 @@ export const palettes: Record<PaletteId, Palette> = {
   },
   paper: {
     id: "paper",
-    label: "Paper",
+    label: "Light",
     ground: paper,
     field: ink,
     fieldAlpha: 0.1,
@@ -60,7 +60,7 @@ export const palettes: Record<PaletteId, Palette> = {
   },
   ink: {
     id: "ink",
-    label: "Ink",
+    label: "Dark",
     ground: ink,
     field: dusk,
     fieldAlpha: 0.55,

@@ -60,6 +60,18 @@ const PR = (n: number) => ({ label: `PR #${n}`, href: `https://github.com/Dark-M
 /** The style guide's own change record. Newest first. */
 export const changeLog: ChangeRecord[] = [
   {
+    id: "CH-18",
+    title: "Logo lockups, clear space in x units, and light and dark modes",
+    target: "Logo / clear space, variants, lockups; every page that names a mode",
+    href: "/logo#lockups",
+    status: "proposed",
+    proposedBy: "Anahat",
+    date: "2026-11-25",
+    why: "The logo page had no visible clear-space logic, and said clear space was the x-height while the files carried 30 units. Lockups with Dark Matter Labs and with projects were made case by case. The two modes were called Paper and Ink, which readers had to translate to light and dark.",
+    previous: "Clear space “equals the x-height” (files padded 30). Three variants: ink, paper, dusk operator. Two lockups: descriptor and DML-endorsed. The x’s feet dip 4.02 below the baseline. Modes named Paper and Ink.",
+    proposed: "Clear space is ½x, from the ink, drawn on the page. Four variants: light and dark, each with an orange x. The x lifted 4.02 units, the overhang of its cut feet, so its lowest tips touch the baseline: bottom-aligned with the C and O. Lockups: stack, horizontal, DML-endorsed stack, xCO with DML, xCO × project, with a partner zone. Modes named light and dark everywhere; paper and ink stay as colour names.",
+  },
+  {
     id: "CH-17",
     title: "Options and Studio may lead, endorsed as an xCO group",
     target: "Brand architecture",

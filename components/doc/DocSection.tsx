@@ -44,7 +44,7 @@ export function DocSection({
     return (
       <section
         id={id}
-        data-register="inverse"
+        data-mode="dark"
         className={`doc-section ${className}`}
         style={{ background: "var(--xco-paper)", color: "var(--xco-ink)" }}
       >

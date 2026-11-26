@@ -25,7 +25,7 @@ export interface RoleInputs {
 }
 
 // ── The x's own geometry, in logo units ─────────────────────────────
-export const X_CENTRE: Vec = { x: g.xLeft + g.xWidth / 2, y: g.baseline - g.xHeight / 2 };
+export const X_CENTRE: Vec = { x: g.xLeft + g.xWidth / 2, y: g.xBase - g.xHeight / 2 };
 export const TIP: Vec = { x: g.xWidth / 2, y: g.xHeight / 2 };
 /** TL, TR, BR, BL. The diagonal pairs (0,2) and (1,3) are the x's two strokes. */
 export const ARMS: ReadonlyArray<readonly [number, number]> = [[-1, -1], [1, -1], [1, 1], [-1, 1]];

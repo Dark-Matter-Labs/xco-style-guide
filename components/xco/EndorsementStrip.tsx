@@ -11,7 +11,7 @@ export function EndorsementStrip({
   x,
   y,
   stamp,
-  variant = "ink",
+  variant = "light",
 }: {
   x: number;
   y: number;

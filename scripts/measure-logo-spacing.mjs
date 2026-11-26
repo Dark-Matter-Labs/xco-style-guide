@@ -18,28 +18,22 @@
 //
 // Exits non-zero if the pairs drift more than TOLERANCE apart at any depth.
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { tsImport } from "tsx/esm/api";
 
 const require = createRequire(import.meta.url);
-const ts = require("typescript");
 const sharp = require("sharp");
 
 const ROOT = process.cwd();
-const TMP = path.join(ROOT, ".logo-spacing");
 
 const DEPTHS = [8, 12, 16];       // logo units; cap height is 100
 const TOLERANCE = 0.1;            // pairs may differ by at most 10%
 const SCALE = 20;                 // raster pixels per logo unit
 
-mkdirSync(TMP, { recursive: true });
-const js = ts.transpileModule(readFileSync(path.join(ROOT, "lib/logo.ts"), "utf8"), {
-  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
-}).outputText;
-writeFileSync(path.join(TMP, "logo.mjs"), js);
-const logo = await import(`file://${path.join(TMP, "logo.mjs")}`);
-rmSync(TMP, { recursive: true, force: true });
+// tsx resolves lib/logo.ts's own imports, which a bare transpile could not.
+const logo = await tsImport(pathToFileURL(path.join(ROOT, "lib/logo.ts")).href, import.meta.url);
 
 const g = logo.logoGeometry;
 const W = Math.ceil(g.width * SCALE);
@@ -96,7 +90,7 @@ function opticalGap(left, right, zone, depth) {
   return sum / r.length;
 }
 
-const zone = [g.baseline - g.xHeight, g.baseline];
+const zone = [g.xBase - g.xHeight, g.xBase];
 
 console.log(`gaps (metric):  x→C ${g.gapXC}   C→O ${g.gapCO}`);
 console.log(`zone: x-height band ${zone[0]}–${zone[1]} · depths ${DEPTHS.join(", ")}\n`);

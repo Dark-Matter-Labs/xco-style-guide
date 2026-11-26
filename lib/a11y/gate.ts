@@ -7,7 +7,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { contrastRatio, minimumFor, type ContrastUse } from "./contrast";
-import { colorIn, registers, utilityColor, type Register } from "./css-tokens";
+import { colorIn, modes, utilityColor, type Mode } from "./css-tokens";
 import { pairings, TEXT_SURFACES, type Pairing } from "./pairings";
 import { colors, surfaceTokens, semanticMeanings, domainColors, paletteHex, identityScales, highlightTokens, routeColors } from "@/lib/design-tokens";
 import { groupMarks, groupColors, auditPairs, MARK_CONTRAST_MIN, type GroupMark } from "@/lib/group-marks";
@@ -23,11 +23,11 @@ export interface Finding {
   line?: number;
 }
 
-// ── 1. Sanctioned pairings, both registers ───────────────────────────
+// ── 1. Sanctioned pairings, light and dark mode ───────────────────────────
 
 export interface PairingResult {
   pairing: Pairing;
-  register: Register;
+  mode: Mode;
   fg: string;
   bg: string;
   ratio: number;
@@ -38,14 +38,14 @@ export interface PairingResult {
 export function measurePairings(): PairingResult[] {
   const out: PairingResult[] = [];
   for (const pairing of pairings) {
-    for (const register of registers) {
-      if (pairing.only && pairing.only !== register) continue;
-      const fg = colorIn(register, pairing.fg);
-      const bg = colorIn(register, pairing.bg);
+    for (const mode of modes) {
+      if (pairing.only && pairing.only !== mode) continue;
+      const fg = colorIn(mode, pairing.fg);
+      const bg = colorIn(mode, pairing.bg);
       // Translucent grounds (the WIP badge) are measured over the page paper.
-      const ratio = contrastRatio(fg, bg, colorIn(register, "--xco-paper"));
+      const ratio = contrastRatio(fg, bg, colorIn(mode, "--xco-paper"));
       const min = minimumFor[pairing.use];
-      out.push({ pairing, register, fg, bg, ratio, min, ok: ratio >= min });
+      out.push({ pairing, mode, fg, bg, ratio, min, ok: ratio >= min });
     }
   }
   return out;
@@ -55,7 +55,7 @@ export function checkPairings(): Finding[] {
   return measurePairings().map((r) => ({
     check: "pairing",
     ok: r.ok,
-    label: `${r.pairing.id} [${r.register}]`,
+    label: `${r.pairing.id} [${r.mode}]`,
     detail: `${r.ratio.toFixed(2)}:1 (${r.pairing.use}, needs ${r.min}:1) — ${r.pairing.where}`,
   }));
 }
@@ -78,7 +78,7 @@ export function checkTokenDrift(): Finding[] {
     ...routeColors.map((r) => ({ name: `route.${r.id}`, hex: r.hex, cssVar: r.cssVar })),
   ];
   return entries.map(({ name, hex, cssVar }) => {
-    const css = colorIn("paper", cssVar).toLowerCase();
+    const css = colorIn("light", cssVar).toLowerCase();
     return {
       check: "token-drift",
       ok: css === hex.toLowerCase(),
@@ -93,7 +93,7 @@ export function checkTokenDrift(): Finding[] {
 const SOURCE_DIRS = ["app", "components"];
 const SOURCE_EXT = /\.(tsx|ts)$/;
 
-/** Text utilities that are only ever set on an ink ground, and the pairing that covers them. */
+/** Text utilities that are only ever set on an ink ground (dark surfaces), and the pairing that covers them. */
 const INVERSE_TEXT: Record<string, string> = {
   "xco-paper": "paper/ink",
   "xco-on-accent": "on-accent/ocean",
@@ -130,16 +130,16 @@ function withOpacity(hex: string, a: number): string {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
 
-/** The weakest ratio a text colour reaches across the text surfaces, both registers. */
+/** The weakest ratio a text colour reaches across the text surfaces, light and dark mode. */
 function worstOnSurfaces(utility: string, opacity: number): { ratio: number; where: string } | null {
   let worst: { ratio: number; where: string } | null = null;
-  for (const register of registers) {
-    const c = utilityColor(register, utility);
+  for (const mode of modes) {
+    const c = utilityColor(mode, utility);
     if (!c || !c.startsWith("#")) return null;
     for (const surface of TEXT_SURFACES) {
-      const bg = colorIn(register, surface);
+      const bg = colorIn(mode, surface);
       const ratio = contrastRatio(withOpacity(c, opacity), bg, bg);
-      if (!worst || ratio < worst.ratio) worst = { ratio, where: `${surface.slice(2)} [${register}]` };
+      if (!worst || ratio < worst.ratio) worst = { ratio, where: `${surface.slice(2)} [${mode}]` };
     }
   }
   return worst;

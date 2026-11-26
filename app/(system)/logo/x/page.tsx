@@ -20,7 +20,7 @@ const change = changeLog.find((c) => c.id === "CH-08")!;
 
 // Measured, never typed: the hand-written 2.46:1 had drifted from the palette.
 const DUSK_ON_PAPER = formatRatio(contrastRatio(paletteHex.dusk, paletteHex.paper));
-const DUSK_ON_DARK = formatRatio(contrastRatio(paletteHex.dusk, colorIn("ink", "--xco-paper")));
+const DUSK_ON_DARK = formatRatio(contrastRatio(paletteHex.dusk, colorIn("dark", "--xco-paper")));
 
 const RULES = [
   { n: "01", rule: "The x has no face. It shows character only through how it moves." },

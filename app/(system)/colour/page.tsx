@@ -12,13 +12,13 @@ function hexToRgb(hex: string) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// The ink register, read from the shipped CSS rather than restated.
-const INVERSE_PAPER = colorIn("ink", "--xco-paper");
-const INVERSE_INK = colorIn("ink", "--xco-ink");
+// Dark mode, read from the shipped CSS rather than restated.
+const INVERSE_PAPER = colorIn("dark", "--xco-paper");
+const INVERSE_INK = colorIn("dark", "--xco-ink");
 
 // Ratios are measured from the shipped CSS at build time, never typed: the
 // hand-written "16.5:1 / 6.5:1 / 4.56:1" that stood here had drifted to wrong.
-const onPaper = (token: string) => formatRatio(contrastRatio(colorIn("paper", token), colorIn("paper", "--xco-paper")));
+const onPaper = (token: string) => formatRatio(contrastRatio(colorIn("light", token), colorIn("light", "--xco-paper")));
 
 export default function ColourPage() {
   return (
@@ -111,7 +111,7 @@ export default function ColourPage() {
             },
             {
               name: "ink-weak",
-              hex: colorIn("paper", "--xco-ink-weak"),
+              hex: colorIn("light", "--xco-ink-weak"),
               cssVar: "--xco-ink-weak",
               usage: "Captions, annotations, placeholder text only.",
               contrast: onPaper("--xco-ink-weak"),
@@ -227,15 +227,15 @@ export default function ColourPage() {
 
       <Routes />
 
-      {/* Inverse register / dark mode */}
+      {/* Dark mode */}
       <section className="max-w-2xl pb-8">
         <h2 className="font-mono text-[0.9375rem] leading-[1.6] text-xco-ink tracking-widest uppercase mb-4">
           Inverse Register
         </h2>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
-          The inverse register is the cool deep field: Field 950 ground ({INVERSE_PAPER}) with
+          Dark mode is the cool deep field: Field 950 ground ({INVERSE_PAPER}) with
           chalk ink ({INVERSE_INK}). It exists as a reader preference (dark mode) and as an authored choice
-          for high-contrast sections using <code className="font-code text-[0.9375rem]">data-register="inverse"</code>.
+          for high-contrast sections using <code className="font-code text-[0.9375rem]">data-mode="dark"</code>.
         </p>
         <p className="font-body text-[24px] text-xco-ink leading-[26px] mb-4">
           Semantic meanings, the named roles and the domain marks are fixed — they do not

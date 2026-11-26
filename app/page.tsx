@@ -7,7 +7,7 @@ import {
   Cells,
   Grain,
   ReadingProgress,
-  RegisterSwitch,
+  ModeSwitch,
 } from "@/components/doc";
 import { Mark, Logo } from "@/components/xco";
 import { instruments } from "@/lib/instruments";
@@ -50,7 +50,7 @@ export default function Home() {
       <ReadingProgress />
 
       <div className="fixed top-3.5 right-3.5 z-[200]">
-        <RegisterSwitch />
+        <ModeSwitch />
       </div>
 
       {/* ── Masthead ─────────────────────────────────────────────────
@@ -76,7 +76,7 @@ export default function Home() {
         </p>
 
         <p className="doc-label mt-[30px] !text-[10px]">
-          {SYSTEM_VERSION} · both registers validated · switch them, top right
+          {SYSTEM_VERSION} · light and dark mode validated · switch them, top right
         </p>
       </header>
 
@@ -210,7 +210,7 @@ export default function Home() {
         </Cells>
       </DocSection>
 
-      {/* ── 04 Deck — inverse register ──────────────────────────────── */}
+      {/* ── 04 Deck — dark section ──────────────────────────────── */}
       <DocSection
         id="deck"
         kicker="04 / Deck"

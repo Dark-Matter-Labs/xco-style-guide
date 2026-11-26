@@ -1,7 +1,7 @@
 // The browser accessibility audit. Run: npm run build && npm run a11y:audit
 //
 // Serves the production build, then opens every page in Chromium in both
-// registers and runs axe-core (WCAG 2.0–2.2 A/AA plus best practice) — the
+// modes (light and dark) and runs axe-core (WCAG 2.0–2.2 A/AA plus best practice) — the
 // checks a static scan cannot make: rendered contrast, names, labels,
 // landmarks, heading order, target size. A second pass emulates
 // prefers-reduced-motion and fails any page where CSS motion still runs.
@@ -21,7 +21,7 @@ import AxeBuilder from "@axe-core/playwright";
 const ROOT = process.cwd();
 const PORT = 3107;
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
-const REGISTERS = ["paper", "ink"] as const;
+const REGISTERS = ["light", "dark"] as const;
 type Register = (typeof REGISTERS)[number];
 
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.split("=")[1];
@@ -78,15 +78,15 @@ async function contextFor(browser: Browser, register: Register, reducedMotion: b
     viewport: { width: 1280, height: 900 },
     reducedMotion: reducedMotion ? "reduce" : "no-preference",
   });
-  // The site reads its register from localStorage before first paint.
+  // The site reads its mode from localStorage before first paint.
   await ctx.addInitScript((dark: boolean) => {
     try {
       if (dark) localStorage.setItem("xco-theme", "dark");
       else localStorage.removeItem("xco-theme");
     } catch {
-      /* storage blocked — the page falls back to paper */
+      /* storage blocked — the page falls back to light mode */
     }
-  }, register === "ink");
+  }, register === "dark");
   return ctx;
 }
 
@@ -113,7 +113,7 @@ async function axePass(browser: Browser, base: string, page: string, register: R
 
 /** With reduced motion requested, nothing in CSS may still be animating. */
 async function motionPass(browser: Browser, base: string, page: string): Promise<Violation[]> {
-  const ctx = await contextFor(browser, "paper", true);
+  const ctx = await contextFor(browser, "light", true);
   const p = await ctx.newPage();
   try {
     await p.goto(`${base}${page}`, { waitUntil: "networkidle" });
@@ -150,7 +150,7 @@ async function main() {
       found.push(...(await motionPass(browser, base, page)));
       violations.push(...found);
       const n = found.reduce((s, v) => s + v.targets.length, 0);
-      console.log(`${n ? "✗" : "✓"} ${page.padEnd(28)} ${n ? `${n} issue(s): ${Array.from(new Set(found.map((v) => v.rule))).join(", ")}` : "clean in both registers"}`);
+      console.log(`${n ? "✗" : "✓"} ${page.padEnd(28)} ${n ? `${n} issue(s): ${Array.from(new Set(found.map((v) => v.rule))).join(", ")}` : "clean in light and dark mode"}`);
     }
   } finally {
     await browser.close();
@@ -161,7 +161,7 @@ async function main() {
   if (json) writeFileSync(json, JSON.stringify(violations, null, 2));
 
   if (!violations.length) {
-    console.log(`\naccessibility audit: ${pages.length} pages × ${REGISTERS.length} registers, no violations`);
+    console.log(`\naccessibility audit: ${pages.length} pages × ${REGISTERS.length} modes, no violations`);
     return;
   }
 

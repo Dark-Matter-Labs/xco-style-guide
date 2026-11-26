@@ -10,7 +10,7 @@ const LABEL_FONT = typography.faces.mono.stack;
 // at an unresolved prerequisite; a ring marks a wait of unknown duration.
 // Route identity is carried by colour and by the A/B step labels, so colour
 // is never the only carrier. Routes are specified on paper, so the figure
-// keeps a paper ground in both registers.
+// keeps a paper ground in light and dark mode.
 
 type Pt = { x: number; y: number };
 

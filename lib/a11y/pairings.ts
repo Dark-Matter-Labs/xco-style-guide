@@ -1,9 +1,9 @@
 // Every colour pairing the system sanctions, and what it is for.
 //
-// A pairing names CSS tokens, not hex, so it is measured in both registers
+// A pairing names CSS tokens, not hex, so it is measured in light and dark mode
 // (paper and ink) from the values that ship. Its `use` sets the bar: text
 // 4.5:1, large text and non-text 3:1. The contrast gate (npm run a11y) fails
-// the build if any pairing falls short in either register; the accessibility
+// the build if any pairing falls short in either mode; the accessibility
 // page renders the same list, so what is documented is what is checked.
 //
 // Adding a colour to the system means adding its pairings here. A pairing
@@ -18,13 +18,13 @@ export interface Pairing {
   use: ContrastUse;
   where: string;
   /** Registers this pairing exists in. Defaults to both. */
-  only?: "paper" | "ink";
+  only?: "light" | "dark";
 }
 
 /** Surfaces text is set on. Structural paper is for rules and borders, never text. */
 export const TEXT_SURFACES = ["--xco-paper", "--xco-paper-raised", "--xco-paper-quiet"] as const;
 
-/** Text colours allowed on any text surface, in either register. */
+/** Text colours allowed on any text surface, in either mode. */
 export const TEXT_COLOURS = [
   { token: "--xco-ink", role: "Body text, headings, UI" },
   { token: "--xco-ink-muted", role: "Secondary text, labels, hints" },
@@ -50,7 +50,7 @@ export const pairings: Pairing[] = [
   ...onSurfaces,
 
   // Inverse and accent grounds
-  { id: "paper/ink", fg: "--xco-paper", bg: "--xco-ink", use: "text", where: "Inverse text — buttons, badges, the active register toggle" },
+  { id: "paper/ink", fg: "--xco-paper", bg: "--xco-ink", use: "text", where: "Inverse text — buttons, badges, the active mode toggle" },
   { id: "on-accent/ocean", fg: "--color-xco-on-accent", bg: "--color-xco-ocean", use: "text", where: "Selected chips and toggles on ocean" },
   { id: "on-accent/navy", fg: "--color-xco-on-accent", bg: "--color-xco-navy", use: "text", where: "Text on the blueprint ground" },
   { id: "ink/dusk", fg: "--color-xco-ink-fixed", bg: "--color-xco-dusk", use: "text", where: "Text on a dusk ground — never paper" },
@@ -72,7 +72,7 @@ export const pairings: Pairing[] = [
     bg: "--xco-paper",
     use: "non-text",
     where: `The ${m} marker in diagrams — paired with its shape`,
-    only: "paper",
+    only: "light",
   })),
 
   // 8.1 exact-span highlights: every fill carries Matter 900 text (§11).
@@ -83,8 +83,8 @@ export const pairings: Pairing[] = [
     use: "text",
     where: `Exact-span highlight: ${h} — role named in the language too`,
   })),
-  { id: "route-a/paper", fg: "--xco-route-a", bg: "--xco-paper", use: "non-text", where: "Route A line in an atlas", only: "paper" },
-  { id: "route-b/paper", fg: "--xco-route-b", bg: "--xco-paper", use: "non-text", where: "Route B line in an atlas", only: "paper" },
+  { id: "route-a/paper", fg: "--xco-route-a", bg: "--xco-paper", use: "non-text", where: "Route A line in an atlas", only: "light" },
+  { id: "route-b/paper", fg: "--xco-route-b", bg: "--xco-paper", use: "non-text", where: "Route B line in an atlas", only: "light" },
 
   // Controls and focus
   { id: "field-border", fg: "--xco-ink", bg: "--xco-paper", use: "non-text", where: "Input and select borders (1.4.11)" },

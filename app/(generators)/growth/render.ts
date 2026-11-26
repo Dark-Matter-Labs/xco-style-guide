@@ -24,8 +24,8 @@ const { paper, ink, dusk, navy } = paletteHex;
 // Line-on-ground clears 3:1 for non-text in every pairing (WCAG 1.4.11):
 // ink/paper 14:1, ink/dusk 5.2:1, paper/navy 15.7:1.
 export const growthPalettes: GrowthPalette[] = [
-  { id: "paper", label: "Paper", ground: paper, line: ink, plate: paper },
-  { id: "ink", label: "Ink", ground: ink, line: paper, plate: ink },
+  { id: "paper", label: "Light", ground: paper, line: ink, plate: paper },
+  { id: "ink", label: "Dark", ground: ink, line: paper, plate: ink },
   { id: "dusk", label: "Dusk", ground: dusk, line: ink, plate: dusk },
   { id: "blueprint", label: "Blueprint", ground: navy, line: paper, plate: navy },
 ];

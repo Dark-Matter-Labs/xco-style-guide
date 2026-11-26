@@ -527,14 +527,14 @@ const resolutionHint = (r: number) =>
   : "Mark readable — approaching sharp";
 
 const COLOR_MODES: { id: ColorMode; label: string }[] = [
-  { id: "ink",      label: "Ink on paper" },
-  { id: "ember",    label: "Dusk on paper" },
-  { id: "inverted", label: "Paper on ink" },
+  { id: "ink",      label: "Light" },
+  { id: "ember",    label: "Light, dusk" },
+  { id: "inverted", label: "Dark" },
 ];
 
 const PHOTO_PALETTES: { id: PhotoPalette; label: string }[] = [
-  { id: "mono",     label: "Mono — ink on paper" },
-  { id: "inverted", label: "Mono — paper on ink" },
+  { id: "mono",     label: "Mono, light" },
+  { id: "inverted", label: "Mono, dark" },
   { id: "dusk",     label: "Dusk (orange)" },
   { id: "ocean",    label: "Ocean (blue)" },
   { id: "multi",    label: "Multi-colour — Karel Martens" },

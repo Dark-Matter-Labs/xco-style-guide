@@ -26,8 +26,8 @@ eq(SOURCES.length, 3);
 assert.ok(SOURCES.find((s) => s.id === "propositions")!.text.includes("Withdrawn in v0.2: the pilots showed its value depends on who holds the right to change course."), "the withdrawn claim matches /x-demo");
 
 // ── The same input always writes the same sheet ─────────────────────
-eq(toSvg(writeSheet(T, O), "paper", "x"), toSvg(writeSheet(T, O), "paper", "x"));
-assert.notEqual(toSvg(writeSheet(T, O), "paper", "x"), toSvg(writeSheet(T, { ...O, seed: "8" }), "paper", "x"));
+eq(toSvg(writeSheet(T, O), "light", "x"), toSvg(writeSheet(T, O), "light", "x"));
+assert.notEqual(toSvg(writeSheet(T, O), "light", "x"), toSvg(writeSheet(T, { ...O, seed: "8" }), "light", "x"));
 
 // ── Not a cipher: the same word in two places looks different ───────
 {
@@ -104,12 +104,12 @@ for (const src of SOURCES) allInside(writeSheet(src.text, O), src.id);
   assert.ok(beadsSeen > 20, "the sheet has beads to check");
 }
 
-// ── Only the x carries dusk; the ink register paints its own ground ──
-for (const reg of ["paper", "ink"] as const) {
+// ── Only the x carries dusk; dark mode paints its own ground ──
+for (const reg of ["light", "dark"] as const) {
   const s = writeSheet(T, O), svg = toSvg(s, reg, "label");
   eq((svg.match(new RegExp(DUSK, "g")) || []).length, s.marks.filter((m) => m.kind === "x").length, `${reg}: dusk only on the x`);
 }
-assert.ok(toSvg(writeSheet(T, O), "ink", "label").includes(`<rect width="1000" height="1000" fill="${INK}"/>`), "ink register has its own ground");
+assert.ok(toSvg(writeSheet(T, O), "dark", "label").includes(`<rect width="1000" height="1000" fill="${INK}"/>`), "dark mode has its own ground");
 
 // ── Nothing to write ─────────────────────────────────────────────────
 eq(writeSheet("", O).marks.length, 0, "empty text writes nothing");
@@ -125,7 +125,7 @@ assert.ok(writeSheet("...", O).marks.every((m) => !(m.kind === "thread" && !m.do
 
 // ── The title is escaped ─────────────────────────────────────────────
 {
-  const svg = toSvg(writeSheet(T, O), "paper", 'a <b> & "c"');
+  const svg = toSvg(writeSheet(T, O), "light", 'a <b> & "c"');
   assert.ok(svg.includes("a &lt;b&gt; &amp; &quot;c&quot;") && !svg.includes("<b>"), "label escaped");
 }
 

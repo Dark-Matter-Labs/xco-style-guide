@@ -54,8 +54,8 @@ export const colors = {
   sand:  { hex: "#F6A577", cssVar: "--color-xco-sand",  twClass: "xco-sand",  usage: "Signal 300. Warm field register — amber light." },
   dusk:  { hex: "#F47743", cssVar: "--color-xco-dusk",  twClass: "xco-dusk",  usage: "Signal 500. The ember — a declared hinge, transition or presence." },
   // ── Ink-safe accents ─────────────────────────────────────────────
-  // The only forms of dusk, ocean and teal allowed to be text. Paper-register
-  // values; the ink register brightens them in globals.css. npm run a11y
+  // The only forms of dusk, ocean and teal allowed to be text. Light-mode
+  // values; dark mode brightens them in globals.css. npm run a11y
   // measures both and checks these copies against the CSS.
   duskInk:  { hex: "#A13E25", cssVar: "--color-xco-dusk-ink",  twClass: "xco-dusk-ink",  usage: "Signal 700. Small warm text on pale grounds (8.1); the ember itself is a surface." },
   oceanInk: { hex: "#335D76", cssVar: "--color-xco-ocean-ink", twClass: "xco-ocean-ink", usage: "Field 600. Structural accent text." },
