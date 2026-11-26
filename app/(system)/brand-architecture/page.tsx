@@ -11,7 +11,7 @@ const BODY = "font-body text-[24px] text-xco-ink leading-[26px]";
 const MONO = "font-mono text-[0.9375rem] leading-[1.6]";
 const LABEL = "font-mono text-[0.75rem] leading-[1.4] text-xco-ink-muted uppercase tracking-widest";
 
-const change = changeLog.find((c) => c.id === "CH-16")!;
+const change = changeLog.find((c) => c.id === "CH-17")!;
 const groups = ["positions-options-stewards", "oceans-continuity-studio"].map(
   (id) => groupMarks.find((m) => m.id === id)!,
 );

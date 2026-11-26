@@ -11,11 +11,12 @@
 export const SYSTEM_VERSION = "v0.3" as const;
 
 // ── Colour ──────────────────────────────────────────────────────────
-// Since the Polyphonic Style Guide v8.1 (5 October 2026), the system's
-// colours are drawn from its identity: Field (prussian and atmospheric
-// blue), Signal (the ember), Matter (chalk to ink). Token NAMES are kept —
-// paper, ink, dusk, ocean… — so nothing that uses them changes; their values
-// are 8.1 stops. The full scales are identityScales, below.
+// One system: the Polyphonic Style Guide v8.1 identity (5 October 2026) —
+// Field (prussian and atmospheric blue), Signal (the ember), Matter (chalk
+// to ink). The token NAMES — paper, ink, navy, ocean, teal, sand, dusk — are
+// Martin Perrow / In Studio's roles (May 2026), kept as aliases for 8.1
+// stops (CH-03, CH-14). The stop is the value; the name is the role. The
+// full scales are identityScales, below.
 
 export const colors = {
   paper: {
@@ -43,9 +44,10 @@ export const colors = {
     // Use: rgba(16,31,36,0.12) or Tailwind border-xco-ink/[0.12]
     usage: "Rules, dividers, grid lines. Never a separate hue.",
   },
-  // ── Extended diagram palette ─────────────────────────────────────
-  // Five colours for blueprint / warmth diagram modes, drawn from 8.1.
-  // Never use all five at once — pick a register (cool or warm).
+  // ── Named roles ─────────────────────────────────────────────────
+  // Five role names on 8.1 stops: three Field, two Signal. One field, one
+  // signal — a Field composition may carry one declared Signal accent
+  // (70:20:8:2), and each colour's meaning is declared in the key.
   navy:  { hex: "#101F2D", cssVar: "--color-xco-navy",  twClass: "xco-navy",  usage: "Field 950. Blueprint dark ground — the deepest blue." },
   ocean: { hex: "#335D76", cssVar: "--color-xco-ocean", twClass: "xco-ocean", usage: "Field 600. Prussian blue — nav accent, systemic diagram elements." },
   teal:  { hex: "#406D82", cssVar: "--color-xco-teal",  twClass: "xco-teal",  usage: "Field 500. Atmospheric blue — the open register." },

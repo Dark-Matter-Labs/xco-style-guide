@@ -26,6 +26,7 @@ const systemLinks = [
   { href: "/colour",      label: "Colour",               blurb: "Field, Signal, Matter. Chalk paper, one ember." },
   { href: "/grid",        label: "Grid",                 blurb: "Golden ratio, Fibonacci spacing, 12 and 24 columns." },
   { href: "/diagrams",    label: "Diagrams",             blurb: "Two line weights. Three node types." },
+  { href: "/ascii",       label: "ASCII",                blurb: "Generated fields set in glyphs. Ground, never decoration." },
   { href: "/tone",        label: "Tone of Voice",        blurb: "Radical conjecture, held with care. Plain where it is acted on." },
   { href: "/components",  label: "Components",           blurb: "Marks, ports, callouts, epistemic tags." },
   { href: "/grammar",     label: "Polyphonic Grammar",   blurb: "Licences, operators, relations, release gates." },

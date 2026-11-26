@@ -1,4 +1,4 @@
-import { identityScales, identityScaleMeta, traceColors, domainColors, highlightTokens, routeColors } from "@/lib/design-tokens";
+import { colors, identityScales, identityScaleMeta, traceColors, domainColors, highlightTokens, routeColors } from "@/lib/design-tokens";
 import { contrastRatio, formatRatio } from "@/lib/a11y/contrast";
 import { PAPER_HEX, swatchLabel } from "./swatch";
 
@@ -23,7 +23,7 @@ export function IdentityScales() {
       <p className={`${BODY} mb-8 max-w-2xl`}>
         Prussian and atmospheric blue hold the wider field. Chalk and mineral
         matter carry legibility. Ember orange gives a locally declared hinge,
-        transition or possibility its presence. Paper, ink, the diagram palette
+        transition or possibility its presence. Paper, ink, the named roles
         and the semantic meanings are drawn from these stops. TRACE and the
         highlight fills are separate keys, further down.
       </p>
@@ -48,6 +48,62 @@ export function IdentityScales() {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+// The five role names come from Martin Perrow / In Studio's first palette
+// (12 May 2026). Their values are 8.1 stops (CH-03); the May hues are kept
+// here as lineage only, never as tokens (CH-14).
+const ROLES = [
+  { key: "navy", may: "#000064" },
+  { key: "ocean", may: "#005096" },
+  { key: "teal", may: "#0082aa" },
+  { key: "sand", may: "#ffa064" },
+  { key: "dusk", may: "#ff5a00" },
+  { key: "duskInk", may: null },
+] as const;
+
+// "Field 600" for a hex, read from the scales rather than restated.
+function stopOf(hex: string): string {
+  for (const key of Object.keys(identityScales) as ScaleKey[]) {
+    const hit = Object.entries(identityScales[key]).find(([, h]) => h === hex);
+    if (hit) return `${identityScaleMeta[key].name} ${hit[0]}`;
+  }
+  throw new Error(`${hex} is not an 8.1 stop`);
+}
+
+export function NamedRoles() {
+  return (
+    <section aria-labelledby="named-roles">
+      <h2 id="named-roles" className={`${LABEL} mb-4`}>Named roles</h2>
+      <p className={`${BODY} mb-8 max-w-2xl`}>
+        Five role names sit on 8.1 stops, three in Field and two in Signal,
+        with dusk-ink as the ember&apos;s text form. The names come from Martin
+        Perrow and In Studio&apos;s first palette; the values are 8.1&apos;s. A name
+        and its stop are the same colour: ocean is Field 600.
+      </p>
+      <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {ROLES.map(({ key, may }) => {
+          const c = colors[key];
+          return (
+            <li key={key}>
+              <div className="h-24 flex flex-col justify-end p-3" style={{ backgroundColor: c.hex }}>
+                <span className={SMALL} style={swatchLabel(c.hex)}>{c.hex}</span>
+              </div>
+              <p className={`${MONO} text-xco-ink pt-2`}>{c.cssVar.replace("--color-xco-", "")}</p>
+              <p className={`${SMALL} text-xco-ink-muted`}>{stopOf(c.hex)}</p>
+              <p className={`${SMALL} text-xco-ink-muted`}>{c.cssVar}</p>
+              {may && <p className={`${SMALL} text-xco-ink-muted pt-1`}>May 2026: {may}</p>}
+            </li>
+          );
+        })}
+      </ul>
+      <p className={`${MONO} text-xco-ink pt-6 max-w-2xl`}>
+        [rule] One field, one signal. A Field composition may carry one declared
+        Signal accent: a risk node beside a field node is the pattern, not an
+        exception. Name each colour&apos;s role in the key, with its shape or line.
+      </p>
     </section>
   );
 }
